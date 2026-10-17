@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Datos descargados ###
+# Los artículos tienen copyright: se quedan en local, no se suben a GitHub.
+data/

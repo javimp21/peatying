@@ -1,0 +1,17 @@
+# Base de datos local para desarrollo: PostgreSQL con la extensión pgvector ya instalada.
+# Arrancar:  docker compose up -d
+# Parar:     docker compose down        (los datos se conservan en el volumen)
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_DB: ragpeat
+      POSTGRES_USER: ragpeat
+      POSTGRES_PASSWORD: ragpeat   # solo para tu ordenador; en producción irá en una variable de entorno
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

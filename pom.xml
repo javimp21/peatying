@@ -35,6 +35,34 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
+		<!-- Descarga páginas HTML y permite buscar dentro con selectores CSS -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.23.2</version>
+		</dependency>
+
+		<!-- Acceso a base de datos con SQL (JdbcClient) y gestión de conexiones -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<!-- Driver: cómo habla Java con PostgreSQL -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<!-- Migraciones: crea y actualiza las tablas a partir de los .sql de db/migration -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
