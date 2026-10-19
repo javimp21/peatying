@@ -42,6 +42,12 @@
 			<version>1.23.2</version>
 		</dependency>
 
+		<!-- RestClient: para llamar a APIs HTTP externas (Voyage, y más adelante Claude) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-restclient</artifactId>
+		</dependency>
+
 		<!-- Acceso a base de datos con SQL (JdbcClient) y gestión de conexiones -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -41,7 +41,14 @@ public class RayPeatScraper {
         // Selector CSS: enlaces <a> cuyo href acaba en ".shtml" y está dentro de /articles/articles/.
         for (Element link : index.select("a[href*=/articles/articles/][href$=.shtml]")) {
             // "abs:href" convierte "/articles/..." en "https://raypeat.com/articles/...".
-            urls.add(link.attr("abs:href"));
+            String url = link.attr("abs:href");
+            // Las traducciones (spanish-..., italian-...) duplican artículos que ya están en inglés.
+            // Además, la del español "gana" en todas las búsquedas solo por estar en el mismo idioma
+            // que la pregunta, aunque no sea la más relevante. Por eso las dejamos fuera.
+            if (url.contains("/spanish-") || url.contains("/italian-")) {
+                continue;
+            }
+            urls.add(url);
         }
         return new ArrayList<>(urls);
     }
@@ -56,7 +63,7 @@ public class RayPeatScraper {
      * (Sin "public": solo lo usan esta clase y los tests del mismo paquete.)
      */
     Article parseArticle(String url, Document page) {
-        String title = page.title().trim();
+        String title = clean(page.title());
 
         // El cuerpo del artículo está en <div class="line">.
         Element body = page.selectFirst("div.line");
@@ -119,8 +126,13 @@ public class RayPeatScraper {
     }
 
     private String clean(String line) {
-        //   es el espacio "duro" (&nbsp;); trim() no lo quita, así que lo cambiamos antes.
-        return line.replace(' ', ' ').trim();
+        return line
+                //   es el espacio "duro" (&nbsp;); trim() no lo quita, así que lo cambiamos antes.
+                .replace(' ', ' ')
+                // Algunas páginas ya vienen rotas desde la web: el carácter original (casi siempre
+                // unas comillas) se perdió y quedó "ï¿½". Lo más probable es que fuera ", así que lo ponemos.
+                .replace("ï¿½", "\"")
+                .trim();
     }
 
     /**

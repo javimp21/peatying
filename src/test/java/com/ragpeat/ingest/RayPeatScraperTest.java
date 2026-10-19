@@ -52,6 +52,19 @@ class RayPeatScraperTest {
     }
 
     @Test
+    void cambiaLosCaracteresRotosDeLaWebPorComillas() {
+        String html = """
+                <html><head><title>Rotos</title></head><body>
+                <div class="line"><p>Un neurotransmisor ï¿½inhibitorioï¿½.</p></div>
+                </body></html>
+                """;
+
+        Article article = scraper.parseArticle(URL, Jsoup.parse(html));
+
+        assertThat(article.text()).isEqualTo("Un neurotransmisor \"inhibitorio\".");
+    }
+
+    @Test
     void formatoNuevo_conDivYBr_yCitasSinTitulo() {
         String html = """
                 <html><head><title>Glucose</title></head><body>

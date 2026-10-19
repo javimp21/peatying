@@ -32,10 +32,15 @@ public class IndexCommand implements CommandLineRunner {
         }
 
         List<Article> articles = store.loadAll();
-        int totalChunks = 0;
+        int changedArticles = 0, writtenChunks = 0;
         for (Article article : articles) {
-            totalChunks += indexService.index(article);
+            int written = indexService.index(article);
+            if (written > 0) {
+                changedArticles++;
+                writtenChunks += written;
+            }
         }
-        log.info("Indexados {} artículos en {} chunks", articles.size(), totalChunks);
+        log.info("Revisados {} artículos: {} cambiados ({} chunks nuevos), el resto sin cambios",
+                articles.size(), changedArticles, writtenChunks);
     }
 }
