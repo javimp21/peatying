@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 
 import com.anthropic.client.AnthropicClient;
 import com.anthropic.core.JsonValue;
+import com.anthropic.core.http.StreamResponse;
+import com.anthropic.helpers.MessageAccumulator;
+import com.anthropic.models.messages.RawMessageStreamEvent;
 import com.anthropic.models.messages.ContentBlockParam;
 import com.anthropic.models.messages.Message;
 import com.anthropic.models.messages.MessageCreateParams;
@@ -87,7 +90,13 @@ public class ChatService {
         this.systemPrompt = systemPromptFile.getContentAsString(StandardCharsets.UTF_8);
     }
 
+    /** Sin avisos intermedios: para la terminal y el banco de pruebas. */
     public ChatAnswer answer(String question) {
+        return answer(question, ChatListener.NONE);
+    }
+
+    /** Con streaming: el listener recibe el texto según Claude lo va escribiendo. */
+    public ChatAnswer answer(String question, ChatListener listener) {
         List<SearchResult> sources = new ArrayList<>(); // todos los fragmentos vistos; su posición+1 es su número [n]
         int searches = 0;
         long inputTokens = 0, outputTokens = 0;
@@ -104,7 +113,7 @@ public class ChatService {
                 .addUserMessage(question);
 
         for (int turn = 1; turn <= MAX_TURNS; turn++) {
-            Message response = claude.messages().create(request.build());
+            Message response = streamTurn(request.build(), listener);
             inputTokens += response.usage().inputTokens();
             outputTokens += response.usage().outputTokens();
 
@@ -130,6 +139,8 @@ public class ChatService {
             }
 
             // Caso a): ejecutamos cada búsqueda pedida y devolvemos todos los resultados en UN mensaje.
+            // Si Claude escribió algo antes de pedir la búsqueda, no era la respuesta: que la web lo borre.
+            listener.onDiscardText();
             List<ContentBlockParam> toolResults = new ArrayList<>();
             for (ToolUseBlock toolUse : toolUses) {
                 String result;
@@ -137,7 +148,7 @@ public class ChatService {
                     result = "Ya has hecho " + MAX_SEARCHES + " búsquedas. Responde con lo que tienes.";
                 } else {
                     searches++;
-                    result = runSearch(toolUse, sources);
+                    result = runSearch(toolUse, sources, listener);
                 }
                 toolResults.add(ContentBlockParam.ofToolResult(ToolResultBlockParam.builder()
                         .toolUseId(toolUse.id()) // así Claude sabe a qué petición corresponde cada resultado
@@ -152,11 +163,32 @@ public class ChatService {
         throw new IllegalStateException("Claude no terminó en " + MAX_TURNS + " turnos");
     }
 
+    /**
+     * Un turno de Claude en modo streaming.
+     * La respuesta llega en trozos (eventos). Cada trozo de texto se lo pasamos al listener en cuanto
+     * llega, y a la vez el MessageAccumulator del SDK va juntando todos los trozos para reconstruir el
+     * mensaje completo: lo necesitamos al final para saber si Claude pidió una búsqueda.
+     */
+    private Message streamTurn(MessageCreateParams params, ChatListener listener) {
+        MessageAccumulator accumulator = MessageAccumulator.create();
+        // try-with-resources: la conexión de streaming se cierra sola al terminar, incluso si hay un error.
+        try (StreamResponse<RawMessageStreamEvent> stream = claude.messages().createStreaming(params)) {
+            stream.stream().forEach(event -> {
+                accumulator.accumulate(event);
+                event.contentBlockDelta()
+                        .flatMap(delta -> delta.delta().text())
+                        .ifPresent(text -> listener.onText(text.text()));
+            });
+        }
+        return accumulator.message();
+    }
+
     /** Lee lo que Claude pidió buscar, busca, y le devuelve los fragmentos como texto numerado. */
-    private String runSearch(ToolUseBlock toolUse, List<SearchResult> sources) {
+    private String runSearch(ToolUseBlock toolUse, List<SearchResult> sources, ChatListener listener) {
         // La entrada llega como JSON: {"query": "...", "keywords": "..."}. convert() la pasa al record.
         SearchInput input = toolUse._input().convert(SearchInput.class);
         log.info("Claude busca -> query: \"{}\" | keywords: \"{}\"", input.query(), input.keywords());
+        listener.onSearch(input.query());
 
         StringBuilder text = new StringBuilder();
         for (SearchResult result : searchService.search(input.query(), input.keywords(), RESULTS_PER_SEARCH)) {

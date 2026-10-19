@@ -21,10 +21,13 @@ public class Grader {
      * Sin saltos de línea ni "[" dentro: una cita real no contiene un [3]. Si no exigimos esto, con
      * comillas mal emparejadas la regex junta el final de una cita con el principio de la siguiente.
      */
-    private static final Pattern QUOTE = Pattern.compile("[\"“]([^\"”\\[\\n]{15,400})[\"”]");
+    private static final Pattern QUOTE = Pattern.compile("[\"“«]([^\"”»\\[\\n]{15,400})[\"”»]");
+    // También «...»: el prompt las reserva para el español, pero si el bot mete ahí una frase en
+    // inglés, es una cita literal y hay que comprobarla igual (looksEnglish descarta las españolas).
 
     private static final Set<String> ENGLISH_WORDS = Set.of("the", "of", "and", "to", "is", "that", "in", "it", "are", "by", "with");
-    private static final Set<String> SPANISH_WORDS = Set.of("el", "la", "los", "las", "de", "que", "y", "en", "es", "un", "una", "por");
+    private static final Set<String> SPANISH_WORDS = Set.of("el", "la", "los", "las", "de", "del", "al", "que", "y",
+            "en", "es", "un", "una", "por", "para", "con", "se", "lo", "su", "sus", "no", "como", "pero");
 
     /** Frases con las que el bot reconoce que algo no está en los artículos. */
     private static final Pattern ADMITS_ABSENCE = Pattern.compile(

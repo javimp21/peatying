@@ -67,6 +67,17 @@ class GraderTest {
     }
 
     @Test
+    void tambienCompruebaCitasEnInglesEntreComillasAngulares() {
+        var q = new EvalQuestion("g", "direct", "?", List.of("gelatin"));
+
+        var grade = grader.grade(q, answer(
+                "Lo llamaba «gelatin cures every disease known» [1], no «hormona del embarazo» [1].", "gelatin"));
+
+        // La inglesa se comprueba (y es inventada); la española sin tildes se ignora.
+        assertThat(grade.invalidQuotes()).containsExactly("gelatin cures every disease known");
+    }
+
+    @Test
     void absent_apruebaSiReconoceQueNoLoMenciona() {
         var q = new EvalQuestion("k", "absent", "?", List.of());
 

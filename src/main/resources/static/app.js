@@ -19,7 +19,8 @@ const LOADING_PHRASES = [
   "Optimizing energy production",
   "Squeezing the oranges",
 ];
-const LOADING_CYCLE_MS = 2400; // solo si las animaciones están desactivadas; si no, manda el CSS (ver showLoading)
+const FIRST_PHRASE_CYCLES = 2;  // veces que se repite la primera frase antes de pasar a la segunda
+const LOADING_CYCLE_MS = 2400;  // solo si las animaciones están desactivadas; si no, manda el CSS (ver showLoading)
 
 const FIRST_PLACEHOLDER = "Prueba: «¿Qué pensaba del azúcar?»";
 const NEXT_PLACEHOLDER = "Escribe otra pregunta…";
@@ -96,7 +97,9 @@ async function ask(question) {
   input.value = "";
   autoGrow();
   setBusy(true);
-  const loading = showLoading();
+  let loading = showLoading();
+  let live = null;                      // el mensaje que se va escribiendo en directo
+  let finished = false;
 
   try {
     const response = await fetch("/api/chat", {
@@ -104,22 +107,151 @@ async function ask(question) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question }),
     });
-    const data = await response.json();
 
     if (!response.ok) {
-      // 400, 429 o 503: el servidor nos manda un mensaje pensado para el usuario.
+      // 400 o 429: el servidor manda un JSON normal con un mensaje pensado para el usuario.
+      const data = await response.json().catch(() => ({}));
       undoQuestion(questionDiv, question, data.error || "Algo ha fallado. Inténtalo de nuevo.");
       return;
     }
-    addMessage({ role: "bot", text: data.answer, sources: data.sources });
+
+    // Leemos el stream de eventos según va llegando.
+    for await (const { event, data } of readEvents(response)) {
+      if (event === "delta") {
+        if (!live) {                    // primer trozo: quitamos el "cargando" y empezamos a escribir
+          loading.stop();
+          loading = null;
+          live = startLiveMessage();
+        }
+        live.append(data.text);
+      } else if (event === "discard") {
+        // Lo escrito no era la respuesta (Claude va a buscar): lo borramos y volvemos al "cargando".
+        if (live) {
+          live.remove();
+          live = null;
+          loading = showLoading();
+        }
+      } else if (event === "done") {
+        // Esperamos a que la máquina de escribir termine de mostrar el texto y entonces la versión final,
+        // con las citas pulsables, ocupa su lugar. Tiene el mismo formato, así que no se nota el cambio.
+        const message = { role: "bot", text: data.answer, sources: data.sources };
+        if (live) {
+          await live.finish();
+          live.element.replaceWith(addMessage(message, { animate: false }));
+        } else {
+          addMessage(message);
+        }
+        finished = true;
+      } else if (event === "error") {
+        live?.remove();
+        undoQuestion(questionDiv, question, data.error);
+        finished = true;
+      }
+    }
+    if (!finished) {
+      // La conexión se cortó sin "done" ni "error".
+      live?.remove();
+      undoQuestion(questionDiv, question, "Se cortó la conexión. Inténtalo de nuevo.");
+    }
   } catch (e) {
     // Sin conexión, o el servidor no responde.
+    live?.remove();
     undoQuestion(questionDiv, question, "No hay conexión con el servidor. Inténtalo de nuevo.");
   } finally {
-    loading.stop();
+    loading?.stop();
     setBusy(false);
     input.focus();
   }
+}
+
+/**
+ * Lee una respuesta SSE (Server-Sent Events) y va devolviendo sus eventos uno a uno.
+ * El formato es texto: cada evento son líneas "event: nombre" y "data: {json}", y entre eventos
+ * hay una línea en blanco. Los datos llegan en trozos que pueden cortar un evento por la mitad,
+ * así que guardamos lo que sobra (buffer) hasta que llega el resto.
+ * (El navegador trae EventSource para esto, pero solo sirve con GET, y nosotros enviamos un POST.)
+ */
+async function* readEvents(response) {
+  const reader = response.body.pipeThrough(new TextDecoderStream()).getReader();
+  let buffer = "";
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) return;
+    buffer += value.replace(/\r\n/g, "\n");
+    let end;
+    while ((end = buffer.indexOf("\n\n")) !== -1) {
+      const block = buffer.slice(0, end);
+      buffer = buffer.slice(end + 2);
+      let event = "message";
+      const dataLines = [];
+      for (const line of block.split("\n")) {
+        if (line.startsWith("event:")) event = line.slice(6).trim();
+        else if (line.startsWith("data:")) dataLines.push(line.slice(5).replace(/^ /, ""));
+      }
+      if (dataLines.length > 0) yield { event, data: JSON.parse(dataLines.join("\n")) };
+    }
+  }
+}
+
+/**
+ * Un mensaje del bot que se va escribiendo en directo, como una máquina de escribir.
+ *
+ * El texto llega del servidor a trompicones (a veces una palabra, a veces media frase). En vez de
+ * pintarlo tal cual llega, lo guardamos en "target" y en cada fotograma de la pantalla
+ * (requestAnimationFrame, ~60 veces por segundo) mostramos unas pocas letras más. Si se acumula mucho
+ * texto pendiente, avanzamos más rápido para no quedarnos atrás.
+ */
+function startLiveMessage() {
+  const div = document.createElement("div");
+  div.className = "message bot live";
+  div.setAttribute("aria-hidden", "true");  // el lector de pantalla leerá la versión final, completa
+  conversation.appendChild(div);
+
+  let target = "";      // todo el texto recibido
+  let shown = 0;        // cuántas letras se ven ya
+  let running = false;
+  let onCaughtUp = null;
+
+  const frame = () => {
+    const pending = target.length - shown;
+    if (pending > 0) {
+      // Mínimo 1 letra por fotograma (~60/s); con mucho pendiente, lo que haga falta para alcanzarlo en ~1/3 s.
+      shown += Math.max(1, Math.ceil(pending / 20));
+      div.innerHTML = renderMarkdown(target.slice(0, shown), null, true);
+      followIfAtBottom();
+      requestAnimationFrame(frame);
+    } else {
+      running = false;
+      onCaughtUp?.();
+    }
+  };
+
+  return {
+    element: div,
+    append(delta) {
+      target += delta;
+      if (!running) {
+        running = true;
+        requestAnimationFrame(frame);
+      }
+    },
+    /** Una promesa que se cumple cuando ya se ve todo el texto recibido. */
+    finish() {
+      return new Promise((resolve) => {
+        if (!running) resolve();
+        else onCaughtUp = resolve;
+      });
+    },
+    remove() {
+      div.remove();
+    },
+  };
+}
+
+/** Seguimos el texto hacia abajo solo si el usuario no ha subido a leer otra cosa. */
+function followIfAtBottom() {
+  const nearBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 160;
+  if (nearBottom) window.scrollTo({ top: document.body.scrollHeight });
 }
 
 /** Si la pregunta falla, la quitamos de la conversación y se la devolvemos a la caja para que no la pierda. */
@@ -141,37 +273,51 @@ function showLoading() {
   conversation.setAttribute("aria-busy", "true"); // en su lugar, avisa de que está ocupado
   conversation.appendChild(div);
 
-  const phrases = [...LOADING_PHRASES].sort(() => Math.random() - 0.5);
-  let i = 0;
-  const showNext = () => {
-    // Estructura: <span class="phrase">Peatying</span><span class="dots"><i>.</i><i>.</i><i>.</i></span>
+  // Como mucho DOS frases por respuesta, al azar. La primera se repite unas veces antes de pasar
+  // a la segunda (que ya se queda): si la respuesta llega rápido, solo se ve una.
+  const [first, second] = [...LOADING_PHRASES].sort(() => Math.random() - 0.5);
+
+  const show = (text) => {
+    // Estructura: <span class="phrase">Peatying</span><span class="dots"><i class="orange"></i>×3</span>
     // Al reemplazar los elementos, las animaciones CSS empiezan de cero con cada frase nueva.
     const phrase = document.createElement("span");
     phrase.className = "phrase";
-    phrase.textContent = phrases[i++ % phrases.length];
+    phrase.textContent = text;
     const dots = document.createElement("span");
     dots.className = "dots";
     for (let d = 0; d < 3; d++) {
-      const dot = document.createElement("i");
-      dot.textContent = ".";
-      dots.appendChild(dot);
+      const orange = document.createElement("i");
+      orange.className = "orange";        // una mini naranja dibujada con CSS (ver styles.css)
+      dots.appendChild(orange);
     }
     div.replaceChildren(phrase, dots);
-    // Cambiamos de frase justo cuando termina un ciclo completo de la animación (brillo + saltos), para
-    // que nunca se corte a medias. Lo avisa el propio navegador con el evento "animationiteration".
-    // Escuchamos el PRIMER punto: no tiene retraso, así que su ciclo coincide con el del brillo.
-    dots.firstChild.addEventListener("animationiteration", showNext, { once: true });
+    return dots;
   };
-  showNext();
+
+  const dots = show(first);
   div.scrollIntoView({ behavior: "smooth", block: "end" });
+
+  // Cambiamos de frase justo cuando termina un ciclo completo de la animación (brillo + saltos), para
+  // que nunca se corte a medias. Lo avisa el propio navegador con el evento "animationiteration".
+  // Escuchamos la PRIMERA naranja: no tiene retraso, así que su ciclo coincide con el del brillo.
+  let cycles = 0;
+  const onCycle = () => {
+    if (++cycles === FIRST_PHRASE_CYCLES && second) {
+      dots.firstChild.removeEventListener("animationiteration", onCycle);
+      show(second);
+    }
+  };
+  dots.firstChild.addEventListener("animationiteration", onCycle);
 
   // Si el usuario tiene desactivadas las animaciones, ese evento no llega nunca: usamos un temporizador.
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const timer = reducedMotion ? setInterval(showNext, LOADING_CYCLE_MS) : null;
+  const timer = reducedMotion && second
+    ? setTimeout(() => show(second), FIRST_PHRASE_CYCLES * LOADING_CYCLE_MS)
+    : null;
 
   return {
     stop() {
-      clearInterval(timer);
+      clearTimeout(timer);
       div.remove();
       conversation.removeAttribute("aria-busy");
     },
@@ -179,10 +325,13 @@ function showLoading() {
 }
 
 // --- Mensajes: estado + pantalla --------------------------------------------
-function addMessage(message) {
+function addMessage(message, { animate = true } = {}) {
   messages.push(message);
   saveConversation();
-  return render(message, true);
+  const div = render(message, animate);
+  // Si sustituye a un texto escrito en directo, no queremos que "salte" con la animación de entrada.
+  if (!animate) div.classList.add("no-anim");
+  return div;
 }
 
 function render(message, scroll) {
@@ -205,12 +354,10 @@ function renderAnswer(answer, sources) {
 
   const byNumber = new Map(sources.map((s) => [s.number, s]));
 
-  // Cada párrafo de la respuesta (separados por línea en blanco) es un <p>.
-  for (const paragraph of answer.split(/\n\s*\n/)) {
-    const p = document.createElement("p");
-    p.innerHTML = formatParagraph(paragraph, byNumber);
-    div.appendChild(p);
-  }
+  const body = document.createElement("div");
+  body.className = "answer-body";
+  body.innerHTML = renderMarkdown(answer, byNumber, false);
+  div.appendChild(body);
 
   // Lista de fuentes al final, con enlace al artículo (un artículo solo una vez).
   if (sources.length > 0) {
@@ -240,18 +387,85 @@ function renderAnswer(answer, sources) {
   return div;
 }
 
+const CARET_MARK = ""; // un carácter "privado" que nunca aparece en un texto normal
+
 /**
- * Convierte un párrafo en HTML seguro:
- *  1. Escapamos TODO (<, >, &...) para que el texto del modelo no pueda meter HTML en la página.
- *  2. Sobre el texto ya escapado añadimos solo lo que nosotros controlamos: **negrita** y [n].
+ * Convierte el Markdown sencillo que escribe el bot en HTML: párrafos, listas (1. / -) y **negrita**.
+ * Se usa igual mientras se escribe (live) y al final, para que el formato no "salte" al terminar.
+ *
+ * Funciona línea a línea: las líneas que empiezan por "1." o "-" son puntos de una lista, las demás
+ * forman párrafos, y una línea en blanco cierra el párrafo.
  */
-function formatParagraph(text, byNumber) {
+function renderMarkdown(text, byNumber, live) {
+  if (live) {
+    // Mientras se escribe, una negrita puede estar a medias ("**conce"): la cerramos provisionalmente
+    // para no ver los asteriscos. Y marcamos dónde va el punto que "respira" (el final del texto).
+    if ((text.match(/\*\*/g) || []).length % 2 === 1) text += "**";
+    text += CARET_MARK;
+  }
+
+  let html = "";
+  let list = null;              // "ol", "ul" o null
+  let paragraph = [];
+  const flushParagraph = () => {
+    if (paragraph.length) html += `<p>${formatInline(paragraph.join(" "), byNumber)}</p>`;
+    paragraph = [];
+  };
+  const closeList = () => {
+    if (list) html += `</${list}>`;
+    list = null;
+  };
+  const openList = (type) => {
+    if (list !== type) {
+      closeList();
+      html += `<${type}>`;
+      list = type;
+    }
+  };
+
+  for (const rawLine of text.split("\n")) {
+    const line = rawLine.trim();
+    let match;
+    if (!line) {
+      flushParagraph();               // la lista sigue abierta: los puntos a veces vienen separados por líneas en blanco
+    } else if ((match = line.match(/^\d+[.)]\s+(.*)$/))) {
+      flushParagraph();
+      openList("ol");
+      html += `<li>${formatInline(match[1], byNumber)}</li>`;
+    } else if ((match = line.match(/^[-*•]\s+(.*)$/))) {
+      flushParagraph();
+      openList("ul");
+      html += `<li>${formatInline(match[1], byNumber)}</li>`;
+    } else {
+      closeList();
+      paragraph.push(line.replace(/^#+\s*/, ""));   // si aun así pone un título "## ...", lo tratamos como texto
+    }
+  }
+  flushParagraph();
+  closeList();
+
+  return live ? html.replace(CARET_MARK, '<span class="caret"></span>') : html;
+}
+
+/**
+ * Convierte un trozo de texto en HTML seguro:
+ *  1. Escapamos TODO (<, >, &...) para que el texto del modelo no pueda meter HTML en la página.
+ *  2. Sobre el texto ya escapado añadimos solo lo que nosotros controlamos: **negrita** y las citas [n].
+ * Mientras se escribe (byNumber = null) las citas aún no se pueden pulsar: se pintan igual, pero inactivas.
+ */
+function formatInline(text, byNumber) {
   return escapeHtml(text)
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\[(\d+)\]/g, (match, n) =>
-      byNumber.has(Number(n))
-        ? `<button type="button" class="cite" data-n="${n}" aria-expanded="false" aria-label="Ver el texto original de la fuente ${n}">${n}</button>`
-        : match);
+    // La cita y el signo que la sigue ("[2]." o "[2],") van juntos en un <span> que no se parte de línea:
+    // si no, a veces el punto se quedaba solo al principio de la línea siguiente.
+    .replace(/\[(\d+)\]([.,;:)]?)/g, (match, n, punctuation) => {
+      let chip;
+      if (!byNumber) chip = `<span class="cite pending">${n}</span>`;
+      else if (byNumber.has(Number(n)))
+        chip = `<button type="button" class="cite" data-n="${n}" aria-expanded="false" aria-label="Ver el texto original de la fuente ${n}">${n}</button>`;
+      else return match;
+      return `<span class="cite-wrap">${chip}${punctuation}</span>`;
+    });
 }
 
 function escapeHtml(text) {
@@ -261,13 +475,26 @@ function escapeHtml(text) {
 }
 
 // --- Panel con el texto original de una cita --------------------------------
+
+// Un clic fuera del panel (y fuera de las citas) lo cierra. También la tecla Escape.
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".source-panel, .cite")) closeSourcePanels();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeSourcePanels();
+});
+
+function closeSourcePanels() {
+  document.querySelectorAll(".source-panel").forEach((panel) => panel.remove());
+  document.querySelectorAll('.cite[aria-expanded="true"]').forEach((b) => b.setAttribute("aria-expanded", "false"));
+}
+
 function toggleSource(messageDiv, button, source) {
   const open = messageDiv.querySelector(".source-panel");
   const wasThisOne = open && open.dataset.n === button.dataset.n;
 
-  // Solo un panel abierto a la vez por mensaje.
-  if (open) open.remove();
-  messageDiv.querySelectorAll(".cite").forEach((b) => b.setAttribute("aria-expanded", "false"));
+  // Solo un panel abierto a la vez en toda la página.
+  closeSourcePanels();
   if (wasThisOne || !source) return;
 
   const panel = document.createElement("div");
@@ -275,17 +502,20 @@ function toggleSource(messageDiv, button, source) {
   panel.dataset.n = button.dataset.n;
 
   const title = document.createElement("h3");
-  title.textContent = `[${source.number}] ${source.title}`;
+  title.textContent = `${source.number} · ${source.title}`;
   const text = document.createElement("p");
   text.textContent = source.text;       // el texto original de Peat, en inglés
   const link = document.createElement("a");
   link.href = source.url;
   link.target = "_blank";
   link.rel = "noopener";
-  link.textContent = "Leer el artículo completo en raypeat.com →";
+  link.textContent = "Leer el artículo completo →";
 
   panel.append(title, text, link);
-  button.closest("p").after(panel);     // justo después del párrafo donde está la cita
+  // Justo debajo de donde está la cita: dentro del punto de la lista, o después del párrafo.
+  const item = button.closest("li");
+  if (item) item.appendChild(panel);
+  else button.closest("p").after(panel);
   messageDiv.querySelectorAll(`.cite[data-n="${source.number}"]`)
     .forEach((b) => b.setAttribute("aria-expanded", "true"));
 }
