@@ -151,7 +151,10 @@ async function ask(question) {
         // Esperamos a que la máquina de escribir termine de mostrar el texto y entonces la versión final,
         // con las citas pulsables, ocupa su lugar. Tiene el mismo formato, así que no se nota el cambio.
         conversationId = data.conversationId;     // se guarda junto con los mensajes (addMessage)
-        const message = { role: "bot", text: data.answer, sources: data.sources };
+        const message = {
+          role: "bot", text: data.answer, sources: data.sources,
+          messageId: data.messageId, conversationId: data.conversationId, vote: null,   // para el 👍/👎
+        };
         if (loading) {                  // respuesta sin streaming previo: también despedimos a las naranjas
           await loading.stop({ roll: firstOfConversation });
           loading = null;
@@ -377,7 +380,7 @@ function addMessage(message, { animate = true } = {}) {
 }
 
 function render(message, scroll) {
-  const div = message.role === "user" ? renderUser(message.text) : renderAnswer(message.text, message.sources);
+  const div = message.role === "user" ? renderUser(message.text) : renderAnswer(message);
   conversation.appendChild(div);
   if (scroll) div.scrollIntoView({ behavior: "smooth", block: message.role === "user" ? "end" : "start" });
   return div;
@@ -390,7 +393,8 @@ function renderUser(text) {
   return div;
 }
 
-function renderAnswer(answer, sources) {
+function renderAnswer(message) {
+  const { text: answer, sources } = message;
   const div = document.createElement("div");
   div.className = "message bot";
 
@@ -421,12 +425,73 @@ function renderAnswer(answer, sources) {
     div.appendChild(list);
   }
 
+  // Respuestas guardadas de antes de existir los votos no tienen messageId: a esas no se puede votar.
+  if (message.messageId) div.appendChild(feedbackRow(message));
+
   // Un solo "escuchador" para todos los botones de cita del mensaje (delegación de eventos).
   div.addEventListener("click", (event) => {
     const button = event.target.closest(".cite");
     if (button) toggleSource(div, button, byNumber.get(Number(button.dataset.n)));
   });
   return div;
+}
+
+// --- 👍/👎 ----------------------------------------------------------------------
+// Icono de pulgar (de la colección libre Lucide, licencia ISC). El de "no" es el mismo girado con CSS.
+const THUMB_SVG = `<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none"
+  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg>`;
+
+function feedbackRow(message) {
+  const row = document.createElement("div");
+  row.className = "feedback";
+  const label = document.createElement("span");
+  const buttons = [
+    { value: 1, name: "Me ha servido" },
+    { value: -1, name: "No me ha servido" },
+  ].map(({ value, name }) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = value === 1 ? "vote up" : "vote down";
+    button.setAttribute("aria-label", name);
+    button.title = name;
+    button.innerHTML = THUMB_SVG;
+    // Pulsar el voto que ya tenías lo quita (vuelve a null).
+    button.addEventListener("click", () => vote(message, message.vote === value ? null : value, paint));
+    return button;
+  });
+
+  const paint = () => {
+    label.textContent = message.vote ? "¡Gracias!" : "¿Te ha servido?";
+    buttons[0].setAttribute("aria-pressed", String(message.vote === 1));
+    buttons[1].setAttribute("aria-pressed", String(message.vote === -1));
+  };
+  paint();
+  row.append(label, ...buttons);
+  return row;
+}
+
+/**
+ * Cambia el voto en pantalla al momento ("optimista") y lo manda al servidor.
+ * Si el servidor falla, lo devolvemos a como estaba, para no mostrar un voto que no se guardó.
+ */
+async function vote(message, value, paint) {
+  const previous = message.vote;
+  message.vote = value;
+  paint();
+  saveConversation();
+  try {
+    const response = await fetch("/api/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversationId: message.conversationId, messageId: message.messageId, value }),
+    });
+    if (!response.ok) throw new Error("HTTP " + response.status);
+  } catch (e) {
+    message.vote = previous;
+    paint();
+    saveConversation();
+  }
 }
 
 const CARET_MARK = ""; // un carácter "privado" que nunca aparece en un texto normal

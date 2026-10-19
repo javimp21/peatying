@@ -32,6 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
+### Resultados del banco de pruebas ###
+# Cada ejecución crea un archivo nuevo: no los subimos todos. Solo el que cita eval/RESULTS.md.
+eval/results/*
+!eval/results/20261019-2351-compare.json
+
 ### Datos descargados ###
 # Los artículos tienen copyright: se quedan en local, no se suben a GitHub.
 data/

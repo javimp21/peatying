@@ -11,6 +11,7 @@ import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.chat.ChatListener;
 import com.ragpeat.chat.ChatService;
 import com.ragpeat.chat.ConversationRepository;
+import com.ragpeat.chat.ConversationRepository.AnswerMetrics;
 import com.ragpeat.chat.Turn;
 import jakarta.annotation.PreDestroy;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,6 +51,7 @@ public class ChatController {
     private final ChatService chatService;
     private final ConversationRepository conversations;
     private final RateLimiter rateLimiter;
+    private final VisitorHasher visitorHasher;
     private final boolean trustProxy;
 
     /**
@@ -60,9 +62,10 @@ public class ChatController {
     private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
     public ChatController(ChatService chatService, ConversationRepository conversations, RateLimiter rateLimiter,
-                          @Value("${chat.trust-proxy:false}") boolean trustProxy) {
+                          VisitorHasher visitorHasher, @Value("${chat.trust-proxy:false}") boolean trustProxy) {
         this.chatService = chatService;
         this.conversations = conversations;
+        this.visitorHasher = visitorHasher;
         this.rateLimiter = rateLimiter;
         this.trustProxy = trustProxy;
     }
@@ -73,9 +76,23 @@ public class ChatController {
 
     record Source(int number, String title, String url, String text) {}
 
-    record ChatResponse(String answer, List<Source> sources, UUID conversationId) {}
+    record ChatResponse(String answer, List<Source> sources, UUID conversationId, long messageId) {}
 
     record ErrorResponse(String error) {}
+
+    /** value: 1 = 👍, -1 = 👎, null = quitar el voto. */
+    record FeedbackRequest(UUID conversationId, Long messageId, Integer value) {}
+
+    @PostMapping("/api/feedback")
+    public ResponseEntity<?> feedback(@RequestBody FeedbackRequest request) {
+        if (request.conversationId() == null || request.messageId() == null
+                || (request.value() != null && request.value() != 1 && request.value() != -1)) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("Voto no válido."));
+        }
+        boolean saved = conversations.saveFeedback(request.conversationId(), request.messageId(), request.value());
+        // 204 No Content: todo bien y no hay nada que devolver. 404: ese mensaje no existe en esa conversación.
+        return saved ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 
     @PostMapping("/api/chat")
     public ResponseEntity<?> chat(@RequestBody ChatRequest request, HttpServletRequest http) {
@@ -92,20 +109,24 @@ public class ChatController {
                     .body(new ErrorResponse("Has hecho muchas preguntas seguidas. Prueba de nuevo dentro de un rato."));
         }
 
+        // La huella se calcula aquí, en el hilo de la petición: el objeto "http" no se puede usar
+        // desde otro hilo cuando la petición ya ha pasado a modo streaming.
+        String visitor = visitorHasher.hash(clientIp(http), String.valueOf(http.getHeader("User-Agent")));
         SseEmitter emitter = new SseEmitter(STREAM_TIMEOUT_MS);
-        executor.execute(() -> respond(question, request.conversationId(), emitter));
+        executor.execute(() -> respond(question, request.conversationId(), visitor, emitter));
         return ResponseEntity.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(emitter);
     }
 
     /** Se ejecuta en un hilo virtual: genera la respuesta y la va mandando por el emitter. */
-    private void respond(String question, UUID requestedId, SseEmitter emitter) {
+    private void respond(String question, UUID requestedId, String visitor, SseEmitter emitter) {
+        long start = System.currentTimeMillis();
         try {
             // Si nos mandan una conversación que existe, seguimos en ella; si no (primera pregunta,
             // o un id inventado o borrado), empezamos una nueva. Nunca nos fiamos del historial que
             // pudiera mandar la página: lo leemos de nuestra base de datos.
             UUID conversationId = requestedId != null && conversations.exists(requestedId)
                     ? requestedId
-                    : conversations.create();
+                    : conversations.create(visitor);
             List<Turn> history = conversations.lastTurns(conversationId, HISTORY_MESSAGES);
 
             ChatAnswer answer = chatService.answer(history, question, new ChatListener() {
@@ -123,8 +144,10 @@ public class ChatController {
                     .map(e -> new Source(e.getKey(), e.getValue().title(), e.getValue().url(), e.getValue().content()))
                     .toList();
             // Solo guardamos el intercambio si ha salido bien.
-            conversations.saveExchange(conversationId, question, answer.text());
-            send(emitter, "done", new ChatResponse(answer.text(), sources, conversationId));
+            long messageId = conversations.saveExchange(conversationId, question, answer.text(),
+                    new AnswerMetrics(System.currentTimeMillis() - start,
+                            answer.inputTokens(), answer.outputTokens(), answer.searches()));
+            send(emitter, "done", new ChatResponse(answer.text(), sources, conversationId, messageId));
             emitter.complete();
         } catch (Exception e) {
             // Falló algo nuestro o de un servicio externo (Claude, Voyage, la base de datos).

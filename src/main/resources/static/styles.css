@@ -391,6 +391,33 @@ li .source-panel { margin: 8px 0 4px; }
 .sources a { color: var(--muted); text-decoration-color: var(--line); }
 .sources a:hover { color: var(--text-soft); }
 
+/* --- 👍/👎 bajo cada respuesta: discreto, gris, y en color solo el que está votado --- */
+.feedback {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.feedback span { margin-right: 4px; }
+.vote {
+  display: grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.vote:hover { background: var(--surface); color: var(--text); }
+.vote:active { transform: scale(0.9); }
+.vote.down svg { transform: rotate(180deg); }      /* el mismo pulgar, boca abajo */
+.vote[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-text); }
+.vote:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+
 /* --- Pie ------------------------------------------------------------------- */
 .footer {
   max-width: 760px;

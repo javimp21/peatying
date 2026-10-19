@@ -17,12 +17,21 @@ public class ConversationRepository {
         this.jdbc = jdbc;
     }
 
-    /** Crea una conversación nueva. El id es un UUID aleatorio: nadie puede adivinar el de otra persona. */
-    public UUID create() {
+    /**
+     * Crea una conversación nueva. El id es un UUID aleatorio: nadie puede adivinar el de otra persona.
+     * visitorHash: huella anónima del visitante (ver VisitorHasher), solo para contar visitantes únicos.
+     */
+    public UUID create(String visitorHash) {
         UUID id = UUID.randomUUID();
-        jdbc.sql("INSERT INTO conversations (id) VALUES (:id)").param("id", id).update();
+        jdbc.sql("INSERT INTO conversations (id, visitor_hash) VALUES (:id, :visitor)")
+                .param("id", id)
+                .param("visitor", visitorHash)
+                .update();
         return id;
     }
+
+    /** Datos de una respuesta del bot para las métricas. */
+    public record AnswerMetrics(long latencyMs, long inputTokens, long outputTokens, int searches) {}
 
     public boolean exists(UUID id) {
         return jdbc.sql("SELECT count(*) FROM conversations WHERE id = :id")
@@ -51,18 +60,46 @@ public class ConversationRepository {
                 .list();
     }
 
-    /** Guarda una pregunta y su respuesta juntas: o las dos, o ninguna. */
+    /**
+     * Guarda una pregunta y su respuesta juntas: o las dos, o ninguna.
+     * @return el id del mensaje de la respuesta (la página lo necesita para votar 👍/👎).
+     */
     @Transactional
-    public void saveExchange(UUID id, String question, String answer) {
-        insert(id, Turn.USER, question);
-        insert(id, Turn.ASSISTANT, answer);
+    public long saveExchange(UUID id, String question, String answer, AnswerMetrics metrics) {
+        jdbc.sql("INSERT INTO chat_messages (conversation_id, role, content) VALUES (:id, 'user', :content)")
+                .param("id", id)
+                .param("content", question)
+                .update();
+        return jdbc.sql("""
+                INSERT INTO chat_messages
+                    (conversation_id, role, content, latency_ms, input_tokens, output_tokens, searches)
+                VALUES (:id, 'assistant', :content, :latency, :input, :output, :searches)
+                RETURNING id
+                """)
+                .param("id", id)
+                .param("content", answer)
+                .param("latency", metrics.latencyMs())
+                .param("input", metrics.inputTokens())
+                .param("output", metrics.outputTokens())
+                .param("searches", metrics.searches())
+                .query(Long.class)
+                .single();
     }
 
-    private void insert(UUID id, String role, String content) {
-        jdbc.sql("INSERT INTO chat_messages (conversation_id, role, content) VALUES (:id, :role, :content)")
-                .param("id", id)
-                .param("role", role)
-                .param("content", content)
-                .update();
+    /**
+     * Guarda el voto (1, -1, o null para quitarlo).
+     * Exigimos que el mensaje sea de ESA conversación: el id del mensaje es un número fácil de
+     * adivinar, pero el de la conversación es un UUID secreto que solo tiene quien la creó.
+     * @return false si no existe ese mensaje del bot en esa conversación.
+     */
+    public boolean saveFeedback(UUID conversationId, long messageId, Integer value) {
+        return jdbc.sql("""
+                UPDATE chat_messages SET feedback = :value
+                WHERE id = :message AND conversation_id = :conversation AND role = 'assistant'
+                """)
+                .param("value", value)
+                .param("message", messageId)
+                .param("conversation", conversationId)
+                .update() == 1;
     }
 }
