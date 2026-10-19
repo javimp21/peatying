@@ -1,6 +1,7 @@
 package com.ragpeat.ingest;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.ragpeat.embedding.PgVector;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -37,6 +38,14 @@ public class ChunkRepository {
                 .param("url", article.url())
                 .query(Long.class)
                 .single();
+    }
+
+    /** El título guardado de un documento, o vacío si aún no existe. */
+    public Optional<String> findTitle(String slug) {
+        return jdbc.sql("SELECT title FROM documents WHERE slug = :slug")
+                .param("slug", slug)
+                .query(String.class)
+                .optional();
     }
 
     /** El texto de los chunks de un documento, en orden. */

@@ -17,9 +17,10 @@ class RayPeatScraperTest {
     @Test
     void formatoAntiguo_conParrafosP_yTituloReferences() {
         String html = """
-                <html><head><title>Gelatin</title></head><body>
+                <html><head><title>New Page Title Here</title></head><body>
                 <div class="line">
                   A R T I C L E<br>
+                  <p><b>Gelatin, stress, longevity</b></p>
                   <p>=========</p>
                   <p>Primer párrafo
                   partido en varias líneas.</p>
@@ -31,8 +32,10 @@ class RayPeatScraperTest {
 
         Article article = scraper.parseArticle(URL, Jsoup.parse(html));
 
-        assertThat(article.title()).isEqualTo("Gelatin");
-        assertThat(article.text()).isEqualTo("Primer párrafo partido en varias líneas.\n\nSegundo párrafo.");
+        // El <title> de la página está mal: el título real se toma de la primera línea del texto.
+        assertThat(article.title()).isEqualTo("Gelatin, stress, longevity");
+        assertThat(article.text())
+                .isEqualTo("Gelatin, stress, longevity\n\nPrimer párrafo partido en varias líneas.\n\nSegundo párrafo.");
     }
 
     @Test
@@ -55,13 +58,14 @@ class RayPeatScraperTest {
     void cambiaLosCaracteresRotosDeLaWebPorComillas() {
         String html = """
                 <html><head><title>Rotos</title></head><body>
-                <div class="line"><p>Un neurotransmisor ï¿½inhibitorioï¿½.</p></div>
+                <div class="line"><p>The industryï¿½s ï¿½inhibitoryï¿½ myth.</p></div>
                 </body></html>
                 """;
 
         Article article = scraper.parseArticle(URL, Jsoup.parse(html));
 
-        assertThat(article.text()).isEqualTo("Un neurotransmisor \"inhibitorio\".");
+        // Entre letras era un apóstrofe; junto a espacios o puntuación, unas comillas.
+        assertThat(article.text()).isEqualTo("The industry's \"inhibitory\" myth.");
     }
 
     @Test

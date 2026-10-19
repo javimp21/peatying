@@ -1,0 +1,601 @@
+[ {
+  "question" : {
+    "id" : "aceites",
+    "type" : "direct",
+    "question" : "¿Qué opinaba Peat de los aceites vegetales poliinsaturados?",
+    "expectedArticles" : [ "unsaturated-oils", "unsaturatedfats", "unsuitablefats", "fats-functions-malfunctions", "fats-degeneration3", "diabetes" ]
+  },
+  "answer" : "Según los artículos, Peat consideraba que los aceites vegetales poliinsaturados (soja, maíz, cártamo, canola, girasol, sésamo y palma, entre otros) son perjudiciales. En una entrevista afirma que el componente responsable es la propia grasa poliinsaturada, y que los aceites frescos, prensados en frío o presentes en la planta, son «intrinsecamente tóxicos» [1]. También señala que estas grasas se encuentran en casi todos los alimentos, así que es difícil evitarlas por completo [1].\n\nSobre la idea de que son nutrientes esenciales, Peat sostenía que el ácido linoleico y el linolénico no son realmente «esenciales», porque el cuerpo puede sintetizar sus propias grasas insaturadas [1]. Critica los experimentos de los Burr, que atribuían a la falta de estas grasas consecuencias graves, y menciona que en los años cuarenta ya se sabía que las grasas poliinsaturadas causaban deterioro del cerebro, los músculos y las gónadas en varios animales, principalmente por destruir la vitamina E [4]. Añade que la promoción de estos aceites por parte de la industria, junto con la campaña contra la grasa saturada, tuvo un fuerte componente comercial [2][3].\n\nPor último, Peat relacionaba las prostaglandinas, que se producen a partir de estas grasas, con la idea de que los aceites serían «hormonas» necesarias, algo que según él sirvió de argumento a la industria farmacéutica y alimentaria [5].\n\nEstos fragmentos no tratan en detalle los efectos concretos sobre el colesterol o las enfermedades cardiovasculares en la población humana, ni qué alternativas de grasa proponía en la dieta diaria. Si quieres profundizar en esos puntos, puedo buscar otros artículos suyos sobre ello.",
+  "cited" : [ "https://raypeat.com/articles/articles/unsaturated-oils.shtml", "https://raypeat.com/articles/articles/sugar-issues.shtml", "https://raypeat.com/articles/articles/unsaturatedfats.shtml", "https://raypeat.com/articles/articles/unsuitablefats.shtml", "https://raypeat.com/articles/articles/fats-degeneration3.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5297,
+  "outputTokens" : 929,
+  "millis" : 9682
+}, {
+  "question" : {
+    "id" : "gelatina",
+    "type" : "direct",
+    "question" : "¿Por qué recomendaba tomar gelatina?",
+    "expectedArticles" : [ "gelatin" ]
+  },
+  "answer" : "Según el artículo \"Gelatin, stress, longevity\", Peat veía la gelatina sobre todo como una fuente de glicina y de otros aminoácidos con efecto antiestrés y antiinflamatorio, más que como un simple alimento proteico.\n\nEl argumento principal es que la gelatina tiene poco triptófano. Peat sostenía que el exceso de triptófano puede favorecer la formación de serotonina y cortisol, y que eso se asocia con problemas musculares, inflamatorios y hormonales. Por eso consideraba que la gelatina podía ayudar a corregir esos problemas [1]. También decía que la glicina, abundante en la gelatina, tiene un efecto «calmante» en las células, que puede proteger frente a daños como la fibrosis, la inflamación o la disfunción mitocondrial [3].\n\nPropone además cómo usarla: si se come una porción grande de carne, sugiere tomar de 5 a 10 gramos de gelatina en el mismo momento para que los aminoácidos entren al torrente sanguíneo más equilibrados [2]. Según el artículo, algunas personas notan menos fatiga con cantidades de unos 100 gramos al día, aunque aclara que, en niños, una cantidad tan grande podría desplazar otros alimentos importantes [1]. Asimismo, defendía el consumo de animales enteros (caldos, cartílagos, piel), en lugar de solo carne muscular, porque así se obtiene un equilibrio de aminoácidos más parecido al de un organismo sano [4].\n\nSi lo que te interesa es tu propia situación, recuerda que esto es lo que Peat escribía y no sustituye la opinión de un médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/gelatin.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 1,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5073,
+  "outputTokens" : 731,
+  "millis" : 8632
+}, {
+  "question" : {
+    "id" : "coco",
+    "type" : "direct",
+    "question" : "¿Qué pensaba del aceite de coco?",
+    "expectedArticles" : [ "coconut-oil" ]
+  },
+  "answer" : "Según el artículo «Coconut Oil» de Peat, él veía el aceite de coco de forma muy favorable, sobre todo en comparación con los aceites poliinsaturados.\n\nArgumentaba que los aceites insaturados son los que se oxidan con facilidad, y que el aceite de coco, rico en grasas saturadas, los protege. Señalaba que el aceite de coco guardado a temperatura ambiente durante un año no mostraba signos de rancidez, y sugería que las grasas saturadas tienen un efecto antioxidante, porque diluyen las moléculas insaturadas inestables y evitan que reaccionen entre sí [3]. También decía que la dieta con aceite de coco reduce la necesidad de vitamina E [3]. En cuanto al envejecimiento, relacionaba la proporción entre grasas insaturadas y saturadas con la formación del «pigmento de la edad» y con el daño de la piel por la luz ultravioleta [2].\n\nSobre el peso, citaba un experimento animal en el que la obesidad aumentaba en proporción a la cantidad de aceite insaturado en relación con el aceite de coco, y no con la cantidad total de grasa [5]. Describía además que, al principio de tomar aceite de coco, notó aumentos de pulso y respiración, que interpretó como una compensación frente a una sustancia antitiroidea. Con el tiempo esa respuesta disminuyó [4]. Este relato es su experiencia personal, no un estudio controlado.\n\nLos fragmentos que encontré vienen de un único artículo, así que no puedo darte su opinión sobre otros usos del aceite de coco, como su contenido en grasas saturadas de cadena media o su efecto en el colesterol. Si quieres saber si te conviene a ti, consulta con un médico o un dietista.",
+  "cited" : [ "https://raypeat.com/articles/articles/coconut-oil.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5210,
+  "outputTokens" : 849,
+  "millis" : 5686
+}, {
+  "question" : {
+    "id" : "cafe",
+    "type" : "direct",
+    "question" : "¿El café es bueno o malo según Peat?",
+    "expectedArticles" : [ "caffeine" ]
+  },
+  "answer" : "Según los artículos de Peat, el café es más bien beneficioso, aunque con matices. En su texto sobre la cafeína la presenta como una sustancia que puede tener efectos positivos y propone «reconsiderar el lugar del café en la dieta y en la atención sanitaria» [4]. Sostiene que muchas de las críticas al café se basan en experimentos con dosis grandes tomadas en poco tiempo o con el estómago vacío, lo que confunde los efectos de la cafeína con los de la subida de metabolismo y adrenalina [1].\n\nEntre los beneficios que menciona están una menor incidencia de suicidio entre los bebedores de café [2][3], una protección del hígado frente al alcohol y el paracetamol [4], y una posible protección frente a algunos cánceres y enfermedades de tiroides [2][4]. También describe efectos sobre el metabolismo: según él, la cafeína aumenta la energía metabólica y puede mejorar el estado de ánimo [3]. Además, el café aporta magnesio y vitamina B1 [2].\n\nPeat también señala que, cuando el metabolismo aumenta, la nutrición adecuada es fundamental [5]. En sus comentarios sobre experimentos con animales, el retraso del crecimiento fetal causado por cafeína se evitaba con azúcar [5]. Por eso, aunque no habla de cantidades concretas para personas, de sus textos se deduce que, para él, el problema no es tanto el café en sí como tomarlo en exceso o sin una alimentación suficiente. Esta última parte es una deducción mía a partir de sus explicaciones, no una recomendación explícita suya.\n\nSi tienes alguna condición de salud concreta, consulta con tu médico antes de cambiar tus hábitos.",
+  "cited" : [ "https://raypeat.com/articles/articles/caffeine.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5393,
+  "outputTokens" : 977,
+  "millis" : 6281
+}, {
+  "question" : {
+    "id" : "pescado",
+    "type" : "direct",
+    "question" : "¿Qué decía sobre el aceite de pescado y el omega 3?",
+    "expectedArticles" : [ "fishoil", "unsaturatedfats", "unsuitablefats" ]
+  },
+  "answer" : "Según los artículos, Peat era muy crítico con el aceite de pescado y los omega-3 de cadena larga (EPA y DHA). Cuestionaba la idea de que sean esenciales y beneficiosos. Señalaba que se les atribuyen efectos como «mejorar la inteligencia de los bebés» o «prevenir el cáncer y las enfermedades cardíacas», pero sostenía que esas afirmaciones se basan en intereses comerciales y en políticas oficiales más que en evidencia sólida [1][2].\n\nSu argumento principal era que estos aceites son muy inestables. Se oxidan con facilidad, sobre todo bajo estrés, lesión tisular o exposición a toxinas, y sus productos de degradación son tóxicos e inflamatorios [4][5]. Por eso, según él, la «deficiencia» de estos ácidos grasos en los tejidos suele coincidir con más estrés oxidativo, y es más probable que su presencia, y no su falta, predisponga a la enfermedad [4]. También decía que la inflamación causada por los ácidos grasos muy insaturados está involucrada en el proceso de cancerización [5].\n\nEn cambio, recomendaba como protectores las grasas saturadas, las de coco y el ácido oleico (omega-9), y mencionaba que las saturadas ayudaban a proteger contra la formación de lipofuscina [5].\n\nLos fragmentos no tratan de dosis concretas ni de qué fuentes de omega-3 serían más o menos aceptables, así que no puedo decir más sobre eso. Tampoco es un consejo personal: si estás valorando tomar aceite de pescado, consulta con tu médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/fishoil.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5222,
+  "outputTokens" : 736,
+  "millis" : 5286
+}, {
+  "question" : {
+    "id" : "co2",
+    "type" : "direct",
+    "question" : "¿Por qué el dióxido de carbono es protector según Peat?",
+    "expectedArticles" : [ "co2", "genes-carbon-dioxide-adaptation", "lactate" ]
+  },
+  "answer" : "Según los artículos, Peat consideraba el CO₂ un factor protector general, no solo un producto de desecho. Describe varios mecanismos.\n\nPor un lado, el CO₂ ayuda a regular el calcio dentro de la célula. Peat explica que la formación constante de CO₂ ácido permite a la célula eliminar el calcio que entra, y que un exceso de calcio intracelular es tóxico porque activa muchas enzimas, impide que las células musculares y nerviosas se relajen y termina matando la célula [3]. Relaciona este papel con el sodio: al aumentar la producción de CO₂, el sodio protegería contra los efectos tóxicos del calcio [3].\n\nPor otro lado, en el fragmento sobre altitud, Peat dice que \"Carbon dioxide protects against free radicals\", y que también ayuda a suministrar oxígeno a los tejidos, a mantener una producción eficiente de energía y a prevenir el estrés celular [5]. En el mismo texto menciona que, a gran altitud, el cuerpo retiene más CO₂ [5].\n\nTambién ve el CO₂ ligado al sueño y a la actividad mitocondrial. Según él, en el sueño reparador el CO₂ en los tejidos sube y el oxígeno baja lo suficiente para estimular la multiplicación de células madre y mitocondrias [4]. Además, un metabolismo más alto que produzca más CO₂ aumentaría la adaptabilidad del organismo [2].\n\nEstos fragmentos no explican con detalle por qué el CO₂ protege frente al envejecimiento en general, aunque el título del artículo lo sugiere. A partir de lo que sí dice, parece que, para Peat, el CO₂ actúa como regulador de la energía celular y del calcio, y que la baja producción de CO₂ (por estrés, oscuridad o un metabolismo más bajo) favorecería el daño [4]. Esta última conclusión es una deducción mía, no una afirmación explícita suya en estos textos.",
+  "cited" : [ "https://raypeat.com/articles/articles/co2.shtml", "https://raypeat.com/articles/articles/salt.shtml", "https://raypeat.com/articles/articles/cholesterol-longevity.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 1,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5036,
+  "outputTokens" : 893,
+  "millis" : 5381
+}, {
+  "question" : {
+    "id" : "sal",
+    "type" : "direct",
+    "question" : "¿Qué pensaba de la sal en la dieta?",
+    "expectedArticles" : [ "salt" ]
+  },
+  "answer" : "Según los artículos, Ray Peat defendía una ingesta de sal generosa y criticaba la restricción de sodio que se popularizó desde los años cincuenta. Sostenía que el consumo de sal no causa edema ni hipertensión, como se creía, y que la idea venía en buena parte de la promoción de los diuréticos [1][4]. Describe la restricción salina como «un cliché cultural» y recuerda que sus efectos fueron perjudiciales, sobre todo en el embarazo [1].\n\nPeat relacionaba la sal con la energía celular. Según él, la falta de sodio aumenta la adrenalina, lo que puede subir la presión arterial y favorecer la movilización de ácidos grasos que dificulta producir energía a partir de la glucosa [2]. En su relato, varias mujeres con edema premenstrual mejoraron al salar los alimentos a su gusto, y personas con problemas de sueño también durmieron mejor al comer toda la sal que quisieron [2]. Atribuía el efecto sedante de los alimentos salados a efectos anti-excitatorios de la hiperosmolaridad, entre otros factores [4]. También mencionaba que las soluciones hipertónicas de sodio se usan para reanimar a pacientes y que favorecen la producción de energía celular y reducen la inflamación [3].\n\nSobre el cáncer de estómago, que se asocia a veces con países de alta ingesta de sal, Peat decía que los experimentos citados mostraban más bien que una cantidad muy grande de solución saturada de sal, junto con un carcinógeno, daña la mucosa protectora del estómago. No demostraban que la sal normal causara cáncer [5].\n\nLos fragmentos no indican una cantidad concreta de sal recomendada, así que no puedo decir cuánta tomaba él o recomendaba. Si tienes una condición como hipertensión o problemas renales, consulta con tu médico antes de cambiar tu consumo de sal.",
+  "cited" : [ "https://raypeat.com/articles/articles/salt.shtml", "https://raypeat.com/articles/articles/edema-heart-failure-hypertension-sarcopenia.shtml", "https://raypeat.com/articles/articles/water.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5209,
+  "outputTokens" : 912,
+  "millis" : 5978
+}, {
+  "question" : {
+    "id" : "hipotiroidismo",
+    "type" : "direct",
+    "question" : "¿Cómo se puede saber si alguien tiene hipotiroidismo, según Peat?",
+    "expectedArticles" : [ "hypothyroidism", "thyroid", "thyroid-insanities" ]
+  },
+  "answer" : "Según los artículos de Peat, no existe una prueba única para detectarlo. Él insistía en combinar varios indicadores, y la frecuencia del pulso junto con la temperatura le parecía mucho más útil que cada una por separado [1]. Para la temperatura, citaba a Broda Barnes, que consideraba la temperatura basal, medida al despertar, como la mejor referencia [2]. Peat matizaba que la temperatura basal depende de muchos factores además de la tiroides, y que en un ambiente frío la temperatura de las extremidades puede ser un indicador mejor que la oral o la timpánica [3]. También mencionaba el pulso en reposo, la tasa metabólica basal (sobre todo si se mide la producción de dióxido de carbono), el reflejo aquiliano y la onda T del electrocardiograma como herramientas útiles [3].\n\nPeat advertía que el TSH no debe interpretarse de forma aislada, porque puede bajar a rangos normales por sustancias distintas de las hormonas tiroideas [3]. Otros análisis de sangre (colesterol, albúmina, glucosa, sodio, lactato, tiroxina y T3 totales) ayudan a evaluar el estado tiroideo [3]. Además, sugería observar la temperatura y el pulso a distintas horas, especialmente antes y después de las comidas, para separar el efecto del estrés del metabolismo basal [4][5]. Un detalle que destacaba es que algunas personas hipotiroideas tienen un pulso muy lento, porque no compensan con mucha adrenalina [5]. También señalaba que contar calorías durante varios días puede ayudar a cuestionar un diagnóstico de hipertiroidismo [4].\n\nEstos criterios son lo que Peat describía en sus artículos, no una guía para diagnosticarse. Si sospechas un problema de tiroides, lo adecuado es consultarlo con un médico, que puede interpretar las pruebas en tu caso concreto.",
+  "cited" : [ "https://raypeat.com/articles/articles/hypothyroidism.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5438,
+  "outputTokens" : 851,
+  "millis" : 5219
+}, {
+  "question" : {
+    "id" : "hierro",
+    "type" : "direct",
+    "question" : "¿Por qué decía que el exceso de hierro es peligroso?",
+    "expectedArticles" : [ "iron-dangers" ]
+  },
+  "answer" : "Según los fragmentos, Peat consideraba el hierro un metal pesado potencialmente tóxico. En exceso, decía, puede contribuir a cáncer, enfermedades cardíacas y otras dolencias [1]. Su razonamiento principal era que el hierro acumulado produce radicales libres destructivos, de forma parecida a otros metales como el plomo o el mercurio, y que el hierro en exceso es un factor clave en la conversión del estrés en daño tisular [1]. También lo relacionaba con el envejecimiento: afirmaba que el hierro causa el envejecimiento celular [4].\n\nDaba varios mecanismos concretos. Por un lado, un exceso de hierro destruye la vitamina E y oxida los ácidos grasos insaturados de los glóbulos rojos, lo que puede causar anemia hemolítica [2]. Por otro, en un experimento de Hans Selye, la administración de grandes dosis de hierro seguidas de un estrés leve produjo una forma de esclerodermia, y la vitamina E la evitaba, lo que sugería un efecto oxidativo [3]. Peat también mencionaba que el exceso de hierro puede bloquear la absorción de cobre, y que la falta de cobre hace que el cuerpo almacene más hierro [4]. Además, citaba la relación del hierro con enfermedades infecciosas y degenerativas, como el Parkinson o el Alzheimer [3].\n\nAlgunos de sus argumentos eran de tipo inmunológico: sostenía que la regulación del hierro es una función central del sistema inmune, porque el hierro es necesario para bacterias, parásitos y células cancerosas, y citaba un estudio de la OMS en el que dar suplementos de hierro a personas anémicas en África aumentó la mortalidad por enfermedades infecciosas, especialmente malaria [1]. Los fragmentos no dicen cómo tratar un caso concreto; si tienes una preocupación sobre tus niveles de hierro, consulta con un médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/iron-dangers.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5116,
+  "outputTokens" : 878,
+  "millis" : 5628
+}, {
+  "question" : {
+    "id" : "serotonina",
+    "type" : "direct",
+    "question" : "¿Qué pensaba de la serotonina? ¿No es la hormona de la felicidad?",
+    "expectedArticles" : [ "serotonin-disease-aging-inflammation", "serotonin-depression-aggression" ]
+  },
+  "answer" : "Según los artículos, Peat rechazaba la idea de que la serotonina sea «la hormona de la felicidad». Lo describía como un mito que, en su opinión, promovió la industria farmacéutica. En un texto sobre hipotiroidismo afirma que «the pharmaceutical industry's myth has led people to believe that serotonin is the chemical of happiness» [2].\n\nEn lugar de un regulador del ánimo, la veía sobre todo como un mediador del estrés y un factor que frena la energía celular. Dice que la serotonina «is a mediator of stress that has to be systematically balanced by the systems that support high energy respiratory metabolism» [3]. También afirma que «Serotonin inhibits mitochondrial respiration» [4] y que, como el estrógeno, reduce el ATP celular [3]. Además, la relaciona con la bajada de temperatura y del metabolismo, con la hibernación y con la dificultad para consolidar el aprendizaje [4].\n\nSobre los antidepresivos, sostenía que el hecho de que aumenten la acción de la serotonina no explica su efecto antidepresivo. Según él, «it is not true that this explains their antidepressant action» [5]. Señalaba además que algunos antidepresivos no aumentan la serotonina, o incluso la reducen, como la reserpina [1][5]. Por eso proponía que la depresión debía entenderse desde la energía cerebral y no solo desde los neurotransmisores [1].\n\nComo deducción mía, no suya: si la serotonina frena el metabolismo energético, Peat probablemente vería la idea de «subirla» para mejorar el ánimo como una estrategia equivocada. En su enfoque, lo que sostiene el ánimo sería un metabolismo energético eficiente, con apoyo de la tiroides, la progesterona y una buena nutrición proteica [3]. Si tienes un problema concreto de ánimo, conviene consultarlo con un médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/serotonin-depression-aggression.shtml", "https://raypeat.com/articles/articles/thyroid-insanities.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5350,
+  "outputTokens" : 946,
+  "millis" : 5809
+}, {
+  "question" : {
+    "id" : "vitamina-e",
+    "type" : "direct",
+    "question" : "¿Para qué servía la vitamina E según Peat?",
+    "expectedArticles" : [ "vitamin-e" ]
+  },
+  "answer" : "Según los artículos de Ray Peat, la vitamina E no servía sobre todo como antioxidante. Su título la describe como «estrógeno antagonista, promotora de energía y antiinflamatoria» [1]. Según él, actúa dentro de los sistemas reguladores de la célula, ayudando a prevenir la inflamación y la excitación inapropiada. Como esa excitación descontrolada causa oxidaciones destructivas, la vitamina E las previene [1]. Reconoce que puede funcionar como antioxidante en muchos entornos químicos, pero considera «altamente engañoso» explicar así sus efectos biológicos beneficiosos [1]. Para ilustrarlo, compara los sistemas antioxidantes biológicos con programas que controlan a los «incendiarios» antes de que prendan fuego, en vez de un cuerpo de bomberos que apaga cada chispa [3].\n\nPeat también la relaciona con la vitamina A: una de sus funciones importantes es proteger la vitamina A de la oxidación destructiva [4]. Además, sugiere un posible efecto protector frente a los ácidos grasos poliinsaturados, como el linoleico y el linolénico, que según él no se había explorado aún. Propone que las bacterias intestinales, con ayuda de la vitamina E, saturan estos ácidos grasos [5]. Ojo: esto lo presenta como una hipótesis.\n\nLos fragmentos no explican con detalle qué significa exactamente la parte de «promotora de energía», así que no puedo describir ese mecanismo con más precisión.",
+  "cited" : [ "https://raypeat.com/articles/articles/vitamin-e.shtml", "https://raypeat.com/articles/articles/alzheimers2.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5163,
+  "outputTokens" : 895,
+  "millis" : 5466
+}, {
+  "question" : {
+    "id" : "leche",
+    "type" : "direct",
+    "question" : "¿Qué opinaba de la leche y los lácteos?",
+    "expectedArticles" : [ "milk" ]
+  },
+  "answer" : "Según los artículos, Peat veía la leche de forma bastante favorable, aunque con matices.\n\nPor un lado, la consideraba un alimento nutritivo y práctico. Escribió que una dieta de leche y fruta, o de leche y carne, aporta un buen equilibrio de calcio y magnesio [1]. También destacaba que la composición de la leche favorece una digestión eficiente y el crecimiento de bacterias relativamente seguras para el intestino y el hígado [2]. Sobre la intolerancia a la lactosa, señalaba que, en pruebas con personas «intolerantes», no había diferencias entre tomar leche con lactosa o sin ella, y que, tras unas semanas de consumo diario, la producción de hidrógeno por las bacterias intestinales disminuía, lo que sugiere adaptación [3]. Además, proponía que el caseína, la proteína principal de la leche, tiene efectos antiestrés, y que combinar leche y queso con fruta aumenta ese efecto [2][5].\n\nPor otro lado, señalaba limitaciones. La leche está pensada para el crecimiento de una cría, así que, según él, no es ideal como alimento único para un adulto: tiene más metionina y triptófano de lo óptimo para un adulto y un contenido de hierro bajo [5]. Ese bajo contenido de hierro, sin embargo, lo veía como una ventaja para quien tiene riesgo de sobrecarga de hierro [5]. También advertía contra la carragenina, un espesante habitual en productos lácteos, que describía como un alérgeno potente [3].\n\nEn cuanto a las bebidas vegetales como sustitutos de la leche, Peat las criticaba: dijo que los bebés alimentados con ellas tienen «consecuencias terribles» y que, en adultos, podrían contribuir a la degeneración y la demencia [1].\n\nEstos artículos no tratan de los lácteos fermentados como el yogur o de la leche en personas con alergia confirmada a la proteína, así que sobre esos casos no puedo decir qué pensaba. Si tienes una situación de salud concreta, consulta con un médico o un dietista.",
+  "cited" : [ "https://raypeat.com/articles/articles/calcium.shtml", "https://raypeat.com/articles/articles/milk.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 4880,
+  "outputTokens" : 881,
+  "millis" : 6055
+}, {
+  "question" : {
+    "id" : "azucar-diabetes",
+    "type" : "direct",
+    "question" : "¿Por qué decía que el azúcar puede ser bueno incluso para los diabéticos?",
+    "expectedArticles" : [ "glucose-sucrose-diabetes", "sugar-issues", "glycemia", "diabetes" ]
+  },
+  "answer" : "Según los artículos, Peat no sostenía que el azúcar sea bueno para los diabéticos sin matices, sino que cuestionaba la idea de que «el azúcar causa la diabetes» y veía la hiperglucemia como una respuesta del organismo y no solo como un enemigo.\n\nSu primer argumento es histórico. Recuerda que, en el siglo XIX, Piorry y Budd trataban la diabetes añadiendo azúcar común (sacarosa) a la dieta, y que la fructosa, una mitad de la sacarosa, se usó terapéuticamente y redujo la glucosa en la orina [1]. Después, con el descubrimiento de la insulina en 1922, esa práctica se olvidó [1].\n\nSu segundo argumento es fisiológico. Según él, la hiperglucemia compensa una falta percibida de glucosa, es decir, una necesidad de más energía [2]. En las heridas de diabéticos, la glucosa local disminuye hasta desaparecer cuando la cicatrización se detiene, y aplicar glucosa e insulina acelera la curación [3]. Además, sostiene que lo que causa la fuga de los vasos sanguíneos no es el exceso de insulina sino la falta de glucosa, y que la fructosa también reduce esa fuga [3]. Por eso concluye que tratar la hiperglucemia como un enemigo podría haber impedido investigar mejor el estrés y la pérdida de tejidos [4].\n\nConviene señalar que estos fragmentos no contienen una recomendación clara de consumir azúcar como tratamiento para personas diabéticas hoy, y no hablan de dosis ni de cómo se aplicaría. Lo que sí dice es que la sacarosa y la fructosa producen menos glucemia que la glucosa y el almidón [5], y que el almidón estimula más la insulina y el apetito [5]. Lo que se deduce de esto es que Peat veía el azúcar como algo que no es intrínsecamente dañino, pero esa es mi interpretación. Si tienes diabetes, cualquier cambio en la dieta debe consultarse con tu médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/sugar-issues.shtml", "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml", "https://raypeat.com/articles/articles/glycemia.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5226,
+  "outputTokens" : 1021,
+  "millis" : 5980
+}, {
+  "question" : {
+    "id" : "hormona-crecimiento",
+    "type" : "direct",
+    "question" : "¿Qué pensaba de la hormona del crecimiento?",
+    "expectedArticles" : [ "growth-hormone" ]
+  },
+  "answer" : "Según los artículos de Ray Peat, la hormona del crecimiento (GH) le preocupaba sobre todo por sus efectos negativos. Su artículo principal sobre el tema se titula «Growth hormone: Hormone of Stress, Aging, & Death?» y pone en duda que sea una hormona beneficiosa [1].\n\nPeat señala que la GH tiene efectos metabólicos específicos: favorece la oxidación de los ácidos grasos más insaturados, en un proceso que parece desperdiciar energía [1]. También dice que se le llamó así mucho antes de que se identificara la sustancia, y que en realidad participa en muchos procesos distintos del crecimiento. Como ejemplos menciona su uso para aumentar la producción de leche en el ganado y para que las personas se vuelvan más magras y musculosas [2]. Es muy parecida a la prolactina, por lo que comparte varios de sus efectos [2].\n\nSobre los riesgos, cita estudios que no encontraron mejoras en la insuficiencia cardiaca ni en la reparación ósea con GH, y señala que los tratamientos con GH se han asociado con problemas como el síndrome del túnel carpiano, mialgia, crecimiento tumoral y ginecomastia [3]. También menciona que en la insuficiencia cardiaca los niveles de GH suelen estar muy altos [3].\n\nEn cuanto al estrés, Peat recoge la idea de Sapolsky de que la GH se suprime en situaciones de estrés agudo, para ahorrar energía para las necesidades inmediatas [3]. Peat también relaciona la GH y la familia de la prolactina con el envejecimiento: en varios experimentos, quitar la hipófisis retrasaba el envejecimiento, y un ratón enano mutante con muy poca GH tenía una vida útil más larga [4].\n\nEstos artículos no hablan de si la GH tiene usos médicos legítimos en casos concretos, como el déficit en niños. Si tienes una situación de salud concreta, consulta con un médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/growth-hormone.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5133,
+  "outputTokens" : 946,
+  "millis" : 6119
+}, {
+  "question" : {
+    "id" : "progesterona",
+    "type" : "direct",
+    "question" : "¿Para qué sirve la progesterona según Peat?",
+    "expectedArticles" : [ "three-hormones", "progesterone-summaries", "progesterone-deceptions", "cancer-progesterone", "epilepsy-progesterone", "ms" ]
+  },
+  "answer" : "Según los artículos, Peat consideraba la progesterona mucho más que una hormona del embarazo. La veía como la hormona más protectora que produce el cuerpo [2][5]. Explica que su nombre («pro-gestacional») lleva a pensar que no hace falta si no se quiere quedar embarazada, pero que su función es más amplia [2][5]. Destaca que el cerebro tiene una concentración muy alta de progesterona y que el timo, órgano clave del sistema inmune, depende mucho de ella [2][5]. También la describe como la base de la adaptación y la resistencia al estrés: las glándulas suprarrenales la usan para producir sus hormonas antiestrés, y cuando hay suficiente, no tienen que producir tanto cortisol, que él asociaba con osteoporosis, envejecimiento de la piel, daño a las células cerebrales y acumulación de grasa [2].\n\nSobre la relación con los estrógenos, Peat decía que la progesterona es el complemento natural del estrógeno y que ayuda a los ovarios a producir ambas hormonas según se necesite. Según él, también ayuda a restablecer el funcionamiento normal de la tiroides y otras glándulas [1]. Añadía que una deficiencia de progesterona se ha asociado con mayor susceptibilidad al cáncer [1]. En la mujer posmenopáusica, según los fragmentos, la progesterona ayudaría a proteger frente a la acción sin oposición de la prolactina, el cortisol y los andrógenos suprarrenales, y sus efectos sobre la hipófisis contribuirían a su papel protector frente a la osteoporosis y la hipertensión [4]. Por último, describía los estrógenos como un estimulante que pone las cosas en marcha, y la progesterona como un agente de calma y plenitud, aunque ambas actúan en todos los aspectos de la fisiología [3].\n\nEstos fragmentos no tratan de dosis concretas para una persona, y esto no es consejo médico. Si te interesa usarla o tienes una situación particular, conviene consultarlo con un médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/three-hormones.shtml", "https://raypeat.com/articles/articles/progesterone-summaries.shtml", "https://raypeat.com/articles/articles/ru486.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5274,
+  "outputTokens" : 893,
+  "millis" : 5739
+}, {
+  "question" : {
+    "id" : "colesterol",
+    "type" : "direct",
+    "question" : "¿El colesterol alto es malo según Peat?",
+    "expectedArticles" : [ "cholesterol-longevity" ]
+  },
+  "answer" : "Según los artículos que encontré, Peat no consideraba que un colesterol alto fuera malo por sí mismo. Pensaba que la idea de que «el colesterol causa la enfermedad cardíaca» era, en gran parte, una simplificación. Critica que la recomendación de «lower serum cholesterol» se presente como algo bueno sin más [1], y sostiene que lo que daña las arterias es el colesterol oxidado, no el colesterol en sí: «it is oxidized cholesterol that damages the arteries» [4]. Añade que los experimentos antiguos con conejos, en los que se basó la idea, usaban colesterol comercial que en realidad estaba oxidado [2].\n\nPeat también argumentaba que el colesterol puede proteger frente a la oxidación de las grasas poliinsaturadas, y que «A low level of cholesterol might increase susceptibility to the oxidants» [3]. Por eso, desde su perspectiva, bajar el colesterol a toda costa no garantiza nada. Además, señalaba que el problema incluye otros factores, como la coagulación, los espasmos vasculares, la inflamación y las toxinas intestinales [1].\n\nEstos fragmentos no dicen qué cifras de colesterol considerarían alarmantes ni cómo tratarlo en una persona concreta. Si tienes un valor alto, eso lo debe valorar un médico, teniendo en cuenta tu caso completo; esto no sustituye esa consulta.",
+  "cited" : [ "https://raypeat.com/articles/articles/cholesterol-longevity.shtml", "https://raypeat.com/articles/articles/fishoil.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5293,
+  "outputTokens" : 852,
+  "millis" : 5712
+}, {
+  "question" : {
+    "id" : "menopausia",
+    "type" : "direct",
+    "question" : "¿Qué causa los sofocos de la menopausia, según Peat?",
+    "expectedArticles" : [ "hot-flashes-energy-aging", "menopause", "estrogen-age-stress", "natural-estrogens" ]
+  },
+  "answer" : "Según los artículos de Peat, los sofocos no se deben simplemente a una falta de estrógeno. Él critica la idea de que son consecuencia de una «deficiencia de estrógeno», que según él nunca se demostró: no hay evidencia de que las mujeres con sofocos tengan menos estrógeno en sangre [1][3]. Explica que la medicina convencional ha cambiado el término por «estrógeno withdrawal» (retirada de estrógeno), pero que lo que parece responsable son cambios en el sistema de regulación de la temperatura del cerebro [3].\n\nEn su explicación, el origen está en la progesterona. Según él, los sofocos empezaron en mujeres que habían faltado a su primera menstruación, lo que coincidió con, y resultó de, la falta de un cuerpo lúteo funcional que produjera una cantidad normal de progesterona [1]. También menciona que la progesterona oral y transdérmica ha resultado eficaz para reducir los sofocos en estudios [4].\n\nPeat también señala que el sofoco es una dilatación episódica de los vasos sanguíneos, y que los mediadores inflamatorios y el óxido nítrico están relacionados con ese proceso, aunque admite que, hasta donde él sabe, nadie había medido el óxido nítrico durante un sofoco [5]. Además, observa que dosis muy altas de estrógeno pueden detener el enrojecimiento y bajar la temperatura, lo que para él indica que el estrógeno actúa bloqueando la producción de calor más que corrigiendo una causa de fondo [4].\n\nEn resumen, Peat relaciona los sofocos con la función del cuerpo lúteo y la progesterona, con el sistema de termorregulación cerebral y con la dilatación de los vasos, y no con una simple falta de estrógeno. Estos fragmentos no explican con detalle el mecanismo completo, así que cualquier conclusión más allá de esto sería mía. Si tienes sofocos y quieres valorar opciones, consulta con un médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/hot-flashes-energy-aging.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5161,
+  "outputTokens" : 920,
+  "millis" : 5673
+}, {
+  "question" : {
+    "id" : "lactato",
+    "type" : "direct",
+    "question" : "¿Qué pensaba del ácido láctico?",
+    "expectedArticles" : [ "lactate", "co2", "cancer-disorder-energy" ]
+  },
+  "answer" : "Según los fragmentos, Peat veía el ácido láctico sobre todo como un producto del metabolismo alterado, y lo asociaba con daño celular más que con energía útil. Describe la glucólisis, la producción de lactato a partir de glucosa, como una vía que aporta \"many times less\" energía que la oxidación [4]. Sostiene que el lactato y el piruvato suprimen la oxidación de la glucosa [3] y que el lactato inhibe la piruvato deshidrogenasa, reduciendo la producción oxidativa de energía [1].\n\nTambién lo relaciona con el estrés. En su descripción del \"metabolismo de estrés\", un exceso de estimulación agota la glucosa y produce ácido láctico, lo que eleva el cortisol [2]. Lo sitúa en un conjunto de problemas: dice que su presencia se ha observado en rosácea, artritis, enfermedades cardiacas, diabetes, enfermedades neurológicas y cáncer [2], y que el envejecimiento y el Alzheimer implican más producción de lactato y daño mitocondrial acumulado [3]. Además, en estos textos el lactato aparece como causa y no solo como indicador, aunque en la práctica médica suele tratarse solo como indicador [2].\n\nAlgunos de los puntos más concretos son estos: según Peat, el lactato podría estimular la liberación de endorfinas, que a su vez movilizan más ácidos grasos libres, y actuar sobre citocinas como la interleucina-6, favoreciendo un predominio de hormonas catabólicas [1]. Por otro lado, menciona que el palmitato, la hormona tiroidea y la luz activan una enzima respiratoria clave y suprimen la formación de lactato [4]. En cuanto a la alimentación, sugiere evitar alimentos con ácido láctico como el yogur y el chucrut, porque considera que el lactato bacteriano es mucho más tóxico que el que se forma bajo estrés [5]. Este último punto es una afirmación concreta de Peat en estos fragmentos y no una recomendación personal mía.\n\nEstos artículos no tratan el ácido láctico como sustancia del ejercicio intenso en términos de rendimiento deportivo ni de su papel en la recuperación muscular, así que no puedo decir qué pensaba sobre eso a partir de estas fuentes.",
+  "cited" : [ "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml", "https://raypeat.com/articles/articles/lactate.shtml", "https://raypeat.com/articles/articles/mitochondria-mortality.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 1,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5444,
+  "outputTokens" : 1063,
+  "millis" : 6892
+}, {
+  "question" : {
+    "id" : "verduras",
+    "type" : "direct",
+    "question" : "¿Comer muchas verduras es sano según Peat?",
+    "expectedArticles" : [ "vegetables" ]
+  },
+  "answer" : "En los artículos que encontré, Peat no recomienda comer muchas verduras como base de la alimentación. Desconfía de ellas sobre todo por sus toxinas. Según él, los alimentos vegetales contienen «pesticidas naturales» y, en el artículo sobre verduras, escribe que «Animal proteins, and fruits, because they contain the lowest levels of toxins, should form the basis of the diet» [5]. Ese mismo texto aclara que el problema no es solo de las verduras, sino también de algunas frutas: menciona que los aguacates contienen tanta grasa insaturada que pueden ser cancerígenos y hepatotóxicos [5].\n\nReconoce algunos aspectos positivos. Las verduras de hoja son «a very rich source of magnesium», pero también pueden ser una fuente importante de plomo y otras toxinas [1]. Además, señala que en la comparación de estroncio radiactivo las verduras eran la peor fuente en relación con el calcio, mientras que la leche era mejor porque las vacas concentran el calcio y la proteína de las plantas y eliminan parte del estroncio [1].\n\nLos fragmentos también mencionan que los aceites vegetales insaturados están presentes de forma natural en verduras, granos, nueces, pescado y carne, y que lo que importa es la proporción de estos aceites en la dieta [3]. Sin embargo, no encontré nada específico sobre la fibra, las crucíferas ni los beneficios de comer verduras en general. Por lo que dice sobre las toxinas vegetales y la base de la dieta [5], es razonable deducir que Peat consideraría las verduras una parte de la dieta que conviene limitar o elegir con cuidado, más que algo que haya que consumir en grandes cantidades, pero esto es una deducción mía y no algo que él escribiera de forma explícita.",
+  "cited" : [ "https://raypeat.com/articles/articles/calcium.shtml", "https://raypeat.com/articles/articles/unsaturated-oils.shtml", "https://raypeat.com/articles/articles/vegetables.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 4817,
+  "outputTokens" : 1089,
+  "millis" : 6209
+}, {
+  "question" : {
+    "id" : "calcio",
+    "type" : "direct",
+    "question" : "¿Qué relación veía entre el calcio y la calcificación de los tejidos?",
+    "expectedArticles" : [ "calcium", "osteoporosis", "osteoporosis-aging" ]
+  },
+  "answer" : "Según los artículos, Peat veía la calcificación de los tejidos blandos como un problema de energía celular, no como consecuencia de tomar demasiado calcio. De hecho, sostenía que restringir el calcio de la dieta empeora el problema. Escribe que las personas con depósitos de calcio «can never improve until their calcium and magnesium intakes are adequate» [3], y critica la recomendación de dieta baja en calcio, porque «since we all have skeletons, dietary calcium restriction cant protect our cells, and in fact, it usually intensifies the process of calcification of the soft tissues» [1]. También menciona que la deficiencia de vitamina E puede provocar estos depósitos [3].\n\nEl mecanismo que describe empieza en la célula. Cuando las células están estresadas o sin energía, pierden magnesio y potasio y captan sodio y calcio. Un exceso de calcio inactiva las mitocondrias y obliga a la célula a producir energía de forma ineficiente, con más ácido láctico. Según él, «Abnormal calcification begins in the mitochondria» [4]. La calcificación visible suele aparecer después de la fibrosis causada por la inflamación [4]. Además, el esqueleto pierde calcio mientras los tejidos blandos lo ganan [4][5].\n\nEl magnesio tiene un papel protector: lo describe como un «basic protective calcium blocker» [5]. En cuanto a la respiración celular, dice que una combinación de tiroides (sobre todo T3), magnesio, progesterona y pregnenolona puede normalizar el metabolismo del calcio, lo que, según él, debería disminuir la calcificación de los tejidos blandos y aumentar la de los huesos [2]. También menciona la vitamina K, la A y la E, y la falta de proteína, como factores que afectan al metabolismo del calcio [5], y advierte contra los aceites vegetales poliinsaturados por su posible interferencia con el control del calcio [2].\n\nEstos artículos no tratan la calcificación en general ni cómo se diagnostica o trata en la práctica clínica. Lo anterior es lo que Peat expone en sus textos. Si tienes un problema concreto de calcificación, consulta con un médico.",
+  "cited" : [ "https://raypeat.com/articles/articles/calcium.shtml", "https://raypeat.com/articles/articles/osteoporosis.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5586,
+  "outputTokens" : 1410,
+  "millis" : 7666
+}, {
+  "question" : {
+    "id" : "estres",
+    "type" : "concept",
+    "question" : "¿Qué es el estrés para Ray Peat y por qué es tan importante en su teoría?",
+    "expectedArticles" : [ "dark-side-of-stress-learned-helplessness", "gelatin", "rosacea-inflammation-aging", "immunodeficiency", "fatigue-aging-recuperation", "imprinting", "regeneration-degeneration" ]
+  },
+  "answer" : "Para Ray Peat, el estrés es sobre todo un problema de energía. En «Gelatin, stress, longevity» lo resume así: \"Stress is an energy problem\", que desencadena una serie de reacciones hormonales y metabólicas como la lipólisis, la glucólisis, y el aumento de serotonina, cortisol, estrogenos, prolactina y catabolismo de proteínas. Añade que los capilares están entre los primeros tejidos dañados por el estrés [1]. Por eso no lo ve como algo limitado a la mente o a una sola glándula, sino como una respuesta general del organismo.\n\nLa importancia de este concepto en su teoría viene de que muchas causas distintas producen el mismo tipo de daño. Peat lo expresa como uno de los principios más sólidos de la biología: diversas causas nocivas llevan a unas pocas formas de daño biológico. Según él, el estrés afecta especialmente al sistema nervioso, al inmunológico y al reproductor, y favorece la inflamación, la peroxidación lipídica, la atrofia tisular y el deterioro mitocondrial [3]. También cita el trabajo de Meerson, según el cual el cortisol y los ácidos grasos libres liberados por el estrés alteran la producción de energía en las mitocondrias y dificultan el uso eficiente de la glucosa, de forma parecida a una diabetes [3].\n\nPeat también subraya que el estrés depende del contexto y de cómo lo interpreta el organismo. Por ejemplo, un animal sujeto durante mucho tiempo puede desarrollar úlceras de estrés, pero si puede morder algo, es decir, si siente que puede defenderse, lo evita [4]. Del mismo modo, en la infancia un estímulo inadecuado puede actuar como estrés y deformar el desarrollo, con efectos en el aprendizaje y la conducta, y Peat asocia esto con la serotonina y los glucocorticoides [2]. Estos artículos no explican en detalle cómo corregir el estrés; solo describen cómo lo entendía él y sus consecuencias.",
+  "cited" : [ "https://raypeat.com/articles/articles/gelatin.shtml", "https://raypeat.com/articles/articles/intelligence.shtml", "https://raypeat.com/articles/articles/immunodeficiency.shtml", "https://raypeat.com/articles/articles/co2.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 1,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 5277,
+  "outputTokens" : 892,
+  "millis" : 6023
+}, {
+  "question" : {
+    "id" : "ciencia",
+    "type" : "concept",
+    "question" : "¿Qué opinaba Peat de la ciencia académica y de los expertos?",
+    "expectedArticles" : [ "authoritarians", "pathological-science-general-electric", "howdoyouknow", "adaptive-substance", "physiology-texts-and-the-real-world", "intuitive-knowledge" ]
+  },
+  "answer" : "Según los artículos que encontré, Peat era muy crítico con la ciencia académica dominante, a la que describía como dogmática y guiada por ideologías más que por la evidencia. En un artículo sobre la regeneración escribe que la \"medicina moderna\" se ha atribuido el «poder de curar», y que la investigación sobre métodos que apoyan la capacidad restauradora del organismo ha sido «ridiculizada y suprimida» [1]. También habla de una «propaganda» de la medicina moderna que incluye una historia de la ciencia hecha a medida para justificar su práctica [1].\n\nEn otro texto, afirma que la ciencia biológica convencional a menudo se basa en doctrinas: describe a la corriente principal como «doctrinaria y, a menudo, fraudulenta», y dice que la ciencia «autoritaria» se ha convertido en una «gran ciencia» gestionada por corporaciones y gobiernos [3]. Según él, los avances útiles han surgido más bien al romper con esas doctrinas y volver al sentido común y a observaciones directas y sencillas [3]. Como ejemplo, señala que se enseñaba que la clonación de animales era imposible aunque ya se practicaba en los años sesenta [3].\n\nEn un artículo sobre el envejecimiento y la luz, critica que, en el mundo académico y médico, «la filosofía es mucho más fuerte que la evidencia» [5]. Atribuye parte de esa actitud a «las actitudes autoritarias pomposas de los expertos», que consideraban que lo que no estaba ya en sus cabezas no podía ser conocimiento [5]. También sostiene que durante más de cincuenta años se desperdició una rama importante de la biología y la medicina, por razones «ideológicas y políticas», y que quienes investigaban la regeneración fueron difamados [2].\n\nHay un matiz importante: en el artículo sobre autoritarismo académico [4] se describe la postura de una persona que acepta las versiones oficiales de varios hechos históricos y ridiculiza a quienes las cuestionan. Los fragmentos no dejan claro si ese «él» es Peat, así que no puedo atribuirle esa postura. Lo que sí puedo decir, a partir de los fragmentos, es que Peat desconfiaba de la autoridad científica cuando esta se apoyaba en doctrinas o intereses, y que defendía la observación directa y el sentido común frente a esas doctrinas [3][5].",
+  "cited" : [ "https://raypeat.com/articles/articles/adaptive-substance.shtml", "https://raypeat.com/articles/articles/stemcells.shtml", "https://raypeat.com/articles/articles/authoritarians.shtml", "https://raypeat.com/articles/articles/aging-eyes.shtml" ],
+  "grade" : {
+    "passed" : false,
+    "sourceHit" : true,
+    "quotes" : 1,
+    "invalidQuotes" : [ "medicina moderna" ],
+    "reason" : "cita literal que no existe en los artículos"
+  },
+  "searches" : 1,
+  "inputTokens" : 5264,
+  "outputTokens" : 1208,
+  "millis" : 7653
+}, {
+  "question" : {
+    "id" : "energia",
+    "type" : "concept",
+    "question" : "¿Por qué Peat daba tanta importancia a la energía de las células?",
+    "expectedArticles" : [ "mitochondria-mortality", "cancer-disorder-energy", "edema-heart-failure-hypertension-sarcopenia", "intelligence", "fatigue-aging-recuperation", "thyroid" ]
+  },
+  "answer" : "Los fragmentos no explican de forma directa por qué Peat daba tanta importancia a la energía celular, pero sí muestran cómo la relacionaba con la salud y la enfermedad.\n\nPara él, la energía de la célula depende sobre todo de la mitocondria y de su capacidad de oxidar. En su análisis del cáncer, menciona factores que dañan la enzima citocromo oxidasa, como el exceso de estrógeno, el hipotiroidismo y la falta de luz, y sostiene que, cuando eso ocurre, las células pasan a un metabolismo de glucólisis aerobia, al que llama «the cancer metabolism» [1]. Es decir, una célula con menos capacidad de producir energía respirando tiende a sobreestimularse y a comportarse de otra manera.\n\nTambién sugiere que la eficiencia energética puede ser protectora. Según el fragmento [2], la mitocondria «desacoplada», que «wastes oxygen and calories», sería protectora frente a los radicales libres, el cáncer y el envejecimiento, y la hormona tiroidea y la ausencia de grasas poliinsaturadas (PUFA) favorecerían ese tipo de mitocondria.\n\nOtro punto es el papel de la glucosa. En el texto sobre diabetes [3], Peat indica que la glucosa suprime la formación de superóxido en las células beta, y que «In every type of tissue, it is the failure to oxidize glucose that produces oxidative stress and cellular damage». Además, el dióxido de carbono producido al oxidar glucosa ayudaría a regular el calcio intracelular, evitando la sobreestimulación y la muerte celular.\n\nPor último, en un texto sobre fisiología [5] describe la energía celular como «a finely organized catalyst, a readiness for work», es decir, no solo como cantidad de combustible, sino como una organización capaz de responder al trabajo que la célula necesita hacer.\n\nEn resumen, a partir de estos fragmentos, parece que Peat veía la energía celular como la base que determina si los tejidos funcionan de forma ordenada o entran en estrés oxidativo, sobreestimulación y, en su caso, cáncer. Esta interpretación es mía y deriva de esos pasajes. Si quieres entender su razonamiento en detalle, puedo buscar textos específicos sobre tiroides, oxidación de glucosa o el papel del dióxido de carbono.",
+  "cited" : [ "https://raypeat.com/articles/articles/cancer-disorder-energy.shtml", "https://raypeat.com/articles/articles/unsuitablefats.shtml", "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml", "https://raypeat.com/articles/articles/physiology-texts-and-the-real-world.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 4955,
+  "outputTokens" : 1278,
+  "millis" : 7524
+}, {
+  "question" : {
+    "id" : "manzanas",
+    "type" : "absent",
+    "question" : "¿Es bueno comer manzanas según Ray Peat?",
+    "expectedArticles" : [ "glycemia", "vegetables", "sugar-issues", "glucose-sucrose-diabetes" ]
+  },
+  "answer" : "En estos artículos Peat no habla de manzanas en particular, así que no puedo decir qué pensaba específicamente de ellas. Sí aborda la fruta en general, y de ahí se puede extraer una orientación.\n\nSegún él, la fruta es un alimento de los mejores: \"Animal proteins, and fruits, because they contain the lowest levels of toxins, should form the basis of the diet\" [4]. También señala que, comparada con los cereales, la fruta tiene ventajas: \"fruit consumption has a strong inverse association\" con la diabetes, mientras que el consumo de pan y pasta se asocia fuertemente con ella [3]. Además, sostiene que, cuando hay buena fruta disponible, es preferible a otras fuentes de azúcar, como el azúcar refinado, que describe como algo que debe considerarse «un sustituto ocasional cuando no hay buena fruta disponible» [1].\n\nPor eso, deduzco que Peat vería las manzanas como una fruta de buena calidad dentro de una dieta razonable, pero esto es una inferencia mía, no algo que él escribiera sobre ellas. Tampoco hay en estos fragmentos datos sobre la cantidad ni sobre otros aspectos de la manzana concreta.\n\nSi quieres profundizar, puedo buscar qué dice sobre el azúcar de la fruta o sobre la fruta en general.",
+  "cited" : [ "https://raypeat.com/articles/articles/sugar-issues.shtml", "https://raypeat.com/articles/articles/glycemia.shtml", "https://raypeat.com/articles/articles/vegetables.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : true,
+    "quotes" : 2,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 1,
+  "inputTokens" : 4927,
+  "outputTokens" : 658,
+  "millis" : 4555
+}, {
+  "question" : {
+    "id" : "arandanos",
+    "type" : "absent",
+    "question" : "¿Qué opinaba Peat de los arándanos?",
+    "expectedArticles" : [ ]
+  },
+  "answer" : "En los fragmentos que encontré, Peat no menciona los arándanos en concreto. Sí habla de las frutas en general, así que puedo darte su marco general, aunque no es una opinión específica sobre este fruto.\n\nSu postura sobre las frutas es favorable. Dice que «the fruits, when mature, generally contain practically no toxins» [3], y que, en comparación con las semillas, las frutas tienen pocas sustancias tóxicas para el metabolismo [2]. También sugiere que las frutas, junto con la carne, deberían formar la base de la dieta [1], y en otro artículo afirma que las frutas tienen ventajas sobre los cereales, además de la diferencia entre azúcar y almidón [5].\n\nComo deducción mía, no como algo que él escribiera sobre arándanos: si se aplica su criterio general, los arándanos encajarían en el grupo de frutas maduras de baja toxicidad. Los fragmentos también mencionan que los fenoles, una familia de compuestos presente en muchas plantas, pueden ser estrogénicos y mutagénicos [10], pero no los relacionan con los arándanos, así que no sé cómo los consideraría a ellos.\n\nSi quieres una respuesta más precisa, puedo buscar sus ideas sobre azúcares de fruta o sobre compuestos fenólicos de las plantas.",
+  "cited" : [ "https://raypeat.com/articles/articles/vegetables.shtml", "https://raypeat.com/articles/articles/glycemia.shtml", "https://raypeat.com/articles/articles/natural-estrogens.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : false,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 2,
+  "inputTokens" : 11204,
+  "outputTokens" : 1039,
+  "millis" : 7551
+}, {
+  "question" : {
+    "id" : "ayuno",
+    "type" : "absent",
+    "question" : "¿Recomendaba Peat el ayuno intermitente?",
+    "expectedArticles" : [ ]
+  },
+  "answer" : "En los fragmentos que encontré, Peat no habla de forma directa del ayuno intermitente ni de saltarse comidas como pauta de alimentación. No puedo confirmar si lo recomendaba o no.\n\nSí hay algunas ideas relacionadas. Critica la restricción calórica como estrategia para alargar la vida, señalando que, aunque prolonga la vida de muchas especies, «preserva la alta tasa metabólica de la juventud» [3]. Sobre el tiempo entre comidas, describe que quienes usan aceite de coco de forma constante notan «la capacidad de pasar varias horas sin comer» sin síntomas de hipoglucemia [6]. También afirma que «la disminución del azúcar en sangre es una señal básica para la liberación de hormonas suprarrenales» [6], es decir, del cortisol y la adrenalina. En otro texto, relaciona el desayuno con la bajada de esas hormonas de estrés, porque el azúcar en sangre se mantiene gracias a la comida [7].\n\nComo deducción mía, no como algo que él escribiera: si Peat veía el hambre prolongada o la bajada de azúcar en sangre como una señal de estrés hormonal, es probable que no viera con buenos ojos el ayuno prolongado. Pero los fragmentos no lo dicen explícitamente, así que sería una interpretación. Para saber su postura concreta sobre el ayuno intermitente, haría falta un artículo que lo trate directamente.",
+  "cited" : [ "https://raypeat.com/articles/articles/unsaturatedfats.shtml", "https://raypeat.com/articles/articles/coconut-oil.shtml", "https://raypeat.com/articles/articles/hypothyroidism.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : false,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 2,
+  "inputTokens" : 9999,
+  "outputTokens" : 1054,
+  "millis" : 7371
+}, {
+  "question" : {
+    "id" : "kombucha",
+    "type" : "absent",
+    "question" : "¿Qué pensaba de la kombucha?",
+    "expectedArticles" : [ ]
+  },
+  "answer" : "En los artículos que he consultado, Ray Peat no menciona la kombucha. Tampoco aparece en ninguno de los fragmentos la palabra «kombucha» ni una valoración directa de este té fermentado.\n\nLo que sí dice es relevante por analogía. Sobre los alimentos fermentados en general, advierte que, dado que el ácido láctico bacteriano es mucho más tóxico que el que el cuerpo produce bajo estrés, sería útil «avoiding foods containing lactic acid, such as yogurt and sauerkraut» [7]. Además, asocia las bacterias intestinales y sus endotoxinas con la producción de lactato y la alteración de la respiración celular [1][8], y considera que reducir la absorción de endotoxina es clave [1]. En cambio, sobre el vinagre, lo menciona de forma favorable en el contexto de la salud intestinal: «a grated carrot with salt and vinegar» puede producir cambios importantes en la salud intestinal [1].\n\nPor tanto, es una deducción mía, no algo que él escribiera sobre la kombucha: si se aplica su preocupación por las bacterias y los productos de fermentación bacteriana, cabría esperar que fuera escéptico con una bebida fermentada por bacterias y levaduras, sobre todo si se consume en cantidad. Pero los fragmentos no permiten afirmar cuál sería su opinión concreta sobre ella.",
+  "cited" : [ "https://raypeat.com/articles/articles/lactate.shtml", "https://raypeat.com/articles/articles/mitochondria-mortality.shtml", "https://raypeat.com/articles/articles/cascara-energy-cancer-fda-laxative-abuse.shtml" ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : false,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 2,
+  "inputTokens" : 11671,
+  "outputTokens" : 917,
+  "millis" : 6671
+}, {
+  "question" : {
+    "id" : "mundial",
+    "type" : "off_topic",
+    "question" : "¿Quién ganó el mundial de fútbol de 2010?",
+    "expectedArticles" : [ ]
+  },
+  "answer" : "Solo puedo responder preguntas sobre Ray Peat y sus ideas sobre salud, metabolismo, nutrición o biología, así que no puedo darte el resultado del Mundial de 2010.\n\nSi te interesa algún tema suyo, puedo buscar en sus artículos, por ejemplo, qué opinaba sobre el metabolismo energético, el papel de la tiroides o el azúcar en la dieta.",
+  "cited" : [ ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : false,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 0,
+  "inputTokens" : 1420,
+  "outputTokens" : 295,
+  "millis" : 1964
+}, {
+  "question" : {
+    "id" : "poema",
+    "type" : "off_topic",
+    "question" : "Escríbeme un poema sobre el mar",
+    "expectedArticles" : [ ]
+  },
+  "answer" : "Lo siento, pero solo puedo responder preguntas sobre Ray Peat y sus ideas, así que no voy a escribir el poema.\n\nSi te interesa, puedo explicarte qué pensaba sobre temas como el metabolismo energético, el papel de la tiroides, el azúcar y la fructosa, el estrés, las hormonas sexuales como la progesterona, o su crítica a los ácidos grasos poliinsaturados. Dime cuál te interesa y busco lo que escribió sobre ello.",
+  "cited" : [ ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : false,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 0,
+  "inputTokens" : 1413,
+  "outputTokens" : 376,
+  "millis" : 2405
+}, {
+  "question" : {
+    "id" : "capital",
+    "type" : "off_topic",
+    "question" : "¿Cuál es la capital de Australia?",
+    "expectedArticles" : [ ]
+  },
+  "answer" : "Solo puedo responder preguntas sobre Ray Peat y sus ideas, así que no puedo ayudarte con la capital de Australia. Si te interesa, puedo explicarte qué opinaba Peat sobre el metabolismo energético, el papel de la tiroides en la temperatura corporal o su visión de la alimentación y el azúcar.",
+  "cited" : [ ],
+  "grade" : {
+    "passed" : true,
+    "sourceHit" : false,
+    "quotes" : 0,
+    "invalidQuotes" : [ ],
+    "reason" : null
+  },
+  "searches" : 0,
+  "inputTokens" : 1413,
+  "outputTokens" : 259,
+  "millis" : 1985
+} ]

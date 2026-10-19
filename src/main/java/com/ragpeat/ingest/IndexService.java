@@ -29,11 +29,13 @@ public class IndexService {
      */
     @Transactional
     public int index(Article article) {
+        // El título también cuenta como cambio: va delante de cada chunk al calcular su embedding.
+        boolean sameTitle = repository.findTitle(article.slug()).map(article.title()::equals).orElse(false);
         long documentId = repository.upsertDocument(article);
         List<String> chunks = chunker.split(article.text());
 
         // List.equals compara elemento a elemento y en orden.
-        if (chunks.equals(repository.findChunkContents(documentId))) {
+        if (sameTitle && chunks.equals(repository.findChunkContents(documentId))) {
             return 0;
         }
 

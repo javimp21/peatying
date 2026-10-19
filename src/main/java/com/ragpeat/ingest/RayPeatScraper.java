@@ -32,6 +32,17 @@ public class RayPeatScraper {
      */
     private static final Pattern CITATION = Pattern.compile("\\b(18|19|20)\\d{2}\\b.{0,30}[;:(]\\s*\\d");
 
+    /**
+     * Artículos que no queremos, comprobado a mano:
+     *  - Traducciones (español, italiano): duplican artículos que ya están en inglés, y la del español
+     *    "ganaba" todas las búsquedas solo por estar en el mismo idioma que la pregunta.
+     *  - Duplicados: el de esclerosis múltiple es idéntico a "multiple-sclerosis", y el de CO2 es
+     *    otra versión casi igual de "co2". Repetidos, ocuparían huecos en los resultados con lo mismo.
+     */
+    private static final Set<String> SKIPPED = Set.of(
+            "spanish-alzheimers", "italian-salt",
+            "multiple-sclerosis-hormone-related-brain-syndromes", "protective-co2-aging");
+
     /** Devuelve las URLs de todos los artículos HTML del índice (sin repetidos). */
     public List<String> fetchArticleUrls() throws IOException {
         Document index = download(INDEX_URL);
@@ -42,13 +53,9 @@ public class RayPeatScraper {
         for (Element link : index.select("a[href*=/articles/articles/][href$=.shtml]")) {
             // "abs:href" convierte "/articles/..." en "https://raypeat.com/articles/...".
             String url = link.attr("abs:href");
-            // Las traducciones (spanish-..., italian-...) duplican artículos que ya están en inglés.
-            // Además, la del español "gana" en todas las búsquedas solo por estar en el mismo idioma
-            // que la pregunta, aunque no sea la más relevante. Por eso las dejamos fuera.
-            if (url.contains("/spanish-") || url.contains("/italian-")) {
-                continue;
+            if (!SKIPPED.contains(new Article(url, "", "").slug())) {
+                urls.add(url);
             }
-            urls.add(url);
         }
         return new ArrayList<>(urls);
     }
@@ -90,6 +97,12 @@ public class RayPeatScraper {
             }
         }
 
+        // La etiqueta <title> de la web a veces está mal ("New Page Title Here", o el título de otro
+        // artículo). El título real suele ser la primera línea del texto; si es corta, usamos esa.
+        if (!paragraphs.isEmpty() && paragraphs.getFirst().length() <= 200) {
+            title = paragraphs.getFirst();
+        }
+
         return new Article(url, title, String.join("\n\n", paragraphs));
     }
 
@@ -129,8 +142,9 @@ public class RayPeatScraper {
         return line
                 //   es el espacio "duro" (&nbsp;); trim() no lo quita, así que lo cambiamos antes.
                 .replace(' ', ' ')
-                // Algunas páginas ya vienen rotas desde la web: el carácter original (casi siempre
-                // unas comillas) se perdió y quedó "ï¿½". Lo más probable es que fuera ", así que lo ponemos.
+                // Algunas páginas ya vienen rotas desde la web: el carácter original se perdió y quedó "ï¿½".
+                // Entre dos letras era un apóstrofe (industry's); en otro sitio, unas comillas ("inhibitory").
+                .replaceAll("(?<=\\p{L})ï¿½(?=\\p{L})", "'")
                 .replace("ï¿½", "\"")
                 .trim();
     }
