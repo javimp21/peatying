@@ -90,13 +90,16 @@ public class ChatService {
         this.systemPrompt = systemPromptFile.getContentAsString(StandardCharsets.UTF_8);
     }
 
-    /** Sin avisos intermedios: para la terminal y el banco de pruebas. */
+    /** Una pregunta suelta, sin avisos intermedios: para la terminal y el banco de pruebas. */
     public ChatAnswer answer(String question) {
-        return answer(question, ChatListener.NONE);
+        return answer(List.of(), question, ChatListener.NONE);
     }
 
-    /** Con streaming: el listener recibe el texto según Claude lo va escribiendo. */
-    public ChatAnswer answer(String question, ChatListener listener) {
+    /**
+     * @param history  los mensajes anteriores de la conversación (vacío si es la primera pregunta).
+     * @param listener recibe el texto según Claude lo va escribiendo (streaming).
+     */
+    public ChatAnswer answer(List<Turn> history, String question, ChatListener listener) {
         List<SearchResult> sources = new ArrayList<>(); // todos los fragmentos vistos; su posición+1 es su número [n]
         int searches = 0;
         long inputTokens = 0, outputTokens = 0;
@@ -109,8 +112,18 @@ public class ChatService {
                 .system(systemPrompt)
                 // effort: cuánto "piensa" el modelo antes de responder. MEDIUM es un buen equilibrio para empezar.
                 .outputConfig(OutputConfig.builder().effort(OutputConfig.Effort.MEDIUM).build())
-                .addTool(SEARCH_TOOL)
-                .addUserMessage(question);
+                .addTool(SEARCH_TOOL);
+
+        // Primero, la conversación anterior; al final, la pregunta nueva. Así Claude entiende
+        // preguntas como "¿y por qué?" o "explícamelo más simple".
+        for (Turn turn : history) {
+            if (Turn.USER.equals(turn.role())) {
+                request.addUserMessage(turn.content());
+            } else {
+                request.addAssistantMessage(withoutCitations(turn.content()));
+            }
+        }
+        request.addUserMessage(question);
 
         for (int turn = 1; turn <= MAX_TURNS; turn++) {
             Message response = streamTurn(request.build(), listener);
@@ -198,6 +211,15 @@ public class ChatService {
                     .append(result.content()).append("\n\n");
         }
         return text.isEmpty() ? "No se encontró nada." : text.toString();
+    }
+
+    /**
+     * Quita los [n] de una respuesta anterior. Los números de cita solo tienen sentido con los
+     * fragmentos de AQUELLA respuesta, que no le volvemos a mandar a Claude; si los dejáramos, podría
+     * confundirlos con los números de la búsqueda nueva (que vuelven a empezar en [1]).
+     */
+    static String withoutCitations(String text) {
+        return text.replaceAll("\\s?\\[\\d+]", "");
     }
 
     /**

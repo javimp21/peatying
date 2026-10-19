@@ -39,11 +39,24 @@ const downloadButton = document.getElementById("download");
 // y es lo que guardamos en el navegador y lo que se descarga.
 //   { role: "user", text }   |   { role: "bot", text, sources: [{number, title, url, text}] }
 let messages = [];
+// El id de la conversación en el servidor (null hasta la primera respuesta). Con él, el bot recuerda
+// lo anterior y entiende preguntas como "¿y por qué?".
+let conversationId = null;
+
+// En pantallas táctiles (móvil, tablet) poner el foco en la caja abre el teclado, que tapa media
+// pantalla. Ahí solo lo abrimos cuando la persona pulsa la caja; en ordenador, el foco ayuda.
+const isTouch = window.matchMedia("(pointer: coarse)").matches;
+const focusInputIfDesktop = () => { if (!isTouch) input.focus(); };
+
+// Móvil: al pulsar fuera de la caja, se cierra el teclado (quitando el foco de la caja).
+document.addEventListener("pointerdown", (event) => {
+  if (isTouch && document.activeElement === input && !event.target.closest("#ask-form")) input.blur();
+});
 
 // --- Arranque ----------------------------------------------------------------
 showExamples();
 restoreConversation();
-input.focus();
+focusInputIfDesktop();
 
 // --- Estado vacío: 4 ejemplos al azar ---------------------------------------
 function showExamples() {
@@ -92,10 +105,12 @@ async function ask(question) {
   if (!question || sendButton.disabled) return;
 
   hideError();
+  const firstOfConversation = messages.length === 0;   // las naranjas solo se van rodando en la primera
   setChatting(true);
   const questionDiv = addMessage({ role: "user", text: question });
   input.value = "";
   autoGrow();
+  if (isTouch) input.blur();            // en móvil, cerramos el teclado para que se vea la respuesta
   setBusy(true);
   let loading = showLoading();
   let live = null;                      // el mensaje que se va escribiendo en directo
@@ -105,7 +120,7 @@ async function ask(question) {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question }),
+      body: JSON.stringify({ question, conversationId }),
     });
 
     if (!response.ok) {
@@ -119,7 +134,8 @@ async function ask(question) {
     for await (const { event, data } of readEvents(response)) {
       if (event === "delta") {
         if (!live) {                    // primer trozo: quitamos el "cargando" y empezamos a escribir
-          loading.stop();
+          // Mientras las naranjas se van rodando, el texto que llega se acumula; luego sale sin perder nada.
+          await loading.stop({ roll: firstOfConversation });
           loading = null;
           live = startLiveMessage();
         }
@@ -134,7 +150,12 @@ async function ask(question) {
       } else if (event === "done") {
         // Esperamos a que la máquina de escribir termine de mostrar el texto y entonces la versión final,
         // con las citas pulsables, ocupa su lugar. Tiene el mismo formato, así que no se nota el cambio.
+        conversationId = data.conversationId;     // se guarda junto con los mensajes (addMessage)
         const message = { role: "bot", text: data.answer, sources: data.sources };
+        if (loading) {                  // respuesta sin streaming previo: también despedimos a las naranjas
+          await loading.stop({ roll: firstOfConversation });
+          loading = null;
+        }
         if (live) {
           await live.finish();
           live.element.replaceWith(addMessage(message, { animate: false }));
@@ -160,7 +181,7 @@ async function ask(question) {
   } finally {
     loading?.stop();
     setBusy(false);
-    input.focus();
+    focusInputIfDesktop();
   }
 }
 
@@ -294,7 +315,7 @@ function showLoading() {
     return dots;
   };
 
-  const dots = show(first);
+  let dots = show(first);
   div.scrollIntoView({ behavior: "smooth", block: "end" });
 
   // Cambiamos de frase justo cuando termina un ciclo completo de la animación (brillo + saltos), para
@@ -304,7 +325,7 @@ function showLoading() {
   const onCycle = () => {
     if (++cycles === FIRST_PHRASE_CYCLES && second) {
       dots.firstChild.removeEventListener("animationiteration", onCycle);
-      show(second);
+      dots = show(second);
     }
   };
   dots.firstChild.addEventListener("animationiteration", onCycle);
@@ -312,14 +333,35 @@ function showLoading() {
   // Si el usuario tiene desactivadas las animaciones, ese evento no llega nunca: usamos un temporizador.
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const timer = reducedMotion && second
-    ? setTimeout(() => show(second), FIRST_PHRASE_CYCLES * LOADING_CYCLE_MS)
+    ? setTimeout(() => { dots = show(second); }, FIRST_PHRASE_CYCLES * LOADING_CYCLE_MS)
     : null;
 
+  let stopped = false;
   return {
-    stop() {
+    /**
+     * Quita el "cargando". Con roll: true, antes las naranjas se van rodando hacia la derecha.
+     * Devuelve una promesa que se cumple cuando ya ha desaparecido. Llamarlo dos veces no hace nada.
+     */
+    stop({ roll = false } = {}) {
+      if (stopped) return Promise.resolve();
+      stopped = true;
       clearTimeout(timer);
-      div.remove();
-      conversation.removeAttribute("aria-busy");
+      dots.firstChild?.removeEventListener("animationiteration", onCycle);
+      const remove = () => {
+        div.remove();
+        conversation.removeAttribute("aria-busy");
+      };
+      if (!roll || reducedMotion) {
+        remove();
+        return Promise.resolve();
+      }
+      div.classList.add("rolling");
+      return new Promise((resolve) => {
+        const done = () => { remove(); resolve(); };
+        // La primera naranja es la última en irse (la de delante sale antes): cuando termina ella, fuera.
+        div.querySelector(".orange").addEventListener("animationend", done, { once: true });
+        setTimeout(done, 1600);         // por si el evento no llegara nunca
+      });
     },
   };
 }
@@ -526,17 +568,22 @@ function toggleSource(messageDiv, button, source) {
 // si falla, la página sigue funcionando, solo que sin recordar la conversación.
 function saveConversation() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ conversationId, messages }));
   } catch (e) { /* sin almacenamiento: no pasa nada */ }
 }
 
 function restoreConversation() {
-  let saved = [];
+  let saved = null;
   try {
-    saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
   } catch (e) { /* datos corruptos o sin acceso: empezamos de cero */ }
 
-  messages = Array.isArray(saved) ? saved : [];
+  if (Array.isArray(saved)) {
+    messages = saved;                   // formato antiguo (solo la lista): sin id, el servidor creará uno nuevo
+  } else {
+    messages = Array.isArray(saved?.messages) ? saved.messages : [];
+    conversationId = saved?.conversationId ?? null;
+  }
   messages.forEach((m) => render(m, false));
   setChatting(messages.length > 0);
   if (messages.length > 0) conversation.lastElementChild.scrollIntoView({ block: "start" });
@@ -544,6 +591,7 @@ function restoreConversation() {
 
 newChatButton.addEventListener("click", () => {
   messages = [];
+  conversationId = null;                // la próxima pregunta empieza una conversación nueva en el servidor
   saveConversation();
   conversation.replaceChildren();       // vacía la conversación en pantalla
   input.value = "";
@@ -551,7 +599,7 @@ newChatButton.addEventListener("click", () => {
   hideError();
   setChatting(false);
   window.scrollTo({ top: 0, behavior: "smooth" });
-  input.focus();
+  focusInputIfDesktop();
 });
 
 // --- Descargar la conversación como Markdown --------------------------------

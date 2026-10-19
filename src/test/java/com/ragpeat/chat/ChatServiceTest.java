@@ -25,6 +25,12 @@ class ChatServiceTest {
     }
 
     @Test
+    void alPasarElHistorial_seQuitanLosNumerosDeCita() {
+        assertThat(ChatService.withoutCitations("El azúcar protege [1]. Y la sal también [2][3]."))
+                .isEqualTo("El azúcar protege. Y la sal también.");
+    }
+
+    @Test
     void ignoraCitasQueNoExisten() {
         SortedMap<Integer, SearchResult> cited = ChatService.citedIn("Algo [7] y nada [0].", sources);
 

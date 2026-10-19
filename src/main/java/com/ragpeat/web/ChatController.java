@@ -3,12 +3,15 @@ package com.ragpeat.web;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.chat.ChatListener;
 import com.ragpeat.chat.ChatService;
+import com.ragpeat.chat.ConversationRepository;
+import com.ragpeat.chat.Turn;
 import jakarta.annotation.PreDestroy;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -41,7 +44,11 @@ public class ChatController {
     static final int MAX_QUESTION_LENGTH = 500;
     private static final long STREAM_TIMEOUT_MS = 120_000;
 
+    /** Cuántos mensajes anteriores ve Claude: 6 = las 3 últimas preguntas con sus respuestas. */
+    private static final int HISTORY_MESSAGES = 6;
+
     private final ChatService chatService;
+    private final ConversationRepository conversations;
     private final RateLimiter rateLimiter;
     private final boolean trustProxy;
 
@@ -52,19 +59,21 @@ public class ChatController {
      */
     private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
 
-    public ChatController(ChatService chatService, RateLimiter rateLimiter,
+    public ChatController(ChatService chatService, ConversationRepository conversations, RateLimiter rateLimiter,
                           @Value("${chat.trust-proxy:false}") boolean trustProxy) {
         this.chatService = chatService;
+        this.conversations = conversations;
         this.rateLimiter = rateLimiter;
         this.trustProxy = trustProxy;
     }
 
     // Lo que llega y lo que sale, como records: Spring los convierte de/a JSON automáticamente.
-    record ChatRequest(String question) {}
+    /** conversationId: null en la primera pregunta; después, el que devolvimos en la respuesta anterior. */
+    record ChatRequest(String question, UUID conversationId) {}
 
     record Source(int number, String title, String url, String text) {}
 
-    record ChatResponse(String answer, List<Source> sources) {}
+    record ChatResponse(String answer, List<Source> sources, UUID conversationId) {}
 
     record ErrorResponse(String error) {}
 
@@ -84,14 +93,22 @@ public class ChatController {
         }
 
         SseEmitter emitter = new SseEmitter(STREAM_TIMEOUT_MS);
-        executor.execute(() -> respond(question, emitter));
+        executor.execute(() -> respond(question, request.conversationId(), emitter));
         return ResponseEntity.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(emitter);
     }
 
     /** Se ejecuta en un hilo virtual: genera la respuesta y la va mandando por el emitter. */
-    private void respond(String question, SseEmitter emitter) {
+    private void respond(String question, UUID requestedId, SseEmitter emitter) {
         try {
-            ChatAnswer answer = chatService.answer(question, new ChatListener() {
+            // Si nos mandan una conversación que existe, seguimos en ella; si no (primera pregunta,
+            // o un id inventado o borrado), empezamos una nueva. Nunca nos fiamos del historial que
+            // pudiera mandar la página: lo leemos de nuestra base de datos.
+            UUID conversationId = requestedId != null && conversations.exists(requestedId)
+                    ? requestedId
+                    : conversations.create();
+            List<Turn> history = conversations.lastTurns(conversationId, HISTORY_MESSAGES);
+
+            ChatAnswer answer = chatService.answer(history, question, new ChatListener() {
                 @Override
                 public void onText(String delta) {
                     send(emitter, "delta", Map.of("text", delta));
@@ -105,7 +122,9 @@ public class ChatController {
             List<Source> sources = answer.citedSources().entrySet().stream()
                     .map(e -> new Source(e.getKey(), e.getValue().title(), e.getValue().url(), e.getValue().content()))
                     .toList();
-            send(emitter, "done", new ChatResponse(answer.text(), sources));
+            // Solo guardamos el intercambio si ha salido bien.
+            conversations.saveExchange(conversationId, question, answer.text());
+            send(emitter, "done", new ChatResponse(answer.text(), sources, conversationId));
             emitter.complete();
         } catch (Exception e) {
             // Falló algo nuestro o de un servicio externo (Claude, Voyage, la base de datos).

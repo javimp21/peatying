@@ -319,6 +319,18 @@ body {
 }
 .message.loading .dots .orange:nth-child(2) { animation-delay: 0.14s; }
 .message.loading .dots .orange:nth-child(3) { animation-delay: 0.28s; }
+/* Despedida (solo en la primera pregunta de cada conversación): la frase se desvanece y las naranjas
+   se van rodando hacia la derecha, girando sobre sí mismas. Sale primero la de delante (la tercera). */
+.message.loading.rolling .phrase { animation: fade-out 0.5s ease forwards; }
+.message.loading.rolling .dots .orange { animation: roll 0.95s cubic-bezier(0.55, 0, 0.8, 0.4) forwards; }
+.message.loading.rolling .dots .orange:nth-child(3) { animation-delay: 0s; }
+.message.loading.rolling .dots .orange:nth-child(2) { animation-delay: 0.09s; }
+.message.loading.rolling .dots .orange:nth-child(1) { animation-delay: 0.18s; }
+@keyframes roll {
+  to { transform: translateX(170px) rotate(1080deg); opacity: 0; }   /* 3 vueltas completas mientras avanza */
+}
+@keyframes fade-out { to { opacity: 0; } }
+
 @keyframes hop {
   0%, 52%   { transform: translateY(0) rotate(0); }
   60%       { transform: translateY(-5px) rotate(-12deg); }   /* arriba, con un pequeño giro */
