@@ -42,7 +42,13 @@
 			<version>1.23.2</version>
 		</dependency>
 
-		<!-- RestClient: para llamar a APIs HTTP externas (Voyage, y más adelante Claude) -->
+		<!-- Servidor web (Tomcat) y controladores REST: la API que usa la página del chat -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
+		</dependency>
+
+		<!-- RestClient: para llamar a APIs HTTP externas (Voyage) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-restclient</artifactId>

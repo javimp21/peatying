@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ray Peat en español</title>
+  <meta name="description" content="Pregunta en español sobre las ideas de Ray Peat. Cada respuesta cita sus artículos originales.">
+  <meta name="color-scheme" content="dark">
+  <link rel="preload" href="fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Toda la app vive dentro de una gran tarjeta redondeada -->
+  <div class="frame">
+    <header class="topbar">
+      <span class="wordmark">Ray Peat <em>en español</em></span>
+      <nav class="actions">
+        <!-- Solo se ven cuando hay conversación (app.js los muestra) -->
+        <button type="button" id="download" class="ghost" hidden>Descargar</button>
+        <button type="button" id="new-chat" class="ghost" hidden>Nueva<span class="wide-only"> conversación</span></button>
+        <a class="pill-link" href="https://raypeat.com/articles/" target="_blank" rel="noopener">Artículos originales</a>
+      </nav>
+    </header>
+
+    <main class="main">
+      <section class="hero">
+        <h1>Las ideas de Ray Peat, <em>en&nbsp;español</em></h1>
+        <p class="lead">Pregunta lo que quieras. Cada respuesta cita sus artículos originales.</p>
+      </section>
+
+      <!-- Aquí se van añadiendo las preguntas y respuestas. aria-live: los lectores de pantalla leen lo nuevo. -->
+      <section id="conversation" class="conversation" aria-live="polite"></section>
+
+      <form id="ask-form" class="ask" autocomplete="off">
+        <!-- El error va justo encima de la caja de texto: donde el usuario está mirando. -->
+        <p id="error" class="error" role="alert" hidden></p>
+        <div class="ask-pill">
+          <label for="question" class="visually-hidden">Tu pregunta</label>
+          <textarea id="question" name="question" rows="1" maxlength="500" required
+                    placeholder="Prueba: «¿Qué pensaba del azúcar?»"></textarea>
+          <button type="submit" id="send" class="send" aria-label="Preguntar">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+
+      <!-- Estado vacío: preguntas de ejemplo. Se rellenan desde app.js y desaparecen al preguntar. -->
+      <section id="examples" class="examples" aria-label="Preguntas de ejemplo"></section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    Respuestas generadas por IA a partir de los artículos de
+    <a href="https://raypeat.com/articles/" target="_blank" rel="noopener">raypeat.com</a>.
+    Pueden contener errores y no son consejo médico.
+    Proyecto independiente, sin relación con Ray Peat ni con raypeat.com.
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

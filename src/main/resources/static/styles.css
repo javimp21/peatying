@@ -1,0 +1,366 @@
+/* Fuentes libres (licencia OFL) guardadas en el propio proyecto: no se cargan de Google. */
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("fonts/instrument-serif-latin-400-normal.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("fonts/instrument-serif-latin-400-italic.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/inter-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900; font-style: normal; font-display: swap;   /* fuente "variable": todos los grosores en un archivo */
+}
+
+/* Colores y medidas en un solo sitio ("tokens"). */
+:root {
+  --bg: #0e0f11;              /* fondo de la página, casi negro */
+  --frame: #16171a;           /* la gran tarjeta */
+  --surface: #1f2125;         /* cajas dentro de la tarjeta */
+  --surface-2: #2a2c31;
+  --line: #2f3238;
+  --text: #f4f4f5;
+  --text-soft: #c9cacf;
+  --muted: #8b8d94;
+  --accent: #2f7cf6;          /* azul del botón principal */
+  --accent-soft: rgba(47, 124, 246, 0.16);
+  --accent-text: #9cc2ff;
+  --error-bg: rgba(239, 68, 68, 0.14);
+  --error-text: #fca5a5;
+  --serif: "Instrument Serif", "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- La gran tarjeta ------------------------------------------------------- */
+.frame {
+  margin: 24px;
+  min-height: calc(100vh - 96px);
+  border-radius: 48px;
+  /* un brillo muy suave arriba, para que no sea un plano gris */
+  background: radial-gradient(120% 60% at 50% 0%, #1d1f24 0%, var(--frame) 60%);
+  border: 1px solid #1f2126;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+}
+.wordmark { font-family: var(--serif); font-size: 1.35rem; letter-spacing: 0.01em; }
+.wordmark em { color: var(--muted); }
+.pill-link {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+.pill-link:hover { filter: brightness(1.1); }
+
+.actions { display: flex; align-items: center; gap: 8px; }
+.ghost {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-soft);
+  font: 500 0.9rem var(--sans);
+  cursor: pointer;
+}
+.ghost:hover { background: var(--surface); color: var(--text); }
+.ghost:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+[hidden] { display: none !important; }   /* que "hidden" gane siempre, aunque otra regla ponga display */
+
+.main {
+  flex: 1;
+  width: 100%;
+  max-width: 760px;           /* columna de lectura */
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Portada (estado vacío) ------------------------------------------------ */
+.hero { text-align: center; padding: 48px 0 36px; transition: padding 0.3s ease; }
+.hero h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 8vw, 5.5rem);   /* crece con la pantalla, entre 48 y 88 px */
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  transition: font-size 0.3s ease;
+}
+.hero h1 em { color: var(--text-soft); }
+.lead { margin: 18px 0 0; font-size: 1.15rem; color: var(--muted); }
+
+/* Al empezar a conversar, la portada se encoge para dejar sitio a la conversación. */
+.chatting .hero { padding: 8px 0 20px; }
+.chatting .hero h1 { font-size: 2rem; }
+.chatting .lead { display: none; }
+
+/* --- Caja de pregunta en forma de píldora ---------------------------------- */
+.ask { padding-top: 8px; }
+.chatting .ask {
+  position: sticky;           /* se queda abajo al hacer scroll */
+  bottom: 0;
+  padding: 12px 0 4px;
+  background: linear-gradient(to top, var(--frame) 70%, transparent);
+}
+
+.ask-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 10px 26px;
+  border-radius: 999px;
+  background: #0b0c0e;
+  border: 1px solid var(--line);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+.ask-pill:focus-within { border-color: var(--accent); }
+
+.ask textarea {
+  flex: 1;
+  min-height: 28px;
+  max-height: 140px;
+  padding: 4px 0;
+  border: 0;
+  outline: none;
+  resize: none;
+  background: transparent;
+  color: var(--text);
+  font: 400 1.2rem/1.4 var(--sans);
+}
+.ask textarea::placeholder { color: #9a9ca3; }
+
+.send {
+  flex: none;
+  width: 48px; height: 48px;
+  display: grid; place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.send:hover { filter: brightness(1.12); transform: translateX(1px); }
+.send:disabled { opacity: 0.45; cursor: wait; transform: none; }
+.send:focus-visible, .examples button:focus-visible, .cite:focus-visible, .pill-link:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+}
+
+.error {
+  margin: 0 0 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: var(--error-bg);
+  color: var(--error-text);
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* --- Preguntas de ejemplo -------------------------------------------------- */
+.examples {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+.examples button {
+  padding: 10px 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-soft);
+  font: 400 0.95rem var(--sans);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.examples button:hover { background: var(--surface-2); color: var(--text); }
+
+/* --- Conversación ---------------------------------------------------------- */
+.conversation { display: flex; flex-direction: column; gap: 22px; }
+.chatting .conversation { flex: 1; padding-bottom: 8px; }
+
+.message.user {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 12px 20px;
+  border-radius: 24px 24px 6px 24px;
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.message.bot { font-size: 1.06rem; line-height: 1.72; color: var(--text-soft); }
+.message.bot p { margin: 0 0 14px; }
+.message.bot p:last-child { margin-bottom: 0; }
+.message.bot strong { color: var(--text); font-weight: 600; }
+
+/* --- Animaciones de entrada ------------------------------------------------- */
+/* Al cargar, cada pieza sube un poco y aparece, una detrás de otra (animation-delay). */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.frame             { animation: fade 0.6s ease both; }
+.topbar            { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) 0.05s both; }
+.hero h1           { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.12s both; }
+.lead              { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.22s both; }
+.ask-pill          { animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.32s both; }
+.examples button   { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.examples button:nth-child(1) { animation-delay: 0.42s; }
+.examples button:nth-child(2) { animation-delay: 0.48s; }
+.examples button:nth-child(3) { animation-delay: 0.54s; }
+.examples button:nth-child(4) { animation-delay: 0.60s; }
+.footer            { animation: fade 0.8s ease 0.6s both; }
+
+/* Cada mensaje nuevo también aparece subiendo. */
+.message { animation: rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.source-panel { animation: rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+/* --- Estado "cargando" ------------------------------------------------------
+   Cada ciclo (2,4 s, el mismo que LOADING_CYCLE_MS en app.js):
+     1. Un brillo recorre la frase de izquierda a derecha (0% -> 55% del ciclo).
+     2. Al llegar al final, los tres puntos saltan en ola: cada uno empieza a saltar
+        mientras el anterior todavía está cayendo (animation-delay escalonado).        */
+.message.loading { color: var(--muted); font-weight: 500; }
+
+.message.loading .phrase {
+  /* El texto se "pinta" con un degradado: gris - blanco - gris. Movemos el degradado y parece
+     que una luz pasa por encima de las letras. background-clip: text recorta el fondo a las letras. */
+  background: linear-gradient(90deg, var(--muted) 40%, #ffffff 50%, var(--muted) 60%);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: sweep 2.4s linear infinite;
+}
+@keyframes sweep {
+  0%   { background-position: 85% 0; }   /* la luz empieza justo a la izquierda de la frase */
+  55%  { background-position: 15% 0; }   /* y termina justo a la derecha */
+  100% { background-position: 15% 0; }   /* el resto del ciclo, quieta (fuera de la frase) */
+}
+
+.message.loading .dots i {
+  display: inline-block;      /* sin esto, transform no funciona en un elemento de texto */
+  font-style: normal;
+  animation: hop 2.4s ease-in-out infinite;
+}
+.message.loading .dots i:nth-child(2) { animation-delay: 0.14s; }
+.message.loading .dots i:nth-child(3) { animation-delay: 0.28s; }
+@keyframes hop {
+  0%, 52%   { transform: translateY(0); color: var(--muted); }
+  60%       { transform: translateY(-7px); color: var(--text); }   /* arriba */
+  70%, 100% { transform: translateY(0); color: var(--muted); }     /* ha caído */
+}
+
+/* Botón de cita [n] dentro del texto */
+.cite {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px; height: 22px;
+  padding: 0 6px;
+  margin: 0 2px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-text);
+  font: 600 0.75rem var(--sans);
+  vertical-align: 2px;
+  cursor: pointer;
+}
+.cite[aria-expanded="true"] { background: var(--accent); color: #fff; }
+
+/* Panel con el texto original de Peat al pulsar una cita */
+.source-panel {
+  margin: 4px 0 16px;
+  padding: 18px 22px;
+  border-radius: 24px;
+  background: #0b0c0e;
+  border: 1px solid var(--line);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-height: 360px;          /* un fragmento puede ser largo: scroll propio en vez de empujar la página */
+  overflow-y: auto;
+}
+.source-panel h3 {
+  margin: 0 0 10px;
+  font: 400 1.3rem/1.2 var(--serif);
+  color: var(--text);
+}
+.source-panel p { margin: 0 0 12px; white-space: pre-line; color: var(--text-soft); }
+.source-panel a { color: var(--accent-text); text-decoration: none; font-weight: 500; }
+.source-panel a:hover { text-decoration: underline; }
+
+.sources {
+  margin: 18px 0 0 !important;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.sources a { color: var(--muted); text-decoration-color: var(--line); }
+.sources a:hover { color: var(--text-soft); }
+
+/* --- Pie ------------------------------------------------------------------- */
+.footer {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 20px 28px;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
+.footer a { color: var(--muted); }
+
+/* Oculto a la vista pero visible para lectores de pantalla */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* --- Móvil ----------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .frame { margin: 8px; min-height: calc(100vh - 16px); border-radius: 28px; }
+  .topbar { padding: 18px 20px; }
+  .pill-link { display: none; }       /* el enlace sigue en el pie */
+  .ghost { padding: 6px 12px; font-size: 0.82rem; }
+  .wide-only { display: none; }       /* "Nueva conversación" -> "Nueva" */
+  .main { padding: 0 14px 18px; }
+  .hero { padding: 28px 0 24px; }
+  .lead { font-size: 1rem; }
+  .ask-pill { padding: 8px 8px 8px 18px; }
+  .ask textarea { font-size: 1.05rem; }
+  .send { width: 42px; height: 42px; }
+}
+
+/* Quien pide menos animaciones (ajuste del sistema), no las ve. */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+  .message.loading .phrase { -webkit-text-fill-color: var(--muted); }
+}
