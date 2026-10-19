@@ -1,0 +1,222 @@
+[ {
+  "question" : {
+    "id" : "aceites",
+    "type" : "direct",
+    "question" : "¿Qué opinaba Peat de los aceites vegetales poliinsaturados?",
+    "expectedArticles" : [ "unsaturated-oils", "unsaturatedfats", "unsuitablefats", "fats-functions-malfunctions", "fats-degeneration3", "diabetes" ]
+  },
+  "ragAnswer" : "Según los artículos que encontré, Peat consideraba que los aceites vegetales poliinsaturados eran nocivos y no un alimento necesario. En su artículo \"Unsaturated Vegetable Oils: Toxic\", menciona como ejemplos el aceite de soja, de maíz, de cártamo, de canola, de sésamo, de girasol y de palma, y afirma que los aceites frescos son \"intrinsically toxic\" [1]. Según él, lo que los vuelve tóxicos es la propia grasa poliinsaturada, no un tratamiento industrial [1]. También señala que estas grasas están en muchas semillas y en la grasa de los animales que las comen, por lo que es difícil evitarlas por completo en la dieta [1].\n\nSobre la idea de que son «nutrientes esenciales», Peat sostenía que esa visión se impulsó comercialmente. Describe que la industria de los aceites usó la publicidad para promover el ácido linoleico y linolénico como «ácidos grasos esenciales» [4], y que los trabajos de los Burr en los que se basaba esa afirmación no se sostenían, ya que los animales alimentados sin grasa producían grasa de composición similar a la manteca de cerdo [3]. Añade que los aceites poliinsaturados causaban en animales deterioro del cerebro, los músculos y las gónadas, en buena parte por destruir la vitamina E [4], y que se conocían enfermedades como la «crazy chick disease» por exceso de estas grasas [3].\n\nLos fragmentos no tratan de forma directa qué recomendaría hoy Peat como alternativa concreta a estos aceites en la dieta, así que no puedo decirlo con base en estos textos. Si te interesa un problema de salud concreto, conviene consultarlo con un médico.",
+  "ragClaims" : [ {
+    "claim" : "Peat consideraba que los aceites vegetales poliinsaturados son nocivos y no un alimento necesario.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Mainly, I'm referring to soybean oil, corn oil, safflower oil, canola, sesame oil, sunflower seed oil, palm oil, and any others that are labeled as \"unsaturated\" or \"polyunsaturated.\" ... Chemically, the material that makes these oils very toxic is the polyunsaturated fat itself."
+  }, {
+    "claim" : "Peat afirmaba que los aceites poliinsaturados frescos (soja, maíz, cártamo, canola, sésamo, girasol, palma) son intrínsecamente tóxicos.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "The fresh oils, whether cold pressed or consumed as part of the living plant material, are intrinsically toxic, and it is not any special industrial treatment that makes them toxic."
+  }, {
+    "claim" : "Según Peat, lo que hace tóxicos a estos aceites es la propia grasa poliinsaturada, no un tratamiento industrial.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Chemically, the material that makes these oils very toxic is the polyunsaturated fat itself. ... it is not any special industrial treatment that makes them toxic."
+  }, {
+    "claim" : "Peat señalaba que las grasas poliinsaturadas están en muchas semillas y en la grasa de los animales que las comen, por lo que es difícil evitarlas por completo.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "These unsaturated oils are found in very high concentrations in many seeds, and in the fats of animals that have eaten a diet containing them. ... it is impossible to eat a diet which lacks them, unless special foods are prepared in the laboratory."
+  }, {
+    "claim" : "Peat sostenía que la idea de los ácidos linoleico y linolénico como esenciales fue impulsada comercialmente por la industria de los aceites mediante publicidad.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "But the oil industries used public relations effectively to sell the medical (heart protective) benefits of a diet containing increased amounts of linoleic and linolenic acids, which they called the essential fatty acids."
+  }, {
+    "claim" : "Peat decía que los trabajos de los Burr sobre los ácidos grasos esenciales no se sostenían, pues los animales alimentados sin grasa producían grasa de composición similar a la manteca de cerdo.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "They believed that the animals were unable to synthesize fat without linoleic acid, although in another context they cited a study in which the fat of rats on a fat-free diet was similar in composition to lard"
+  }, {
+    "claim" : "Peat afirmaba que los aceites poliinsaturados causaban en animales deterioro del cerebro, los músculos y las gónadas, en buena parte por destruir la vitamina E.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "By the 1940s, the polyunsaturated oils, including fish oils, were known to cause deterioration of the brain, muscles, and gonads in a variety of animals, and this was found to be caused mainly by their destruction of vitamin E."
+  }, {
+    "claim" : "Peat mencionaba enfermedades como la «crazy chick disease» causadas por exceso de grasas poliinsaturadas.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Meanwhile, \"crazy chick disease\" caused by feeding an excess of polyunsaturated fats, and a little later, \"yellow fat disease,\" caused by too much fish fat, were being recognized by farmers."
+  } ],
+  "baselineAnswer" : "Ray Peat consideraba que los aceites vegetales ricos en ácidos grasos poliinsaturados (PUFA), como los de soja, maíz, girasol o cártamo, eran perjudiciales para la salud. Su argumento principal era que el ácido linoleico, el más abundante de ellos, es muy susceptible a la peroxidación (oxidación) en las membranas celulares y en las propias grasas almacenadas. Según él, esto generaba estrés oxidativo, inflamación y daño a las mitocondrias, que son la base de su visión \"bioenergética\" de la salud.\n\nTambién sostenía que los PUFA interferían con funciones metabólicas clave. Decía que podían reducir la función tiroidea y la tasa metabólica, aumentar la sensibilidad a las hormonas estrogénicas en relación con la progesterona, y empeorar la respuesta al estrés. Peat señalaba además que estas grasas se acumulan en los tejidos durante mucho tiempo, de modo que la dieta de años anteriores seguiría afectando al organismo. Por eso recomendaba reducir su consumo y preferir grasas saturadas y monoinsaturadas, como las de coco o mantequilla, aunque siempre desde un planteamiento general y no como pauta individual.\n\nConviene saber que estas ideas son minoritarias dentro de la nutrición científica convencional, que suele considerar los PUFA, en especial los omega-6 y omega-3 de origen vegetal y marino, como grasas esenciales y beneficiosas para el corazón en el contexto de una dieta equilibrada. Si te interesa el tema, puedes consultar los argumentos de Peat en sus escritos y boletines, y contrastarlos con la literatura científica actual.",
+  "baselineClaims" : [ {
+    "claim" : "Peat consideraba que los aceites vegetales ricos en PUFA (soja, maíz, girasol, cártamo) eran perjudiciales para la salud.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Avoid foods which contain the polyunsaturated oils, such as corn, soy, safflower, flax, cottonseed, canola, peanut, and sesame oil."
+  }, {
+    "claim" : "Peat sostenía que el ácido linoleico es muy susceptible a la peroxidación en las membranas celulares y en las grasas almacenadas.",
+    "verdict" : "UNSUPPORTED",
+    "evidence" : "Those oils are extremely susceptible to oxidation, so they tend to spontaneously disappear in response to tissue injury, cellular excitation, the increased energy demands of stress, exposure to toxins or ionizing radiation, or even exposure to light."
+  }, {
+    "claim" : "Según Peat, la peroxidación de los PUFA genera estrés oxidativo, inflamación y daño a las mitocondrias.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Most of the products of lipid peroxidation are toxic, as a result of their reactions with proteins, DNA, and the mitochondria."
+  }, {
+    "claim" : "Peat decía que los PUFA pueden reducir la función tiroidea y la tasa metabólica.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "A series of studies about 20 years ago showed that the functions of the thyroid hormone are all inhibited by unsaturated fats, with the inhibition increasing in proportion to the number of unsaturations (double bonds) in the fat molecule."
+  }, {
+    "claim" : "Peat decía que los PUFA aumentan la sensibilidad a las hormonas estrogénicas en relación con la progesterona y empeoran la respuesta al estrés.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "While they inhibit the formation of progesterone and androgens, they activate the synthesis of estrogen, which in turn activates the release of more free polyunsaturated fatty acids from the tissues, in a positive feedback pattern."
+  }, {
+    "claim" : "Peat señalaba que los PUFA se acumulan en los tejidos durante mucho tiempo, de modo que la dieta de años anteriores sigue afectando al organismo.",
+    "verdict" : "UNSUPPORTED",
+    "evidence" : "The least stable n-3 fats which accumulate with age and gradually reduce energy production also have their short term effects on endurance. Endurance was much lower in rats fed a high n-3 fat diet, and the effect persisted even after 6 weeks on a standard diet"
+  }, {
+    "claim" : "Peat recomendaba reducir el consumo de PUFA y preferir grasas saturadas y monoinsaturadas, como las de coco o mantequilla.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Use coconut oil, butter, and olive oil."
+  } ]
+}, {
+  "question" : {
+    "id" : "gelatina",
+    "type" : "direct",
+    "question" : "¿Por qué recomendaba tomar gelatina?",
+    "expectedArticles" : [ "gelatin" ]
+  },
+  "ragAnswer" : "Según los artículos, Peat recomendaba la gelatina sobre todo por su perfil de aminoácidos, que según él tiene efectos antiestrés y antiinflamatorios.\n\nEl argumento central es que la gelatina tiene muy poco triptófano. Peat sostenía que el exceso de triptófano favorece la formación de serotonina, prolactina y cortisol, y que eso puede agravar problemas musculares [1][5]. Por eso la veía como un alimento útil para contrarrestar esos desequilibrios, aunque no hay estudios que él citara en estos fragmentos que lo demuestren de forma concluyente.\n\nTambién destacaba la glicina, el aminoácido más abundante en la gelatina. La describía como un neurotransmisor inhibidor que favorece el sueño y que, según él, tiene un efecto estabilizador en casi todas las células, ayudando a protegerlas del daño por inflamación, fibrosis o desequilibrios energéticos [3][4]. Mencionaba además que alanina y prolina tienen efectos parecidos, por lo que la gelatina, con sus otros componentes, le parecía preferible a la glicina aislada [3].\n\nEn cuanto a la forma de tomarla, sugería que si se come una porción grande de carne, convenía añadir unos 5 o 10 gramos de gelatina en el mismo momento para equilibrar los aminoácidos que llegan a la sangre [2]. Algunos fragmentos mencionan cantidades mayores, de hasta 100 gramos diarios en adultos, que según él algunas personas toleran bien para reducir la fatiga [1]. Más que un suplemento, la idea general era acompañar la dieta de carne con fuentes de colágeno, como caldos de huesos, piel o pata de pollo [5].\n\nSi lo que te interesa es usarla para un problema de salud concreto, recuerda que esto no sustituye la consulta con un médico.",
+  "ragClaims" : [ {
+    "claim" : "Peat recomendaba la gelatina por su perfil de aminoácidos, con efectos antiestrés y antiinflamatorios.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "A generous supply of glycine/gelatin, against a balanced background of amino acids, has a great variety of antistress actions."
+  }, {
+    "claim" : "Peat decía que la gelatina contiene muy poco triptófano.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "It happens that gelatin is a protein which contains no tryptophan, and only small amounts of cysteine, methionine, and histidine."
+  }, {
+    "claim" : "Peat sostenía que el exceso de triptófano favorece la formación de serotonina, prolactina y cortisol y puede agravar problemas musculares.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "The formation of serotonin is increased by the excess tryptophan in muscle, and serotonin stimulates the formation of more cortisol"
+  }, {
+    "claim" : "Peat destacaba la glicina de la gelatina como neurotransmisor inhibidor que favorece el sueño.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Glycine is recognized as an \"inhibitory\" neurotransmitter, and promotes natural sleep."
+  }, {
+    "claim" : "Peat decía que la glicina tiene un efecto estabilizador en casi todas las células y las protege del daño por inflamación, fibrosis o desequilibrios energéticos.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "But in every type of cell, it apparently has the same kind of quieting, protective antistress action. ... Fibrosis, free radical damage, inflammation, cell death from ATP depletion or calcium overload, mitochondrial damage, diabetes, etc., can be prevented or alleviated by glycine."
+  }, {
+    "claim" : "Peat mencionaba que la alanina y la prolina tienen efectos parecidos a la glicina, por lo que prefería la gelatina a la glicina aislada.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Some types of cell damage are prevented almost as well by alanine and proline as by glycine, so the use of gelatin, rather than glycine, is preferable, especially when the gelatin is associated with its normal biochemicals."
+  }, {
+    "claim" : "Peat sugería añadir unos 5 o 10 gramos de gelatina cuando se come una porción grande de carne para equilibrar los aminoácidos en sangre.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "If a person eats a large serving of meat, it's probably helpful to have 5 or 10 grams of gelatin at approximately the same time, so that the amino acids enter the blood stream in balance."
+  }, {
+    "claim" : "Peat recomendaba acompañar la dieta de carne con fuentes de colágeno como caldos de huesos, piel o pata de pollo.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "When we eat animal proteins in the traditional ways (for example, eating fish head soup, as well as the muscles, or \"head-cheese\" as well as pork chops, and chicken-foot soup as well as drumsticks), we assimilate a large amount of glycine and gelatin."
+  } ],
+  "baselineAnswer" : "Ray Peat recomendaba la gelatina sobre todo por su contenido de **glicina**, un aminoácido que, según él, era escaso en la dieta moderna. Argumentaba que la carne muscular aporta mucha **metionina** y otros aminoácidos que él consideraba estresantes para el metabolismo, y que la glicina ayudaba a equilibrar esa proporción. Para Peat, una dieta rica en metionina y pobre en glicina favorecía un estado de estrés metabólico, con más producción de cortisol y de estrógeno, y menos energía celular.\n\nTambién atribuía a la glicina varios efectos beneficiosos: apoyar la producción de colágeno y la reparación de tejidos, favorecer el sueño y la relajación, contribuir a la desintoxicación hepática (por ejemplo, al formar conjugados con sustancias que el hígado debe eliminar) y reducir inflamación. Por eso sugería la gelatina, o caldos de huesos y tejidos conectivos, como una forma práctica de aumentar la ingesta de glicina.\n\nConviene señalar que estas ideas provienen de su interpretación bioenergética y que muchas de sus afirmaciones sobre la gelatina y la glicina no están respaldadas por estudios clínicos sólidos. Si te interesa el tema, es buena idea contrastar sus planteamientos con la evidencia científica actual.",
+  "baselineClaims" : [ {
+    "claim" : "Peat recomendaba la gelatina sobre todo por su contenido de glicina, un aminoácido escaso en la dieta moderna.",
+    "verdict" : "UNSUPPORTED",
+    "evidence" : "In the industrialized societies, the consumption of gelatin has decreased, relative to the foods that contain an inappropriately high proportion of the antimetabolic amino acids, especially tryptophan and cysteine."
+  }, {
+    "claim" : "Peat sostenía que la carne muscular aporta mucha metionina y otros aminoácidos que estresan el metabolismo, y que la glicina ayuda a equilibrar esa proporción.",
+    "verdict" : "UNSUPPORTED",
+    "evidence" : "When only the muscle meats are eaten, the amino acid balance entering our blood stream is the same as that produced by extreme stress, when cortisol excess causes our muscles to be broken down to provide energy and material for repair."
+  }, {
+    "claim" : "Peat afirmaba que una dieta rica en metionina y pobre en glicina favorece el estrés metabólico, con más cortisol y estrógeno y menos energía celular.",
+    "verdict" : "UNSUPPORTED",
+    "evidence" : "When only the muscle meats are eaten, the amino acid balance entering our blood stream is the same as that produced by extreme stress, when cortisol excess causes our muscles to be broken down to provide energy and material for repair. The formation of serotonin is increased by the excess tryptophan in muscle, and serotonin stimulates the formation of more cortisol"
+  }, {
+    "claim" : "Peat atribuía a la glicina el apoyo a la producción de colágeno y la reparación de tejidos.",
+    "verdict" : "UNSUPPORTED",
+    "evidence" : "Glycine and proline are responsible for the unusual fibrous property of collagen."
+  }, {
+    "claim" : "Peat atribuía a la glicina un efecto favorable sobre el sueño y la relajación.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Glycine is recognized as an \"inhibitory\" neurotransmitter, and promotes natural sleep."
+  }, {
+    "claim" : "Peat atribuía a la glicina un papel en la desintoxicación hepática al formar conjugados con sustancias que el hígado debe eliminar.",
+    "verdict" : "UNSUPPORTED",
+    "evidence" : ""
+  }, {
+    "claim" : "Peat atribuía a la glicina la reducción de la inflamación.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "A small dose of glycine taken shortly after suffering a stroke was found to accelerate recovery, preventing the spreading of injury through its inhibitory and antiinflammatory actions."
+  }, {
+    "claim" : "Peat sugería la gelatina o los caldos de huesos y tejidos conectivos como forma práctica de aumentar la ingesta de glicina.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "When we eat animal proteins in the traditional ways (for example, eating fish head soup, as well as the muscles, or \"head-cheese\" as well as pork chops, and chicken-foot soup as well as drumsticks), we assimilate a large amount of glycine and gelatin."
+  } ]
+}, {
+  "question" : {
+    "id" : "coco",
+    "type" : "direct",
+    "question" : "¿Qué pensaba del aceite de coco?",
+    "expectedArticles" : [ "coconut-oil" ]
+  },
+  "ragAnswer" : "Según los artículos de Ray Peat, el aceite de coco le parecía una grasa beneficiosa, sobre todo por ser saturada y por lo que hace frente a las grasas insaturadas.\n\nSu argumento principal es que, al ser rico en grasas saturadas, el aceite de coco protege contra la oxidación. Peat explica que los aceites insaturados se enrancian con facilidad, mientras que el coco apenas lo hace, y sugiere que las grasas saturadas, al diluir las insaturadas, impiden las reacciones en cadena que las dañan [1]. También señala que la peroxidación lipídica se asocia con el envejecimiento, las convulsiones y la degeneración neuronal, y que el aceite de coco podría tener un papel antioxidante más general que el de la vitamina E [1][2]. En otro punto, atribuye al consumo de aceites insaturados una relación con el cáncer, y cita como ejemplo el daño cardíaco que producen en animales y la protección que da la grasa saturada frente a ese daño [3][4].\n\nPeat también matizaba el uso del coco. Advertía de que las fracciones purificadas (ácido butírico, láurico, mirístico o mezclas de triglicéridos de cadena media) se venden como «fármacos» y que, sin un conocimiento más preciso, prefería el producto natural completo como alimento habitual [2]. Además, comentaba que a él mismo los triglicéridos de cadena media le producían un olor corporal muy desagradable, y que estos productos no llevaban suficiente tiempo en uso como para saber si eran seguros [2].\n\nEn estos fragmentos Peat no habla de cómo usarlo en concreto ni de cantidades. Si lo que buscas es decidir qué consumir por un problema de salud, consulta con un médico.",
+  "ragClaims" : [ {
+    "claim" : "Peat consideraba el aceite de coco una grasa beneficiosa por ser saturada, frente a las grasas insaturadas.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "I have already discussed the many toxic effects of the unsaturated oils, and I have frequently mentioned that coconut oil doesn't have those toxic effects, though it does contain a small amount of the unsaturated oils."
+  }, {
+    "claim" : "Peat decía que el aceite de coco protege contra la oxidación porque es rico en grasas saturadas.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Since we would expect the small percentage of unsaturated oils naturally contained in coconut oil to become rancid, it seems that the other (saturated) oils have an antioxidative effect: I suspect that the dilution keeps the unstable unsaturated fat molecules spatially separated from each other"
+  }, {
+    "claim" : "Peat explicaba que los aceites insaturados se enrancian con facilidad mientras que el coco apenas lo hace.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "The unsaturated oils in some cooked foods become rancid in just a few hours, even at refrigerator temperatures... Coconut oil that has been kept at room temperature for a year has been tested for rancidity, and showed no evidence of it."
+  }, {
+    "claim" : "Peat sugería que las grasas saturadas, al diluir las insaturadas, impiden las reacciones en cadena que las dañan.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "I suspect that the dilution keeps the unstable unsaturated fat molecules spatially separated from each other, so they can't interact in the destructive chain reactions that occur in other oils."
+  }, {
+    "claim" : "Peat asociaba la peroxidación lipídica con el envejecimiento, las convulsiones y la degeneración neuronal, y creía que el aceite de coco podría tener un papel antioxidante más general que la vitamina E.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Lipid peroxidation occurs during seizures... lipid peroxidation is being found to be involved in the nerve cell degeneration of Alzheimer's disease. General aging, and especially aging of the brain, is increasingly seen as being closely associated with lipid peroxidation. ... I think its antioxidant role is more general than that"
+  }, {
+    "claim" : "Peat atribuía al consumo de aceites insaturados una relación con el cáncer y con el daño cardíaco en animales, del que protege la grasa saturada.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "human studies soon showed the same results that the animal studies had, namely, that they were toxic to the heart and increased the incidence of cancer. ... The addition of saturated fat to the experimental heart-toxic oil-rich diet protects against the damage to heart cells."
+  }, {
+    "claim" : "Peat advertía de que las fracciones purificadas del coco (butírico, láurico, mirístico, triglicéridos de cadena media) se venden como fármacos y prefería el producto natural completo como alimento habitual.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Various fractions of coconut oil are coming into use as \"drugs,\" meaning that they are advertised as treatments for diseases. Butyric acid is used to treat cancer, lauric and myristic acids to treat virus infections, and mixtures of medium-chain fats are sold for weight loss. ... I think the whole natural product, used as a regular food, is the best way to protect health."
+  }, {
+    "claim" : "Peat comentaba que a él los triglicéridos de cadena media le producían un olor corporal desagradable y que no llevaban suficiente tiempo en uso para saber si eran seguros.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "for a couple of days after I ate a small amount of a medium-chain triglyceride mixture, my skin oil emitted a rank, goaty smell. ... these things just haven't been in use long enough to know whether they are safe."
+  } ],
+  "baselineAnswer" : "Ray Peat consideraba el aceite de coco una de las grasas más favorables, sobre todo en comparación con los aceites vegetales ricos en ácidos grasos poliinsaturados, como el de soja, maíz o girasol. Su argumento principal era que los poliinsaturados se oxidan con facilidad, se acumulan en los tejidos y pueden interferir con el metabolismo energético. En cambio, veía las grasas saturadas, como las del coco, como más estables y compatibles con una función metabólica eficiente.\n\nTambién destacaba que el aceite de coco contiene una proporción notable de ácidos grasos saturados de cadena media, como el láurico y el caprílico, que según él se utilizan con rapidez como fuente de energía. Por eso lo recomendaba como parte de una alimentación que favoreciera la producción de energía celular.\n\nSus opiniones se basan sobre todo en sus escritos y en su boletín, y no tengo certeza de que haya tratado cada aspecto del aceite de coco con el mismo detalle. Si necesitas decisiones sobre tu dieta o tu salud, conviene consultarlas con un profesional de la salud.",
+  "baselineClaims" : [ {
+    "claim" : "Peat consideraba el aceite de coco una de las grasas más favorables, sobre todo frente a aceites vegetales ricos en poliinsaturados como soja, maíz o girasol.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "I have already discussed the many toxic effects of the unsaturated oils, and I have frequently mentioned that coconut oil doesn't have those toxic effects"
+  }, {
+    "claim" : "Peat sostenía que los ácidos grasos poliinsaturados se oxidan con facilidad.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Those oils are extremely susceptible to oxidation, so they tend to spontaneously disappear in response to tissue injury, cellular excitation, the increased energy demands of stress"
+  }, {
+    "claim" : "Peat sostenía que los poliinsaturados se acumulan en los tejidos.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "With aging, the highly peroxidizable fatty acids, arachidonic and docosahexaenoic acid, increase greatly in a variety of tissues, and lipid peroxidation increases with aging."
+  }, {
+    "claim" : "Peat afirmaba que los poliinsaturados pueden interferir con el metabolismo energético.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Over the years, it has become evident that the polyunsaturated fats are not very compatible with a high rate of metabolism"
+  }, {
+    "claim" : "Peat veía las grasas saturadas, como las del coco, como más estables y compatibles con una función metabólica eficiente.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "The saturated fatty acids are very unreactive chemically. Coconut oil, despite containing about 1% of the unstable PUFA, can be left in a bucket at room temperature for a year or more without showing any evidence of deterioration"
+  }, {
+    "claim" : "Peat destacaba que el aceite de coco contiene una proporción notable de ácidos grasos saturados de cadena media, como el láurico y el caprílico.",
+    "verdict" : "UNSUPPORTED",
+    "evidence" : "Coconut oil is unusually rich in short and medium chain fatty acids."
+  }, {
+    "claim" : "Peat decía que los ácidos grasos de cadena media se utilizan con rapidez como fuente de energía.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "these very soluble and mobile short-chain saturated fats have priority for oxidation, because they don't require carnitine transport into the mitochondrion"
+  }, {
+    "claim" : "Peat recomendaba el aceite de coco como parte de una alimentación que favoreciera la producción de energía celular.",
+    "verdict" : "SUPPORTED",
+    "evidence" : "Therefore, shifting from unsaturated fats in foods to coconut oil involves several anti-stress processes, reducing our need for the adrenal hormones."
+  } ]
+} ]
