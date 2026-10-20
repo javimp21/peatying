@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Logo: la mini naranja de la animación de carga, con su hoja. -->
+  <defs>
+    <radialGradient id="peel" cx="35%" cy="32%" r="70%">
+      <stop offset="0" stop-color="#ffc266"/>
+      <stop offset="0.45" stop-color="#f7931e"/>
+      <stop offset="1" stop-color="#d9650b"/>
+    </radialGradient>
+  </defs>
+  <circle cx="31" cy="36" r="25" fill="url(#peel)"/>
+  <path d="M33 13 C 36 5, 46 3, 52 6 C 48 13, 41 15, 33 13 Z" fill="#6cbf55"/>
+  <path d="M31 12 q1 -4 3 -6" stroke="#4e8a3c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+</svg>
