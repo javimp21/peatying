@@ -612,7 +612,10 @@ function renderAnswer(message) {
   if (sources.length > 0) {
     const list = document.createElement("p");
     list.className = "sources";
-    list.append("Fuentes: ");
+    const label = document.createElement("span");
+    label.className = "sources-label";
+    label.textContent = "Fuentes";
+    list.append(label);
     const seen = new Set();
     for (const s of sources) {
       if (seen.has(s.url)) continue;
@@ -794,6 +797,17 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") closeSourcePanels();
 });
 
+/** "https://raypeat.com/articles/articles/gelatin.shtml" -> "raypeat.com/articles/articles/gelatin.shtml" (recortada si es larga). */
+function shortUrl(url) {
+  try {
+    const { host, pathname } = new URL(url);
+    const short = host.replace(/^www\./, "") + decodeURIComponent(pathname);
+    return short.length > 52 ? short.slice(0, 51) + "…" : short;
+  } catch {
+    return url;
+  }
+}
+
 function closeSourcePanels() {
   document.querySelectorAll(".source-panel").forEach((panel) => panel.remove());
   document.querySelectorAll('.cite[aria-expanded="true"]').forEach((b) => b.setAttribute("aria-expanded", "false"));
@@ -811,18 +825,28 @@ function toggleSource(messageDiv, button, source) {
   panel.className = "source-panel";
   panel.dataset.n = button.dataset.n;
 
+  // Como una nota al pie de un libro: número y tipo en letra de máquina, título, el texto original
+  // y la dirección de donde sale.
   const interview = source.type === "interview";
+  const meta = document.createElement("p");
+  meta.className = "source-meta";
+  const number = document.createElement("span");
+  number.className = "source-n";
+  number.textContent = source.number;
+  meta.append(number, interview ? "Entrevista" : "Artículo");
   const title = document.createElement("h3");
-  title.textContent = `${source.number} · ${interview ? "Entrevista · " : ""}${source.title}`;
+  title.textContent = source.title;
   const text = document.createElement("p");
+  text.className = "source-text";
   text.textContent = source.text;       // el texto original de Peat, en inglés
   const link = document.createElement("a");
   link.href = source.url;
   link.target = "_blank";
   link.rel = "noopener";
-  link.textContent = interview ? "Leer la transcripción completa →" : "Leer el artículo completo →";
+  link.textContent = `${shortUrl(source.url)} ↗`;
+  link.setAttribute("aria-label", interview ? "Leer la transcripción completa" : "Leer el artículo completo");
 
-  panel.append(title, text);
+  panel.append(meta, title, text);
   // Las transcripciones están retocadas (gramática, frases partidas): avisamos de que no es literal.
   if (interview) {
     const note = document.createElement("p");
