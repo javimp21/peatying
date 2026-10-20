@@ -79,39 +79,45 @@
     <p class="about-note">Es un proyecto independiente, sin relación con Ray Peat ni con raypeat.com. Las respuestas pueden tener errores y no son consejo médico.</p>
   </dialog>
 
-  <!-- Easter egg: un exprimidor. La media naranja baja, gira apretando el cono, gotea y llena el vaso.
+  <!-- Easter egg: un exprimidor. La media naranja baja, gira apretando el cono y el zumo sale por la boquilla al vaso.
        Es decorativo: aria-hidden para que los lectores de pantalla lo ignoren. -->
   <div id="juicer" class="juicer" hidden aria-hidden="true">
     <figure>
-      <svg viewBox="0 0 200 260" width="220" height="286">
+      <svg viewBox="0 0 250 240" width="275" height="264">
         <defs>
           <clipPath id="glass-shape">
-            <path d="M64 152 L136 152 L130 244 Q130 249 125 249 L75 249 Q70 249 70 244 Z"/>
+            <path d="M186 168 L234 168 L230 226 Q230 231 225 231 L195 231 Q190 231 190 226 Z"/>
           </clipPath>
         </defs>
-        <!-- El zumo va dentro del vaso (recortado con su forma) y crece desde abajo. -->
+        <!-- Sombra en la mesa. -->
+        <ellipse cx="150" cy="233" rx="100" ry="5" fill="rgba(0,0,0,0.35)"/>
+        <!-- El vaso, a la derecha, con el zumo dentro (recortado con su forma) creciendo desde abajo. -->
         <g clip-path="url(#glass-shape)">
           <g class="juice">
-            <rect x="60" y="168" width="80" height="84" fill="#ffa62b"/>
-            <rect x="60" y="168" width="80" height="5" fill="#ffc861"/>
+            <rect x="184" y="182" width="52" height="52" fill="#ffa62b"/>
+            <rect x="184" y="182" width="52" height="4" fill="#ffc861"/>
           </g>
         </g>
-        <path d="M64 152 L136 152 L130 244 Q130 249 125 249 L75 249 Q70 249 70 244 Z"
+        <path d="M186 168 L234 168 L230 226 Q230 231 225 231 L195 231 Q190 231 190 226 Z"
               fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-        <ellipse class="drop" cx="97" cy="140" rx="2.6" ry="4" fill="#ffa62b"/>
-        <ellipse class="drop" cx="101" cy="140" rx="2.2" ry="3.6" fill="#ffb84d"/>
-        <ellipse class="drop" cx="104" cy="140" rx="2.6" ry="4" fill="#ffa62b"/>
-        <!-- El exprimidor: un plato con el cono en medio. -->
-        <path d="M26 124 Q100 148 174 124 L169 133 Q100 155 31 133 Z" fill="#dfe5ee"/>
-        <path d="M100 84 L125 127 L75 127 Z" fill="#f3f6fa"/>
-        <path d="M100 86 L90 126 M100 86 L100 127 M100 86 L110 126" stroke="#c3ccd8" stroke-width="1.5"/>
+        <!-- El chorro y las gotas salen de la boquilla y caen en el vaso. -->
+        <rect class="stream" x="207" y="158" width="3" height="60" rx="1.5" fill="#ffa62b"/>
+        <ellipse class="drop" cx="208.5" cy="162" rx="2.4" ry="3.8" fill="#ffb84d"/>
+        <ellipse class="drop" cx="208.5" cy="162" rx="2" ry="3.4" fill="#ffa62b"/>
+        <!-- El exprimidor, de una pieza: cuerpo tipo cubo, borde arriba, cono y boquilla a la derecha. -->
+        <path d="M168 146 L212 151 Q214 152 212 155 L209 160 L166 162 Z" fill="#d5dce6"/>
+        <path d="M56 140 L174 140 L170 224 Q170 231 163 231 L67 231 Q60 231 60 224 Z" fill="#e6ebf2"/>
+        <path d="M60 140 L64 224 Q64 228 68 228 L74 228 L70 140 Z" fill="rgba(255,255,255,0.45)"/>
+        <rect x="50" y="131" width="130" height="12" rx="6" fill="#f3f6fa"/>
+        <path d="M115 90 L148 134 L82 134 Z" fill="#f8fafc"/>
+        <path d="M115 92 L101 133 M115 92 L115 134 M115 92 L129 133" stroke="#c3ccd8" stroke-width="1.5"/>
         <!-- Media naranja boca abajo: se dibuja después del cono para taparlo al apretar. -->
         <g class="orange-half">
-          <path d="M53 92 A47 47 0 0 1 147 92 Z" fill="#f28c28"/>
-          <path d="M53 92 A47 47 0 0 1 147 92" fill="none" stroke="#d9731a" stroke-width="2"/>
-          <rect x="53" y="88" width="94" height="8" rx="4" fill="#ffd27a"/>
-          <ellipse cx="80" cy="64" rx="11" ry="6" fill="rgba(255,255,255,0.35)" transform="rotate(-32 80 64)"/>
-          <path d="M98 45 q4 -10 14 -12" stroke="#5c8a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M70 88 A45 45 0 0 1 160 88 Z" fill="#f28c28"/>
+          <path d="M70 88 A45 45 0 0 1 160 88" fill="none" stroke="#d9731a" stroke-width="2"/>
+          <rect x="70" y="84" width="90" height="8" rx="4" fill="#ffd27a"/>
+          <ellipse cx="96" cy="61" rx="11" ry="6" fill="rgba(255,255,255,0.35)" transform="rotate(-32 96 61)"/>
+          <path d="M113 43 q4 -10 14 -12" stroke="#5c8a2e" stroke-width="3" fill="none" stroke-linecap="round"/>
         </g>
       </svg>
       <figcaption>Zumo recién exprimido</figcaption>

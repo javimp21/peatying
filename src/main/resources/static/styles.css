@@ -600,36 +600,47 @@ li .source-panel { margin: 8px 0 4px; }
   animation: juicer-in 0.25s ease-out both;
 }
 .juicer figure { margin: 0; text-align: center; }
-.juicer svg { width: min(220px, 60vw); height: auto; }
+.juicer svg { width: min(275px, 72vw); height: auto; }
 .juicer figcaption { margin-top: 6px; font: italic 1.5rem var(--serif); color: #ffc861; }
 @keyframes juicer-in { from { opacity: 0; } }
 
 /* transform-box: fill-box hace que el origen del giro sea el propio dibujo, no la esquina del SVG. */
-.juicer .orange-half, .juicer .juice, .juicer .drop { transform-box: fill-box; }
+.juicer .orange-half, .juicer .juice, .juicer .drop, .juicer .stream { transform-box: fill-box; }
 .juicer.play .orange-half {
   transform-origin: 50% 100%;
   animation: squeeze 3.4s ease-in-out both;
 }
 @keyframes squeeze {
+  /* Cae y se posa en la punta del cono (se ve casi entero); luego gira y se va hundiendo poco a poco. */
   0%   { transform: translateY(-160px); opacity: 0; }
-  15%  { transform: translateY(0); opacity: 1; }
-  22%  { transform: translateY(24px) scaleY(0.86); }
-  32%  { transform: translateY(28px) scaleY(0.8) rotate(-12deg); }
-  42%  { transform: translateY(28px) scaleY(0.8) rotate(12deg); }
-  52%  { transform: translateY(30px) scaleY(0.75) rotate(-12deg); }
-  62%  { transform: translateY(30px) scaleY(0.75) rotate(12deg); }
-  72%  { transform: translateY(31px) scaleY(0.7); }
-  85%  { transform: translateY(0) scaleY(0.7); opacity: 1; }
-  100% { transform: translateY(-160px) scaleY(0.7); opacity: 0; }
+  15%  { transform: translateY(2px); opacity: 1; }
+  25%  { transform: translateY(6px) scaleY(0.95) rotate(-12deg); }
+  35%  { transform: translateY(10px) scaleY(0.91) rotate(12deg); }
+  45%  { transform: translateY(13px) scaleY(0.88) rotate(-12deg); }
+  55%  { transform: translateY(16px) scaleY(0.85) rotate(12deg); }
+  65%  { transform: translateY(18px) scaleY(0.83) rotate(-12deg); }
+  72%  { transform: translateY(19px) scaleY(0.82); }
+  85%  { transform: translateY(0) scaleY(0.82); opacity: 1; }
+  100% { transform: translateY(-160px) scaleY(0.82); opacity: 0; }
 }
-/* Las gotas caen en bucle mientras se aprieta, cada una con su retraso. */
-.juicer.play .drop { animation: drip 0.5s ease-in 0.8s 4 both; }
-.juicer.play .drop:nth-of-type(2) { animation-delay: 0.97s; }
-.juicer.play .drop:nth-of-type(3) { animation-delay: 1.13s; }
+
+/* Mientras se aprieta, sale un chorro por la boquilla; al final quedan unas gotas. */
+.juicer.play .stream {
+  transform-origin: 50% 0;
+  animation: pour 1.8s ease-out 0.8s both;
+}
+@keyframes pour {
+  0%   { transform: scaleY(0); opacity: 1; }
+  20%  { transform: scaleY(1); }
+  80%  { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+.juicer.play .drop { animation: drip 0.5s ease-in 2.5s 2 both; }
+.juicer.play .drop:nth-of-type(2) { animation-delay: 2.75s; }
 @keyframes drip {
   0%   { transform: translateY(0); opacity: 0; }
   15%  { opacity: 1; }
-  100% { transform: translateY(70px); opacity: 0; }
+  100% { transform: translateY(45px); opacity: 0; }
 }
 .juicer.play .juice {
   transform-origin: 50% 100%;
