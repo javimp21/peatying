@@ -61,6 +61,9 @@ public class RateLimiter {
         if (Duration.between(dayStart, now).toHours() >= 24) {
             dayStart = now;
             todayCount = 0;
+            // Una vez al día olvidamos las IPs que ya no tienen preguntas recientes: si no, el mapa
+            // crecería con cada visitante nuevo durante meses.
+            requestsByIp.values().removeIf(times -> times.isEmpty() || times.peekLast().isBefore(now.minus(window)));
         }
         if (todayCount >= dailyLimit) {
             return false;

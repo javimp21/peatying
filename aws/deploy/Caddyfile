@@ -3,6 +3,13 @@
 # caduque y redirige http:// a https:// sin que tengamos que hacer nada más.
 
 peatying.com {
+	# Las peticiones a la API son una pregunta de 500 caracteres como mucho: cualquier cosa más grande
+	# es un abuso (subir megas para agotar la memoria). Se corta aquí, antes de llegar a la app.
+	request_body {
+		max_size 16KB
+	}
+	# HTTPS obligatorio durante un año: el navegador no volverá a intentar http:// con este dominio.
+	header Strict-Transport-Security "max-age=31536000"
 	reverse_proxy app:8080 {
 		# Respuestas en streaming (SSE): mandar cada trozo al navegador en cuanto llega, sin acumular.
 		flush_interval -1

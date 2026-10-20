@@ -29,6 +29,8 @@ aws ecr get-login-password --region "$REGION" | docker login --username AWS --pa
 export APP_TAG
 docker compose pull
 docker compose up -d --remove-orphans
+# Si el Caddyfile cambió, Caddy no se entera solo: se lo recargamos (sin cortar las conexiones abiertas).
+docker compose exec -T caddy caddy reload --config /etc/caddy/Caddyfile
 docker image prune -f      # borra imágenes viejas que ya no se usan, para no llenar el disco
 
 docker compose ps
