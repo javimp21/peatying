@@ -30,6 +30,25 @@
   --accent-text: #9cc2ff;
   --error-bg: rgba(239, 68, 68, 0.14);
   --error-text: #fca5a5;
+  /* Colores que antes iban fijos en cada regla: ahora cambian con el tema. */
+  --frame-glow: #1d1f24;      /* el brillo suave de arriba */
+  --input-bg: #0b0c0e;
+  --placeholder: #9a9ca3;
+  --bot-text: #e4e5e8;
+  --strong: #ffffff;
+  --shimmer: #ffffff;         /* la luz que recorre la frase de carga */
+  --panel-bg: rgba(255, 255, 255, 0.03);
+  --panel-line: #26282d;
+  --panel-text: #b9bbc1;
+  --float-bg: rgba(31, 33, 37, 0.72);
+  --float-bg-solid: rgba(31, 33, 37, 0.88);
+  --float-line: rgba(255, 255, 255, 0.08);
+  --hover-soft: rgba(255, 255, 255, 0.08);
+  --quote-bg: rgba(255, 255, 255, 0.04);
+  --shadow: rgba(0, 0, 0, 0.45);
+  --gold: #ffc861;
+  --glass: rgba(255, 255, 255, 0.4);
+  color-scheme: dark;
   --serif: "Instrument Serif", "Times New Roman", serif;
   --sans: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
@@ -56,7 +75,7 @@ body {
 .frame {
   flex: 1;
   /* un brillo muy suave arriba, para que no sea un plano gris */
-  background: radial-gradient(120% 60% at 50% 0%, #1d1f24 0%, var(--frame) 60%);
+  background: radial-gradient(120% 60% at 50% 0%, var(--frame-glow) 0%, var(--frame) 60%);
   display: flex;
   flex-direction: column;
 }
@@ -141,9 +160,9 @@ body {
   gap: 8px;
   padding: 10px 10px 10px 26px;
   border-radius: 999px;
-  background: #0b0c0e;
+  background: var(--input-bg);
   border: 1px solid var(--line);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 20px 50px var(--shadow);
 }
 .ask-pill:focus-within { border-color: var(--accent); }
 /* Solo durante la conversación: en la portada ya lo dice el pie de página. */
@@ -162,7 +181,7 @@ body {
   color: var(--text);
   font: 400 1.2rem/1.4 var(--sans);
 }
-.ask textarea::placeholder { color: #9a9ca3; }
+.ask textarea::placeholder { color: var(--placeholder); }
 
 .send {
   flex: none;
@@ -226,10 +245,10 @@ body {
 }
 
 .message.user { font-size: 1.05rem; }
-.message.bot { font-size: 1.08rem; line-height: 1.62; color: #e4e5e8; }
+.message.bot { font-size: 1.08rem; line-height: 1.62; color: var(--bot-text); }
 .message.bot p { margin: 0 0 12px; }
 .message.bot > :last-child, .answer-body > :last-child { margin-bottom: 0; }
-.message.bot strong { color: #ffffff; font-weight: 650; }
+.message.bot strong { color: var(--strong); font-weight: 650; }
 
 /* Listas de la respuesta: números y viñetas en el color de acento, con aire entre puntos. */
 .message.bot ol, .message.bot ul { margin: 0 0 12px; padding-left: 1.4em; }
@@ -290,7 +309,7 @@ body {
 .message.loading .phrase {
   /* El texto se "pinta" con un degradado: gris - blanco - gris. Movemos el degradado y parece
      que una luz pasa por encima de las letras. background-clip: text recorta el fondo a las letras. */
-  background: linear-gradient(90deg, var(--muted) 40%, #ffffff 50%, var(--muted) 60%);
+  background: linear-gradient(90deg, var(--muted) 40%, var(--shimmer) 50%, var(--muted) 60%);
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -374,8 +393,8 @@ li .source-panel { margin: 8px 0 4px; }
   margin: 2px 0 14px;
   padding: 12px 16px;
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid #26282d;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-line);
   font-size: 0.86rem;
   line-height: 1.55;
   max-height: 190px;          /* un fragmento puede ser largo: scroll propio en vez de empujar la página */
@@ -390,7 +409,7 @@ li .source-panel { margin: 8px 0 4px; }
   text-transform: uppercase;
   color: var(--muted);
 }
-.source-panel p { margin: 0 0 8px; white-space: pre-line; color: #b9bbc1; }
+.source-panel p { margin: 0 0 8px; white-space: pre-line; color: var(--panel-text); }
 .source-panel .source-note { font-size: 0.78rem; color: var(--muted); font-style: italic; }
 .source-panel a { color: var(--accent-text); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
 .source-panel a:hover { text-decoration: underline; }
@@ -402,9 +421,9 @@ li .source-panel { margin: 8px 0 4px; }
   display: flex;
   gap: 2px;
   padding: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--float-line);
   border-radius: 999px;
-  background: rgba(31, 33, 37, 0.72);  /* medio transparente: deja ver el texto de debajo */
+  background: var(--float-bg);  /* medio transparente: deja ver el texto de debajo */
   backdrop-filter: blur(6px);
   animation: rise 0.18s ease-out both;
 }
@@ -413,7 +432,7 @@ li .source-panel { margin: 8px 0 4px; }
   position: static;
   width: fit-content;
   margin: 0 auto 8px;
-  background: rgba(31, 33, 37, 0.88);  /* aquí pasa texto por debajo al hacer scroll: algo más opaco */
+  background: var(--float-bg-solid);  /* aquí pasa texto por debajo al hacer scroll: algo más opaco */
 }
 
 .selection-ask button {
@@ -426,7 +445,7 @@ li .source-panel { margin: 8px 0 4px; }
   white-space: nowrap;
   cursor: pointer;
 }
-.selection-ask button:hover, .selection-ask button:focus-visible { background: rgba(255, 255, 255, 0.08); color: var(--text); }
+.selection-ask button:hover, .selection-ask button:focus-visible { background: var(--hover-soft); color: var(--text); }
 
 /* La cita encima de la caja de texto, como al responder a un mensaje en WhatsApp. */
 .reply {
@@ -437,7 +456,7 @@ li .source-panel { margin: 8px 0 4px; }
   padding: 8px 8px 8px 14px;
   border-left: 3px solid var(--accent);
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--quote-bg);
   font-size: 0.86rem;
   color: var(--text-soft);
 }
@@ -535,6 +554,44 @@ li .source-panel { margin: 8px 0 4px; }
 .narrow-only { display: none; }       /* solo en pantallas estrechas: ver max-width 640px */
 
 /* Pantallas medianas: durante la conversación no caben los tres botones; el enlace sigue en el pie. */
+/* --- Modo claro ------------------------------------------------------------------
+   Sigue el ajuste del sistema (móvil u ordenador). Solo cambian los colores: todo lo demás es igual. */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #efebe4;
+    --frame: #f8f6f2;
+    --surface: #ece8e1;
+    --surface-2: #e4dfd6;
+    --line: #d9d3c8;
+    --text: #1c1d20;
+    --text-soft: #3e4046;
+    --muted: #6f7178;
+    --accent: #2563eb;
+    --accent-soft: rgba(37, 99, 235, 0.12);
+    --accent-text: #1d4ed8;
+    --error-bg: rgba(220, 38, 38, 0.1);
+    --error-text: #b91c1c;
+    --frame-glow: #fffdf8;
+    --input-bg: #ffffff;
+    --placeholder: #8a8c92;
+    --bot-text: #26282c;
+    --strong: #000000;
+    --shimmer: #1c1d20;
+    --panel-bg: rgba(0, 0, 0, 0.03);
+    --panel-line: #e0dad0;
+    --panel-text: #44464b;
+    --float-bg: rgba(255, 255, 255, 0.78);
+    --float-bg-solid: rgba(255, 255, 255, 0.94);
+    --float-line: rgba(0, 0, 0, 0.1);
+    --hover-soft: rgba(0, 0, 0, 0.06);
+    --quote-bg: rgba(0, 0, 0, 0.04);
+    --shadow: rgba(60, 50, 30, 0.16);
+    --gold: #b5640e;
+    --glass: rgba(0, 0, 0, 0.35);
+    color-scheme: light;
+  }
+}
+
 @media (max-width: 900px) {
   .chatting .pill-link { display: none; }
 }
@@ -578,24 +635,26 @@ li .source-panel { margin: 8px 0 4px; }
   background:
     /* arriba, una sombra suave para que se lea la barra que va encima; abajo, el fundido al fondo */
     linear-gradient(to bottom, rgba(14, 15, 17, 0.7) 0%, rgba(14, 15, 17, 0) 22%),
-    linear-gradient(to top, var(--frame) 0%, rgba(22, 23, 26, 0.75) 35%, rgba(22, 23, 26, 0.1) 70%),
+    linear-gradient(to top, var(--frame) 0%, rgba(22, 23, 26, 0.85) 10%, rgba(22, 23, 26, 0.7) 35%, rgba(22, 23, 26, 0.1) 70%),
     url("img/ray-peat.jpg") center 22% / cover no-repeat;
 }
 /* En esta página la barra de arriba flota sobre la foto en vez de ocupar su propia franja. */
-.about-page .topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 2; }
-.about-page .topbar .ghost { background: rgba(14, 15, 17, 0.35); backdrop-filter: blur(6px); border-color: rgba(255, 255, 255, 0.18); }
+.about-page .topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 2; color: #f4f4f5; }
+.about-page .wordmark em { color: #c9cacf; }
+.about-page .topbar .ghost { color: #f4f4f5; background: rgba(14, 15, 17, 0.35); backdrop-filter: blur(6px); border-color: rgba(255, 255, 255, 0.18); }
 .about-page .frame { position: relative; }
+.cover { color: #f4f4f5; }          /* sobre la foto: claro en los dos temas */
 .cover h1, .cover-sub { text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); }
-.cover-kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.25em; color: var(--text-soft); }
+.cover-kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.25em; color: #c9cacf; }
 .cover h1 { margin: 6px 0 14px; font: 400 clamp(4.5rem, 16vw, 10rem)/0.9 var(--serif); letter-spacing: -0.01em; }
-.cover-sub { max-width: 30ch; margin: 0 auto; font-size: clamp(1.1rem, 3.5vw, 1.35rem); color: var(--text-soft); }
+.cover-sub { max-width: 30ch; margin: 0 auto; font-size: clamp(1.1rem, 3.5vw, 1.35rem); color: #d6d7db; }
 .cover-sub em { font-family: var(--serif); font-size: 1.15em; color: #ffc861; }
 .cover-scroll {
   position: absolute;
   left: 50%;
   bottom: 28px;
   translate: -50% 0;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.65);
   font-size: 1.6rem;
   text-decoration: none;
   animation: nudge 2s ease-in-out infinite;
@@ -632,8 +691,9 @@ li .source-panel { margin: 8px 0 4px; }
 /* En .play (y no en .juicer) para que vuelva a empezar si se pulsa otra vez mientras se ve. */
 .juicer.play { animation: juicer-in 0.3s ease-out both, juicer-out 0.5s ease-in 3.7s forwards; }
 .juicer figure { margin: 0; text-align: center; }
-.juicer svg { width: 100%; height: auto; }
-.juicer figcaption { margin-top: 2px; font: italic 0.9rem var(--serif); color: #ffc861; white-space: nowrap; }
+.juicer svg { width: 100%; height: auto; filter: drop-shadow(0 2px 6px var(--shadow)); }
+.juicer .glass { stroke: var(--glass); }
+.juicer figcaption { margin-top: 2px; font: italic 0.9rem var(--serif); color: var(--gold); white-space: nowrap; }
 @keyframes juicer-in { from { opacity: 0; transform: scale(0.6) translateY(-8px); } }
 @keyframes juicer-out { to { opacity: 0; transform: scale(0.85); } }
 
