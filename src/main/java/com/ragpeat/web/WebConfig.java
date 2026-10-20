@@ -27,7 +27,7 @@ public class WebConfig {
         // "/" NO va aquí: Spring la sirve reenviando internamente a index.html (un "forward"), y con
         // este filtro la respuesta salía vacía. Sin fecha ni huella, el navegador la pide entera
         // cada vez, que para un HTML tan pequeño no importa.
-        registration.addUrlPatterns("/index.html", "/app.js", "/styles.css");
+        registration.addUrlPatterns("/index.html", "/app.js", "/styles.css", "/about.html", "/about.js");
         return registration;
     }
 }

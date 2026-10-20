@@ -82,6 +82,8 @@ body {
 
 .actions { display: flex; align-items: center; gap: 8px; }
 .ghost {
+  display: inline-block;
+  text-decoration: none;            /* también se usa en enlaces (Sobre Ray Peat) */
   padding: 8px 16px;
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -505,35 +507,6 @@ li .source-panel { margin: 8px 0 4px; }
 .vote:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 
 /* --- Ventana "Sobre Ray Peat" ------------------------------------------------ */
-.about {
-  width: min(560px, calc(100vw - 32px));
-  max-height: calc(100vh - 64px);
-  padding: 32px 30px 26px;
-  border: 1px solid var(--line);
-  border-radius: 0;                    /* rectas, como el resto de la página */
-  background: var(--frame);
-  color: var(--text-soft);
-  font: 400 1rem/1.65 var(--sans);
-}
-.about::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); }
-.about[open] { animation: rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.about h2 { margin: 0 0 12px; font: 400 2.1rem/1.1 var(--serif); color: var(--text); }
-.about h3 { margin: 22px 0 6px; font: 600 1rem var(--sans); color: var(--text); }
-.about p { margin: 0 0 10px; }
-.about strong { color: var(--text); }
-.about-note { margin-top: 20px !important; font-size: 0.85rem; color: var(--muted); }
-.about-close {
-  position: absolute;
-  top: 12px; right: 14px;
-  width: 36px; height: 36px;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  font-size: 1.6rem;
-  line-height: 1;
-  cursor: pointer;
-}
-.about-close:hover { color: var(--text); }
 .about-close:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 
 /* --- Pie ------------------------------------------------------------------- */
@@ -586,6 +559,65 @@ li .source-panel { margin: 8px 0 4px; }
 }
 
 /* Quien pide menos animaciones (ajuste del sistema), no las ve. */
+/* --- Página "Sobre Ray Peat" (about.html) ---------------------------------------- */
+/* Portada: ocupa toda la pantalla, con un "sol" naranja difuminado detrás del nombre. */
+.cover {
+  position: relative;
+  min-height: calc(100vh - 90px);
+  display: grid;
+  place-content: center;
+  padding: 0 20px 60px;
+  text-align: center;
+  overflow: hidden;
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: min(80vw, 560px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 42% 38%, #ffb347 0%, #f28c28 40%, rgba(242, 140, 40, 0) 70%);
+  opacity: 0.32;
+  filter: blur(12px);
+}
+.cover > * { position: relative; }   /* por encima del sol */
+.cover-kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.25em; color: var(--muted); }
+.cover h1 { margin: 6px 0 14px; font: 400 clamp(4.5rem, 16vw, 10rem)/0.9 var(--serif); letter-spacing: -0.01em; }
+.cover-sub { max-width: 30ch; margin: 0 auto; font-size: clamp(1.1rem, 3.5vw, 1.35rem); color: var(--text-soft); }
+.cover-sub em { font-family: var(--serif); font-size: 1.15em; color: #ffc861; }
+.cover-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  translate: -50% 0;
+  color: var(--muted);
+  font-size: 1.6rem;
+  text-decoration: none;
+  animation: nudge 2s ease-in-out infinite;
+}
+@keyframes nudge { 50% { transform: translateY(8px); } }
+
+.story { max-width: 640px; margin: 0 auto; padding: 20px 20px 90px; font-size: 1.15rem; line-height: 1.75; color: var(--text-soft); }
+.story h2 { margin: 64px 0 14px; font: 400 clamp(2rem, 6vw, 2.6rem)/1.1 var(--serif); color: var(--text); }
+.story h2:first-child { margin-top: 24px; }
+.story strong { color: var(--text); }
+.story .about-note { margin-top: 48px; font-size: 0.9rem; color: var(--muted); }
+.story-cta { margin-top: 36px; text-align: center; }
+.story-cta .pill-link { display: inline-block; }   /* en móvil .pill-link se oculta; este no */
+
+/* Aparecer al bajar: de invisible y borroso a nítido (lo contrario de desvanecerse).
+   Solo con la clase .js (ver about.js): sin JavaScript, el texto se ve normal desde el principio. */
+.js .reveal {
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(18px);
+  transition: opacity 1.1s ease, filter 1.1s ease, transform 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.js .reveal.visible { opacity: 1; filter: none; transform: none; }
+
 /* --- Easter egg: el exprimidor ------------------------------------------------
    Todo dura 3,4 s y arranca al añadir la clase .play (app.js la quita y la pone para repetir). */
 /* Pequeño, justo debajo de "en español" (app.js lo coloca), sin tapar la página: aparece y se desvanece. */
@@ -651,4 +683,5 @@ li .source-panel { margin: 8px 0 4px; }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
   .message.loading .phrase { -webkit-text-fill-color: var(--muted); }
+  .js .reveal { opacity: 1; filter: none; transform: none; }   /* sin animaciones: el texto se ve ya */
 }
