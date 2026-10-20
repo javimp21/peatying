@@ -11,6 +11,17 @@ const EXAMPLES = [
   "¿Qué opinaba de la ciencia académica?",
   "¿Qué es el estrés para Peat?",
   "¿Qué decía sobre el hierro?",
+  // Más curiosas (cada una comprobada: la búsqueda encuentra su artículo en primer lugar).
+  "¿Por qué decía que la sal no es mala?",
+  "¿Qué tiene que ver William Blake con la biología?",
+  "¿Por qué desconfiaba del aceite de pescado?",
+  "¿Cómo saber si tu tiroides va lenta sin análisis?",
+  "¿La leche es buena o mala?",
+  "¿Beber mucha agua puede ser malo?",
+  "¿Qué opinaba de las verduras?",
+  "¿De dónde vienen los sofocos?",
+  "¿Por qué le gustaba el aceite de coco?",
+  "¿La inteligencia depende del metabolismo?",
 ];
 
 // Frases que van rotando mientras el bot busca y piensa (sin puntos: los tres puntos los pinta la animación).
@@ -19,6 +30,7 @@ const LOADING_PHRASES = [
   "Optimizing energy production",
   "Squeezing the oranges",
   "Sunmaxxing",
+  "Converting T4 to T3",
 ];
 const FIRST_PHRASE_CYCLES = 2;  // veces que se repite la primera frase antes de pasar a la segunda
 const LOADING_CYCLE_MS = 2400;  // solo si las animaciones están desactivadas; si no, manda el CSS (ver showLoading)
