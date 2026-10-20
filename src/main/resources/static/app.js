@@ -216,6 +216,27 @@ function elementOf(node) {
   return node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
 }
 
+// --- Easter egg: pulsar "en español" en el título exprime una naranja ----------------
+const juicer = document.getElementById("juicer");
+let juicerTimer;
+document.getElementById("egg").addEventListener("click", () => {
+  juicer.hidden = false;
+  // Quitar y volver a poner la clase reinicia la animación. Leer offsetWidth obliga al navegador a
+  // aplicar el cambio entre medias; sin eso, juntaría las dos cosas y no se repetiría.
+  juicer.classList.remove("play");
+  void juicer.offsetWidth;
+  juicer.classList.add("play");
+  clearTimeout(juicerTimer);
+  juicerTimer = setTimeout(closeJuicer, 4800);
+});
+juicer.addEventListener("click", closeJuicer);   // pulsar en cualquier sitio lo cierra antes
+
+function closeJuicer() {
+  clearTimeout(juicerTimer);
+  juicer.hidden = true;
+  juicer.classList.remove("play");
+}
+
 // --- Estado vacío: 4 ejemplos al azar ---------------------------------------
 function showExamples() {
   const shuffled = [...EXAMPLES].sort(() => Math.random() - 0.5).slice(0, 4);

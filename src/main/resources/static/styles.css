@@ -586,6 +586,58 @@ li .source-panel { margin: 8px 0 4px; }
 }
 
 /* Quien pide menos animaciones (ajuste del sistema), no las ve. */
+/* --- Easter egg: el exprimidor ------------------------------------------------
+   Todo dura 3,4 s y arranca al añadir la clase .play (app.js la quita y la pone para repetir). */
+.juicer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgba(8, 9, 11, 0.6);
+  backdrop-filter: blur(3px);
+  cursor: pointer;
+  animation: juicer-in 0.25s ease-out both;
+}
+.juicer figure { margin: 0; text-align: center; }
+.juicer svg { width: min(220px, 60vw); height: auto; }
+.juicer figcaption { margin-top: 6px; font: italic 1.5rem var(--serif); color: #ffc861; }
+@keyframes juicer-in { from { opacity: 0; } }
+
+/* transform-box: fill-box hace que el origen del giro sea el propio dibujo, no la esquina del SVG. */
+.juicer .orange-half, .juicer .juice, .juicer .drop { transform-box: fill-box; }
+.juicer.play .orange-half {
+  transform-origin: 50% 100%;
+  animation: squeeze 3.4s ease-in-out both;
+}
+@keyframes squeeze {
+  0%   { transform: translateY(-160px); opacity: 0; }
+  15%  { transform: translateY(0); opacity: 1; }
+  22%  { transform: translateY(24px) scaleY(0.86); }
+  32%  { transform: translateY(28px) scaleY(0.8) rotate(-12deg); }
+  42%  { transform: translateY(28px) scaleY(0.8) rotate(12deg); }
+  52%  { transform: translateY(30px) scaleY(0.75) rotate(-12deg); }
+  62%  { transform: translateY(30px) scaleY(0.75) rotate(12deg); }
+  72%  { transform: translateY(31px) scaleY(0.7); }
+  85%  { transform: translateY(0) scaleY(0.7); opacity: 1; }
+  100% { transform: translateY(-160px) scaleY(0.7); opacity: 0; }
+}
+/* Las gotas caen en bucle mientras se aprieta, cada una con su retraso. */
+.juicer.play .drop { animation: drip 0.5s ease-in 0.8s 4 both; }
+.juicer.play .drop:nth-of-type(2) { animation-delay: 0.97s; }
+.juicer.play .drop:nth-of-type(3) { animation-delay: 1.13s; }
+@keyframes drip {
+  0%   { transform: translateY(0); opacity: 0; }
+  15%  { opacity: 1; }
+  100% { transform: translateY(70px); opacity: 0; }
+}
+.juicer.play .juice {
+  transform-origin: 50% 100%;
+  animation: fill-glass 2s ease-out 0.9s both;
+}
+@keyframes fill-glass { from { transform: scaleY(0); } }
+.juicer.play figcaption { animation: rise 0.5s ease-out 2.8s both; }
+
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
   .message.loading .phrase { -webkit-text-fill-color: var(--muted); }
