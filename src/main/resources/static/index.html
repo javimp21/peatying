@@ -15,7 +15,7 @@
     <header class="topbar">
       <span class="wordmark">Ray Peat <em>en español</em></span>
       <nav class="actions">
-        <button type="button" id="about-open" class="ghost">Sobre<span class="wide-only"> Ray Peat</span></button>
+        <button type="button" id="about-open" class="ghost"><span class="wide-only">Sobre Ray Peat</span><span class="narrow-only">About</span></button>
         <!-- Solo se ven cuando hay conversación (app.js los muestra) -->
         <button type="button" id="download" class="ghost" hidden>Descargar</button>
         <button type="button" id="new-chat" class="ghost" hidden>Nueva<span class="wide-only"> conversación</span></button>
@@ -35,6 +35,11 @@
       <form id="ask-form" class="ask" autocomplete="off">
         <!-- El error va justo encima de la caja de texto: donde el usuario está mirando. -->
         <p id="error" class="error" role="alert" hidden></p>
+        <!-- La parte de una respuesta sobre la que se va a preguntar (botón "Preguntar sobre esto"). -->
+        <div id="reply" class="reply" hidden>
+          <span id="reply-text" class="reply-text"></span>
+          <button type="button" id="reply-cancel" class="reply-cancel" aria-label="Quitar la cita">×</button>
+        </div>
         <div class="ask-pill">
           <label for="question" class="visually-hidden">Tu pregunta</label>
           <textarea id="question" name="question" rows="1" maxlength="500" required

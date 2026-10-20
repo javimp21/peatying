@@ -385,8 +385,79 @@ li .source-panel { margin: 8px 0 4px; }
   color: var(--muted);
 }
 .source-panel p { margin: 0 0 8px; white-space: pre-line; color: #b9bbc1; }
+.source-panel .source-note { font-size: 0.78rem; color: var(--muted); font-style: italic; }
 .source-panel a { color: var(--accent-text); text-decoration: none; font-size: 0.82rem; font-weight: 500; }
 .source-panel a:hover { text-decoration: underline; }
+
+/* Botón flotante al seleccionar texto de una respuesta: "Explícame esto" / "Cuéntame más". */
+.selection-ask {
+  position: absolute;
+  z-index: 30;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(31, 33, 37, 0.72);  /* medio transparente: deja ver el texto de debajo */
+  backdrop-filter: blur(6px);
+  animation: rise 0.18s ease-out both;
+}
+.selection-ask button {
+  padding: 7px 13px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-soft);
+  font: 500 0.8rem var(--sans);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.selection-ask button:hover, .selection-ask button:focus-visible { background: rgba(255, 255, 255, 0.08); color: var(--text); }
+
+/* La cita encima de la caja de texto, como al responder a un mensaje en WhatsApp. */
+.reply {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0 18px 8px;
+  padding: 8px 8px 8px 14px;
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.86rem;
+  color: var(--text-soft);
+}
+/* Como mucho dos líneas; si es más larga, acaba en "…". */
+.reply-text {
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.reply-cancel {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+.reply-cancel:hover { color: var(--text); }
+
+/* En el mensaje del usuario, la cita va encima de su pregunta. */
+.user-quote {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 6px;
+  padding-left: 10px;
+  border-left: 2px solid var(--accent);
+  font-size: 0.86rem;
+  color: var(--muted);
+}
 
 .sources {
   margin: 18px 0 0 !important;
@@ -476,6 +547,8 @@ li .source-panel { margin: 8px 0 4px; }
 
 .wordmark, .ghost, .pill-link { white-space: nowrap; }
 
+.narrow-only { display: none; }       /* solo en pantallas estrechas: ver max-width 640px */
+
 /* Pantallas medianas: durante la conversación no caben los tres botones; el enlace sigue en el pie. */
 @media (max-width: 900px) {
   .chatting .pill-link { display: none; }
@@ -487,6 +560,7 @@ li .source-panel { margin: 8px 0 4px; }
   .pill-link { display: none; }       /* el enlace sigue en el pie */
   .ghost { padding: 6px 12px; font-size: 0.82rem; }
   .wide-only { display: none; }       /* "Nueva conversación" -> "Nueva" */
+  .narrow-only { display: inline; }   /* "Sobre Ray Peat" -> "About" */
   .main { padding: 0 14px 18px; }
   .hero { padding: 28px 0 24px; }
   .lead { font-size: 1rem; }

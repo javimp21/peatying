@@ -37,7 +37,7 @@ const downloadButton = document.getElementById("download");
 
 // El estado de la conversación: la lista de mensajes. La pantalla se dibuja a partir de aquí,
 // y es lo que guardamos en el navegador y lo que se descarga.
-//   { role: "user", text }   |   { role: "bot", text, sources: [{number, title, url, text}] }
+//   { role: "user", text }   |   { role: "bot", text, sources: [{number, title, url, type, text}] }
 let messages = [];
 // El id de la conversación en el servidor (null hasta la primera respuesta). Con él, el bot recuerda
 // lo anterior y entiende preguntas como "¿y por qué?".
@@ -52,12 +52,6 @@ const focusInputIfDesktop = () => { if (!isTouch) input.focus(); };
 document.addEventListener("pointerdown", (event) => {
   if (isTouch && document.activeElement === input && !event.target.closest("#ask-form")) input.blur();
 });
-
-// --- Arranque ----------------------------------------------------------------
-showExamples();
-restoreConversation();
-focusInputIfDesktop();
-countVisit();
 
 /**
  * Avisa al servidor de que alguien ha abierto la página, para contar visitas aunque no pregunte.
@@ -75,6 +69,133 @@ document.getElementById("about-close").addEventListener("click", () => aboutDial
 aboutDialog.addEventListener("click", (event) => {
   if (event.target === aboutDialog) aboutDialog.close();
 });
+
+// --- Preguntar sobre un trozo de la respuesta ----------------------------------
+// Al seleccionar texto de una respuesta aparece un botón flotante para pedir que lo aclare o lo amplíe,
+// sin tener que copiar el trozo y pegarlo en la caja.
+const MAX_FRAGMENT = 200;          // la pregunta entera (cita incluida) tiene un máximo de 500 caracteres
+const MAX_QUESTION = 500;
+
+const selectionAsk = document.createElement("div");
+selectionAsk.className = "selection-ask";
+selectionAsk.hidden = true;
+let selectedFragment = "";
+
+// "Aclarar esto" pregunta directamente; "Preguntar sobre esto" deja la cita encima de la caja
+// (como al responder a un mensaje en WhatsApp) para que la persona escriba su pregunta.
+const SELECTION_ACTIONS = [
+  ["Aclarar esto", (fragment) => ask("¿Me aclaras esto?", fragment)],
+  ["Preguntar sobre esto", (fragment) => { setReply(fragment); input.focus(); }],
+];
+for (const [label, action] of SELECTION_ACTIONS) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = label;
+  // mousedown cancelado: si no, el clic quitaría la selección antes de llegar al botón.
+  button.addEventListener("mousedown", (event) => event.preventDefault());
+  button.addEventListener("click", () => {
+    const fragment = selectedFragment;
+    hideSelectionAsk();
+    window.getSelection().removeAllRanges();
+    action(fragment);
+  });
+  selectionAsk.appendChild(button);
+}
+document.body.appendChild(selectionAsk);
+
+// La cita que se está respondiendo (o null). Al bot se le manda delante de la pregunta.
+let replyQuote = null;
+const replyBox = document.getElementById("reply");
+const replyText = document.getElementById("reply-text");
+document.getElementById("reply-cancel").addEventListener("click", () => { clearReply(); input.focus(); });
+
+function setReply(fragment) {
+  replyQuote = fragment;
+  replyText.textContent = fragment;
+  replyBox.hidden = false;
+  // La cita también ocupa sitio en los 500 caracteres: dejamos para la pregunta solo lo que queda.
+  input.maxLength = MAX_QUESTION - withQuote("", fragment).length;
+}
+
+function clearReply() {
+  replyQuote = null;
+  replyBox.hidden = true;
+  input.maxLength = MAX_QUESTION;
+}
+
+/** Lo que recibe el bot: la parte de su respuesta a la que se refiere la pregunta, y la pregunta. */
+function withQuote(question, quote) {
+  return quote ? `Sobre esta parte de tu respuesta anterior: «${quote}»\n\n${question}` : question;
+}
+
+// selectionchange salta con el ratón, con el dedo y con el teclado. Esperamos un poco a que la
+// selección se quede quieta para no mover el botón con cada letra que se añade.
+let selectionTimer;
+document.addEventListener("selectionchange", () => {
+  clearTimeout(selectionTimer);
+  selectionTimer = setTimeout(updateSelectionAsk, 200);
+});
+
+function updateSelectionAsk() {
+  const selection = window.getSelection();
+  if (selection.isCollapsed || selection.rangeCount === 0 || sendButton.disabled) return hideSelectionAsk();
+
+  // Solo dentro de UNA respuesta ya terminada (no en la que se está escribiendo ni en las preguntas).
+  const range = toWholeWords(selection.getRangeAt(0));
+  const start = elementOf(range.startContainer)?.closest(".message.bot:not(.live) .answer-body");
+  const end = elementOf(range.endContainer)?.closest(".message.bot:not(.live) .answer-body");
+  if (!start || start !== end) return hideSelectionAsk();
+
+  // El texto sin los botones de cita: seleccionando "…el azúcar [2]." no queremos que salga "el azúcar 2."
+  const copy = document.createElement("div");
+  copy.appendChild(range.cloneContents());
+  copy.querySelectorAll(".cite").forEach((cite) => cite.remove());
+  let fragment = copy.textContent.replace(/\s+/g, " ").trim();
+  if (fragment.length < 3) return hideSelectionAsk();
+  if (fragment.length > MAX_FRAGMENT) fragment = fragment.slice(0, MAX_FRAGMENT).trimEnd() + "…";
+  selectedFragment = fragment;
+
+  // Debajo de la selección: encima suele estar el menú del propio móvil (Copiar, Buscar…).
+  // getBoundingClientRect da la posición en la ventana; sumando el scroll la pasamos a la página.
+  const rect = range.getBoundingClientRect();
+  selectionAsk.hidden = false;
+  const width = selectionAsk.offsetWidth;
+  const left = Math.min(Math.max(8, rect.left + rect.width / 2 - width / 2),
+                        document.documentElement.clientWidth - width - 8);
+  selectionAsk.style.left = `${left + window.scrollX}px`;
+  selectionAsk.style.top = `${rect.bottom + window.scrollY + 10}px`;
+}
+
+function hideSelectionAsk() {
+  selectionAsk.hidden = true;
+}
+
+/**
+ * Copia de la selección ampliada a palabras completas: es fácil soltar el dedo o el ratón a mitad
+ * de palabra, y "ales: valoraba … de pollo co" se entiende peor que "tradicionales: … como".
+ */
+function toWholeWords(original) {
+  const range = original.cloneRange();
+  const isLetter = (char) => /[\p{L}\p{N}]/u.test(char);
+  if (range.startContainer.nodeType === Node.TEXT_NODE) {
+    const text = range.startContainer.data;
+    let i = range.startOffset;
+    while (i > 0 && isLetter(text[i - 1])) i--;
+    range.setStart(range.startContainer, i);
+  }
+  if (range.endContainer.nodeType === Node.TEXT_NODE) {
+    const text = range.endContainer.data;
+    let i = range.endOffset;
+    while (i < text.length && isLetter(text[i])) i++;
+    range.setEnd(range.endContainer, i);
+  }
+  return range;
+}
+
+/** El elemento que contiene un nodo (si el nodo es un trozo de texto, su padre). */
+function elementOf(node) {
+  return node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+}
 
 // --- Estado vacío: 4 ejemplos al azar ---------------------------------------
 function showExamples() {
@@ -100,7 +221,7 @@ function setChatting(chatting) {
 // --- Enviar una pregunta ----------------------------------------------------
 form.addEventListener("submit", (event) => {
   event.preventDefault(); // sin esto, el formulario recargaría la página
-  ask(input.value);
+  ask(input.value, replyQuote);
 });
 
 // Enter envía; Mayúsculas+Enter hace un salto de línea.
@@ -118,14 +239,15 @@ function autoGrow() {
   input.style.height = input.scrollHeight + "px";
 }
 
-async function ask(question) {
+async function ask(question, quote = null) {
   question = question.trim();
   if (!question || sendButton.disabled) return;
 
   hideError();
+  clearReply();
   const firstOfConversation = messages.length === 0;   // las naranjas solo se van rodando en la primera
   setChatting(true);
-  const questionDiv = addMessage({ role: "user", text: question });
+  const questionDiv = addMessage(quote ? { role: "user", text: question, quote } : { role: "user", text: question });
   input.value = "";
   autoGrow();
   if (isTouch) input.blur();            // en móvil, cerramos el teclado para que se vea la respuesta
@@ -138,7 +260,7 @@ async function ask(question) {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question, conversationId }),
+      body: JSON.stringify({ question: withQuote(question, quote), conversationId }),
     });
 
     if (!response.ok) {
@@ -316,7 +438,8 @@ function followIfAtBottom() {
 
 /** Si la pregunta falla, la quitamos de la conversación y se la devolvemos a la caja para que no la pierda. */
 function undoQuestion(questionDiv, question, errorMessage) {
-  messages.pop();
+  const undone = messages.pop();
+  if (undone.quote) setReply(undone.quote);
   questionDiv.remove();                 // por referencia: el último elemento podría ser el "cargando"
   saveConversation();
   if (messages.length === 0) setChatting(false);
@@ -416,16 +539,22 @@ function addMessage(message, { animate = true } = {}) {
 }
 
 function render(message, scroll) {
-  const div = message.role === "user" ? renderUser(message.text) : renderAnswer(message);
+  const div = message.role === "user" ? renderUser(message) : renderAnswer(message);
   conversation.appendChild(div);
   if (scroll) div.scrollIntoView({ behavior: "smooth", block: message.role === "user" ? "end" : "start" });
   return div;
 }
 
-function renderUser(text) {
+function renderUser({ text, quote }) {
   const div = document.createElement("div");
   div.className = "message user";
-  div.textContent = text;               // textContent nunca interpreta HTML: seguro
+  if (quote) {
+    const cited = document.createElement("span");
+    cited.className = "user-quote";
+    cited.textContent = quote;
+    div.appendChild(cited);
+  }
+  div.append(text);                     // append con texto (como textContent) nunca interpreta HTML: seguro
   return div;
 }
 
@@ -644,17 +773,26 @@ function toggleSource(messageDiv, button, source) {
   panel.className = "source-panel";
   panel.dataset.n = button.dataset.n;
 
+  const interview = source.type === "interview";
   const title = document.createElement("h3");
-  title.textContent = `${source.number} · ${source.title}`;
+  title.textContent = `${source.number} · ${interview ? "Entrevista · " : ""}${source.title}`;
   const text = document.createElement("p");
   text.textContent = source.text;       // el texto original de Peat, en inglés
   const link = document.createElement("a");
   link.href = source.url;
   link.target = "_blank";
   link.rel = "noopener";
-  link.textContent = "Leer el artículo completo →";
+  link.textContent = interview ? "Leer la transcripción completa →" : "Leer el artículo completo →";
 
-  panel.append(title, text, link);
+  panel.append(title, text);
+  // Las transcripciones están retocadas (gramática, frases partidas): avisamos de que no es literal.
+  if (interview) {
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = "Transcripción editada de raypeat-wiki: el sentido es el suyo, las palabras exactas pueden variar.";
+    panel.append(note);
+  }
+  panel.append(link);
   // Justo debajo de donde está la cita: dentro del punto de la lista, o después del párrafo.
   const item = button.closest("li");
   if (item) item.appendChild(panel);
@@ -709,6 +847,7 @@ downloadButton.addEventListener("click", () => {
   for (const m of messages) {
     if (m.role === "user") {
       lines.push(`## ${m.text}`, "");
+      if (m.quote) lines.push(`> ${m.quote}`, "");
     } else {
       lines.push(m.text, "");
       if (m.sources.length > 0) {
@@ -743,3 +882,11 @@ function showError(message) {
 function hideError() {
   errorBox.hidden = true;
 }
+
+// --- Arranque ----------------------------------------------------------------
+// Al final del archivo a propósito: las constantes declaradas con const (como THUMB_SVG) no existen
+// hasta que se llega a su línea, y restaurar la conversación ya las usa.
+showExamples();
+restoreConversation();
+focusInputIfDesktop();
+countVisit();
