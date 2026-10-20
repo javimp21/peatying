@@ -244,6 +244,11 @@ body {
 .conversation { display: flex; flex-direction: column; gap: 22px; }
 .chatting .conversation { flex: 1; padding-bottom: 8px; }
 
+/* La respuesta más reciente ocupa como mínimo casi una pantalla: así la pregunta puede quedarse
+   arriba mientras la respuesta se escribe debajo, sin que la página tenga que moverse. */
+.conversation > .message.bot:last-child { min-height: calc(100vh - 240px); min-height: calc(100svh - 240px); }
+.message.user { scroll-margin-top: 16px; }
+
 .message.user {
   align-self: flex-end;
   max-width: 85%;

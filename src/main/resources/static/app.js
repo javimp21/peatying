@@ -18,6 +18,7 @@ const LOADING_PHRASES = [
   "Peatying",
   "Optimizing energy production",
   "Squeezing the oranges",
+  "Sunmaxxing",
 ];
 const FIRST_PHRASE_CYCLES = 2;  // veces que se repite la primera frase antes de pasar a la segunda
 const LOADING_CYCLE_MS = 2400;  // solo si las animaciones están desactivadas; si no, manda el CSS (ver showLoading)
@@ -291,6 +292,10 @@ async function ask(question, quote = null) {
   if (isTouch) input.blur();            // en móvil, cerramos el teclado para que se vea la respuesta
   setBusy(true);
   let loading = showLoading();
+  // La pregunta sube hasta arriba y la respuesta se escribe debajo, sin mover la página (la última
+  // respuesta tiene altura mínima en el CSS para que siempre haya sitio). Se hace después de crear
+  // el "cargando": antes la página aún no es lo bastante alta para subir la pregunta del todo.
+  questionDiv.scrollIntoView({ behavior: "smooth", block: "start" });
   let live = null;                      // el mensaje que se va escribiendo en directo
   let finished = false;
 
@@ -420,7 +425,6 @@ function startLiveMessage() {
       // Mínimo 1 letra por fotograma (~60/s); con mucho pendiente, lo que haga falta para alcanzarlo en ~1/3 s.
       shown += Math.max(1, Math.ceil(pending / 20));
       div.innerHTML = renderMarkdown(target.slice(0, shown), null, true);
-      followIfAtBottom();
       nextFrame(frame);
     } else {
       running = false;
@@ -469,10 +473,6 @@ function nextFrame(fn) {
 }
 
 /** Seguimos el texto hacia abajo solo si el usuario no ha subido a leer otra cosa. */
-function followIfAtBottom() {
-  const nearBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 160;
-  if (nearBottom) window.scrollTo({ top: document.body.scrollHeight });
-}
 
 /** Si la pregunta falla, la quitamos de la conversación y se la devolvemos a la caja para que no la pierda. */
 function undoQuestion(questionDiv, question, errorMessage) {
@@ -516,7 +516,6 @@ function showLoading() {
   };
 
   let dots = show(first);
-  div.scrollIntoView({ behavior: "smooth", block: "end" });
 
   // Cambiamos de frase justo cuando termina un ciclo completo de la animación (brillo + saltos), para
   // que nunca se corte a medias. Lo avisa el propio navegador con el evento "animationiteration".
@@ -570,16 +569,16 @@ function showLoading() {
 function addMessage(message, { animate = true } = {}) {
   messages.push(message);
   saveConversation();
-  const div = render(message, animate);
+  const div = render(message);
   // Si sustituye a un texto escrito en directo, no queremos que "salte" con la animación de entrada.
   if (!animate) div.classList.add("no-anim");
   return div;
 }
 
-function render(message, scroll) {
+// No desplaza la página: al preguntar, ask() sube la pregunta arriba y todo lo demás aparece debajo.
+function render(message) {
   const div = message.role === "user" ? renderUser(message) : renderAnswer(message);
   conversation.appendChild(div);
-  if (scroll) div.scrollIntoView({ behavior: "smooth", block: message.role === "user" ? "end" : "start" });
   return div;
 }
 
@@ -885,7 +884,7 @@ function restoreConversation() {
     messages = Array.isArray(saved?.messages) ? saved.messages : [];
     conversationId = saved?.conversationId ?? null;
   }
-  messages.forEach((m) => render(m, false));
+  messages.forEach((m) => render(m));
   setChatting(messages.length > 0);
   if (messages.length > 0) conversation.lastElementChild.scrollIntoView({ block: "start" });
 }
