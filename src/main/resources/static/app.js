@@ -101,7 +101,14 @@ for (const [label, action] of SELECTION_ACTIONS) {
   });
   selectionAsk.appendChild(button);
 }
-document.body.appendChild(selectionAsk);
+// En móvil, el menú del propio sistema (Copiar, Buscar…) sale pegado a la selección, encima o debajo
+// según el navegador, y taparía el botón. Ahí lo fijamos abajo, encima de la caja de texto.
+if (isTouch) {
+  selectionAsk.classList.add("docked");
+  form.insertBefore(selectionAsk, document.getElementById("reply"));
+} else {
+  document.body.appendChild(selectionAsk);
+}
 
 // La cita que se está respondiendo (o null). Al bot se le manda delante de la pregunta.
 let replyQuote = null;
@@ -157,8 +164,9 @@ function updateSelectionAsk() {
 
   // Debajo de la selección: encima suele estar el menú del propio móvil (Copiar, Buscar…).
   // getBoundingClientRect da la posición en la ventana; sumando el scroll la pasamos a la página.
-  const rect = range.getBoundingClientRect();
   selectionAsk.hidden = false;
+  if (isTouch) return;                  // en móvil va fijo encima de la caja: no hay que colocarlo
+  const rect = range.getBoundingClientRect();
   const width = selectionAsk.offsetWidth;
   const left = Math.min(Math.max(8, rect.left + rect.width / 2 - width / 2),
                         document.documentElement.clientWidth - width - 8);
@@ -828,7 +836,14 @@ function restoreConversation() {
   if (messages.length > 0) conversation.lastElementChild.scrollIntoView({ block: "start" });
 }
 
-newChatButton.addEventListener("click", () => {
+newChatButton.addEventListener("click", startOver);
+// El nombre de arriba a la izquierda también vuelve a la portada, como en casi todas las webs.
+document.getElementById("home").addEventListener("click", (event) => {
+  event.preventDefault();               // es un enlace a "/": sin esto recargaría la página
+  startOver();
+});
+
+function startOver() {
   messages = [];
   conversationId = null;                // la próxima pregunta empieza una conversación nueva en el servidor
   saveConversation();
@@ -837,9 +852,11 @@ newChatButton.addEventListener("click", () => {
   autoGrow();
   hideError();
   setChatting(false);
+  clearReply();
+  hideSelectionAsk();
   window.scrollTo({ top: 0, behavior: "smooth" });
   focusInputIfDesktop();
-});
+}
 
 // --- Descargar la conversación como Markdown --------------------------------
 downloadButton.addEventListener("click", () => {

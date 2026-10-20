@@ -67,7 +67,7 @@ body {
   justify-content: space-between;
   padding: 24px 32px;
 }
-.wordmark { font-family: var(--serif); font-size: 1.35rem; letter-spacing: 0.01em; }
+.wordmark { font-family: var(--serif); font-size: 1.35rem; letter-spacing: 0.01em; color: inherit; text-decoration: none; }
 .wordmark em { color: var(--muted); }
 .pill-link {
   padding: 8px 18px;
@@ -402,6 +402,14 @@ li .source-panel { margin: 8px 0 4px; }
   backdrop-filter: blur(6px);
   animation: rise 0.18s ease-out both;
 }
+/* En móvil: fijo encima de la caja de texto, centrado (ver app.js). */
+.selection-ask.docked {
+  position: static;
+  width: fit-content;
+  margin: 0 auto 8px;
+  background: rgba(31, 33, 37, 0.88);  /* aquí pasa texto por debajo al hacer scroll: algo más opaco */
+}
+
 .selection-ask button {
   padding: 7px 13px;
   border: 0;
