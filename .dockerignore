@@ -1,0 +1,10 @@
+# Lo que NO se manda a Docker al construir la imagen: más rápido y sin colar datos que no tocan.
+target/
+data/
+eval/
+.git/
+.idea/
+.vscode/
+.claude/
+*.ps1
+HELP.md
