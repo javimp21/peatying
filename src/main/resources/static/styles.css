@@ -425,6 +425,38 @@ li .source-panel { margin: 8px 0 4px; }
 .vote[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-text); }
 .vote:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 
+/* --- Ventana "Sobre Ray Peat" ------------------------------------------------ */
+.about {
+  width: min(560px, calc(100vw - 32px));
+  max-height: calc(100vh - 64px);
+  padding: 32px 30px 26px;
+  border: 1px solid var(--line);
+  border-radius: 0;                    /* rectas, como el resto de la página */
+  background: var(--frame);
+  color: var(--text-soft);
+  font: 400 1rem/1.65 var(--sans);
+}
+.about::backdrop { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(3px); }
+.about[open] { animation: rise 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.about h2 { margin: 0 0 12px; font: 400 2.1rem/1.1 var(--serif); color: var(--text); }
+.about h3 { margin: 22px 0 6px; font: 600 1rem var(--sans); color: var(--text); }
+.about p { margin: 0 0 10px; }
+.about strong { color: var(--text); }
+.about-note { margin-top: 20px !important; font-size: 0.85rem; color: var(--muted); }
+.about-close {
+  position: absolute;
+  top: 12px; right: 14px;
+  width: 36px; height: 36px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.about-close:hover { color: var(--text); }
+.about-close:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+
 /* --- Pie ------------------------------------------------------------------- */
 .footer {
   max-width: 760px;
@@ -461,6 +493,14 @@ li .source-panel { margin: 8px 0 4px; }
   .ask-pill { padding: 8px 8px 8px 18px; }
   .ask textarea { font-size: 1.05rem; }
   .send { width: 42px; height: 42px; }
+}
+
+/* Móviles estrechos: en la barra de arriba no caben el nombre completo y tres botones. */
+@media (max-width: 480px) {
+  .topbar { padding: 16px 14px; gap: 10px; }
+  .wordmark em { display: none; }     /* "Ray Peat en español" -> "Ray Peat" */
+  .actions { gap: 6px; }
+  .ghost { padding: 6px 10px; }
 }
 
 /* Quien pide menos animaciones (ajuste del sistema), no las ve. */

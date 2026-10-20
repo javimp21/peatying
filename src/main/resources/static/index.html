@@ -15,6 +15,7 @@
     <header class="topbar">
       <span class="wordmark">Ray Peat <em>en español</em></span>
       <nav class="actions">
+        <button type="button" id="about-open" class="ghost">Sobre<span class="wide-only"> Ray Peat</span></button>
         <!-- Solo se ven cuando hay conversación (app.js los muestra) -->
         <button type="button" id="download" class="ghost" hidden>Descargar</button>
         <button type="button" id="new-chat" class="ghost" hidden>Nueva<span class="wide-only"> conversación</span></button>
@@ -59,6 +60,19 @@
     Las preguntas se guardan de forma anónima para mejorar el servicio.
     Proyecto independiente, sin relación con Ray Peat ni con raypeat.com.
   </footer>
+  <!-- Ventana "Sobre Ray Peat". <dialog> es un elemento nativo del navegador: se abre con showModal(),
+       se cierra con Escape y bloquea el resto de la página mientras está abierta. -->
+  <dialog id="about" class="about" aria-labelledby="about-title">
+    <button type="button" class="about-close" id="about-close" aria-label="Cerrar">×</button>
+    <h2 id="about-title">¿Quién fue Ray Peat?</h2>
+    <p>Raymond Peat (1936–2022) fue un biólogo estadounidense, doctor por la Universidad de Oregón y especializado en fisiología. Investigó durante décadas las hormonas y el metabolismo, y dio clase en varias universidades, también en México. Escribió decenas de artículos que hoy siguen leyéndose en foros y redes.</p>
+    <h3>Sus ideas, en pocas palabras</h3>
+    <p>Para Peat, la salud depende sobre todo de <strong>cuánta energía producen tus células</strong>. De ahí salen sus posturas más conocidas: cuidar la tiroides, no temer al azúcar de la fruta, desconfiar de los aceites vegetales poliinsaturados y ver el estrés como el gran desgaste del cuerpo. Muchas van contra el consenso médico actual.</p>
+    <h3>¿Qué es esta web?</h3>
+    <p>Un buscador conversacional: haces una pregunta y una IA busca en sus artículos y te responde citando el texto original, con enlace. Si Peat no habló de algo, te lo dice.</p>
+    <p class="about-note">Es un proyecto independiente, sin relación con Ray Peat ni con raypeat.com. Las respuestas pueden tener errores y no son consejo médico.</p>
+  </dialog>
+
   <script src="app.js"></script>
 </body>
 </html>

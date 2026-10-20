@@ -31,9 +31,35 @@ public class StatsCommand implements CommandLineRunner {
         if (args.length == 0 || !args[0].equals("stats")) {
             return;
         }
+        printVisits();
         printDaily();
         printTotals();
         printThumbsDown();
+    }
+
+    /** Cuánta gente abre la web cada día, pregunte o no; y qué parte de ella llega a preguntar. */
+    private void printVisits() {
+        List<Map<String, Object>> rows = jdbc.sql("""
+                SELECT v.day AS dia,
+                       count(*) AS visitantes,
+                       (SELECT count(DISTINCT c.visitor_hash) FROM conversations c
+                         WHERE c.created_at::date = v.day) AS preguntan
+                FROM page_views v
+                GROUP BY v.day
+                ORDER BY v.day DESC
+                LIMIT 14
+                """)
+                .query()
+                .listOfRows();
+
+        System.out.println("\n=== Visitas a la web (personas distintas por día, fecha en UTC)");
+        System.out.printf("%-12s %10s %16s%n", "día", "visitantes", "de ellos preguntan");
+        for (Map<String, Object> r : rows) {
+            System.out.printf("%-12s %10s %16s%n", r.get("dia"), r.get("visitantes"), r.get("preguntan"));
+        }
+        if (rows.isEmpty()) {
+            System.out.println("(todavía ninguna)");
+        }
     }
 
     /** Una fila por día (últimos 14 días con actividad). */

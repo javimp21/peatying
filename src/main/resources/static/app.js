@@ -57,6 +57,24 @@ document.addEventListener("pointerdown", (event) => {
 showExamples();
 restoreConversation();
 focusInputIfDesktop();
+countVisit();
+
+/**
+ * Avisa al servidor de que alguien ha abierto la página, para contar visitas aunque no pregunte.
+ * Es anónimo (el servidor solo guarda una huella diaria) y si falla no pasa nada: no molesta al usuario.
+ */
+function countVisit() {
+  fetch("/api/visit", { method: "POST" }).catch(() => {});
+}
+
+// --- Ventana "Sobre Ray Peat" ---------------------------------------------------
+const aboutDialog = document.getElementById("about");
+document.getElementById("about-open").addEventListener("click", () => aboutDialog.showModal());
+document.getElementById("about-close").addEventListener("click", () => aboutDialog.close());
+// Pulsar fuera de la ventana (en el fondo oscurecido) también la cierra.
+aboutDialog.addEventListener("click", (event) => {
+  if (event.target === aboutDialog) aboutDialog.close();
+});
 
 // --- Estado vacío: 4 ejemplos al azar ---------------------------------------
 function showExamples() {
