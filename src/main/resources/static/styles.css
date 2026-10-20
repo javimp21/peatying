@@ -567,16 +567,23 @@ li .source-panel { margin: 8px 0 4px; }
    donde va el título, y se funde con el fondo de la página para que no haya un corte al bajar. */
 .cover {
   position: relative;
-  min-height: calc(100vh - 90px);
+  min-height: 100vh;
+  min-height: 100svh;                  /* svh: la altura real visible en el móvil, sin la barra del navegador */
   display: grid;
   place-content: end center;
   padding: 0 20px 80px;
   text-align: center;
   overflow: hidden;
   background:
-    linear-gradient(to top, var(--frame) 0%, rgba(22, 23, 26, 0.75) 35%, rgba(22, 23, 26, 0.15) 70%, rgba(22, 23, 26, 0.35) 100%),
+    /* arriba, una sombra suave para que se lea la barra que va encima; abajo, el fundido al fondo */
+    linear-gradient(to bottom, rgba(14, 15, 17, 0.7) 0%, rgba(14, 15, 17, 0) 22%),
+    linear-gradient(to top, var(--frame) 0%, rgba(22, 23, 26, 0.75) 35%, rgba(22, 23, 26, 0.1) 70%),
     url("img/ray-peat.jpg") center 22% / cover no-repeat;
 }
+/* En esta página la barra de arriba flota sobre la foto en vez de ocupar su propia franja. */
+.about-page .topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 2; }
+.about-page .topbar .ghost { background: rgba(14, 15, 17, 0.35); backdrop-filter: blur(6px); border-color: rgba(255, 255, 255, 0.18); }
+.about-page .frame { position: relative; }
 .cover h1, .cover-sub { text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); }
 .cover-kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.25em; color: var(--text-soft); }
 .cover h1 { margin: 6px 0 14px; font: 400 clamp(4.5rem, 16vw, 10rem)/0.9 var(--serif); letter-spacing: -0.01em; }
