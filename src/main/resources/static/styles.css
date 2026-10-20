@@ -563,31 +563,22 @@ li .source-panel { margin: 8px 0 4px; }
 
 /* Quien pide menos animaciones (ajuste del sistema), no las ve. */
 /* --- Página "Sobre Ray Peat" (about.html) ---------------------------------------- */
-/* Portada: ocupa toda la pantalla, con un "sol" naranja difuminado detrás del nombre. */
+/* Portada: ocupa toda la pantalla, con la foto de fondo. El degradado oscurece la parte de abajo,
+   donde va el título, y se funde con el fondo de la página para que no haya un corte al bajar. */
 .cover {
   position: relative;
   min-height: calc(100vh - 90px);
   display: grid;
-  place-content: center;
-  padding: 0 20px 60px;
+  place-content: end center;
+  padding: 0 20px 80px;
   text-align: center;
   overflow: hidden;
+  background:
+    linear-gradient(to top, var(--frame) 0%, rgba(22, 23, 26, 0.75) 35%, rgba(22, 23, 26, 0.15) 70%, rgba(22, 23, 26, 0.35) 100%),
+    url("img/ray-peat.jpg") center 22% / cover no-repeat;
 }
-.cover::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 46%;
-  width: min(80vw, 560px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle at 42% 38%, #ffb347 0%, #f28c28 40%, rgba(242, 140, 40, 0) 70%);
-  opacity: 0.32;
-  filter: blur(12px);
-}
-.cover > * { position: relative; }   /* por encima del sol */
-.cover-kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.25em; color: var(--muted); }
+.cover h1, .cover-sub { text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); }
+.cover-kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.25em; color: var(--text-soft); }
 .cover h1 { margin: 6px 0 14px; font: 400 clamp(4.5rem, 16vw, 10rem)/0.9 var(--serif); letter-spacing: -0.01em; }
 .cover-sub { max-width: 30ch; margin: 0 auto; font-size: clamp(1.1rem, 3.5vw, 1.35rem); color: var(--text-soft); }
 .cover-sub em { font-family: var(--serif); font-size: 1.15em; color: #ffc861; }
