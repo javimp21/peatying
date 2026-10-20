@@ -219,17 +219,24 @@ function elementOf(node) {
 // --- Easter egg: pulsar "en español" en el título exprime una naranja ----------------
 const juicer = document.getElementById("juicer");
 let juicerTimer;
-document.getElementById("egg").addEventListener("click", () => {
+const egg = document.getElementById("egg");
+egg.addEventListener("click", () => {
   juicer.hidden = false;
+  // Centrado justo debajo de la palabra, sin salirse de la pantalla por los lados.
+  const rect = egg.getBoundingClientRect();
+  const width = juicer.offsetWidth;
+  const left = Math.min(Math.max(8, rect.left + rect.width / 2 - width / 2),
+                        document.documentElement.clientWidth - width - 8);
+  juicer.style.left = `${left + window.scrollX}px`;
+  juicer.style.top = `${rect.bottom + window.scrollY + 4}px`;
   // Quitar y volver a poner la clase reinicia la animación. Leer offsetWidth obliga al navegador a
   // aplicar el cambio entre medias; sin eso, juntaría las dos cosas y no se repetiría.
   juicer.classList.remove("play");
   void juicer.offsetWidth;
   juicer.classList.add("play");
   clearTimeout(juicerTimer);
-  juicerTimer = setTimeout(closeJuicer, 4800);
+  juicerTimer = setTimeout(closeJuicer, 4300);   // cuando ya se ha desvanecido (ver juicer-out en el CSS)
 });
-juicer.addEventListener("click", closeJuicer);   // pulsar en cualquier sitio lo cierra antes
 
 function closeJuicer() {
   clearTimeout(juicerTimer);

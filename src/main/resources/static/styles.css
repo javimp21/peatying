@@ -588,21 +588,20 @@ li .source-panel { margin: 8px 0 4px; }
 /* Quien pide menos animaciones (ajuste del sistema), no las ve. */
 /* --- Easter egg: el exprimidor ------------------------------------------------
    Todo dura 3,4 s y arranca al añadir la clase .play (app.js la quita y la pone para repetir). */
+/* Pequeño, justo debajo de "en español" (app.js lo coloca), sin tapar la página: aparece y se desvanece. */
 .juicer {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  display: grid;
-  place-items: center;
-  background: rgba(8, 9, 11, 0.6);
-  backdrop-filter: blur(3px);
-  cursor: pointer;
-  animation: juicer-in 0.25s ease-out both;
+  position: absolute;
+  z-index: 40;
+  width: 130px;
+  pointer-events: none;               /* no estorba: los clics pasan a lo que hay debajo */
 }
+/* En .play (y no en .juicer) para que vuelva a empezar si se pulsa otra vez mientras se ve. */
+.juicer.play { animation: juicer-in 0.3s ease-out both, juicer-out 0.5s ease-in 3.7s forwards; }
 .juicer figure { margin: 0; text-align: center; }
-.juicer svg { width: min(275px, 72vw); height: auto; }
-.juicer figcaption { margin-top: 6px; font: italic 1.5rem var(--serif); color: #ffc861; }
-@keyframes juicer-in { from { opacity: 0; } }
+.juicer svg { width: 100%; height: auto; }
+.juicer figcaption { margin-top: 2px; font: italic 0.9rem var(--serif); color: #ffc861; white-space: nowrap; }
+@keyframes juicer-in { from { opacity: 0; transform: scale(0.6) translateY(-8px); } }
+@keyframes juicer-out { to { opacity: 0; transform: scale(0.85); } }
 
 /* transform-box: fill-box hace que el origen del giro sea el propio dibujo, no la esquina del SVG. */
 .juicer .orange-half, .juicer .juice, .juicer .drop, .juicer .stream { transform-box: fill-box; }
