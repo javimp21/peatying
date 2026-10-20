@@ -158,7 +158,7 @@ function updateSelectionAsk() {
   copy.appendChild(range.cloneContents());
   copy.querySelectorAll(".cite").forEach((cite) => cite.remove());
   let fragment = copy.textContent.replace(/\s+/g, " ").trim();
-  if (fragment.length < 3) return hideSelectionAsk();
+  if (!hasSomethingToExplain(fragment)) return hideSelectionAsk();
   if (fragment.length > MAX_FRAGMENT) fragment = fragment.slice(0, MAX_FRAGMENT).trimEnd() + "…";
   selectedFragment = fragment;
 
@@ -172,6 +172,16 @@ function updateSelectionAsk() {
                         document.documentElement.clientWidth - width - 8);
   selectionAsk.style.left = `${left + window.scrollX}px`;
   selectionAsk.style.top = `${rect.bottom + window.scrollY + 10}px`;
+}
+
+// Palabras que solas no significan nada: seleccionar "de" o "por la" no tiene nada que aclarar.
+const EMPTY_WORDS = new Set(("a al con de del el en es esa ese eso esta este esto la las le les lo los más muy " +
+  "no o para pero por que se sin sobre son su sus un una y").split(" "));
+
+/** ¿Hay en el trozo al menos una palabra con significado propio ("prolactina", "tiroides")? */
+function hasSomethingToExplain(fragment) {
+  const words = fragment.toLowerCase().match(/[\p{L}\p{N}]+/gu) || [];
+  return words.some((word) => word.length >= 3 && !EMPTY_WORDS.has(word));
 }
 
 function hideSelectionAsk() {
@@ -188,13 +198,14 @@ function toWholeWords(original) {
   if (range.startContainer.nodeType === Node.TEXT_NODE) {
     const text = range.startContainer.data;
     let i = range.startOffset;
-    while (i > 0 && isLetter(text[i - 1])) i--;
+    // Solo si la selección corta una palabra (letra a los dos lados); si empieza en un espacio, se queda.
+    if (isLetter(text[i] ?? "")) while (i > 0 && isLetter(text[i - 1])) i--;
     range.setStart(range.startContainer, i);
   }
   if (range.endContainer.nodeType === Node.TEXT_NODE) {
     const text = range.endContainer.data;
     let i = range.endOffset;
-    while (i < text.length && isLetter(text[i])) i++;
+    if (i > 0 && isLetter(text[i - 1])) while (i < text.length && isLetter(text[i])) i++;
     range.setEnd(range.endContainer, i);
   }
   return range;
