@@ -1,0 +1,24 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "LeerSoloNuestrosParametros",
+      "Effect": "Allow",
+      "Action": ["ssm:GetParameter", "ssm:GetParameters", "ssm:GetParametersByPath"],
+      "Resource": "arn:aws:ssm:eu-west-1:984546305267:parameter/ragpeat/*"
+    },
+    {
+      "Sid": "DescifrarParametrosSoloAtravesDeSSM",
+      "Effect": "Allow",
+      "Action": "kms:Decrypt",
+      "Resource": "*",
+      "Condition": { "StringEquals": { "kms:ViaService": "ssm.eu-west-1.amazonaws.com" } }
+    },
+    {
+      "Sid": "EscribirLogsDeLaApp",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents", "logs:DescribeLogStreams"],
+      "Resource": "arn:aws:logs:eu-west-1:984546305267:log-group:/ragpeat/*"
+    }
+  ]
+}

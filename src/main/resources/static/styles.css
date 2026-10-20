@@ -45,13 +45,18 @@ body {
 }
 
 /* --- La gran tarjeta ------------------------------------------------------- */
+/* La página ocupa toda la pantalla, de borde a borde: sin margen ni línea alrededor.
+   body es una columna: el recuadro crece (flex: 1) y el pie queda siempre abajo. */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--frame);
+}
 .frame {
-  margin: 24px;
-  min-height: calc(100vh - 96px);
-  border-radius: 48px;
+  flex: 1;
   /* un brillo muy suave arriba, para que no sea un plano gris */
   background: radial-gradient(120% 60% at 50% 0%, #1d1f24 0%, var(--frame) 60%);
-  border: 1px solid #1f2126;
   display: flex;
   flex-direction: column;
 }
@@ -298,7 +303,9 @@ body {
   display: inline-flex;
   gap: 3px;
   margin-left: 6px;
-  vertical-align: 0.02em;
+  /* Un poco por debajo de la línea del texto: son más grandes que un punto y llevan la hoja encima,
+     así que apoyadas justo en la línea se veían altas. */
+  vertical-align: -0.12em;
 }
 .orange {
   position: relative;
@@ -444,7 +451,6 @@ li .source-panel { margin: 8px 0 4px; }
 
 /* --- Móvil ----------------------------------------------------------------- */
 @media (max-width: 640px) {
-  .frame { margin: 8px; min-height: calc(100vh - 16px); border-radius: 28px; }
   .topbar { padding: 18px 20px; }
   .pill-link { display: none; }       /* el enlace sigue en el pie */
   .ghost { padding: 6px 12px; font-size: 0.82rem; }

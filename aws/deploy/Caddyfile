@@ -1,0 +1,15 @@
+# Configuración de Caddy.
+# Al poner un dominio, Caddy pide solo el certificado HTTPS a Let's Encrypt, lo renueva antes de que
+# caduque y redirige http:// a https:// sin que tengamos que hacer nada más.
+
+peatying.com {
+	reverse_proxy app:8080 {
+		# Respuestas en streaming (SSE): mandar cada trozo al navegador en cuanto llega, sin acumular.
+		flush_interval -1
+	}
+}
+
+# www.peatying.com lleva a la dirección principal (301 = redirección permanente).
+www.peatying.com {
+	redir https://peatying.com{uri} permanent
+}

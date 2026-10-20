@@ -1,2 +1,6 @@
 /mvnw text eol=lf
 *.cmd text eol=crlf
+# Scripts y configuración que se ejecutan en Linux (el servidor): siempre con saltos de línea de Linux.
+*.sh text eol=lf
+Caddyfile text eol=lf
+Dockerfile text eol=lf

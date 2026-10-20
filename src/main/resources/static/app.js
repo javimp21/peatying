@@ -243,7 +243,7 @@ function startLiveMessage() {
       shown += Math.max(1, Math.ceil(pending / 20));
       div.innerHTML = renderMarkdown(target.slice(0, shown), null, true);
       followIfAtBottom();
-      requestAnimationFrame(frame);
+      nextFrame(frame);
     } else {
       running = false;
       onCaughtUp?.();
@@ -256,7 +256,7 @@ function startLiveMessage() {
       target += delta;
       if (!running) {
         running = true;
-        requestAnimationFrame(frame);
+        nextFrame(frame);
       }
     },
     /** Una promesa que se cumple cuando ya se ve todo el texto recibido. */
@@ -270,6 +270,24 @@ function startLiveMessage() {
       div.remove();
     },
   };
+}
+
+/**
+ * Ejecuta fn en el próximo fotograma de la pantalla (requestAnimationFrame) o, si el navegador no los
+ * está dibujando (pestaña en segundo plano, ventana minimizada...), con un temporizador de respaldo.
+ * Gana el que llegue primero. Sin el respaldo, la respuesta se quedaba "congelada" mientras la
+ * pestaña no estuviera a la vista.
+ */
+function nextFrame(fn) {
+  let done = false;
+  const run = () => {
+    if (!done) {
+      done = true;
+      fn();
+    }
+  };
+  requestAnimationFrame(run);
+  setTimeout(run, 50);
 }
 
 /** Seguimos el texto hacia abajo solo si el usuario no ha subido a leer otra cosa. */

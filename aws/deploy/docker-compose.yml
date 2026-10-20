@@ -1,0 +1,40 @@
+# Lo que corre en el servidor EC2: la app y Caddy delante.
+# Caddy recibe las visitas (puertos 80/443), pone el HTTPS y le pasa las peticiones a la app.
+services:
+  app:
+    image: 984546305267.dkr.ecr.eu-west-1.amazonaws.com/rag-peat:${APP_TAG:-latest}
+    restart: unless-stopped            # si se cae o se reinicia el servidor, vuelve a arrancar sola
+    env_file: .env                     # DB_URL, DB_PASSWORD y las claves (lo genera deploy.sh desde Parameter Store)
+    environment:
+      CHAT_TRUST_PROXY: "true"         # = chat.trust-proxy: estamos detrás de Caddy, la IP real llega en X-Forwarded-For
+    volumes:
+      - ./data:/app/data               # artículos descargados (solo para los comandos download/index)
+    logging:
+      driver: awslogs                  # los logs van a CloudWatch, no se pierden si se borra el contenedor
+      options:
+        awslogs-region: eu-west-1
+        awslogs-group: /ragpeat/app
+        awslogs-create-group: "true"
+
+  caddy:
+    image: caddy:2.11.6
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data               # aquí guarda Caddy los certificados HTTPS: no hay que perderlos
+      - caddy_config:/config
+    depends_on:
+      - app
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: eu-west-1
+        awslogs-group: /ragpeat/caddy
+        awslogs-create-group: "true"
+
+volumes:
+  caddy_data:
+  caddy_config:
