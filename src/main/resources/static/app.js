@@ -31,6 +31,7 @@ const LOADING_PHRASES = [
   "Squeezing the oranges",
   "Sunmaxxing",
   "Converting T4 to T3",
+  "Lowering serotonin",
 ];
 const FIRST_PHRASE_CYCLES = 2;  // veces que se repite la primera frase antes de pasar a la segunda
 const LOADING_CYCLE_MS = 2400;  // solo si las animaciones están desactivadas; si no, manda el CSS (ver showLoading)
