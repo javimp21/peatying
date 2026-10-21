@@ -16,13 +16,12 @@
   <meta property="og:image" content="https://peatying.com/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Ray Peat sentado en un sofá, junto al texto «Ray Peat en español»">
+  <meta property="og:image:alt" content="Retrato de Ray Peat al aire libre, junto al texto «Ray Peat en español»">
   <meta property="og:locale" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="img/logo.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css">
-  <link rel="preload" href="img/ray-peat.jpg" as="image">
   <!-- En la cabecera y sin defer: marca la página como "con JavaScript" antes de pintarla, para que
        el texto que aparece al bajar empiece ya oculto (si no, se vería un instante y luego desaparecería). -->
   <script src="about.js"></script>
@@ -39,9 +38,12 @@
     <main>
       <!-- Portada: ocupa la pantalla entera; el resto aparece al bajar. -->
       <section class="cover">
-        <p class="cover-kicker">1936 – 2022</p>
-        <h1>Ray Peat</h1>
-        <p class="cover-sub">Biólogo y fisiólogo. Para él, la salud empieza en <em>la energía de tus células</em>.</p>
+        <img class="cover-photo" src="img/ray-peat.jpg" alt="Retrato de Ray Peat al aire libre" width="1160" height="1740">
+        <div class="cover-text">
+          <p class="cover-kicker">1936 – 2022</p>
+          <h1>Ray Peat</h1>
+          <p class="cover-sub">Biólogo y fisiólogo. Para él, la salud empieza en <em>la energía de tus células</em>.</p>
+        </div>
         <a class="cover-scroll" href="#quien" aria-label="Seguir leyendo">↓</a>
       </section>
 

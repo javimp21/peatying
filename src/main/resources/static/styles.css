@@ -640,8 +640,10 @@ li .source-panel { margin: 8px 0 4px; }
 
 /* Quien pide menos animaciones (ajuste del sistema), no las ve. */
 /* --- Página "Sobre Ray Peat" (about.html) ---------------------------------------- */
-/* Portada: ocupa toda la pantalla, con la foto de fondo. El degradado oscurece la parte de abajo,
-   donde va el título, y se funde con el fondo de la página para que no haya un corte al bajar. */
+/* Portada. La foto es vertical, así que cambia según la pantalla:
+   - Móvil (vertical): la foto llena la pantalla y el título va encima, abajo.
+   - Ordenador (horizontal): dos columnas, la foto entera a la izquierda y el título a la derecha.
+     A pantalla completa, una foto vertical se ampliaría tanto que solo se vería la frente. */
 .cover {
   position: relative;
   min-height: 100vh;
@@ -651,12 +653,25 @@ li .source-panel { margin: 8px 0 4px; }
   padding: 0 20px 80px;
   text-align: center;
   overflow: hidden;
-  background:
-    /* arriba, una sombra suave para que se lea la barra que va encima; abajo, el fundido al fondo */
-    linear-gradient(to bottom, rgba(14, 15, 17, 0.7) 0%, rgba(14, 15, 17, 0) 22%),
-    linear-gradient(to top, var(--frame) 0%, rgba(22, 23, 26, 0.85) 10%, rgba(22, 23, 26, 0.7) 35%, rgba(22, 23, 26, 0.1) 70%),
-    url("img/ray-peat.jpg") center 22% / cover no-repeat;
 }
+.cover-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                   /* llena el hueco recortando lo que sobre, sin deformar */
+  object-position: 50% 22%;            /* con la cara a la vista */
+}
+/* Encima de la foto: arriba, una sombra suave para que se lea la barra; abajo, el fundido al fondo. */
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(14, 15, 17, 0.7) 0%, rgba(14, 15, 17, 0) 22%),
+    linear-gradient(to top, var(--frame) 0%, rgba(22, 23, 26, 0.85) 10%, rgba(22, 23, 26, 0.7) 35%, rgba(22, 23, 26, 0.1) 70%);
+}
+.cover-text, .cover-scroll { position: relative; z-index: 1; }
 /* En esta página la barra de arriba flota sobre la foto en vez de ocupar su propia franja. */
 .about-page .topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 2; color: #f4f4f5; }
 .about-page .wordmark em { color: #c9cacf; }
@@ -668,7 +683,7 @@ li .source-panel { margin: 8px 0 4px; }
 .cover h1 { margin: 6px 0 14px; font: 400 clamp(4.5rem, 16vw, 10rem)/0.9 var(--serif); letter-spacing: -0.01em; }
 .cover-sub { max-width: 30ch; margin: 0 auto; font-size: clamp(1.1rem, 3.5vw, 1.35rem); color: #d6d7db; }
 .cover-sub em { font-family: var(--serif); font-size: 1.15em; color: #ffc861; }
-.cover-scroll {
+.cover .cover-scroll {
   position: absolute;
   left: 50%;
   bottom: 28px;
@@ -679,6 +694,36 @@ li .source-panel { margin: 8px 0 4px; }
   animation: nudge 2s ease-in-out infinite;
 }
 @keyframes nudge { 50% { transform: translateY(8px); } }
+
+@media (min-width: 900px) and (min-aspect-ratio: 1/1) {
+  .cover {
+    grid-template-columns: 44% 1fr;
+    place-content: stretch;
+    align-items: center;
+    gap: 5vw;
+    padding: 0 8vw 0 0;
+    text-align: left;
+    color: var(--text);                /* aquí el título no va sobre la foto: colores del tema */
+  }
+  .cover-photo {
+    position: static;
+    grid-row: 1;
+    height: 100vh;
+    height: 100svh;
+    object-position: 50% 25%;
+    /* el borde derecho de la foto se funde con el fondo de la página */
+    -webkit-mask-image: linear-gradient(to right, #000 72%, transparent 100%);
+            mask-image: linear-gradient(to right, #000 72%, transparent 100%);
+  }
+  .cover::after { width: 44%; background: linear-gradient(to bottom, rgba(14, 15, 17, 0.6) 0%, rgba(14, 15, 17, 0) 20%); }
+  .cover h1, .cover-sub { text-shadow: none; }
+  .cover-kicker { color: var(--muted); }
+  .cover-sub { margin: 0; color: var(--text-soft); }
+  .cover-sub em { color: var(--gold); }
+  .cover .cover-scroll { left: 72%; color: var(--muted); }
+  /* El botón "Volver al chat" queda sobre el fondo de la página, no sobre la foto. */
+  .about-page .topbar .ghost { color: var(--text-soft); background: transparent; backdrop-filter: none; border-color: var(--line); }
+}
 
 .story { max-width: 640px; margin: 0 auto; padding: 20px 20px 90px; font-size: 1.15rem; line-height: 1.75; color: var(--text-soft); }
 .story h2 { margin: 64px 0 14px; font: 400 clamp(2rem, 6vw, 2.6rem)/1.1 var(--serif); color: var(--text); }
