@@ -39,7 +39,7 @@ const LOADING_CYCLE_MS = 2400;  // solo si las animaciones están desactivadas; 
 
 const FIRST_PLACEHOLDER = "Prueba: «¿Qué pensaba del azúcar?»";
 const NEXT_PLACEHOLDER = "Escribe otra pregunta…";
-const STORAGE_KEY = "rp-chat-v1";
+const STORAGE_KEY = "rp-chat-v1";      // donde se guardaba la conversación antes (ver forgetOldConversation)
 
 const form = document.getElementById("ask-form");
 const input = document.getElementById("question");
@@ -51,7 +51,7 @@ const newChatButton = document.getElementById("new-chat");
 const downloadButton = document.getElementById("download");
 
 // El estado de la conversación: la lista de mensajes. La pantalla se dibuja a partir de aquí,
-// y es lo que guardamos en el navegador y lo que se descarga.
+// y es lo que se descarga.
 //   { role: "user", text }   |   { role: "bot", text, sources: [{number, title, url, type, text}] }
 let messages = [];
 // El id de la conversación en el servidor (null hasta la primera respuesta). Con él, el bot recuerda
@@ -493,7 +493,6 @@ function undoQuestion(questionDiv, question, errorMessage) {
   const undone = messages.pop();
   if (undone.quote) setReply(undone.quote);
   questionDiv.remove();                 // por referencia: el último elemento podría ser el "cargando"
-  saveConversation();
   if (messages.length === 0) setChatting(false);
   input.value = question;
   autoGrow();
@@ -582,7 +581,6 @@ function showLoading() {
 // --- Mensajes: estado + pantalla --------------------------------------------
 function addMessage(message, { animate = true } = {}) {
   messages.push(message);
-  saveConversation();
   const div = render(message);
   // Si sustituye a un texto escrito en directo, no queremos que "salte" con la animación de entrada.
   if (!animate) div.classList.add("no-anim");
@@ -698,7 +696,6 @@ async function vote(message, value, paint) {
   const previous = message.vote;
   message.vote = value;
   paint();
-  saveConversation();
   try {
     const response = await fetch("/api/feedback", {
       method: "POST",
@@ -709,7 +706,6 @@ async function vote(message, value, paint) {
   } catch (e) {
     message.vote = previous;
     paint();
-    saveConversation();
   }
 }
 
@@ -876,31 +872,14 @@ function toggleSource(messageDiv, button, source) {
     .forEach((b) => b.setAttribute("aria-expanded", "true"));
 }
 
-// --- Guardar la conversación en el navegador ---------------------------------
-// localStorage guarda texto en el navegador de cada persona: no viaja a nuestro servidor.
-// Puede fallar (modo privado, almacenamiento lleno...), así que siempre va dentro de try/catch:
-// si falla, la página sigue funcionando, solo que sin recordar la conversación.
-function saveConversation() {
+// --- Sin memoria entre visitas ------------------------------------------------------
+// Al recargar o volver a abrir la página se empieza de cero, como en un buscador: la conversación
+// solo vive mientras la página está abierta (para guardarla está "Descargar"). Antes se guardaba
+// en el navegador; borramos lo que pudiera quedar de entonces.
+function forgetOldConversation() {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ conversationId, messages }));
-  } catch (e) { /* sin almacenamiento: no pasa nada */ }
-}
-
-function restoreConversation() {
-  let saved = null;
-  try {
-    saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-  } catch (e) { /* datos corruptos o sin acceso: empezamos de cero */ }
-
-  if (Array.isArray(saved)) {
-    messages = saved;                   // formato antiguo (solo la lista): sin id, el servidor creará uno nuevo
-  } else {
-    messages = Array.isArray(saved?.messages) ? saved.messages : [];
-    conversationId = saved?.conversationId ?? null;
-  }
-  messages.forEach((m) => render(m));
-  setChatting(messages.length > 0);
-  if (messages.length > 0) conversation.lastElementChild.scrollIntoView({ block: "start" });
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (e) { /* sin acceso al almacenamiento: no hay nada que borrar */ }
 }
 
 newChatButton.addEventListener("click", startOver);
@@ -913,7 +892,6 @@ document.getElementById("home").addEventListener("click", (event) => {
 function startOver() {
   messages = [];
   conversationId = null;                // la próxima pregunta empieza una conversación nueva en el servidor
-  saveConversation();
   conversation.replaceChildren();       // vacía la conversación en pantalla
   input.value = "";
   autoGrow();
@@ -968,9 +946,9 @@ function hideError() {
 }
 
 // --- Arranque ----------------------------------------------------------------
-// Al final del archivo a propósito: las constantes declaradas con const (como THUMB_SVG) no existen
-// hasta que se llega a su línea, y restaurar la conversación ya las usa.
+// Al final del archivo a propósito: las constantes declaradas con const no existen hasta que se llega
+// a su línea, y así todo lo que se usa al arrancar ya está definido.
 showExamples();
-restoreConversation();
+forgetOldConversation();
 focusInputIfDesktop();
 countVisit();
