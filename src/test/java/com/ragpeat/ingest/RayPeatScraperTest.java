@@ -15,6 +15,20 @@ class RayPeatScraperTest {
     private static final String URL = "https://raypeat.com/articles/articles/ejemplo.shtml";
 
     @Test
+    void siElArticuloEmpiezaConUnaCitaFirmada_usaElTitleDeLaPagina() {
+        String html = """
+                <html><head><title>Cancer: Disorder and Energy</title></head><body>
+                <p>For every thing that lives is holy, life delights in life.... W. Blake</p>
+                <p>Kurt Goldstein: "Life is a condition alternating between excitation and rest."</p>
+                </body></html>
+                """;
+
+        Article article = scraper.parseArticle(URL, Jsoup.parse(html));
+
+        assertThat(article.title()).isEqualTo("Cancer: Disorder and Energy");
+    }
+
+    @Test
     void formatoAntiguo_conParrafosP_yTituloReferences() {
         String html = """
                 <html><head><title>New Page Title Here</title></head><body>

@@ -30,6 +30,11 @@ public class RayPeatScraper {
      * Una cita bibliográfica tiene un año seguido de volumen/páginas: "1990 Jul;259(1 Pt 2):F80-7".
      * El texto normal casi nunca tiene ese patrón (escribe "(Barat, et al., 2008)").
      */
+    /**
+     * Una cita con su autor al final: "For every thing that lives is holy... W. Blake".
+     * Algunos artículos empiezan así (un epígrafe), y esa primera línea NO es el título.
+     */
+    private static final Pattern EPIGRAPH = Pattern.compile("(\\.{3,}|…|[\"”])\\s*[-–—]?\\s*(\\p{Lu}\\.\\s*)*\\p{Lu}[\\p{L}.' ]{1,30}$");
     private static final Pattern CITATION = Pattern.compile("\\b(18|19|20)\\d{2}\\b.{0,30}[;:(]\\s*\\d");
 
     /**
@@ -99,7 +104,9 @@ public class RayPeatScraper {
 
         // La etiqueta <title> de la web a veces está mal ("New Page Title Here", o el título de otro
         // artículo). El título real suele ser la primera línea del texto; si es corta, usamos esa.
-        if (!paragraphs.isEmpty() && paragraphs.getFirst().length() <= 200) {
+        // Salvo que esa primera línea sea un epígrafe (una cita firmada): entonces vale el <title>.
+        if (!paragraphs.isEmpty() && paragraphs.getFirst().length() <= 200
+                && !EPIGRAPH.matcher(paragraphs.getFirst()).find()) {
             title = paragraphs.getFirst();
         }
 
