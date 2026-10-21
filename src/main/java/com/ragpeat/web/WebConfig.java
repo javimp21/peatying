@@ -4,6 +4,8 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * Para que el navegador nunca use una versión vieja de la página.
@@ -17,7 +19,17 @@ import org.springframework.web.filter.ShallowEtagHeaderFilter;
  * descarga nada. (En application.properties además desactivamos el uso de la fecha.)
  */
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
+
+    /**
+     * Direcciones limpias: peatying.com/about en vez de /about.html. "forward" sirve el archivo sin
+     * cambiar la dirección que ve el navegador (no es una redirección). /about.html sigue funcionando,
+     * para no romper enlaces ya compartidos.
+     */
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/about").setViewName("forward:/about.html");
+    }
 
     @Bean
     FilterRegistrationBean<ShallowEtagHeaderFilter> etagFilter() {
