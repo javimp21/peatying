@@ -64,13 +64,14 @@ public class ConversationRepository {
 
     /**
      * Guarda una pregunta y su respuesta juntas: o las dos, o ninguna.
+     * Antes tacha los datos personales (ver PersonalData): p. ej. el DNI de una analítica pegada.
      * @return el id del mensaje de la respuesta (la página lo necesita para votar 👍/👎).
      */
     @Transactional
     public long saveExchange(UUID id, String question, String answer, AnswerMetrics metrics) {
         jdbc.sql("INSERT INTO chat_messages (conversation_id, role, content) VALUES (:id, 'user', :content)")
                 .param("id", id)
-                .param("content", question)
+                .param("content", PersonalData.redact(question))
                 .update();
         return jdbc.sql("""
                 INSERT INTO chat_messages
@@ -79,7 +80,7 @@ public class ConversationRepository {
                 RETURNING id
                 """)
                 .param("id", id)
-                .param("content", answer)
+                .param("content", PersonalData.redact(answer))
                 .param("latency", metrics.latencyMs())
                 .param("input", metrics.inputTokens())
                 .param("output", metrics.outputTokens())
