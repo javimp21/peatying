@@ -22,7 +22,10 @@ DB_URL=jdbc:postgresql://${DB_HOST}:5432/ragpeat
 DB_PASSWORD=$(param /ragpeat/db-password)
 ANTHROPIC_API_KEY=$(param /ragpeat/anthropic-api-key)
 VOYAGE_API_KEY=$(param /ragpeat/voyage-api-key)
+APP_TAG=${APP_TAG}
 EOF
+# APP_TAG también en .env: así cualquier "docker compose run ..." posterior (stats, index...) usa
+# la versión desplegada y no la imagen "latest", que es antigua.
 
 # Iniciar sesión en ECR (también con el rol) y arrancar la versión pedida.
 aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$REGISTRY"
