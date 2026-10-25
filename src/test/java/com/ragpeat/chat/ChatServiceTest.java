@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 class ChatServiceTest {
 
     private final List<SearchResult> sources = List.of(
-            new SearchResult(10, "Gelatin", "url1", "texto 1", 0.03),
-            new SearchResult(11, "Sugar", "url2", "texto 2", 0.02),
-            new SearchResult(12, "Thyroid", "url3", "texto 3", 0.01));
+            new SearchResult(10, "gelatin", "Gelatin", "url1", "article", "texto 1", 0.03),
+            new SearchResult(11, "sugar", "Sugar", "url2", "article", "texto 2", 0.02),
+            new SearchResult(12, "thyroid", "Thyroid", "url3", "article", "texto 3", 0.01));
 
     @Test
     void soloDevuelveLosFragmentosCitados_ordenados_ySinRepetir() {

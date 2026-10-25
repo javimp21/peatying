@@ -49,35 +49,58 @@ public class SearchService {
                 ? ""
                 : String.join(" or ", englishKeywords.trim().split("\\s+"));
 
+        // Hay casi tres veces más texto de entrevistas que de artículos: si compitieran juntos, las
+        // entrevistas taparían a los artículos, que son la fuente más fiable (texto escrito por Peat, literal).
+        // Por eso cada tipo tiene sitio reservado: de 5 resultados, 3 artículos y 2 entrevistas.
+        int interviews = limit * 2 / 5;
+
         return jdbc.sql("""
                 WITH semantic AS (
                     -- <=> es la "distancia coseno" de pgvector: cuanto menor, más parecido el significado.
-                    SELECT id, ROW_NUMBER() OVER (ORDER BY embedding <=> CAST(:vector AS vector)) AS rank
-                    FROM chunks
-                    WHERE embedding IS NOT NULL
-                    ORDER BY embedding <=> CAST(:vector AS vector)
-                    LIMIT :candidates
+                    -- PARTITION BY: la posición se cuenta por separado dentro de los artículos y de las entrevistas.
+                    SELECT c.id, d.source_type,
+                           ROW_NUMBER() OVER (PARTITION BY d.source_type ORDER BY c.embedding <=> CAST(:vector AS vector)) AS rank
+                    FROM chunks c JOIN documents d ON d.id = c.document_id
+                    WHERE c.embedding IS NOT NULL
                 ),
                 keyword AS (
-                    SELECT id, ROW_NUMBER() OVER (ORDER BY ts_rank(content_tsv, q) DESC) AS rank
-                    FROM chunks, websearch_to_tsquery('english', :keywords) AS q
-                    WHERE content_tsv @@ q          -- @@ = "el chunk contiene la búsqueda"
-                    ORDER BY ts_rank(content_tsv, q) DESC
-                    LIMIT :candidates
+                    SELECT c.id, d.source_type,
+                           ROW_NUMBER() OVER (PARTITION BY d.source_type ORDER BY ts_rank(c.content_tsv, q) DESC) AS rank
+                    FROM chunks c JOIN documents d ON d.id = c.document_id,
+                         websearch_to_tsquery('english', :keywords) AS q
+                    WHERE c.content_tsv @@ q        -- @@ = "el chunk contiene la búsqueda"
+                ),
+                fused AS (
+                    SELECT COALESCE(s.id, k.id) AS id,
+                           COALESCE(s.source_type, k.source_type) AS source_type,
+                           COALESCE(1.0 / (60 + s.rank), 0) + COALESCE(1.0 / (60 + k.rank), 0) AS score
+                    -- FULL OUTER JOIN: nos quedamos con los chunks que salen en cualquiera de las dos listas.
+                    FROM (SELECT * FROM semantic WHERE rank <= :candidates) s
+                    FULL OUTER JOIN (SELECT * FROM keyword WHERE rank <= :candidates) k ON k.id = s.id
+                ),
+                ranked AS (
+                    SELECT *, ROW_NUMBER() OVER (PARTITION BY source_type ORDER BY score DESC) AS position
+                    FROM fused
+                ),
+                chosen AS (
+                    -- Primero los que caben en su cupo; si un tipo no llena el suyo (p. ej. no hay entrevistas),
+                    -- el hueco lo ocupa el mejor del otro tipo.
+                    SELECT * FROM ranked
+                    ORDER BY position <= CASE WHEN source_type = 'interview' THEN :interviews ELSE :articles END DESC,
+                             score DESC
+                    LIMIT :limit
                 )
-                SELECT c.id AS chunk_id, d.title, d.url, c.content,
-                       COALESCE(1.0 / (60 + s.rank), 0) + COALESCE(1.0 / (60 + k.rank), 0) AS score
-                -- FULL OUTER JOIN: nos quedamos con los chunks que salen en cualquiera de las dos listas.
-                FROM semantic s
-                FULL OUTER JOIN keyword k ON k.id = s.id
-                JOIN chunks c ON c.id = COALESCE(s.id, k.id)
+                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, r.score
+                FROM chosen r
+                JOIN chunks c ON c.id = r.id
                 JOIN documents d ON d.id = c.document_id
-                ORDER BY score DESC
-                LIMIT :limit
+                ORDER BY r.score DESC
                 """)
                 .param("vector", queryVector)
                 .param("keywords", keywordQuery)
                 .param("candidates", CANDIDATES)
+                .param("interviews", interviews)
+                .param("articles", limit - interviews)
                 .param("limit", limit)
                 .query(SearchResult.class)
                 .list();

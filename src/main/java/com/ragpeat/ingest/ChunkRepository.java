@@ -26,16 +26,18 @@ public class ChunkRepository {
      * ON CONFLICT (slug) DO UPDATE: si ya hay una fila con ese slug, en vez de fallar la actualiza.
      * RETURNING id: devuelve el id de la fila, sea nueva o actualizada.
      */
-    public long upsertDocument(Article article) {
+    public long upsertDocument(String slug, String title, String url, String sourceType) {
         return jdbc.sql("""
-                INSERT INTO documents (slug, title, url)
-                VALUES (:slug, :title, :url)
-                ON CONFLICT (slug) DO UPDATE SET title = EXCLUDED.title, url = EXCLUDED.url
+                INSERT INTO documents (slug, title, url, source_type)
+                VALUES (:slug, :title, :url, :type)
+                ON CONFLICT (slug) DO UPDATE SET title = EXCLUDED.title, url = EXCLUDED.url,
+                                                 source_type = EXCLUDED.source_type
                 RETURNING id
                 """)
-                .param("slug", article.slug())
-                .param("title", article.title())
-                .param("url", article.url())
+                .param("slug", slug)
+                .param("title", title)
+                .param("url", url)
+                .param("type", sourceType)
                 .query(Long.class)
                 .single();
     }
@@ -70,12 +72,12 @@ public class ChunkRepository {
                 .update();
     }
 
-    /** Un chunk que aún no tiene embedding, con el título de su artículo. */
-    public record PendingChunk(long id, String title, String content) {}
+    /** Un chunk que aún no tiene embedding, con el título y el tipo (article/interview) de su documento. */
+    public record PendingChunk(long id, String title, String sourceType, String content) {}
 
     public List<PendingChunk> findWithoutEmbedding(int limit) {
         return jdbc.sql("""
-                SELECT c.id, d.title, c.content
+                SELECT c.id, d.title, d.source_type, c.content
                 FROM chunks c JOIN documents d ON d.id = c.document_id
                 WHERE c.embedding IS NULL
                 ORDER BY c.id
@@ -83,7 +85,7 @@ public class ChunkRepository {
                 """)
                 .param("limit", limit)
                 // query(PendingChunk.class): Spring crea un PendingChunk por fila,
-                // emparejando las columnas id/title/content con los campos del record.
+                // emparejando las columnas (source_type -> sourceType) con los campos del record.
                 .query(PendingChunk.class)
                 .list();
     }

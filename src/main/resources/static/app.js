@@ -891,14 +891,14 @@ function toggleSource(messageDiv, button, source) {
   link.target = "_blank";
   link.rel = "noopener";
   link.textContent = `${shortUrl(source.url)} ↗`;
-  link.setAttribute("aria-label", interview ? "Leer la transcripción completa" : "Leer el artículo completo");
+  link.setAttribute("aria-label", interview ? "Escuchar el audio original" : "Leer el artículo completo");
 
   panel.append(meta, title, text);
-  // Las transcripciones están retocadas (gramática, frases partidas): avisamos de que no es literal.
+  // Las transcripciones son automáticas (Whisper): avisamos de que puede haber errores de reconocimiento.
   if (interview) {
     const note = document.createElement("p");
     note.className = "source-note";
-    note.textContent = "Transcripción editada de raypeat-wiki: el sentido es el suyo, las palabras exactas pueden variar.";
+    note.textContent = "Transcripción automática del audio original: puede tener algún error.";
     panel.append(note);
   }
   panel.append(link);

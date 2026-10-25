@@ -72,7 +72,7 @@ public class ChatController {
     /** internal: true desde un navegador nuestro (marcado con ?interno); sus conversaciones no cuentan en las métricas. */
     record ChatRequest(String question, UUID conversationId, Boolean internal) {}
 
-    record Source(int number, String title, String url, String text) {}
+    record Source(int number, String title, String url, String type, String text) {}
 
     record ChatResponse(String answer, List<Source> sources, UUID conversationId, long messageId) {}
 
@@ -140,7 +140,8 @@ public class ChatController {
                 }
             });
             List<Source> sources = answer.citedSources().entrySet().stream()
-                    .map(e -> new Source(e.getKey(), e.getValue().title(), e.getValue().url(), e.getValue().content()))
+                    .map(e -> new Source(e.getKey(), e.getValue().title(), e.getValue().url(),
+                            e.getValue().sourceType(), e.getValue().content()))
                     .toList();
             // Solo guardamos el intercambio si ha salido bien.
             long messageId = conversations.saveExchange(conversationId, question, answer.text(),

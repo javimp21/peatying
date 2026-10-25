@@ -11,6 +11,7 @@ import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.chat.ChatService;
 import com.ragpeat.eval.Grader.Grade;
 import com.ragpeat.ingest.ArticleFileStore;
+import com.ragpeat.ingest.InterviewFileStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -31,13 +32,15 @@ public class EvalCommand implements CommandLineRunner {
 
     private final ChatService chatService;
     private final ArticleFileStore store;
+    private final InterviewFileStore interviewStore;
     private final JsonMapper json;
     private final String model;
 
-    public EvalCommand(ChatService chatService, ArticleFileStore store, JsonMapper json,
-                       @Value("${anthropic.model}") String model) {
+    public EvalCommand(ChatService chatService, ArticleFileStore store, InterviewFileStore interviewStore,
+                       JsonMapper json, @Value("${anthropic.model}") String model) {
         this.chatService = chatService;
         this.store = store;
+        this.interviewStore = interviewStore;
         this.json = json;
         this.model = model;
     }
@@ -53,7 +56,7 @@ public class EvalCommand implements CommandLineRunner {
         }
         List<EvalQuestion> questions = json.readValue(Path.of("eval", "questions.json").toFile(),
                 new TypeReference<List<EvalQuestion>>() {});
-        Grader grader = new Grader(store.loadAll());
+        Grader grader = new Grader(store.loadAll(), interviewStore.loadAll());
 
         List<Result> results = new ArrayList<>();
         for (EvalQuestion q : questions) {
@@ -67,7 +70,8 @@ public class EvalCommand implements CommandLineRunner {
                     answer.inputTokens(), answer.outputTokens(), millis));
 
             System.out.printf("%-4s %-20s %-9s %s%n", grade.passed() ? "OK" : "FALLO", q.id(), q.type(),
-                    grade.passed() ? "" : grade.reason() + (grade.invalidQuotes().isEmpty() ? "" : " " + grade.invalidQuotes()));
+                    grade.passed() ? "" : grade.reason() + (grade.invalidQuotes().isEmpty() ? "" : " " + grade.invalidQuotes())
+                            + (grade.interviewQuotes().isEmpty() ? "" : " " + grade.interviewQuotes()));
         }
         printSummary(results);
 
@@ -82,12 +86,13 @@ public class EvalCommand implements CommandLineRunner {
         long passed = results.stream().filter(r -> r.grade().passed()).count();
         int quotes = results.stream().mapToInt(r -> r.grade().quotes()).sum();
         int invalid = results.stream().mapToInt(r -> r.grade().invalidQuotes().size()).sum();
+        int fromInterviews = results.stream().mapToInt(r -> r.grade().interviewQuotes().size()).sum();
         double cost = results.stream()
                 .mapToDouble(r -> (r.inputTokens() * INPUT_PRICE + r.outputTokens() * OUTPUT_PRICE) / 1_000_000).sum();
         double avgSeconds = results.stream().mapToLong(Result::millis).average().orElse(0) / 1000;
 
         System.out.printf("%n=== %s: %d/%d aprobadas (%.0f%%)%n", model, passed, results.size(), 100.0 * passed / results.size());
-        System.out.printf("Citas literales: %d, de ellas inventadas: %d%n", quotes, invalid);
+        System.out.printf("Citas literales: %d, de ellas inventadas: %d, de entrevistas: %d%n", quotes, invalid, fromInterviews);
         System.out.printf("Coste total: ~$%.4f · tiempo medio por pregunta: %.1f s%n%n", cost, avgSeconds);
     }
 }

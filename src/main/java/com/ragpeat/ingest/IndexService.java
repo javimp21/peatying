@@ -5,15 +5,17 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Mete un artículo en la base de datos: el documento y sus chunks. */
+/** Mete un artículo o una entrevista en la base de datos: el documento y sus chunks. */
 @Service
 public class IndexService {
 
     private final Chunker chunker;
+    private final InterviewChunker interviewChunker;
     private final ChunkRepository repository;
 
-    public IndexService(Chunker chunker, ChunkRepository repository) {
+    public IndexService(Chunker chunker, InterviewChunker interviewChunker, ChunkRepository repository) {
         this.chunker = chunker;
+        this.interviewChunker = interviewChunker;
         this.repository = repository;
     }
 
@@ -29,10 +31,18 @@ public class IndexService {
      */
     @Transactional
     public int index(Article article) {
+        return index(article.slug(), article.title(), article.url(), "article", chunker.split(article.text()));
+    }
+
+    @Transactional
+    public int index(Interview interview) {
+        return index(interview.slug(), interview.title(), interview.url(), "interview", interviewChunker.split(interview));
+    }
+
+    private int index(String slug, String title, String url, String sourceType, List<String> chunks) {
         // El título también cuenta como cambio: va delante de cada chunk al calcular su embedding.
-        boolean sameTitle = repository.findTitle(article.slug()).map(article.title()::equals).orElse(false);
-        long documentId = repository.upsertDocument(article);
-        List<String> chunks = chunker.split(article.text());
+        boolean sameTitle = repository.findTitle(slug).map(title::equals).orElse(false);
+        long documentId = repository.upsertDocument(slug, title, url, sourceType);
 
         // List.equals compara elemento a elemento y en orden.
         if (sameTitle && chunks.equals(repository.findChunkContents(documentId))) {

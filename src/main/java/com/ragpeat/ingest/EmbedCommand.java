@@ -44,10 +44,11 @@ public class EmbedCommand implements CommandLineRunner {
         List<PendingChunk> batch;
         // Pedimos lotes de chunks sin embedding hasta que no quede ninguno.
         while (!(batch = repository.findWithoutEmbedding(BATCH_SIZE)).isEmpty()) {
-            // Al chunk le ponemos delante el título del artículo: así el vector sabe de qué
+            // Al chunk le ponemos delante el título del documento: así el vector sabe de qué
             // trata el texto aunque el trozo no lo diga (p. ej. un párrafo que solo dice "this hormone").
             List<String> texts = batch.stream()
-                    .map(c -> "Ray Peat, \"" + c.title() + "\"\n\n" + c.content())
+                    .map(c -> (c.sourceType().equals("interview") ? "Ray Peat interview, \"" : "Ray Peat, \"")
+                            + c.title() + "\"\n\n" + c.content())
                     .toList();
 
             List<float[]> embeddings = voyage.embedDocuments(texts);

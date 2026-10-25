@@ -42,7 +42,7 @@ public class Chunker {
     }
 
     /** Un párrafo corto se queda igual; uno largo se parte en grupos de frases que quepan en MAX_CHARS. */
-    private List<String> fitToMax(String paragraph) {
+    static List<String> fitToMax(String paragraph) {
         if (paragraph.length() <= MAX_CHARS) {
             return List.of(paragraph);
         }

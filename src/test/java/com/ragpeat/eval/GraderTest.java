@@ -7,6 +7,9 @@ import java.util.TreeMap;
 
 import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.ingest.Article;
+import com.ragpeat.ingest.Interview;
+import com.ragpeat.ingest.Interview.Section;
+import com.ragpeat.ingest.Interview.Turn;
 import com.ragpeat.search.SearchResult;
 import org.junit.jupiter.api.Test;
 
@@ -14,12 +17,15 @@ class GraderTest {
 
     private final Grader grader = new Grader(List.of(
             new Article("https://raypeat.com/articles/articles/gelatin.shtml", "Gelatin",
-                    "Glycine is recognized as an \"inhibitory\" neurotransmitter, and it’s very safe.")));
+                    "Glycine is recognized as an \"inhibitory\" neurotransmitter, and it’s very safe.")),
+            List.of(new Interview("interview-x", "Show", "url", List.of(new Section("Gelatin", List.of(
+                    new Turn("Host", "Do you think gelatin makes everyone live forever?"),
+                    new Turn(Interview.PEAT, "Gelatin is a very good balancing protein for most people.")))))));
 
     private ChatAnswer answer(String text, String... citedSlugs) {
         TreeMap<Integer, SearchResult> cited = new TreeMap<>();
         for (int i = 0; i < citedSlugs.length; i++) {
-            cited.put(i + 1, new SearchResult(i, "t", "https://raypeat.com/articles/articles/" + citedSlugs[i] + ".shtml", "c", 0));
+            cited.put(i + 1, new SearchResult(i, citedSlugs[i], "t", "https://raypeat.com/articles/articles/" + citedSlugs[i] + ".shtml", "article", "c", 0));
         }
         return new ChatAnswer(text, cited, 1, 0, 0);
     }
@@ -43,6 +49,20 @@ class GraderTest {
 
         assertThat(grade.passed()).isFalse();
         assertThat(grade.invalidQuotes()).containsExactly("gelatin cures every disease known");
+    }
+
+    @Test
+    void distingueCitasDeEntrevistas_yNoCuentaLoQueDiceElPresentador() {
+        var q = new EvalQuestion("g", "direct", "?", List.of("gelatin"));
+
+        var fromPeat = grader.grade(q, answer("Dijo \"a very good balancing protein for most people\" [1].", "gelatin"));
+        var fromHost = grader.grade(q, answer("Dijo \"gelatin makes everyone live forever\" [1].", "gelatin"));
+
+        assertThat(fromPeat.passed()).isFalse();
+        assertThat(fromPeat.interviewQuotes()).hasSize(1);
+        assertThat(fromPeat.invalidQuotes()).isEmpty();
+        // Lo dijo el presentador, no Peat: atribuírselo a Peat es inventar.
+        assertThat(fromHost.invalidQuotes()).hasSize(1);
     }
 
     @Test

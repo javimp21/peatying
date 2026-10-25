@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 
 import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.ingest.Article;
+import com.ragpeat.ingest.Interview;
+import com.ragpeat.search.SearchResult;
 
 /**
  * Corrige una respuesta del bot con reglas automáticas (sin usar otro modelo).
@@ -27,7 +29,8 @@ public class Grader {
 
     private static final Set<String> ENGLISH_WORDS = Set.of("the", "of", "and", "to", "is", "that", "in", "it", "are", "by", "with");
     private static final Set<String> SPANISH_WORDS = Set.of("el", "la", "los", "las", "de", "del", "al", "que", "y",
-            "en", "es", "un", "una", "por", "para", "con", "se", "lo", "su", "sus", "no", "como", "pero");
+            "en", "es", "un", "una", "por", "para", "con", "se", "lo", "su", "sus", "no", "como", "pero",
+            "muy", "mucho", "mucha", "muchos", "muchas", "comer", "tomar", "hay", "son");
 
     /** Frases con las que el bot reconoce que algo no está en los artículos. */
     private static final Pattern ADMITS_ABSENCE = Pattern.compile(
@@ -35,21 +38,38 @@ public class Grader {
 
     /** El texto de todos los artículos, normalizado, para comprobar que las citas literales existen. */
     private final String corpus;
+    /** Lo que dijo Peat en las entrevistas. Una cita de aquí no es inventada, pero tampoco literal: el texto está editado. */
+    private final String interviewCorpus;
 
-    public Grader(List<Article> articles) {
+    public Grader(List<Article> articles, List<Interview> interviews) {
         this.corpus = normalize(articles.stream().map(Article::text).collect(Collectors.joining(" ")));
+        this.interviewCorpus = normalize(interviews.stream()
+                .flatMap(i -> i.sections().stream())
+                .flatMap(s -> s.turns().stream())
+                .filter(Interview.Turn::isPeat)
+                .map(Interview.Turn::text)
+                .collect(Collectors.joining(" ")));
     }
 
-    public record Grade(boolean passed, boolean sourceHit, int quotes, List<String> invalidQuotes, String reason) {}
+    /**
+     * @param invalidQuotes   citas que no están en ningún sitio: inventadas.
+     * @param interviewQuotes citas sacadas de una entrevista: el prompt pide no citarlas literalmente.
+     */
+    public record Grade(boolean passed, boolean sourceHit, int quotes, List<String> invalidQuotes,
+                        List<String> interviewQuotes, String reason) {}
 
     public Grade grade(EvalQuestion q, ChatAnswer answer) {
         Set<String> citedSlugs = answer.citedSources().values().stream()
-                .map(source -> new Article(source.url(), "", "").slug())
+                .map(SearchResult::slug)
                 .collect(Collectors.toSet());
         boolean sourceHit = q.expectedArticles().stream().anyMatch(citedSlugs::contains);
 
         List<String> quotes = quotesIn(answer.text());
-        List<String> invalid = quotes.stream().filter(quote -> !existsInCorpus(quote)).toList();
+        List<String> notInArticles = quotes.stream().filter(quote -> !corpus.contains(normalize(quote))).toList();
+        List<String> fromInterviews = notInArticles.stream()
+                .filter(quote -> interviewCorpus.contains(normalize(quote)))
+                .toList();
+        List<String> invalid = notInArticles.stream().filter(quote -> !fromInterviews.contains(quote)).toList();
 
         String reason = switch (q.type()) {
             case "direct", "concept" -> {
@@ -64,9 +84,12 @@ public class Grader {
         };
         // Una cita literal que no existe en ningún artículo es inventada: suspende siempre.
         if (reason == null && !invalid.isEmpty()) {
-            reason = "cita literal que no existe en los artículos";
+            reason = "cita literal inventada";
         }
-        return new Grade(reason == null, sourceHit, quotes.size(), invalid, reason);
+        if (reason == null && !fromInterviews.isEmpty()) {
+            reason = "cita entre comillas una entrevista (texto editado, no literal)";
+        }
+        return new Grade(reason == null, sourceHit, quotes.size(), invalid, fromInterviews, reason);
     }
 
     /** Saca los textos entre comillas. Si llevan "..." en medio, cada trozo se comprueba por separado. */
@@ -75,7 +98,8 @@ public class Grader {
         Matcher matcher = QUOTE.matcher(text);
         while (matcher.find()) {
             for (String piece : matcher.group(1).split("\\.\\.\\.|…")) {
-                if (piece.strip().length() >= 15 && looksEnglish(piece)) {
+                // Menos de 3 palabras ("efecto carbamino") es un término entre comillas, no una cita.
+                if (piece.strip().length() >= 15 && piece.strip().split("\\s+").length >= 3 && looksEnglish(piece)) {
                     quotes.add(piece.strip());
                 }
             }
@@ -98,10 +122,6 @@ public class Grader {
             if (SPANISH_WORDS.contains(word)) spanish++;
         }
         return spanish <= english;
-    }
-
-    private boolean existsInCorpus(String quote) {
-        return corpus.contains(normalize(quote));
     }
 
     /**
