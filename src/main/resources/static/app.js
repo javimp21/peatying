@@ -957,7 +957,7 @@ downloadButton.addEventListener("click", () => {
       }
     }
   }
-  lines.push("---", "Respuestas generadas por IA a partir de los artículos de raypeat.com. No son consejo médico.");
+  lines.push("---", "Respuestas generadas por IA a partir de los artículos de raypeat.com y de sus entrevistas de radio. No son consejo médico.");
 
   // Creamos el archivo en memoria (Blob) y simulamos un clic en un enlace de descarga.
   const blob = new Blob([lines.join("\n")], { type: "text/markdown;charset=utf-8" });
