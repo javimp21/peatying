@@ -39,6 +39,7 @@ const LOADING_CYCLE_MS = 2400;  // solo si las animaciones están desactivadas; 
 
 const FIRST_PLACEHOLDER = "Prueba: «¿Qué pensaba del azúcar?»";
 const NEXT_PLACEHOLDER = "Escribe otra pregunta…";
+const INTERNAL_KEY = "rp-internal";
 const STORAGE_KEY = "rp-chat-v1";      // donde se guardaba la conversación antes (ver forgetOldConversation)
 
 const form = document.getElementById("ask-form");
@@ -73,7 +74,44 @@ document.addEventListener("pointerdown", (event) => {
  * Es anónimo (el servidor solo guarda una huella diaria) y si falla no pasa nada: no molesta al usuario.
  */
 function countVisit() {
-  fetch("/api/visit", { method: "POST" }).catch(() => {});
+  if (isInternal) return;               // nuestras propias visitas no cuentan
+  fetch("/api/visit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    // De qué página viene (el servidor guarda solo el dominio). Vacío si se llega directo.
+    body: JSON.stringify({ referrer: document.referrer }),
+  }).catch(() => {});
+}
+
+/** Un aviso pequeño abajo que desaparece solo a los 4 segundos. */
+function showToast(text) {
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.setAttribute("role", "status");
+  toast.textContent = text;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+/**
+ * ¿Es este un navegador nuestro? Se marca una vez abriendo peatying.com/?interno (y se desmarca con
+ * ?interno=0). Queda guardado en este navegador: sus visitas y preguntas no cuentan en las métricas.
+ * No es un secreto ni da ningún permiso: solo sirve para no contarnos a nosotros mismos.
+ */
+function readInternalFlag() {
+  const params = new URLSearchParams(location.search);
+  try {
+    if (params.has("interno")) {
+      const on = params.get("interno") !== "0";
+      if (on) localStorage.setItem(INTERNAL_KEY, "1");
+      else localStorage.removeItem(INTERNAL_KEY);
+      history.replaceState(null, "", location.pathname);   // quitamos ?interno de la dirección
+      showToast(on ? "Este navegador ya no cuenta en las métricas." : "Este navegador vuelve a contar en las métricas.");
+    }
+    return localStorage.getItem(INTERNAL_KEY) === "1";
+  } catch (e) {
+    return false;                       // sin almacenamiento: contamos la visita, no pasa nada
+  }
 }
 
 // --- Preguntar sobre un trozo de la respuesta ----------------------------------
@@ -317,7 +355,7 @@ async function ask(question, quote = null) {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: withQuote(question, quote), conversationId }),
+      body: JSON.stringify({ question: withQuote(question, quote), conversationId, internal: isInternal }),
     });
 
     if (!response.ok) {
@@ -950,5 +988,6 @@ function hideError() {
 // a su línea, y así todo lo que se usa al arrancar ya está definido.
 showExamples();
 forgetOldConversation();
+const isInternal = readInternalFlag();
 focusInputIfDesktop();
 countVisit();

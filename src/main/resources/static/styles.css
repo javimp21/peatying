@@ -743,6 +743,22 @@ li .source-panel { margin: 8px 0 4px; }
 }
 .js .reveal.visible { opacity: 1; filter: none; transform: none; }
 
+/* Aviso pequeño (p. ej. al marcar el navegador con ?interno): abajo, centrado, se va solo. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 60;
+  translate: -50% 0;
+  padding: 10px 16px;
+  border: 1px solid var(--float-line);
+  border-radius: 999px;
+  background: var(--float-bg-solid);
+  color: var(--text);
+  font-size: 0.85rem;
+  animation: rise 0.25s ease-out both, fade-out 0.4s ease-in 3.6s forwards;
+}
+
 /* --- Easter egg: el exprimidor ------------------------------------------------
    Todo dura 3,4 s y arranca al añadir la clase .play (app.js la quita y la pone para repetir). */
 /* Pequeño, justo debajo de "en español" (app.js lo coloca), sin tapar la página: aparece y se desvanece. */

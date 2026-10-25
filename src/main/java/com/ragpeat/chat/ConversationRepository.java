@@ -21,11 +21,13 @@ public class ConversationRepository {
      * Crea una conversación nueva. El id es un UUID aleatorio: nadie puede adivinar el de otra persona.
      * visitorHash: huella anónima del visitante (ver VisitorHasher), solo para contar visitantes únicos.
      */
-    public UUID create(String visitorHash) {
+    /** @param internal true si la conversación es nuestra (navegador marcado con ?interno): no cuenta en las métricas. */
+    public UUID create(String visitorHash, boolean internal) {
         UUID id = UUID.randomUUID();
-        jdbc.sql("INSERT INTO conversations (id, visitor_hash) VALUES (:id, :visitor)")
+        jdbc.sql("INSERT INTO conversations (id, visitor_hash, internal) VALUES (:id, :visitor, :internal)")
                 .param("id", id)
                 .param("visitor", visitorHash)
+                .param("internal", internal)
                 .update();
         return id;
     }

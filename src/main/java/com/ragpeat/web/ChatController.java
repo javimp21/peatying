@@ -69,7 +69,8 @@ public class ChatController {
 
     // Lo que llega y lo que sale, como records: Spring los convierte de/a JSON automáticamente.
     /** conversationId: null en la primera pregunta; después, el que devolvimos en la respuesta anterior. */
-    record ChatRequest(String question, UUID conversationId) {}
+    /** internal: true desde un navegador nuestro (marcado con ?interno); sus conversaciones no cuentan en las métricas. */
+    record ChatRequest(String question, UUID conversationId, Boolean internal) {}
 
     record Source(int number, String title, String url, String text) {}
 
@@ -110,12 +111,13 @@ public class ChatController {
         // desde otro hilo cuando la petición ya ha pasado a modo streaming.
         String visitor = clientInfo.visitorHash(http);
         SseEmitter emitter = new SseEmitter(STREAM_TIMEOUT_MS);
-        executor.execute(() -> respond(question, request.conversationId(), visitor, emitter));
+        boolean internal = Boolean.TRUE.equals(request.internal());
+        executor.execute(() -> respond(question, request.conversationId(), visitor, internal, emitter));
         return ResponseEntity.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(emitter);
     }
 
     /** Se ejecuta en un hilo virtual: genera la respuesta y la va mandando por el emitter. */
-    private void respond(String question, UUID requestedId, String visitor, SseEmitter emitter) {
+    private void respond(String question, UUID requestedId, String visitor, boolean internal, SseEmitter emitter) {
         long start = System.currentTimeMillis();
         try {
             // Si nos mandan una conversación que existe, seguimos en ella; si no (primera pregunta,
@@ -123,7 +125,7 @@ public class ChatController {
             // pudiera mandar la página: lo leemos de nuestra base de datos.
             UUID conversationId = requestedId != null && conversations.exists(requestedId)
                     ? requestedId
-                    : conversations.create(visitor);
+                    : conversations.create(visitor, internal);
             List<Turn> history = conversations.lastTurns(conversationId, HISTORY_MESSAGES);
 
             ChatAnswer answer = chatService.answer(history, question, new ChatListener() {

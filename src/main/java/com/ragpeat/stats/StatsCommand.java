@@ -32,6 +32,7 @@ public class StatsCommand implements CommandLineRunner {
             return;
         }
         printVisits();
+        printReferrers();
         printDaily();
         printTotals();
         printThumbsDown();
@@ -43,7 +44,7 @@ public class StatsCommand implements CommandLineRunner {
                 SELECT v.day AS dia,
                        count(*) AS visitantes,
                        (SELECT count(DISTINCT c.visitor_hash) FROM conversations c
-                         WHERE c.created_at::date = v.day) AS preguntan
+                         WHERE c.created_at::date = v.day AND NOT c.internal) AS preguntan
                 FROM page_views v
                 GROUP BY v.day
                 ORDER BY v.day DESC
@@ -62,7 +63,29 @@ public class StatsCommand implements CommandLineRunner {
         }
     }
 
-    /** Una fila por día (últimos 14 días con actividad). */
+    /** De qué webs llega la gente (últimos 30 días). "directo": sin web de origen (enlace pegado, apps, WhatsApp...). */
+    private void printReferrers() {
+        List<Map<String, Object>> rows = jdbc.sql("""
+                SELECT coalesce(referrer, 'directo') AS origen, count(*) AS visitantes
+                FROM page_views
+                WHERE day > CURRENT_DATE - 30
+                GROUP BY 1
+                ORDER BY 2 DESC
+                LIMIT 15
+                """)
+                .query()
+                .listOfRows();
+
+        System.out.println("\n=== De dónde llegan (últimos 30 días)");
+        for (Map<String, Object> r : rows) {
+            System.out.printf("%-30s %6s%n", r.get("origen"), r.get("visitantes"));
+        }
+        if (rows.isEmpty()) {
+            System.out.println("(todavía nada)");
+        }
+    }
+
+    /** Una fila por día (últimos 14 días con actividad). Sin nuestras conversaciones (internal). */
     private void printDaily() {
         List<Map<String, Object>> rows = jdbc.sql("""
                 SELECT c.created_at::date                       AS dia,
@@ -74,6 +97,7 @@ public class StatsCommand implements CommandLineRunner {
                        coalesce(sum(m.output_tokens), 0)        AS tokens_salida
                 FROM conversations c
                 JOIN chat_messages m ON m.conversation_id = c.id
+                WHERE NOT c.internal
                 GROUP BY dia
                 ORDER BY dia DESC
                 LIMIT 14
@@ -94,11 +118,16 @@ public class StatsCommand implements CommandLineRunner {
 
     private void printTotals() {
         Map<String, Object> t = jdbc.sql("""
-                WITH per_conversation AS (
+                WITH visible AS (
+                    SELECT m.* FROM chat_messages m
+                    JOIN conversations c ON c.id = m.conversation_id
+                    WHERE NOT c.internal
+                ),
+                per_conversation AS (
                     SELECT conversation_id,
                            count(*) FILTER (WHERE role = 'user')            AS questions,
                            extract(epoch FROM max(created_at) - min(created_at)) AS seconds
-                    FROM chat_messages
+                    FROM visible
                     GROUP BY conversation_id
                 )
                 SELECT (SELECT count(*) FROM per_conversation)                              AS conversaciones,
@@ -108,9 +137,9 @@ public class StatsCommand implements CommandLineRunner {
                        -- arrastrar por una conversación larguísima como haría la media.
                        (SELECT round(percentile_cont(0.5) WITHIN GROUP (ORDER BY seconds)::numeric / 60, 1)
                           FROM per_conversation WHERE questions > 1)                        AS minutos_mediana,
-                       (SELECT count(*) FROM chat_messages WHERE feedback = 1)              AS votos_positivos,
-                       (SELECT count(*) FROM chat_messages WHERE feedback = -1)             AS votos_negativos,
-                       (SELECT count(*) FROM chat_messages WHERE role = 'assistant')        AS respuestas
+                       (SELECT count(*) FROM visible WHERE feedback = 1)              AS votos_positivos,
+                       (SELECT count(*) FROM visible WHERE feedback = -1)             AS votos_negativos,
+                       (SELECT count(*) FROM visible WHERE role = 'assistant')        AS respuestas
                 """)
                 .query()
                 .singleRow();
@@ -136,7 +165,8 @@ public class StatsCommand implements CommandLineRunner {
                          WHERE u.conversation_id = m.conversation_id AND u.role = 'user' AND u.id < m.id
                          ORDER BY u.id DESC LIMIT 1) AS pregunta
                 FROM chat_messages m
-                WHERE m.feedback = -1
+                JOIN conversations c ON c.id = m.conversation_id
+                WHERE m.feedback = -1 AND NOT c.internal
                 ORDER BY m.id DESC
                 LIMIT 10
                 """)
