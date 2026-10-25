@@ -17,36 +17,36 @@
 
 /* Colores y medidas en un solo sitio ("tokens"). */
 :root {
-  --bg: #0e0f11;              /* fondo de la página, casi negro */
-  --frame: #16171a;           /* la gran tarjeta */
-  --surface: #1f2125;         /* cajas dentro de la tarjeta */
-  --surface-2: #2a2c31;
-  --line: #2f3238;
-  --text: #f4f4f5;
-  --text-soft: #c9cacf;
-  --muted: #8b8d94;
-  --accent: #2f7cf6;          /* azul del botón principal */
-  --accent-soft: rgba(47, 124, 246, 0.16);
-  --accent-text: #9cc2ff;
-  --error-bg: rgba(239, 68, 68, 0.14);
-  --error-text: #fca5a5;
-  /* Colores que antes iban fijos en cada regla: ahora cambian con el tema. */
-  --frame-glow: #1d1f24;      /* el brillo suave de arriba */
-  --input-bg: #0b0c0e;
-  --placeholder: #9a9ca3;
-  --bot-text: #e4e5e8;
-  --strong: #ffffff;
-  --shimmer: #ffffff;         /* la luz que recorre la frase de carga */
-  --panel-text: #b9bbc1;
-  --float-bg: rgba(31, 33, 37, 0.72);
-  --float-bg-solid: rgba(31, 33, 37, 0.88);
-  --float-line: rgba(255, 255, 255, 0.08);
-  --hover-soft: rgba(255, 255, 255, 0.08);
-  --quote-bg: rgba(255, 255, 255, 0.04);
-  --shadow: rgba(0, 0, 0, 0.45);
-  --gold: #ffc861;
-  --glass: rgba(255, 255, 255, 0.4);
-  color-scheme: dark;
+  /* Paleta crema: fondo de papel, tinta casi negra y el naranja de la marca como acento. */
+  --bg: #f1ebd8;              /* fuera de la gran tarjeta, un poco más oscuro */
+  --frame: #fbf7e8;           /* la gran tarjeta: crema */
+  --surface: #f3edd9;         /* cajas dentro de la tarjeta */
+  --surface-2: #ece4cd;
+  --line: #e0d7bf;
+  --text: #17191e;            /* tinta */
+  --text-soft: #3d3f45;
+  --muted: #6f6a5c;
+  --accent: #d9661a;          /* naranja: botón principal, citas, enlaces */
+  --accent-soft: rgba(217, 102, 26, 0.12);
+  --accent-text: #b0500f;     /* naranja más oscuro para texto: se lee bien sobre el crema */
+  --error-bg: rgba(220, 38, 38, 0.1);
+  --error-text: #b91c1c;
+  --frame-glow: #fffcf1;      /* el brillo suave de arriba */
+  --input-bg: #fffdf6;
+  --placeholder: #8a8473;
+  --bot-text: #26282c;
+  --strong: #000000;
+  --shimmer: #17191e;         /* la luz que recorre la frase de carga */
+  --panel-text: #45474d;
+  --float-bg: rgba(255, 252, 241, 0.8);
+  --float-bg-solid: rgba(255, 252, 241, 0.95);
+  --float-line: rgba(0, 0, 0, 0.1);
+  --hover-soft: rgba(0, 0, 0, 0.06);
+  --quote-bg: rgba(0, 0, 0, 0.04);
+  --shadow: rgba(70, 55, 20, 0.14);
+  --gold: #b5640e;
+  --glass: rgba(0, 0, 0, 0.35);
+  color-scheme: light;
   --serif: "Instrument Serif", "Times New Roman", serif;
   /* Letra de máquina para metadatos (números, tipo de fuente, fechas): la del propio sistema. */
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, Menlo, monospace;
@@ -575,42 +575,6 @@ li .source-panel { margin: 8px 0 4px; }
 .narrow-only { display: none; }       /* solo en pantallas estrechas: ver max-width 640px */
 
 /* Pantallas medianas: durante la conversación no caben los tres botones; el enlace sigue en el pie. */
-/* --- Modo claro ------------------------------------------------------------------
-   Sigue el ajuste del sistema (móvil u ordenador). Solo cambian los colores: todo lo demás es igual. */
-@media (prefers-color-scheme: light) {
-  :root {
-    --bg: #efebe4;
-    --frame: #f8f6f2;
-    --surface: #ece8e1;
-    --surface-2: #e4dfd6;
-    --line: #d9d3c8;
-    --text: #1c1d20;
-    --text-soft: #3e4046;
-    --muted: #6f7178;
-    --accent: #2563eb;
-    --accent-soft: rgba(37, 99, 235, 0.12);
-    --accent-text: #1d4ed8;
-    --error-bg: rgba(220, 38, 38, 0.1);
-    --error-text: #b91c1c;
-    --frame-glow: #fffdf8;
-    --input-bg: #ffffff;
-    --placeholder: #8a8c92;
-    --bot-text: #26282c;
-    --strong: #000000;
-    --shimmer: #1c1d20;
-    --panel-text: #44464b;
-    --float-bg: rgba(255, 255, 255, 0.78);
-    --float-bg-solid: rgba(255, 255, 255, 0.94);
-    --float-line: rgba(0, 0, 0, 0.1);
-    --hover-soft: rgba(0, 0, 0, 0.06);
-    --quote-bg: rgba(0, 0, 0, 0.04);
-    --shadow: rgba(60, 50, 30, 0.16);
-    --gold: #b5640e;
-    --glass: rgba(0, 0, 0, 0.35);
-    color-scheme: light;
-  }
-}
-
 @media (max-width: 900px) {
   .chatting .pill-link { display: none; }
 }
@@ -773,7 +737,6 @@ li .source-panel { margin: 8px 0 4px; }
 .juicer figure { margin: 0; text-align: center; }
 .juicer svg { width: 100%; height: auto; filter: drop-shadow(0 2px 6px var(--shadow)); }
 .juicer .glass { stroke: var(--glass); }
-.juicer figcaption { margin-top: 2px; font: italic 0.9rem var(--serif); color: var(--gold); white-space: nowrap; }
 @keyframes juicer-in { from { opacity: 0; transform: scale(0.6) translateY(-8px); } }
 @keyframes juicer-out { to { opacity: 0; transform: scale(0.85); } }
 
@@ -820,7 +783,6 @@ li .source-panel { margin: 8px 0 4px; }
   animation: fill-glass 2s ease-out 0.9s both;
 }
 @keyframes fill-glass { from { transform: scaleY(0); } }
-.juicer.play figcaption { animation: rise 0.5s ease-out 2.8s both; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }

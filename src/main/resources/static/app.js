@@ -260,7 +260,7 @@ function elementOf(node) {
   return node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
 }
 
-// --- Easter egg: pulsar "en español" en el título exprime una naranja ----------------
+// --- Easter egg: pulsar "Peat" en el título exprime una naranja ----------------
 const juicer = document.getElementById("juicer");
 let juicerTimer;
 const egg = document.getElementById("egg");
