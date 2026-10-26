@@ -1,6 +1,7 @@
 package com.ragpeat.chat;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,5 +45,31 @@ public class RedactCommand implements CommandLineRunner {
             }
         }
         log.info("Revisados {} mensajes: {} tenían datos personales y se han tachado", messages.size(), changed);
+
+        // También el texto de los documentos adjuntos (analíticas...), y los motivos de los 👎.
+        record Document(UUID id, String text) {}
+        List<Document> documents = jdbc.sql("SELECT id, document_text AS text FROM conversations WHERE document_text IS NOT NULL")
+                .query(Document.class).list();
+        int changedDocs = 0;
+        for (Document document : documents) {
+            String redacted = PersonalData.redact(document.text());
+            if (!redacted.equals(document.text())) {
+                jdbc.sql("UPDATE conversations SET document_text = :text WHERE id = :id")
+                        .param("text", redacted).param("id", document.id()).update();
+                changedDocs++;
+            }
+        }
+        int reasons = 0;
+        for (Message reason : jdbc.sql("SELECT id, feedback_reason AS content FROM chat_messages WHERE feedback_reason IS NOT NULL")
+                .query(Message.class).list()) {
+            String redacted = PersonalData.redact(reason.content());
+            if (!redacted.equals(reason.content())) {
+                jdbc.sql("UPDATE chat_messages SET feedback_reason = :r WHERE id = :id")
+                        .param("r", redacted).param("id", reason.id()).update();
+                reasons++;
+            }
+        }
+        log.info("Revisados {} documentos: {} tenían datos personales y se han tachado; motivos de 👎 tachados: {}",
+                documents.size(), changedDocs, reasons);
     }
 }

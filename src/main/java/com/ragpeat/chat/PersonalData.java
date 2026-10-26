@@ -29,14 +29,18 @@ public final class PersonalData {
             "nacimiento", "edad", "documento", "obra\\s+social", "mutua",
             "paciente", "nombre(?:\\s+y\\s+apellidos?)?", "apellidos?",
             "m[eé]dic[oa](?:\\s+solicitante)?", "doctora?", "dra?\\.?", "profesional", "solicitante",
-            "domicilio", "direcci[oó]n", "tel[eé]fono", "tel", "m[oó]vil", "celular", "e-?mail", "correo");
+            "domicilio", "direcci[oó]n", "tel[eé]fono", "tel", "m[oó]vil", "celular", "e-?mail", "correo",
+            // Firmas al pie de los informes: "Responsable Análisis Clínicos: ...", "Dirección técnica: ...".
+            "responsable[^:\\n]{0,40}", "direcci[oó]n\\s+t[eé]cnica", "facultativ[oa][^:\\n]{0,20}",
+            "(?:firmado|validado|revisado)(?:\\s+por)?", "peticionari[oa]");
 
     /**
      * La etiqueta tiene que ir seguida de dos puntos (así "mi médico me dijo" no se toca), y lo que sigue
      * no puede ser "**": eso es un título en negrita de una respuesta del bot, no un dato.
      */
     private static final Pattern LABEL = Pattern.compile(
-            "(?:^[ \\t]*(?:" + WEAK_LABELS + ")|(?<![\\p{L}\\d])(?:" + STRONG_LABELS + "))\\.?\\s*:(?!\\*)\\s*",
+            // (?:\s*\(...\))?: un paréntesis corto antes de los dos puntos, como "Fecha de nacimiento (edad):".
+            "(?:^[ \\t]*(?:" + WEAK_LABELS + ")|(?<![\\p{L}\\d])(?:" + STRONG_LABELS + "))(?:\\s*\\([^)\\n]{0,20}\\))?\\.?\\s*:(?!\\*)\\s*",
             Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE | Pattern.MULTILINE);
 
     /** Datos que se reconocen solos, sin etiqueta delante. */

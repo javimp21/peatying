@@ -52,7 +52,10 @@ public class ChatService {
     private static final Logger log = LoggerFactory.getLogger(ChatService.class);
 
     private static final int MAX_SEARCHES = 3;      // lo mismo que dice el prompt; aquí se hace cumplir
-    private static final int MAX_TURNS = 6;         // red de seguridad contra un bucle infinito
+    // Con un documento adjunto (p. ej. una analítica de 40 valores) hacen falta más búsquedas para no dejarse
+    // marcadores sin mirar: con 3, el bot acababa diciendo "Peat no habla de X" sin haberlo buscado.
+    private static final int MAX_SEARCHES_WITH_DOCUMENT = 6;
+    private static final int MAX_TURNS = 9;         // red de seguridad contra un bucle infinito
     private static final int RESULTS_PER_SEARCH = 5;
     private static final Pattern CITATION = Pattern.compile("\\[(\\d+)]"); // "[3]" -> captura "3"
 
@@ -121,6 +124,11 @@ public class ChatService {
                 Úsalo para saber de qué marcadores o temas pregunta y busca qué decía Peat sobre ellos. No diagnostiques ni
                 digas qué debe hacer con sus resultados; si un valor está fuera de los de referencia, puedes señalarlo y contar
                 qué pensaba Peat de ese marcador.
+                Con este documento puedes hacer hasta 6 búsquedas. Si preguntan por el documento entero, empieza por los
+                valores marcados o fuera de rango y agrupa marcadores relacionados en una misma búsqueda (por ejemplo
+                "transaminases liver enzymes AST ALT", "folic acid B12"). MUY IMPORTANTE: nunca digas que Peat no habló de
+                un marcador que no hayas buscado específicamente; Peat habló de muchísimos. Si no te da para todos, di cuáles
+                no has mirado todavía y ofrece buscarlos.
                 <documento>
                 """ + document + "\n</documento>";
 
@@ -177,8 +185,10 @@ public class ChatService {
             List<ContentBlockParam> toolResults = new ArrayList<>();
             for (ToolUseBlock toolUse : toolUses) {
                 String result;
-                if (searches >= MAX_SEARCHES) {
-                    result = "Ya has hecho " + MAX_SEARCHES + " búsquedas. Responde con lo que tienes.";
+                int limit = document == null || document.isBlank() ? MAX_SEARCHES : MAX_SEARCHES_WITH_DOCUMENT;
+                if (searches >= limit) {
+                    result = "Ya has hecho " + limit + " búsquedas. Responde con lo que tienes, y de lo que no hayas "
+                            + "buscado no digas que Peat no habla: ofrece buscarlo en otra pregunta.";
                 } else {
                     searches++;
                     result = runSearch(toolUse, sources, listener);

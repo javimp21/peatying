@@ -64,6 +64,20 @@ class PersonalDataTest {
     }
 
     @Test
+    void handlesHospitalReportFormats() {
+        // Datos inventados, con el formato de un informe real que se coló.
+        String report = """
+                Fecha de nacimiento (edad): 01/02/1990 (36 años)
+                Hemoglobina: 16.6 g/dl (13 - 17)
+                Responsable Análisis Clínicos: Ana Prueba Garcia
+                Dirección técnica: Luis Prueba Perez
+                Facultativo responsable: Dra. Prueba""";
+        String redacted = PersonalData.redact(report);
+        assertThat(redacted).doesNotContain("1990", "Ana Prueba", "Luis Prueba", "Dra. Prueba");
+        assertThat(redacted).contains("Hemoglobina: 16.6 g/dl (13 - 17)", "Fecha de nacimiento (edad): [dato personal]");
+    }
+
+    @Test
     void leavesNormalQuestionsAlone() {
         String question = "Mi médico me dijo que tengo el LDL en 160 y la TSH en 4,5. ¿Qué pensaba Peat? Peso 52 kg y mido 157 cm.";
         assertThat(PersonalData.redact(question)).isEqualTo(question);

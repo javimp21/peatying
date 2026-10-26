@@ -29,6 +29,9 @@ public class DocumentReader {
             Transcribe el texto de este documento (por ejemplo, una analítica o un informe médico) tal cual,
             sin resumir ni interpretar. En las tablas de resultados, una línea por prueba con este formato:
             "Prueba: valor unidad (valores de referencia)". Omite cabeceras de laboratorio, logotipos y pies de página.
+            NO transcribas nada que identifique a una persona: nombres (del paciente, médicos o personal del laboratorio),
+            números de documento, historia o cobertura, fechas de nacimiento, teléfonos, direcciones o emails. Pon en su
+            lugar [dato personal]. Sí puedes dejar el sexo y la edad.
             Responde SOLO con el texto transcrito. Si no hay texto legible, responde exactamente: SIN TEXTO
             """;
 
