@@ -619,6 +619,38 @@ li .source-panel { margin: 8px 0 4px; }
 }
 .history-clear { margin-top: 14px; padding: 0; text-decoration: underline; }
 
+/* --- Páginas de temas (peatying.com/temas/...) -------------------------------- */
+.topic { max-width: 680px; margin: 0 auto; padding: 30px 20px 80px; font-size: 1.08rem; line-height: 1.7; color: var(--text-soft); }
+.topic h1 { margin: 6px 0 18px; font: 400 clamp(3.2rem, 13vw, 5.6rem)/0.9 var(--display); text-transform: uppercase; color: var(--ink); }
+.topic h2 { margin: 38px 0 10px; padding-top: 12px; border-top: var(--rule-bar) solid var(--ink); font: 400 1.2rem/1.2 var(--slab); text-transform: uppercase; color: var(--ink); }
+.topic p { margin: 0 0 14px; }
+.topic a { color: var(--ink); }
+.topic-crumbs { font-size: 0.85rem; color: var(--muted); }
+.topic-intro { font-size: 1.2rem; color: var(--ink); }
+.topic-cite {
+  display: inline-block; min-width: 1.5em; margin-left: 2px; padding: 0 4px;
+  border: var(--rule-hair) solid var(--ink);
+  font-size: 0.72rem; line-height: 1.5; text-align: center; text-decoration: none; vertical-align: 0.15em;
+}
+.topic-cite:hover { background: var(--ink); color: var(--frame); }
+.topic-ask a {
+  display: inline-block; margin: 6px 0 4px; padding: 10px 16px;
+  background: var(--ink); color: var(--frame) !important;
+  text-decoration: none; font-weight: 600;
+}
+.topic-ask a:hover { background: var(--text-soft); }
+.topic-faq dt { margin-top: 18px; font-weight: 700; color: var(--ink); }
+.topic-faq dd { margin: 4px 0 0; }
+.topic-sources { padding-left: 1.4em; font-size: 0.92rem; }
+.topic-sources span { color: var(--muted); font-size: 0.85rem; }
+.topic-sources li:target { background: var(--accent-soft); }
+.topic-note { margin-top: 30px !important; font-size: 0.85rem; color: var(--muted); }
+.topic-index { list-style: none; padding: 0; border-top: var(--rule-hair) solid var(--ink); }
+.topic-index li { padding: 14px 0; border-bottom: var(--rule-hair) solid var(--line); }
+.topic-index a { display: block; font: 400 1.15rem/1.2 var(--slab); text-transform: uppercase; text-decoration: none; }
+.topic-index a:hover { text-decoration: underline; }
+.topic-index span { display: block; margin-top: 4px; font-size: 0.95rem; color: var(--muted); }
+
 /* --- Páginas de texto legal (privacidad) ---------------------------------- */
 .legal { max-width: 640px; margin: 0 auto; padding: 36px 20px 80px; font-size: 1.05rem; line-height: 1.65; color: var(--text-soft); }
 .legal h1 { margin: 0 0 18px; font: 400 4.5rem/0.9 var(--display); text-transform: uppercase; color: var(--ink); }

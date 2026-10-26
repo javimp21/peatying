@@ -1165,6 +1165,21 @@ downloadButton.addEventListener("click", () => {
   URL.revokeObjectURL(link.href);       // liberamos la memoria del archivo temporal
 });
 
+/**
+ * peatying.com/?q=... (los botones de las páginas de temas): deja la pregunta escrita en la caja,
+ * sin enviarla. Así ni un buscador que siga el enlace gasta una pregunta, ni se pregunta sin querer.
+ */
+function prefillFromLink() {
+  const params = new URLSearchParams(location.search);
+  const question = params.get("q");
+  if (!question) return;
+  input.value = question.slice(0, MAX_QUESTION);
+  autoGrow();
+  params.delete("q");
+  history.replaceState(null, "", location.pathname + (params.size ? "?" + params : ""));
+  input.focus();
+}
+
 // --- Utilidades -------------------------------------------------------------
 function setBusy(busy) {
   sendButton.disabled = busy;
@@ -1185,6 +1200,7 @@ function hideError() {
 // a su línea, y así todo lo que se usa al arrancar ya está definido.
 showExamples();
 forgetOldConversation();
+prefillFromLink();
 historyButton.hidden = loadHistory().length === 0;
 const isInternal = readInternalFlag();
 focusInputIfDesktop();
