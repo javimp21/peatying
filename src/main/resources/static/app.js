@@ -328,17 +328,31 @@ function showHook() {
  */
 function reserveHookHeight() {
   if (!hookBox.offsetParent) return;   // oculta (en la conversación): se mide al volver a la portada
+  const box = hookClaim.parentNode;
+  const by = document.getElementById("hook-by");
   const probe = hookClaim.cloneNode();
   probe.removeAttribute("id");
-  probe.style.cssText = "position:absolute; visibility:hidden; left:0; right:0;";
-  hookClaim.parentNode.appendChild(probe);
-  let max = 0;
+  probe.style.cssText = "position:absolute; visibility:hidden; left:0; right:0; top:0;";
+  box.appendChild(probe);
+  const boxRight = box.getBoundingClientRect().right;
+  const byWidth = by.offsetWidth + 16;  // la firma y un poco de aire
+  const byHeight = by.offsetHeight;
+  let needed = 0;
   for (const [claim] of HOOKS) {
     probe.textContent = `«${claim}»`;
-    max = Math.max(max, probe.offsetHeight);
+    const height = probe.offsetHeight;
+    // ¿Dónde acaba la última línea? Si llega a la zona de la firma, esta frase necesita una fila más.
+    const range = document.createRange();
+    range.selectNodeContents(probe);
+    const lines = range.getClientRects();
+    const lastLineRight = lines.length ? lines[lines.length - 1].right : 0;
+    const lastLineHeight = lines.length ? lines[lines.length - 1].height : 0;
+    const clashes = lastLineRight > boxRight - byWidth;
+    // Una frase de una línea cabe con la firma debajo; si choca, la firma va en su propia fila.
+    needed = Math.max(needed, clashes ? height + byHeight + 4 : Math.max(height, lastLineHeight + byHeight));
   }
   probe.remove();
-  hookBox.style.setProperty("--hook-height", `${max}px`);
+  hookBox.style.setProperty("--hook-height", `${Math.ceil(needed)}px`);
 }
 let hookResizeTimer;
 window.addEventListener("resize", () => {
