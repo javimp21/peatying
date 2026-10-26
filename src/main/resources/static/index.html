@@ -36,6 +36,11 @@
       <a href="/" id="home" class="wordmark" aria-label="Inicio"><img src="img/logo.png" alt="" class="logo" width="30" height="30"><span class="wordmark-name">Ray Peat</span></a>
       <nav class="actions">
         <a href="/about" class="ghost"><span class="wide-only">Sobre Ray Peat</span><span class="narrow-only">About</span></a>
+        <!-- Solo se ve si hay conversaciones guardadas en este navegador (app.js lo muestra) -->
+        <button type="button" id="history" class="ghost icon-ghost" aria-label="Historial" title="Historial" hidden>
+          <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><span class="wide-only">Historial</span>
+        </button>
         <!-- Solo se ven cuando hay conversación (app.js los muestra) -->
         <button type="button" id="download" class="ghost" hidden>Descargar</button>
         <button type="button" id="new-chat" class="ghost" hidden>Nueva<span class="wide-only"> conversación</span></button>
@@ -95,6 +100,17 @@
       Ubicación por <a href="https://db-ip.com" target="_blank" rel="noopener">DB-IP</a>
     </span>
   </footer>
+
+  <!-- Historial: las conversaciones anteriores, guardadas solo en este navegador (ver app.js). -->
+  <dialog id="history-dialog" class="history-dialog" aria-labelledby="history-title">
+    <div class="history-head">
+      <h2 id="history-title">Historial</h2>
+      <button type="button" id="history-close" class="ghost">Cerrar</button>
+    </div>
+    <p class="history-note">Se guarda solo en este navegador: nadie más puede verlo.</p>
+    <ul id="history-list" class="history-list"></ul>
+    <button type="button" id="history-clear" class="history-clear">Borrar todo el historial</button>
+  </dialog>
 
   <!-- Easter egg: un exprimidor. La media naranja baja, gira apretando el cono y el zumo sale por la boquilla al vaso.
        Es decorativo: aria-hidden para que los lectores de pantalla lo ignoren. -->

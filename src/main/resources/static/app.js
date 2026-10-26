@@ -410,6 +410,7 @@ async function ask(question, quote = null) {
         } else {
           addMessage(message);
         }
+        saveCurrentConversation();
         finished = true;
       } else if (event === "error") {
         live?.remove();
@@ -744,6 +745,7 @@ function quoteLanguageToggle(message, quotes) {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "HTTP " + response.status);
         message.translations = data.translations;
+        saveCurrentConversation();      // la traducción también queda guardada: no se vuelve a pagar
       } catch (e) {
         showToast("No se han podido traducir las citas. Prueba otra vez.");
         return;
@@ -808,6 +810,7 @@ async function vote(message, value, paint) {
       body: JSON.stringify({ conversationId: message.conversationId, messageId: message.messageId, value }),
     });
     if (!response.ok) throw new Error("HTTP " + response.status);
+    saveCurrentConversation();          // que el historial recuerde el voto
   } catch (e) {
     message.vote = previous;
     paint();
@@ -981,10 +984,105 @@ function toggleSource(messageDiv, button, source) {
     .forEach((b) => b.setAttribute("aria-expanded", "true"));
 }
 
-// --- Sin memoria entre visitas ------------------------------------------------------
-// Al recargar o volver a abrir la página se empieza de cero, como en un buscador: la conversación
-// solo vive mientras la página está abierta (para guardarla está "Descargar"). Antes se guardaba
-// en el navegador; borramos lo que pudiera quedar de entonces.
+// --- Historial ------------------------------------------------------------------------
+// Cada conversación se guarda en ESTE navegador (localStorage) al terminar cada respuesta. Al abrir
+// la página se empieza siempre de cero, pero desde "Historial" se puede volver a cualquiera y seguirla
+// (el servidor la recuerda por su conversationId). No hay cuentas: otro navegador no ve este historial.
+const HISTORY_KEY = "rp-history-v1";
+const HISTORY_MAX = 30;                 // las más recientes; las más viejas se van borrando
+
+const historyButton = document.getElementById("history");
+const historyDialog = document.getElementById("history-dialog");
+const historyList = document.getElementById("history-list");
+
+function loadHistory() {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY)) ?? [];
+  } catch (e) {
+    return [];                          // sin almacenamiento (modo privado estricto) o datos dañados
+  }
+}
+
+/** Guarda la lista; si no cabe (el navegador da unos 5 MB), quita las conversaciones más viejas y reintenta. */
+function storeHistory(history) {
+  while (history.length > 0) {
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      break;
+    } catch (e) {
+      if (e.name !== "QuotaExceededError") break;    // sin almacenamiento: no se guarda y ya está
+      history = history.slice(0, -1);
+    }
+  }
+  if (history.length === 0) {
+    try { localStorage.removeItem(HISTORY_KEY); } catch (e) { /* nada que hacer */ }
+  }
+  historyButton.hidden = history.length === 0;
+}
+
+/** La conversación actual pasa a ser la primera del historial (o se actualiza si ya estaba). */
+function saveCurrentConversation() {
+  if (!conversationId || messages.length === 0) return;
+  const firstQuestion = messages.find((m) => m.role === "user")?.text ?? "Conversación";
+  const entry = { id: conversationId, title: firstQuestion.slice(0, 120), updatedAt: Date.now(), messages };
+  const others = loadHistory().filter((h) => h.id !== conversationId);
+  storeHistory([entry, ...others].slice(0, HISTORY_MAX));
+}
+
+function openConversation(entry) {
+  startOver();
+  conversationId = entry.id;
+  setChatting(true);
+  for (const message of entry.messages) addMessage(message, { animate: false });
+  historyDialog.close();
+  // Abajo del todo, donde se sigue preguntando (sin animación: es una conversación que ya existía).
+  window.scrollTo({ top: document.body.scrollHeight });
+}
+
+function showHistory() {
+  historyList.replaceChildren();
+  const dateFormat = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  for (const entry of loadHistory()) {
+    const item = document.createElement("li");
+    const open = document.createElement("button");
+    open.type = "button";
+    open.className = "history-open";
+    const title = document.createElement("span");
+    title.textContent = entry.title;
+    const date = document.createElement("small");
+    date.textContent = dateFormat.format(entry.updatedAt);
+    open.append(title, date);
+    open.addEventListener("click", () => openConversation(entry));
+
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.className = "history-remove";
+    remove.textContent = "Borrar";
+    remove.setAttribute("aria-label", `Borrar «${entry.title}»`);
+    remove.addEventListener("click", () => {
+      storeHistory(loadHistory().filter((h) => h.id !== entry.id));
+      item.remove();
+      if (!historyList.children.length) historyDialog.close();
+    });
+    item.append(open, remove);
+    historyList.appendChild(item);
+  }
+  historyDialog.showModal();
+}
+
+historyButton.addEventListener("click", showHistory);
+document.getElementById("history-close").addEventListener("click", () => historyDialog.close());
+document.getElementById("history-clear").addEventListener("click", () => {
+  if (!confirm("¿Borrar todas las conversaciones guardadas en este navegador?")) return;
+  storeHistory([]);
+  historyDialog.close();
+});
+// Un clic en el fondo oscuro (fuera de la ventana) también la cierra.
+historyDialog.addEventListener("click", (event) => {
+  if (event.target === historyDialog) historyDialog.close();
+});
+
+// Antes se guardaba solo la última conversación, con otra clave: borramos lo que pudiera quedar.
 function forgetOldConversation() {
   try {
     localStorage.removeItem(STORAGE_KEY);
@@ -1059,6 +1157,7 @@ function hideError() {
 // a su línea, y así todo lo que se usa al arrancar ya está definido.
 showExamples();
 forgetOldConversation();
+historyButton.hidden = loadHistory().length === 0;
 const isInternal = readInternalFlag();
 focusInputIfDesktop();
 countVisit();

@@ -570,6 +570,43 @@ li .source-panel { margin: 8px 0 4px; }
 .footer a { color: var(--muted); }
 .footer-links { display: block; margin-top: 8px; }
 
+/* --- Historial: botón con reloj y ventana con la lista ------------------------ */
+.icon-ghost { display: inline-flex; align-items: center; gap: 6px; }
+.icon-ghost svg { flex: none; }
+.history-dialog {
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(640px, calc(100vh - 64px));
+  padding: 22px 22px 18px;
+  border: var(--rule-hair) solid var(--ink);
+  border-top: var(--rule-bar) solid var(--ink);
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+}
+.history-dialog::backdrop { background: rgba(30, 22, 10, 0.45); }
+.history-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.history-head h2 { margin: 0; font: 400 2.6rem/0.9 var(--display); text-transform: uppercase; }
+.history-note { margin: 8px 0 14px; font-size: 0.85rem; color: var(--muted); }
+.history-list { list-style: none; margin: 0; padding: 0; border-top: var(--rule-hair) solid var(--ink); }
+.history-list li { display: flex; align-items: stretch; border-bottom: var(--rule-hair) solid var(--line); }
+.history-open {
+  flex: 1; min-width: 0;
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 10px 8px 10px 0;
+  border: 0; background: transparent; color: var(--ink);
+  font: inherit; text-align: left; cursor: pointer;
+}
+.history-open span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 1rem; }
+.history-open small { font-size: 0.8rem; color: var(--muted); }
+.history-open:hover span { text-decoration: underline; }
+.history-remove, .history-clear {
+  border: 0; background: transparent; color: var(--muted);
+  font: inherit; font-size: 0.82rem; cursor: pointer;
+}
+.history-remove { padding: 0 4px 0 12px; }
+.history-remove:hover, .history-clear:hover { color: var(--accent-text); }
+.history-clear { margin-top: 14px; padding: 0; text-decoration: underline; }
+
 /* --- Páginas de texto legal (privacidad) ---------------------------------- */
 .legal { max-width: 640px; margin: 0 auto; padding: 36px 20px 80px; font-size: 1.05rem; line-height: 1.65; color: var(--text-soft); }
 .legal h1 { margin: 0 0 18px; font: 400 4.5rem/0.9 var(--display); text-transform: uppercase; color: var(--ink); }
@@ -616,6 +653,7 @@ li .source-panel { margin: 8px 0 4px; }
 @media (max-width: 480px) {
   .topbar { padding: 16px 14px; gap: 10px; }
   .wordmark em { display: none; }     /* "Ray Peat en español" -> "Ray Peat" */
+  .chatting .wordmark-name { display: none; }   /* solo la naranja: si no, los 4 botones no caben */
   .actions { gap: 6px; }
   .ghost { padding: 6px 10px; }
 }
