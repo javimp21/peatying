@@ -667,8 +667,6 @@ function renderAnswer(message) {
   body.className = "answer-body";
   body.innerHTML = renderMarkdown(answer, byNumber, false);
   div.appendChild(body);
-  const quotes = [...body.querySelectorAll(".quote-en")];
-  if (quotes.length > 0) div.appendChild(quoteLanguageToggle(message, quotes));
 
   // Lista de fuentes al final, con enlace al artículo (un artículo solo una vez).
   if (sources.length > 0) {
@@ -704,19 +702,15 @@ function renderAnswer(message) {
   return div;
 }
 
-// --- Citas en inglés o en español ------------------------------------------------
-// Las citas literales salen en inglés, tal cual las escribió Peat. Con "Español" se traducen
-// (una sola vez: la traducción se guarda en el mensaje) y con "Inglés" vuelven al original.
+// --- El texto original de una fuente, en inglés o en español ------------------------
+// En el panel de cada cita, dos botones pegados: "Inglés" (el texto tal cual, por defecto) y "Español".
+// La traducción se pide una sola vez y se guarda en la fuente (y en el historial): no se vuelve a pagar.
 
-function quoteLanguageToggle(message, quotes) {
-  const originals = quotes.map((q) => q.textContent);
+function sourceLanguageToggle(source, textElement) {
   const group = document.createElement("div");
   group.className = "lang-toggle";
   group.setAttribute("role", "group");
-  group.setAttribute("aria-label", "Idioma de las citas");
-  const label = document.createElement("span");
-  label.textContent = "Citas en";
-
+  group.setAttribute("aria-label", "Idioma del texto original");
   const buttons = ["Inglés", "Español"].map((name) => {
     const button = document.createElement("button");
     button.type = "button";
@@ -724,30 +718,29 @@ function quoteLanguageToggle(message, quotes) {
     group.append(button);
     return button;
   });
-  group.prepend(label);
 
   const paint = (spanish) => {
-    quotes.forEach((q, i) => { q.textContent = spanish ? message.translations[i] : originals[i]; });
+    textElement.textContent = spanish ? source.translation : source.text;
     buttons[0].setAttribute("aria-pressed", String(!spanish));
     buttons[1].setAttribute("aria-pressed", String(spanish));
   };
   buttons[0].addEventListener("click", () => paint(false));
   buttons[1].addEventListener("click", async () => {
-    if (!message.translations) {
+    if (!source.translation) {
       buttons[1].disabled = true;
       buttons[1].textContent = "Traduciendo…";
       try {
         const response = await fetch("/api/translate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ texts: originals }),
+          body: JSON.stringify({ texts: [source.text] }),
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "HTTP " + response.status);
-        message.translations = data.translations;
-        saveCurrentConversation();      // la traducción también queda guardada: no se vuelve a pagar
+        source.translation = data.translations[0];
+        saveCurrentConversation();
       } catch (e) {
-        showToast("No se han podido traducir las citas. Prueba otra vez.");
+        showToast("No se ha podido traducir. Prueba otra vez.");
         return;
       } finally {
         buttons[1].disabled = false;
@@ -884,11 +877,7 @@ function renderMarkdown(text, byNumber, live) {
  * Mientras se escribe (byNumber = null) las citas aún no se pueden pulsar: se pintan igual, pero inactivas.
  */
 function formatInline(text, byNumber) {
-  let html = escapeHtml(text);
-  // Las citas literales en inglés ("...") van en un <span>: el botón Español las traduce (ver quoteLanguageToggle).
-  // Solo en la respuesta terminada: mientras se escribe, una cita puede estar a medias.
-  if (byNumber) html = html.replace(/(["“])([^"“”<>]{2,400}?)(["”])/g, '$1<span class="quote-en">$2</span>$3');
-  return html
+  return escapeHtml(text)
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     // La cita y el signo que la sigue ("[2]." o "[2],") van juntos en un <span> que no se parte de línea:
     // si no, a veces el punto se quedaba solo al principio de la línea siguiente.
@@ -949,17 +938,17 @@ function toggleSource(messageDiv, button, source) {
   // Como una nota al pie de un libro: número y tipo en letra de máquina, título, el texto original
   // y la dirección de donde sale.
   const interview = source.type === "interview";
-  const meta = document.createElement("p");
+  const meta = document.createElement("div");
   meta.className = "source-meta";
   const number = document.createElement("span");
   number.className = "source-n";
   number.textContent = source.number;
-  meta.append(number, interview ? "Entrevista" : "Artículo");
   const title = document.createElement("h3");
   title.textContent = source.title;
   const text = document.createElement("p");
   text.className = "source-text";
   text.textContent = source.text;       // el texto original de Peat, en inglés
+  meta.append(number, interview ? "Entrevista" : "Artículo", sourceLanguageToggle(source, text));
   const link = document.createElement("a");
   link.href = source.url;
   link.target = "_blank";
@@ -1023,9 +1012,12 @@ function storeHistory(history) {
 /** La conversación actual pasa a ser la primera del historial (o se actualiza si ya estaba). */
 function saveCurrentConversation() {
   if (!conversationId || messages.length === 0) return;
-  const firstQuestion = messages.find((m) => m.role === "user")?.text ?? "Conversación";
-  const entry = { id: conversationId, title: firstQuestion.slice(0, 120), updatedAt: Date.now(), messages };
-  const others = loadHistory().filter((h) => h.id !== conversationId);
+  const history = loadHistory();
+  // El nombre: el que ya tuviera (quizá puesto a mano con "Renombrar") o, la primera vez, la primera pregunta.
+  const title = history.find((h) => h.id === conversationId)?.title
+    ?? (messages.find((m) => m.role === "user")?.text ?? "Conversación").slice(0, 120);
+  const entry = { id: conversationId, title, updatedAt: Date.now(), messages };
+  const others = history.filter((h) => h.id !== conversationId);
   storeHistory([entry, ...others].slice(0, HISTORY_MAX));
 }
 
@@ -1054,9 +1046,45 @@ function showHistory() {
     open.append(title, date);
     open.addEventListener("click", () => openConversation(entry));
 
+    // Renombrar: el título se convierte en una caja de texto; Enter (o salir de la caja) guarda, Escape cancela.
+    const rename = document.createElement("button");
+    rename.type = "button";
+    rename.className = "history-action";
+    rename.textContent = "Renombrar";
+    rename.setAttribute("aria-label", `Renombrar «${entry.title}»`);
+    rename.addEventListener("click", () => {
+      const field = document.createElement("input");
+      field.className = "history-rename";
+      field.value = entry.title;
+      field.maxLength = 120;
+      field.setAttribute("aria-label", "Nuevo nombre de la conversación");
+      let done = false;
+      const finish = (save) => {
+        if (done) return;
+        done = true;
+        const name = field.value.trim();
+        if (save && name) {
+          entry.title = name;
+          storeHistory(loadHistory().map((h) => (h.id === entry.id ? { ...h, title: name } : h)));
+          title.textContent = name;
+        }
+        field.replaceWith(open);
+        open.focus();
+      };
+      field.addEventListener("keydown", (event) => {
+        // preventDefault: si no, ese mismo Enter "pulsaría" el título (que recibe el foco) y abriría la conversación.
+        if (event.key === "Enter") { event.preventDefault(); finish(true); }
+        if (event.key === "Escape") { event.preventDefault(); finish(false); }   // sin cerrar la ventana entera
+      });
+      field.addEventListener("blur", () => finish(true));
+      open.replaceWith(field);
+      field.focus();
+      field.select();
+    });
+
     const remove = document.createElement("button");
     remove.type = "button";
-    remove.className = "history-remove";
+    remove.className = "history-action";
     remove.textContent = "Borrar";
     remove.setAttribute("aria-label", `Borrar «${entry.title}»`);
     remove.addEventListener("click", () => {
@@ -1064,7 +1092,7 @@ function showHistory() {
       item.remove();
       if (!historyList.children.length) historyDialog.close();
     });
-    item.append(open, remove);
+    item.append(open, rename, remove);
     historyList.appendChild(item);
   }
   historyDialog.showModal();

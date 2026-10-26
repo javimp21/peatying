@@ -13,17 +13,19 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
- * Traduce al español las citas literales en inglés de una respuesta (botón "Español" de la página).
- * Va aparte de la respuesta a propósito: la cita original se queda tal cual, y solo quien la quiera
- * en español paga (unas décimas de céntimo) por traducirla.
+ * Traduce al español el texto original de una fuente (botón "Español" del panel de cada cita).
+ * Va aparte de la respuesta a propósito: el original se queda tal cual, y solo quien lo quiera
+ * en español paga (unas décimas de céntimo) por traducirlo.
  */
 @Service
 public class QuoteTranslator {
 
     private static final String PROMPT = """
-            Traduce al español cada una de estas citas de Ray Peat. Son frases en inglés sobre biología y salud.
-            Traducción fiel y natural, sin añadir ni quitar ideas y sin comillas.
-            Responde SOLO con un array JSON de strings: una traducción por cita, en el mismo orden.
+            Traduce al español cada uno de estos textos de Ray Peat: fragmentos de sus artículos o transcripciones
+            de entrevistas de radio, en inglés, sobre biología y salud.
+            Traducción fiel y natural, sin añadir, quitar ni resumir nada. Conserva los saltos de línea y, en las
+            entrevistas, los nombres de quien habla al principio de cada turno ("Ray Peat:", "Host:"...).
+            Responde SOLO con un array JSON de strings: una traducción por texto, en el mismo orden.
 
             """;
 
@@ -40,7 +42,7 @@ public class QuoteTranslator {
     public List<String> toSpanish(List<String> quotes) {
         Message response = client.messages().create(MessageCreateParams.builder()
                 .model(model)
-                .maxTokens(2000L)
+                .maxTokens(6000L)
                 .outputConfig(OutputConfig.builder().effort(OutputConfig.Effort.LOW).build())
                 .addUserMessage(PROMPT + json.writeValueAsString(quotes))
                 .build());

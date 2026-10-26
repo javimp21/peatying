@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * POST /api/translate con {"texts": ["...", "..."]}: traduce al español las citas en inglés de una respuesta.
- * Responde {"translations": ["...", "..."]} en el mismo orden.
+ * POST /api/translate con {"texts": ["..."]}: traduce al español el texto original de una fuente.
+ * Responde {"translations": ["..."]} en el mismo orden.
  */
 @RestController
 public class TranslateController {
 
     private static final Logger log = LoggerFactory.getLogger(TranslateController.class);
 
-    // Una respuesta tiene pocas citas y cortas (el prompt pide frases cortas). Más que esto es abuso.
-    static final int MAX_TEXTS = 12;
-    static final int MAX_TEXT_LENGTH = 400;
+    // La página manda un fragmento cada vez, de ~1500 caracteres (ver Chunker). Más que esto es abuso.
+    static final int MAX_TEXTS = 3;
+    static final int MAX_TEXT_LENGTH = 2500;
 
     private final QuoteTranslator translator;
     private final ClientInfo clientInfo;

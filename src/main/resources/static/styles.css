@@ -512,11 +512,11 @@ li .source-panel { margin: 8px 0 4px; }
 .sources-label { margin-right: 8px; font: 400 0.8rem var(--slab); text-transform: uppercase; color: var(--ink); }
 .sources a:hover { color: var(--text-soft); }
 
-/* --- Citas en Inglés | Español: dos botones pegados, el activo relleno de tinta --- */
-.lang-toggle { display: flex; align-items: center; margin-top: 14px; font-size: 0.82rem; color: var(--muted); }
-.lang-toggle span { margin-right: 8px; }
+/* --- Texto original en Inglés | Español: dos botones pegados, el activo relleno de tinta --- */
+.lang-toggle { display: flex; align-items: center; margin-left: 10px; }
 .lang-toggle button {
-  padding: 4px 10px;
+  padding: 2px 9px;
+  font-weight: 500 !important;
   border: var(--rule-hair) solid var(--ink);
   background: transparent;
   color: var(--ink);
@@ -599,12 +599,20 @@ li .source-panel { margin: 8px 0 4px; }
 .history-open span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 1rem; }
 .history-open small { font-size: 0.8rem; color: var(--muted); }
 .history-open:hover span { text-decoration: underline; }
-.history-remove, .history-clear {
+.history-action, .history-clear {
   border: 0; background: transparent; color: var(--muted);
   font: inherit; font-size: 0.82rem; cursor: pointer;
 }
-.history-remove { padding: 0 4px 0 12px; }
-.history-remove:hover, .history-clear:hover { color: var(--accent-text); }
+.history-action { padding: 0 4px 0 10px; }
+.history-action:hover, .history-clear:hover { color: var(--accent-text); }
+.history-rename {
+  flex: 1; min-width: 0; margin: 6px 0;
+  padding: 6px 8px;
+  border: var(--rule-hair) solid var(--ink);
+  background: var(--input-bg);
+  color: var(--ink);
+  font: inherit; font-size: 1rem;
+}
 .history-clear { margin-top: 14px; padding: 0; text-decoration: underline; }
 
 /* --- Páginas de texto legal (privacidad) ---------------------------------- */
