@@ -322,7 +322,33 @@ function showHook() {
   hookBox.classList.add("hook-in");
 }
 
+/**
+ * Mide la frase más larga al ancho actual y reserva esa altura (ver .hook-box): así, al cambiar de frase,
+ * la caja de pregunta no sube y baja. Se repite si cambia el ancho (girar el móvil, redimensionar).
+ */
+function reserveHookHeight() {
+  if (!hookBox.offsetParent) return;   // oculta (en la conversación): se mide al volver a la portada
+  const probe = hookClaim.cloneNode();
+  probe.removeAttribute("id");
+  probe.style.cssText = "position:absolute; visibility:hidden; left:0; right:0;";
+  hookClaim.parentNode.appendChild(probe);
+  let max = 0;
+  for (const [claim] of HOOKS) {
+    probe.textContent = `«${claim}»`;
+    max = Math.max(max, probe.offsetHeight);
+  }
+  probe.remove();
+  hookBox.style.setProperty("--hook-height", `${max}px`);
+}
+let hookResizeTimer;
+window.addEventListener("resize", () => {
+  clearTimeout(hookResizeTimer);
+  hookResizeTimer = setTimeout(reserveHookHeight, 150);
+});
+
 function startHooks() {
+  // Con las fuentes ya cargadas: con la de reserva, las frases miden distinto.
+  document.fonts.ready.then(reserveHookHeight);
   showHook();
   clearInterval(hookTimer);
   // Con "reducir movimiento" se queda una sola frase fija.
@@ -360,6 +386,7 @@ function setChatting(chatting) {
   newChatButton.hidden = !chatting;
   downloadButton.hidden = !chatting;
   input.placeholder = chatting ? NEXT_PLACEHOLDER : FIRST_PLACEHOLDER;
+  if (!chatting) reserveHookHeight();   // por si cambió el ancho mientras estaba oculta
 }
 
 // --- Enviar una pregunta ----------------------------------------------------

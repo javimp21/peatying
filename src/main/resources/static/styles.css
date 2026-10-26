@@ -158,12 +158,14 @@ body {
 /* --- Gancho: una afirmación de Peat, grande, que va cambiando ------------------ */
 .hook { margin: 0 0 26px; padding: 16px 0 14px; border-top: var(--rule-bar) solid var(--ink); border-bottom: var(--rule-hair) solid var(--ink); }
 .chatting .hook { display: none; }
+/* La caja tiene la altura de la frase más larga (la mide app.js) y la frase va abajo, pegada a la firma:
+   el hueco de las frases cortas queda arriba, bajo la raya, y lo de debajo no salta al cambiar de frase. */
+.hook-box { position: relative; display: flex; align-items: flex-end; min-height: var(--hook-height, auto); }
 .hook-claim {
   margin: 0;
   font: 400 clamp(1.5rem, 5.4vw, 2.2rem)/1.15 var(--slab); color: var(--ink);
-  min-height: 2.3em;                     /* las frases largas ocupan dos líneas: así no salta lo de debajo */
 }
-.hook-by { margin: 8px 0 0; font-size: 0.95rem; color: var(--muted); }
+.hook-by { margin: 6px 0 0; font-size: 0.95rem; color: var(--muted); text-align: right; }
 .hook-why { padding: 0; border: 0; background: none; font: inherit; font-weight: 600; color: var(--accent-text); cursor: pointer; }
 .hook-why:hover { text-decoration: underline; }
 .hook-why:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
