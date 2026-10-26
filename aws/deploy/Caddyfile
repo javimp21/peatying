@@ -5,8 +5,13 @@
 peatying.com {
 	# Las peticiones a la API son una pregunta de 3000 caracteres como mucho: cualquier cosa más grande
 	# es un abuso (subir megas para agotar la memoria). Se corta aquí, antes de llegar a la app.
-	request_body {
+	# La excepción es adjuntar un documento (PDF o foto de hasta 5 MB; la app vuelve a comprobarlo).
+	@small not path /api/document
+	request_body @small {
 		max_size 16KB
+	}
+	request_body /api/document {
+		max_size 6MB
 	}
 	# HTTPS obligatorio durante un año: el navegador no volverá a intentar http:// con este dominio.
 	header Strict-Transport-Security "max-age=31536000"

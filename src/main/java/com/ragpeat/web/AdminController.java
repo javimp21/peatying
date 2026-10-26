@@ -125,7 +125,7 @@ public class AdminController {
             return no;
         }
         List<Map<String, Object>> conversations = jdbc.sql("""
-                SELECT c.id, c.created_at AS started, c.internal,
+                SELECT c.id, c.created_at AS started, c.internal, c.document_name, c.document_text,
                        p.country, p.city, p.referrer
                 FROM conversations c
                 LEFT JOIN page_views p ON p.visitor_hash = c.visitor_hash AND p.day = c.created_at::date

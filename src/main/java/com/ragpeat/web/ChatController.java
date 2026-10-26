@@ -132,8 +132,9 @@ public class ChatController {
                     ? requestedId
                     : conversations.create(visitor, internal);
             List<Turn> history = conversations.lastTurns(conversationId, HISTORY_MESSAGES);
+            String document = conversations.documentText(conversationId);   // null si no adjuntó nada
 
-            ChatAnswer answer = chatService.answer(history, question, new ChatListener() {
+            ChatAnswer answer = chatService.answer(history, question, document, new ChatListener() {
                 @Override
                 public void onText(String delta) {
                     send(emitter, "delta", Map.of("text", delta));

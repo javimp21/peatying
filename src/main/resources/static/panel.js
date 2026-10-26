@@ -180,13 +180,24 @@ function conversationCard(c) {
   const up = c.messages.filter((m) => m.feedback === 1).length;
   meta.textContent = [when.format(new Date(c.started)), place, c.referrer || "directo",
     `${questions.length} pregunta${questions.length === 1 ? "" : "s"}`,
-    up ? `${up} 👍` : "", down ? `${down} 👎` : "", c.internal ? "nuestra" : ""].filter(Boolean).join(" · ");
+    up ? `${up} 👍` : "", down ? `${down} 👎` : "", c.document_name ? `📄 ${c.document_name}` : "",
+    c.internal ? "nuestra" : ""].filter(Boolean).join(" · ");
   summary.append(title, meta);
   details.appendChild(summary);
 
   // Los mensajes se crean al abrirla: con cientos de conversaciones, la página va más ligera.
   details.addEventListener("toggle", () => {
     if (!details.open || details.querySelector(".msg")) return;
+    if (c.document_text) {
+      const doc = document.createElement("div");
+      doc.className = "msg msg-doc";
+      const head = document.createElement("small");
+      head.textContent = `Documento adjunto · ${c.document_name || "sin nombre"} (texto extraído, sin datos personales)`;
+      const text = document.createElement("p");
+      text.textContent = c.document_text;
+      doc.append(head, text);
+      details.appendChild(doc);
+    }
     for (const m of c.messages) {
       const div = document.createElement("div");
       div.className = `msg msg-${m.role}`;

@@ -638,8 +638,16 @@ function addMessage(message, { animate = true } = {}) {
 
 // No desplaza la página: al preguntar, ask() sube la pregunta arriba y todo lo demás aparece debajo.
 function render(message) {
-  const div = message.role === "user" ? renderUser(message) : renderAnswer(message);
+  const div = message.role === "user" ? renderUser(message)
+    : message.role === "doc" ? renderDocNote(message) : renderAnswer(message);
   conversation.appendChild(div);
+  return div;
+}
+
+function renderDocNote({ name }) {
+  const div = document.createElement("div");
+  div.className = "message doc";
+  div.textContent = `📄 Has adjuntado «${name}». Lo tendré en cuenta en esta conversación.`;
   return div;
 }
 
@@ -1119,10 +1127,12 @@ function storeHistory(history) {
 function saveCurrentConversation() {
   if (!conversationId || messages.length === 0) return;
   const history = loadHistory();
-  // El nombre: el que ya tuviera (quizá puesto a mano con "Renombrar") o, la primera vez, la primera pregunta.
-  const title = history.find((h) => h.id === conversationId)?.title
-    ?? (messages.find((m) => m.role === "user")?.text ?? "Conversación").slice(0, 120);
-  const entry = { id: conversationId, title, updatedAt: Date.now(), messages };
+  // El nombre: el puesto a mano con "Renombrar" o, si no, la primera pregunta (o el documento, si aún no hay).
+  const previous = history.find((h) => h.id === conversationId);
+  const automatic = (messages.find((m) => m.role === "user")?.text
+    ?? (currentDocumentName() ? `📄 ${currentDocumentName()}` : "Conversación")).slice(0, 120);
+  const title = previous?.renamed ? previous.title : automatic;
+  const entry = { id: conversationId, title, renamed: Boolean(previous?.renamed), updatedAt: Date.now(), messages };
   const others = history.filter((h) => h.id !== conversationId);
   storeHistory([entry, ...others].slice(0, HISTORY_MAX));
 }
@@ -1132,6 +1142,7 @@ function openConversation(entry) {
   conversationId = entry.id;
   setChatting(true);
   for (const message of entry.messages) addMessage(message, { animate: false });
+  if (currentDocumentName()) showDocChip(`📄 ${currentDocumentName()}`);
   historyDialog.close();
   // Abajo del todo, donde se sigue preguntando (sin animación: es una conversación que ya existía).
   window.scrollTo({ top: document.body.scrollHeight });
@@ -1171,7 +1182,7 @@ function showHistory() {
         const name = field.value.trim();
         if (save && name) {
           entry.title = name;
-          storeHistory(loadHistory().map((h) => (h.id === entry.id ? { ...h, title: name } : h)));
+          storeHistory(loadHistory().map((h) => (h.id === entry.id ? { ...h, title: name, renamed: true } : h)));
           title.textContent = name;
         }
         field.replaceWith(open);
@@ -1234,6 +1245,7 @@ function startOver() {
   messages = [];
   conversationId = null;                // la próxima pregunta empieza una conversación nueva en el servidor
   conversation.replaceChildren();       // vacía la conversación en pantalla
+  showDocChip("");                      // el documento era de la conversación anterior
   input.value = "";
   autoGrow();
   hideError();
@@ -1251,6 +1263,8 @@ downloadButton.addEventListener("click", () => {
     if (m.role === "user") {
       lines.push(`## ${m.text}`, "");
       if (m.quote) lines.push(`> ${m.quote}`, "");
+    } else if (m.role === "doc") {
+      lines.push(`_Documento adjunto: ${m.name}_`, "");
     } else {
       lines.push(m.text, "");
       if (m.sources.length > 0) {
@@ -1286,10 +1300,64 @@ function prefillFromLink() {
   input.focus();
 }
 
+// --- Adjuntar un documento (analítica, informe...) ---------------------------------
+// El servidor saca el texto del PDF o de la foto, lo guarda con la conversación sin datos personales y
+// descarta el archivo. Desde ese momento el bot lo tiene delante en todas las preguntas de la conversación.
+const MAX_DOCUMENT_BYTES = 5 * 1024 * 1024;
+const attachButton = document.getElementById("attach");
+const docInput = document.getElementById("doc-input");
+const docChip = document.getElementById("doc-chip");
+const docChipText = document.getElementById("doc-chip-text");
+
+attachButton.addEventListener("click", () => docInput.click());
+docInput.addEventListener("change", () => {
+  const file = docInput.files[0];
+  docInput.value = "";                  // así se puede volver a elegir el mismo archivo
+  if (file) uploadDocument(file);
+});
+
+function showDocChip(text) {
+  docChipText.textContent = text;
+  docChip.hidden = !text;
+}
+
+async function uploadDocument(file) {
+  hideError();
+  if (file.size > MAX_DOCUMENT_BYTES) return showError("El archivo tiene que pesar menos de 5 MB.");
+  attachButton.disabled = true;
+  showDocChip(`📄 ${file.name} · leyendo el documento…`);
+  try {
+    const form = new FormData();
+    form.append("file", file);
+    if (conversationId) form.append("conversationId", conversationId);
+    form.append("internal", String(isInternal));
+    const response = await fetch("/api/document", { method: "POST", body: form });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || "No he podido leer el documento. Prueba otra vez.");
+    conversationId = data.conversationId;
+    setChatting(true);
+    addMessage({ role: "doc", name: data.name });
+    showDocChip(`📄 ${data.name}`);
+    saveCurrentConversation();
+    focusInputIfDesktop();
+  } catch (e) {
+    showDocChip(currentDocumentName() ? `📄 ${currentDocumentName()}` : "");
+    showError(e.message);
+  } finally {
+    attachButton.disabled = false;
+  }
+}
+
+/** El último documento adjuntado en esta conversación (se puede sustituir por otro). */
+function currentDocumentName() {
+  return [...messages].reverse().find((m) => m.role === "doc")?.name ?? null;
+}
+
 // --- Utilidades -------------------------------------------------------------
 function setBusy(busy) {
   sendButton.disabled = busy;
   input.disabled = busy;
+  attachButton.disabled = busy;
 }
 
 function showError(message) {

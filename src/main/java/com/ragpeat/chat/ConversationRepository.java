@@ -32,6 +32,18 @@ public class ConversationRepository {
         return id;
     }
 
+    /** El texto del documento adjunto a la conversación, o null. */
+    public String documentText(UUID id) {
+        return jdbc.sql("SELECT document_text FROM conversations WHERE id = :id")
+                .param("id", id).query(String.class).optional().orElse(null);
+    }
+
+    /** Guarda (o sustituye) el documento de la conversación: solo el nombre y el texto, nunca el archivo. */
+    public void saveDocument(UUID id, String name, String text) {
+        jdbc.sql("UPDATE conversations SET document_name = :name, document_text = :text WHERE id = :id")
+                .param("id", id).param("name", name).param("text", text).update();
+    }
+
     /** Datos de una respuesta del bot para las métricas. */
     public record AnswerMetrics(long latencyMs, long inputTokens, long outputTokens, int searches) {}
 
