@@ -194,6 +194,12 @@ function conversationCard(c) {
       const text = document.createElement("p");
       text.textContent = m.content.replace(/\*\*/g, "");   // sin los ** de la negrita: se lee mejor
       div.append(head, text);
+      if (m.feedback_reason) {
+        const why = document.createElement("p");
+        why.className = "msg-reason";
+        why.textContent = "Qué ha fallado, según quien votó: " + m.feedback_reason;
+        div.appendChild(why);
+      }
       details.appendChild(div);
     }
   }, { once: false });

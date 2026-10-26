@@ -773,8 +773,12 @@ function feedbackRow(message) {
     button.setAttribute("aria-label", name);
     button.title = name;
     button.innerHTML = THUMB_SVG;
-    // Pulsar el voto que ya tenías lo quita (vuelve a null).
-    button.addEventListener("click", () => vote(message, message.vote === value ? null : value, paint));
+    // Pulsar el voto que ya tenías lo quita (vuelve a null). Con un 👎, se ofrece contar qué ha fallado.
+    button.addEventListener("click", async () => {
+      const saved = await vote(message, message.vote === value ? null : value, paint);
+      if (saved && message.vote === -1) showReasonBox(row, message);
+      else row.nextElementSibling?.classList.contains("feedback-reason") && row.nextElementSibling.remove();
+    });
     return button;
   });
 
@@ -784,8 +788,108 @@ function feedbackRow(message) {
     buttons[1].setAttribute("aria-pressed", String(message.vote === -1));
   };
   paint();
-  row.append(label, ...buttons);
+
+  const share = document.createElement("button");
+  share.type = "button";
+  share.className = "share";
+  share.innerHTML = SHARE_SVG;
+  share.append("Compartir");
+  share.addEventListener("click", () => shareAnswer(message, share));
+  row.append(label, ...buttons, share);
   return row;
+}
+
+/** Tras un 👎: un cuadro opcional para contar qué ha fallado. Se manda junto al mismo voto. */
+function showReasonBox(row, message) {
+  if (row.nextElementSibling?.classList.contains("feedback-reason")) return;
+  const box = document.createElement("form");
+  box.className = "feedback-reason";
+  const text = document.createElement("textarea");
+  text.rows = 2;
+  text.maxLength = 500;
+  text.placeholder = "¿Qué ha fallado? (opcional: algo incorrecto, que no responda a lo que preguntabas…)";
+  text.setAttribute("aria-label", "Qué ha fallado en la respuesta");
+  const send = document.createElement("button");
+  send.type = "submit";
+  send.className = "ghost";
+  send.textContent = "Enviar";
+  const skip = document.createElement("button");
+  skip.type = "button";
+  skip.className = "link-button";
+  skip.textContent = "Ahora no";
+  skip.addEventListener("click", () => box.remove());
+  box.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const reason = text.value.trim();
+    if (!reason) return box.remove();
+    send.disabled = true;
+    try {
+      const response = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ conversationId: message.conversationId, messageId: message.messageId, value: -1, reason }),
+      });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      const thanks = document.createElement("p");
+      thanks.className = "feedback-reason";
+      thanks.textContent = "Gracias: nos sirve para mejorar las respuestas.";
+      box.replaceWith(thanks);
+    } catch (e) {
+      send.disabled = false;
+      showToast("No se ha podido enviar. Prueba otra vez.");
+    }
+  });
+  box.append(text, send, skip);
+  row.after(box);
+  text.focus();
+}
+
+// --- Compartir una respuesta -------------------------------------------------------
+// Icono de "compartir" de Lucide (licencia ISC).
+const SHARE_SVG = `<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none"
+  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+  <path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg>`;
+
+/**
+ * El servidor guarda una copia de la pregunta y la respuesta y nos da su enlace (peatying.com/r/...).
+ * En el móvil se abre el menú de compartir del sistema (WhatsApp, Telegram...); en el ordenador se copia.
+ */
+async function shareAnswer(message, button) {
+  if (!message.shareUrl) {
+    button.disabled = true;
+    try {
+      const response = await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          conversationId: message.conversationId,
+          messageId: message.messageId,
+          sources: message.sources.map((s) => ({ number: s.number, url: s.url })),
+        }),
+      });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      message.shareUrl = location.origin + (await response.json()).url;
+      saveCurrentConversation();
+    } catch (e) {
+      showToast("No se ha podido crear el enlace. Prueba otra vez.");
+      return;
+    } finally {
+      button.disabled = false;
+    }
+  }
+  if (isTouch && navigator.share) {
+    try {
+      await navigator.share({ title: "Ray Peat Chatbot", url: message.shareUrl });
+    } catch (e) { /* cerró el menú sin compartir: nada que hacer */ }
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(message.shareUrl);
+    showToast("Enlace copiado. Pégalo donde quieras compartirlo.");
+  } catch (e) {
+    prompt("Copia este enlace:", message.shareUrl);
+  }
 }
 
 /**
@@ -804,9 +908,11 @@ async function vote(message, value, paint) {
     });
     if (!response.ok) throw new Error("HTTP " + response.status);
     saveCurrentConversation();          // que el historial recuerde el voto
+    return true;
   } catch (e) {
     message.vote = previous;
     paint();
+    return false;
   }
 }
 

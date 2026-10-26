@@ -555,6 +555,31 @@ li .source-panel { margin: 8px 0 4px; }
 .vote[aria-pressed="true"] { background: var(--ink); color: var(--frame); }
 .vote:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 
+/* "Compartir", a la derecha de los votos, discreto como ellos. */
+.share {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: auto; padding: 4px 10px;
+  border: var(--rule-hair) solid var(--line); background: transparent;
+  color: var(--muted); font: inherit; cursor: pointer;
+}
+.share:hover { border-color: var(--ink); color: var(--ink); }
+.share:disabled { cursor: progress; }
+.share:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+
+/* Tras un 👎: qué ha fallado (opcional). */
+.feedback-reason { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px; margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
+.feedback-reason textarea {
+  flex: 1 1 260px; padding: 8px 10px; resize: vertical;
+  border: var(--rule-hair) solid var(--ink); background: var(--input-bg); color: var(--ink); font: inherit;
+}
+.link-button { border: 0; background: none; padding: 6px 4px; color: var(--muted); font: inherit; text-decoration: underline; cursor: pointer; }
+
+/* Página de una respuesta compartida (peatying.com/r/...): la pregunta como título, más pequeña que en temas. */
+.topic h1.share-question { font: 400 clamp(2.2rem, 8vw, 3.6rem)/1 var(--display); }
+.share-answer { color: var(--ink); }
+.share-answer ul, .share-answer ol { padding-left: 1.3em; }
+.share-answer li { margin-bottom: 8px; }
+
 /* --- Ventana "Sobre Ray Peat" ------------------------------------------------ */
 .about-close:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 
@@ -690,6 +715,7 @@ li .source-panel { margin: 8px 0 4px; }
 .msg p { margin: 4px 0 0; white-space: pre-wrap; color: var(--ink); font-size: 0.95rem; line-height: 1.55; }
 .msg-user { background: var(--surface); border-right: var(--rule-bar) solid var(--ink); }
 .msg-assistant { border-left: 3px solid var(--line); }
+.msg .msg-reason { margin-top: 8px; padding: 6px 10px; background: var(--accent-soft); color: var(--accent-text); font-size: 0.88rem; }
 
 /* --- Páginas de texto legal (privacidad) ---------------------------------- */
 .legal { max-width: 640px; margin: 0 auto; padding: 36px 20px 80px; font-size: 1.05rem; line-height: 1.65; color: var(--text-soft); }

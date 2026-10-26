@@ -90,17 +90,20 @@ public class ConversationRepository {
     }
 
     /**
-     * Guarda el voto (1, -1, o null para quitarlo).
+     * Guarda el voto (1, -1, o null para quitarlo) y, con 👎, el motivo opcional.
      * Exigimos que el mensaje sea de ESA conversación: el id del mensaje es un número fácil de
      * adivinar, pero el de la conversación es un UUID secreto que solo tiene quien la creó.
      * @return false si no existe ese mensaje del bot en esa conversación.
      */
-    public boolean saveFeedback(UUID conversationId, long messageId, Integer value) {
+    public boolean saveFeedback(UUID conversationId, long messageId, Integer value, String reason) {
+        // El motivo lo escribe la persona: pasa por el mismo filtro de datos personales que las preguntas.
+        String cleanReason = reason == null || reason.isBlank() ? null : PersonalData.redact(reason.strip());
         return jdbc.sql("""
-                UPDATE chat_messages SET feedback = :value
+                UPDATE chat_messages SET feedback = :value, feedback_reason = :reason
                 WHERE id = :message AND conversation_id = :conversation AND role = 'assistant'
                 """)
                 .param("value", value)
+                .param("reason", cleanReason)
                 .param("message", messageId)
                 .param("conversation", conversationId)
                 .update() == 1;

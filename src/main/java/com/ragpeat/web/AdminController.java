@@ -143,7 +143,7 @@ public class AdminController {
         List<UUID> ids = conversations.stream().map(c -> (UUID) c.get("id")).toList();
         Map<UUID, List<Map<String, Object>>> byConversation = new LinkedHashMap<>();
         for (Map<String, Object> m : jdbc.sql("""
-                SELECT conversation_id, role, content, created_at AS at, feedback, latency_ms
+                SELECT conversation_id, role, content, created_at AS at, feedback, feedback_reason, latency_ms
                 FROM chat_messages WHERE conversation_id IN (:ids) ORDER BY id
                 """).param("ids", ids).query().listOfRows()) {
             byConversation.computeIfAbsent((UUID) m.remove("conversation_id"), k -> new ArrayList<>()).add(m);

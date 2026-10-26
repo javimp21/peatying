@@ -78,16 +78,21 @@ public class ChatController {
 
     record ErrorResponse(String error) {}
 
-    /** value: 1 = 👍, -1 = 👎, null = quitar el voto. */
-    record FeedbackRequest(UUID conversationId, Long messageId, Integer value) {}
+    /** value: 1 = 👍, -1 = 👎, null = quitar el voto. reason: con 👎, qué ha fallado (opcional). */
+    record FeedbackRequest(UUID conversationId, Long messageId, Integer value, String reason) {}
+
+    static final int MAX_REASON_LENGTH = 500;
 
     @PostMapping("/api/feedback")
     public ResponseEntity<?> feedback(@RequestBody FeedbackRequest request) {
         if (request.conversationId() == null || request.messageId() == null
-                || (request.value() != null && request.value() != 1 && request.value() != -1)) {
+                || (request.value() != null && request.value() != 1 && request.value() != -1)
+                || (request.reason() != null && request.reason().length() > MAX_REASON_LENGTH)) {
             return ResponseEntity.badRequest().body(new ErrorResponse("Voto no válido."));
         }
-        boolean saved = conversations.saveFeedback(request.conversationId(), request.messageId(), request.value());
+        // El motivo solo tiene sentido con 👎: con 👍 o al quitar el voto, se borra.
+        String reason = Integer.valueOf(-1).equals(request.value()) ? request.reason() : null;
+        boolean saved = conversations.saveFeedback(request.conversationId(), request.messageId(), request.value(), reason);
         // 204 No Content: todo bien y no hay nada que devolver. 404: ese mensaje no existe en esa conversación.
         return saved ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
