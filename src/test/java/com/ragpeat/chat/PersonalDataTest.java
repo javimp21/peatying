@@ -49,6 +49,21 @@ class PersonalDataTest {
     }
 
     @Test
+    void leavesBotAnswersAlone() {
+        String answer = """
+                - **Energía celular:** Según él, la serotonina «lowers cellular ATP» [1].
+                - **Médico:** no lo sustituye.
+                El papel del médico: acompañar. Tu edad: no importa.""";
+        assertThat(PersonalData.redact(answer)).isEqualTo(answer);
+    }
+
+    @Test
+    void weakLabelsCountAtTheStartOfALine() {
+        assertThat(PersonalData.redact("Paciente: PEREZ JUAN\nTel: 600123456"))
+                .isEqualTo("Paciente: [dato personal]\nTel: [dato personal]");
+    }
+
+    @Test
     void leavesNormalQuestionsAlone() {
         String question = "Mi médico me dijo que tengo el LDL en 160 y la TSH en 4,5. ¿Qué pensaba Peat? Peso 52 kg y mido 157 cm.";
         assertThat(PersonalData.redact(question)).isEqualTo(question);

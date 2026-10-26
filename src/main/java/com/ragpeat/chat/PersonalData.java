@@ -14,19 +14,30 @@ public final class PersonalData {
 
     static final String MASK = "[dato personal]";
 
-    /** Lo que se refiere al documento o al expediente, y no a la salud: "DNI:", "HC:", "Fecha Nac.:", "Médico:"... */
-    private static final String LABELS = String.join("|",
-            "fecha\\s+de\\s+nacimiento", "fecha\\s+nac(?:imiento|\\.)?", "f\\.\\s*nac(?:imiento|\\.)?", "nacimiento", "edad",
+    /** Etiquetas que solo pueden ser de un documento o expediente: "DNI:", "HC:", "Fecha Nac.:"... Valen en cualquier sitio. */
+    private static final String STRONG_LABELS = String.join("|",
+            "fecha\\s+de\\s+nacimiento", "fecha\\s+nac(?:imiento|\\.)?", "f\\.\\s*nac(?:imiento|\\.)?",
             "historia\\s+cl[ií]nica", "(?:n[º°o]|nro|n[uú]m(?:ero)?)\\.?\\s*(?:de\\s+)?(?:historia|afiliado|informe|documento|protocolo|paciente|socio|orden|muestra)",
-            "dni", "nie", "nif", "cuil", "cuit", "pasaporte", "documento", "n?hc", "cip", "sip", "nss",
-            "tarjeta\\s+sanitaria", "seguridad\\s+social", "obra\\s+social", "afiliado", "mutua",
+            "dni", "nie", "nif", "cuil", "cuit", "pasaporte", "n?hc", "cip", "sip", "nss",
+            "tarjeta\\s+sanitaria", "seguridad\\s+social", "afiliado");
+
+    /**
+     * Palabras que también salen en frases normales ("Energía celular:", "El médico:"). Solo cuentan como
+     * etiqueta al principio de una línea, que es como vienen en un informe.
+     */
+    private static final String WEAK_LABELS = String.join("|",
+            "nacimiento", "edad", "documento", "obra\\s+social", "mutua",
             "paciente", "nombre(?:\\s+y\\s+apellidos?)?", "apellidos?",
             "m[eé]dic[oa](?:\\s+solicitante)?", "doctora?", "dra?\\.?", "profesional", "solicitante",
             "domicilio", "direcci[oó]n", "tel[eé]fono", "tel", "m[oó]vil", "celular", "e-?mail", "correo");
 
-    /** La etiqueta tiene que ir seguida de dos puntos: así "mi médico me dijo" no se toca. */
+    /**
+     * La etiqueta tiene que ir seguida de dos puntos (así "mi médico me dijo" no se toca), y lo que sigue
+     * no puede ser "**": eso es un título en negrita de una respuesta del bot, no un dato.
+     */
     private static final Pattern LABEL = Pattern.compile(
-            "(?<![\\p{L}\\d])(?:" + LABELS + ")\\.?\\s*:\\s*", Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+            "(?:^[ \\t]*(?:" + WEAK_LABELS + ")|(?<![\\p{L}\\d])(?:" + STRONG_LABELS + "))\\.?\\s*:(?!\\*)\\s*",
+            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE | Pattern.MULTILINE);
 
     /** Datos que se reconocen solos, sin etiqueta delante. */
     private static final Pattern UNLABELED = Pattern.compile(String.join("|",
@@ -62,7 +73,7 @@ public final class PersonalData {
                 valueEnd = end.start();
             }
             // Si en la misma columna empieza otra etiqueta ("HC: 123 Fecha Nac.: ..."), el valor acaba ahí.
-            Matcher next = LABEL.matcher(text).region(valueStart + 1, valueEnd);
+            Matcher next = LABEL.matcher(text).region(valueStart + 1, valueEnd).useAnchoringBounds(false);
             if (valueStart + 1 < valueEnd && next.find()) {
                 valueEnd = next.start();
             }
