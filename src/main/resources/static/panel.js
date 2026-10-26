@@ -126,8 +126,11 @@ function renderChart(rows) {
     svg.appendChild(t);
   };
   label(0, 12, String(max));
-  label(pad, H + 16, rows[0].day.slice(5));
-  label(W, H + 16, rows[rows.length - 1].day.slice(5), "end");
+  // La fecha debajo de su barra: todas si caben (hasta 14 días); si no, una de cada pocas.
+  const every = Math.ceil(rows.length / 14);
+  rows.forEach((r, i) => {
+    if (i % every === 0 || i === rows.length - 1) label(pad + i * step + bar / 2, H + 16, `${r.day.slice(8)}/${r.day.slice(5, 7)}`, "middle");
+  });
   box.replaceChildren(svg);
 }
 
