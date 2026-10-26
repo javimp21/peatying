@@ -7,9 +7,12 @@ let conversations = [];
 
 // aws/panel.ps1 abre peatying.com/panel#t=CLAVE: la guardamos y la quitamos de la dirección.
 // (Lo que va tras # nunca se envía al servidor ni queda en sus registros.)
+// Con "&movil" (código QR de aws/panel.ps1 -Movil) la clave se queda en la dirección: en el iPhone, el icono
+// de "Añadir a pantalla de inicio" guarda la dirección y no comparte datos con Safari.
 if (location.hash.startsWith("#t=")) {
-  try { localStorage.setItem(TOKEN_KEY, decodeURIComponent(location.hash.slice(3))); } catch (e) { /* nada */ }
-  history.replaceState(null, "", location.pathname);
+  const [value, ...flags] = location.hash.slice(3).split("&");
+  try { localStorage.setItem(TOKEN_KEY, decodeURIComponent(value)); } catch (e) { /* nada */ }
+  if (!flags.includes("movil")) history.replaceState(null, "", location.pathname);
 }
 const token = () => { try { return localStorage.getItem(TOKEN_KEY); } catch (e) { return null; } };
 
