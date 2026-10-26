@@ -178,7 +178,10 @@ function conversationCard(c) {
   const place = c.city ? `${c.city}, ${c.country}` : (c.country || "ubicación desconocida");
   const down = c.messages.filter((m) => m.feedback === -1).length;
   const up = c.messages.filter((m) => m.feedback === 1).length;
-  meta.textContent = [when.format(new Date(c.started)), place, c.referrer || "directo",
+  // La hora de la última pregunta (las conversaciones vienen ordenadas por ella); si empezó antes, también el inicio.
+  const last = when.format(new Date(c.last_at || c.started));
+  const started = when.format(new Date(c.started));
+  meta.textContent = [last === started ? last : `${last} (empezó ${started})`, place, c.referrer || "directo",
     `${questions.length} pregunta${questions.length === 1 ? "" : "s"}`,
     up ? `${up} 👍` : "", down ? `${down} 👎` : "", c.document_name ? `📄 ${c.document_name}` : "",
     c.internal ? "nuestra" : ""].filter(Boolean).join(" · ");

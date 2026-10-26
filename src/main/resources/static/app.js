@@ -298,6 +298,49 @@ function closeJuicer() {
   juicer.classList.remove("play");
 }
 
+// --- Gancho: afirmaciones de Peat que chocan con lo habitual ------------------
+// Todas están respaldadas en sus textos (ver las páginas de /temas). Van rotando; al pulsar, se pregunta por qué.
+const HOOKS = [
+  ["El azúcar no causa la diabetes.", "¿Por qué decía Peat que el azúcar no causa la diabetes?"],
+  ["Los aceites vegetales son tóxicos.", "¿Por qué decía Peat que los aceites vegetales son tóxicos?"],
+  ["El colesterol te protege.", "¿Por qué decía Peat que el colesterol es protector?"],
+  ["La serotonina no es la hormona de la felicidad.", "¿Por qué decía Peat que la serotonina no es la hormona de la felicidad?"],
+  ["La sal no es mala: restringirla, sí.", "¿Por qué decía Peat que restringir la sal es perjudicial?"],
+  ["El café es casi un nutriente.", "¿Por qué decía Peat que el café es casi un nutriente?"],
+  ["El estrógeno es una hormona del estrés.", "¿Por qué decía Peat que el estrógeno es una hormona del estrés?"],
+  ["El CO₂ no es un desecho: te protege.", "¿Por qué decía Peat que el CO2 es protector?"],
+  ["Comer solo carne, sin gelatina, es como vivir en estrés.", "¿Por qué decía Peat que hay que comer gelatina además de carne?"],
+];
+const HOOK_MS = 6000;
+const hookBox = document.getElementById("hook");
+const hookClaim = document.getElementById("hook-claim");
+let hookIndex = Math.floor(Math.random() * HOOKS.length);
+let hookTimer = null;
+
+function showHook() {
+  hookClaim.textContent = `«${HOOKS[hookIndex][0]}»`;
+  hookClaim.setAttribute("aria-label", `${HOOKS[hookIndex][0]} Preguntar por qué`);
+  hookBox.classList.remove("hook-in");
+  void hookBox.offsetWidth;             // reinicia la animación de entrada
+  hookBox.classList.add("hook-in");
+}
+
+function startHooks() {
+  showHook();
+  clearInterval(hookTimer);
+  // Con "reducir movimiento" se queda una sola frase fija.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  hookTimer = setInterval(() => {
+    if (document.body.classList.contains("chatting") || document.hidden) return;   // solo en la portada visible
+    hookIndex = (hookIndex + 1) % HOOKS.length;
+    showHook();
+  }, HOOK_MS);
+}
+
+const askHook = () => ask(HOOKS[hookIndex][1]);
+hookClaim.addEventListener("click", askHook);
+document.getElementById("hook-why").addEventListener("click", askHook);
+
 // --- Estado vacío: 4 ejemplos al azar ---------------------------------------
 function showExamples() {
   const shuffled = [...EXAMPLES].sort(() => Math.random() - 0.5).slice(0, 4);
@@ -1373,6 +1416,7 @@ function hideError() {
 // Al final del archivo a propósito: las constantes declaradas con const no existen hasta que se llega
 // a su línea, y así todo lo que se usa al arrancar ya está definido.
 showExamples();
+startHooks();
 forgetOldConversation();
 prefillFromLink();
 historyButton.hidden = loadHistory().length === 0;

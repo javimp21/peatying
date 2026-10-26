@@ -126,12 +126,14 @@ public class AdminController {
         }
         List<Map<String, Object>> conversations = jdbc.sql("""
                 SELECT c.id, c.created_at AS started, c.internal, c.document_name, c.document_text,
+                       (SELECT max(m.created_at) FROM chat_messages m WHERE m.conversation_id = c.id) AS last_at,
                        p.country, p.city, p.referrer
                 FROM conversations c
                 LEFT JOIN page_views p ON p.visitor_hash = c.visitor_hash AND p.day = c.created_at::date
                 WHERE (:internas OR NOT c.internal)
                   AND EXISTS (SELECT 1 FROM chat_messages m WHERE m.conversation_id = c.id)
-                ORDER BY c.created_at DESC
+                -- Primero las que tienen la pregunta más reciente, aunque la conversación empezara antes.
+                ORDER BY last_at DESC NULLS LAST
                 LIMIT :limit
                 """)
                 .param("internas", internas)

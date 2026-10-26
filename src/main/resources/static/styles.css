@@ -156,6 +156,23 @@ body {
 /* Al empezar a conversar, la portada desaparece: arriba queda solo la barra con el nombre. */
 .chatting .hero { display: none; }
 
+/* --- Gancho: una afirmación de Peat, grande, que va cambiando ------------------ */
+.hook { margin: 0 0 26px; padding: 16px 0 14px; border-top: var(--rule-bar) solid var(--ink); border-bottom: var(--rule-hair) solid var(--ink); }
+.chatting .hook { display: none; }
+.hook-claim {
+  display: block; width: 100%; padding: 0;
+  border: 0; background: none; text-align: left; cursor: pointer;
+  font: 400 clamp(1.5rem, 5.4vw, 2.2rem)/1.15 var(--slab); color: var(--ink);
+  min-height: 2.3em;                     /* las frases largas ocupan dos líneas: así no salta lo de debajo */
+}
+.hook-claim:hover { color: var(--accent-text); }
+.hook-by { margin: 8px 0 0; font-size: 0.95rem; color: var(--muted); }
+.hook-why { padding: 0; border: 0; background: none; font: inherit; font-weight: 600; color: var(--accent-text); cursor: pointer; }
+.hook-why:hover { text-decoration: underline; }
+.hook-claim:focus-visible, .hook-why:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
+.hook-in .hook-claim { animation: hook-fade 0.6s ease both; }
+@keyframes hook-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
 /* --- Caja de pregunta en forma de píldora ---------------------------------- */
 .ask { padding-top: 8px; }
 .chatting .ask {
