@@ -57,6 +57,8 @@ $("login").addEventListener("submit", (event) => {
   load();
 });
 $("logout").addEventListener("click", () => {
+  // Para no salir sin querer: después habría que volver a abrirlo con aws/panel.ps1.
+  if (!confirm("¿Salir del panel? Este navegador olvidará la clave.")) return;
   try { localStorage.removeItem(TOKEN_KEY); } catch (e) { /* nada */ }
   showLogin();
 });
