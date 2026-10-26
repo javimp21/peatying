@@ -1069,7 +1069,7 @@ function showHistory() {
           title.textContent = name;
         }
         field.replaceWith(open);
-        open.focus();
+        rename.focus();                 // el foco vuelve a "Renombrar", que es donde estaba
       };
       field.addEventListener("keydown", (event) => {
         // preventDefault: si no, ese mismo Enter "pulsaría" el título (que recibe el foco) y abriría la conversación.

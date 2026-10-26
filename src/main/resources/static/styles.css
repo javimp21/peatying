@@ -605,6 +605,10 @@ li .source-panel { margin: 8px 0 4px; }
 }
 .history-action { padding: 0 4px 0 10px; }
 .history-action:hover, .history-clear:hover { color: var(--accent-text); }
+/* Sin el recuadro del navegador: con el teclado, el elemento activo se subraya en bermellón. */
+.history-open:focus, .history-action:focus, .history-clear:focus { outline: none; }
+.history-open:focus-visible span { text-decoration: underline; text-decoration-color: var(--accent); }
+.history-action:focus-visible, .history-clear:focus-visible { color: var(--accent-text); text-decoration: underline; }
 .history-rename {
   flex: 1; min-width: 0; margin: 6px 0;
   padding: 6px 8px;
