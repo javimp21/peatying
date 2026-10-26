@@ -50,7 +50,8 @@ public class TopicPageRenderer {
 
     String page(Page p) {
         String url = SITE + "/temas/" + p.slug();
-        String title = p.title() + ": sus ideas explicadas en español";
+        // Corto a propósito (Bing avisa a partir de ~70 caracteres): "Ray Peat y el azúcar · Ray Peat Chatbot".
+        String title = p.title();
         StringBuilder body = new StringBuilder();
         body.append("<p class=\"topic-crumbs\"><a href=\"/temas\">Temas</a> · Ray Peat</p>\n");
         body.append("<h1>").append(esc(p.title())).append("</h1>\n");
