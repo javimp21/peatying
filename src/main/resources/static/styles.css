@@ -94,8 +94,7 @@ body {
 .wordmark em { font-style: normal; color: var(--muted); }
 .wordmark .logo { width: 1.7em; height: 1.7em; vertical-align: -0.5em; }
 /* Solo la naranja: en la portada el título ya dice "Ray Peat". En la conversación, que no tiene título, sí sale el nombre. */
-.wordmark-name { display: none; margin-left: 0.5em; }
-.chatting .wordmark-name { display: inline; }
+.wordmark-name { display: none; margin-left: 0.5em; }   /* arriba a la izquierda, solo la naranja (también en la conversación) */
 .pill-link {
   padding: 10px 16px;
   border: 1px solid var(--ink);
@@ -800,7 +799,6 @@ li .source-panel { margin: 8px 0 4px; }
 @media (max-width: 480px) {
   .topbar { padding: 16px 14px; gap: 10px; }
   .wordmark em { display: none; }     /* "Ray Peat en español" -> "Ray Peat" */
-  .chatting .wordmark-name { display: none; }   /* solo la naranja: si no, los 4 botones no caben */
   .actions { gap: 6px; }
   .ghost { padding: 6px 10px; }
 }
