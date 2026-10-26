@@ -22,6 +22,7 @@ DB_URL=jdbc:postgresql://${DB_HOST}:5432/ragpeat
 DB_PASSWORD=$(param /ragpeat/db-password)
 ANTHROPIC_API_KEY=$(param /ragpeat/anthropic-api-key)
 VOYAGE_API_KEY=$(param /ragpeat/voyage-api-key)
+ADMIN_TOKEN=$(param /ragpeat/admin-token 2>/dev/null || true)
 APP_TAG=${APP_TAG}
 EOF
 # APP_TAG también en .env: así cualquier "docker compose run ..." posterior (stats, index...) usa

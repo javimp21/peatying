@@ -12,11 +12,13 @@ y sigue donde se quedó.
 Uso (desde la raíz del proyecto, con GROQ_API_KEY y ANTHROPIC_API_KEY en el entorno):
   python scripts/transcribe_interviews.py urls.txt            # un enlace .mp3 por línea
   python scripts/transcribe_interviews.py urls.txt --limit 3  # solo los 3 primeros (prueba)
+  python scripts/transcribe_interviews.py ge.tsv              # "id<TAB>tema<TAB>url" (p. ej. Generative Energy)
 """
 import concurrent.futures
 import json
 import os
 import re
+import subprocess
 import sys
 import threading
 import time
@@ -36,6 +38,14 @@ SHOWS = {
     "ewh": "EastWest Healing", "jf": "JodelleFit", "sourcenutritional": "Source Nutritional Show",
     "rainmaking": "It's Rainmaking Time", "eluv": "ELUV", "blp": "Butter Living Podcast",
     "wp": "World Puja", "voiceofamerica": "Voice of America", "kkvv": "KKVV Radio",
+    "ge": "Generative Energy",
+}
+
+# Lo que conviene saber de un programa para no confundir a Peat con otro invitado.
+SHOW_HINTS = {
+    "ge": "This is the Generative Energy podcast. Danny Roddy is the host. Georgi Dinkov, when present, is a co-host "
+          "who also gives long explanations about biology and studies: label him HOST, never PEAT. "
+          "Peat is older, speaks slowly and often tells anecdotes from his own experiments and reading.",
 }
 
 lock = threading.Lock()
@@ -57,18 +67,56 @@ def http_json(req, timeout=600, retries=5):
             raise RuntimeError(f"HTTP {e.code}: {body!r}") from None
 
 
-def multipart(fields):
+def multipart(fields, file=None):
     boundary = uuid.uuid4().hex
     parts = [f'--{boundary}\r\nContent-Disposition: form-data; name="{k}"\r\n\r\n{v}\r\n'.encode() for k, v in fields.items()]
+    if file:
+        name, data = file
+        parts.append(f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{name}"\r\n'
+                     f'Content-Type: audio/ogg\r\n\r\n'.encode() + data + b"\r\n")
     parts.append(f"--{boundary}--\r\n".encode())
     return b"".join(parts), f"multipart/form-data; boundary={boundary}"
 
 
-def transcribe(url):
-    """Le pasamos a Groq el enlace del audio y lo descarga él: nosotros no bajamos nada. Así también
-    valen los archivos de más de 25 MB (el límite de subida de la cuenta gratuita)."""
-    fields = {"model": "whisper-large-v3-turbo", "response_format": "verbose_json", "language": "en", "url": url}
-    body, ctype = multipart(fields)
+TMP_DIR = os.path.join("data", "audio_tmp")
+GROQ_URL_LIMIT = 100 * 1024 * 1024          # Groq no acepta enlaces a archivos de más de 100 MB
+
+
+def compressed(url, name):
+    """Para audios de más de 100 MB (los de Generative Energy, a 128 kbps estéreo): los bajamos y los dejamos
+    en voz mono Opus a 16 kbps (unos 7 MB por hora), que cabe en el límite de subida de 25 MB y Whisper
+    entiende igual. Se borran al terminar."""
+    os.makedirs(TMP_DIR, exist_ok=True)
+    source, target = os.path.join(TMP_DIR, name + ".mp3"), os.path.join(TMP_DIR, name + ".ogg")
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=900) as resp, open(source, "wb") as f:
+        while chunk := resp.read(1 << 20):
+            f.write(chunk)
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", source, "-ac", "1", "-ar", "16000",
+                    "-c:a", "libopus", "-b:a", "16k", target], check=True)
+    with open(target, "rb") as f:
+        data = f.read()
+    os.remove(source)
+    os.remove(target)
+    return data
+
+
+def remote_size(url):
+    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=60) as resp:
+        return int(resp.headers.get("content-length") or 0)
+
+
+def transcribe(url, name):
+    """Normalmente le pasamos a Groq el enlace del audio y lo descarga él: nosotros no bajamos nada. Así también
+    valen los archivos de más de 25 MB (el límite de subida de la cuenta gratuita). Si pasa de 100 MB (el
+    límite de los enlaces), lo comprimimos aquí y lo subimos."""
+    fields = {"model": "whisper-large-v3-turbo", "response_format": "verbose_json", "language": "en"}
+    # toxinless.com no es accesible desde aquí, y sus archivos caben siempre: ni lo miramos.
+    if "toxinless.com" not in url and remote_size(url) > GROQ_URL_LIMIT:
+        body, ctype = multipart(fields, (name + ".ogg", compressed(url, name)))
+    else:
+        body, ctype = multipart({**fields, "url": url})
     req = urllib.request.Request(GROQ_URL, data=body, method="POST", headers={
         "Authorization": f"Bearer {os.environ['GROQ_API_KEY']}", "User-Agent": UA, "Content-Type": ctype})
     return http_json(req)
@@ -84,12 +132,13 @@ def sentences_of(transcript):
     return result
 
 
-def label_speakers(sentences):
+def label_speakers(sentences, hint=""):
     numbered = "\n".join(f"{i}: {s['text']}" for i, s in enumerate(sentences))
     last = len(sentences) - 1
     prompt = f"""This is an automatic transcript of a radio interview or podcast with the biologist Ray Peat, split into numbered sentences.
 Decide who speaks in each sentence. Speakers: PEAT (Ray Peat, the guest who answers), HOST (any presenter or interviewer), CALLER (listeners who phone in or whose questions are read).
 Peat gives long explanations about biology, hormones, metabolism, history and politics; hosts introduce, ask, read questions and react; callers ask about their own case.
+{hint}
 Be careful at turn changes: a short reaction ("Wow.", "Right.") or a question at the start or end of a sentence block usually belongs to someone else.
 Reply ONLY with a JSON list of consecutive ranges covering every sentence from 0 to {last}, like:
 [{{"from": 0, "to": 12, "speaker": "HOST"}}, {{"from": 13, "to": 40, "speaker": "PEAT"}}]
@@ -111,8 +160,10 @@ Reply ONLY with a JSON list of consecutive ranges covering every sentence from 0
     return ranges
 
 
-def metadata(url):
-    name = url.rsplit("/", 1)[-1].removesuffix(".mp3")
+def metadata(url, name=None, given_topic=None):
+    """El id dice programa y fecha ("kmud-081201-cholesterol"). En toxinless.com es el nombre del archivo;
+    para otros sitios (enlaces sin nombre útil) viene en la lista junto con el tema."""
+    name = name or url.rsplit("/", 1)[-1].removesuffix(".mp3")
     parts = name.split("-")
     show = SHOWS.get(parts[0], parts[0])
     date = None
@@ -122,22 +173,24 @@ def metadata(url):
         topic = " ".join(parts[2:])
     else:
         topic = " ".join(parts[1:])
-    return name, show, date, topic.capitalize()
+    return name, show, date, given_topic or topic.capitalize()
 
 
-def process(url):
-    name, show, date, topic = metadata(url)
+def process(job):
+    url, name, given_topic = job
+    name, show, date, topic = metadata(url, name, given_topic)
     path = os.path.join(OUT_DIR, name + ".json")
     if os.path.exists(path):
         return name, "ya estaba"
-    transcript = transcribe(url)
+    transcript = transcribe(url, name)
     with lock:
         costs["audio_seconds"] += transcript.get("duration", 0)
     sentences = sentences_of(transcript)
+    hint = SHOW_HINTS.get(name.split("-")[0], "")
     try:
-        ranges = label_speakers(sentences)
+        ranges = label_speakers(sentences, hint)
     except (ValueError, AttributeError, json.JSONDecodeError):
-        ranges = label_speakers(sentences)          # un reintento si el formato vino mal
+        ranges = label_speakers(sentences, hint)    # un reintento si el formato vino mal
     turns = [{"speaker": r["speaker"], "start": round(sentences[r["from"]]["start"], 1),
               "text": " ".join(s["text"] for s in sentences[r["from"]:r["to"] + 1])} for r in ranges]
     episode = {"id": name, "show": show, "date": date, "topic": topic, "audio_url": url,
@@ -151,8 +204,13 @@ def process(url):
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
-    lines = [l.split() for l in open(sys.argv[1], encoding="utf-8") if l.strip()]
-    jobs = [parts[-1] for parts in lines if "toxinless.com" in parts[-1]]   # líneas "estado tamaño url" o solo "url"
+    jobs = []
+    for line in open(sys.argv[1], encoding="utf-8"):
+        if "\t" in line:                     # "id<TAB>tema<TAB>url": episodios de fuera de toxinless.com
+            name, topic, url = line.rstrip("\n").split("\t")
+            jobs.append((url, name, topic))
+        elif "toxinless.com" in line:        # "estado tamaño url" o solo "url"
+            jobs.append((line.split()[-1], None, None))
     if "--limit" in sys.argv:
         jobs = jobs[:int(sys.argv[sys.argv.index("--limit") + 1])]
     started, failed = time.time(), []

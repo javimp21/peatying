@@ -651,6 +651,46 @@ li .source-panel { margin: 8px 0 4px; }
 .topic-index a:hover { text-decoration: underline; }
 .topic-index span { display: block; margin-top: 4px; font-size: 0.95rem; color: var(--muted); }
 
+/* --- Panel privado (peatying.com/panel) ------------------------------------- */
+.panel { max-width: 1000px; margin: 0 auto; padding: 24px 20px 80px; color: var(--text-soft); }
+.panel h1 { margin: 0 0 6px; font: 400 4rem/0.9 var(--display); text-transform: uppercase; color: var(--ink); }
+.panel h2 { margin: 34px 0 10px; padding-top: 10px; border-top: var(--rule-bar) solid var(--ink); font: 400 1.1rem/1.2 var(--slab); text-transform: uppercase; color: var(--ink); }
+.panel-sub { font-size: 0.85rem; color: var(--muted); }
+.panel-login { max-width: 360px; margin: 40px auto; display: grid; gap: 10px; }
+.panel-login input, .panel-filters input[type="search"] {
+  padding: 10px 12px; border: var(--rule-hair) solid var(--ink); background: var(--input-bg); color: var(--ink); font: inherit;
+}
+.panel-error { color: var(--error-text); }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0; margin-top: 18px; border: var(--rule-hair) solid var(--ink); }
+.kpis div { padding: 14px 16px; border-right: var(--rule-hair) solid var(--line); }
+.kpis strong { display: block; font: 400 2.6rem/1 var(--display); color: var(--ink); }
+.kpis span { font-size: 0.85rem; color: var(--muted); }
+.panel-chart svg { width: 100%; height: auto; display: block; }
+.panel-chart text { font: 11px var(--sans); fill: var(--muted); }
+.bar-visits { fill: var(--line); }
+.bar-askers { fill: var(--accent); }
+.panel-legend { font-size: 0.82rem; color: var(--muted); }
+.sw { display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 10px; vertical-align: -1px; }
+.sw-visits { background: var(--line); } .sw-askers { background: var(--accent); }
+.panel-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0 32px; }
+.panel-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.panel-table td { padding: 6px 0; border-bottom: var(--rule-hair) solid var(--line); }
+.panel-table td:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+.panel-filters { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 0.9rem; }
+.panel-filters input[type="search"] { flex: 1 1 260px; }
+.conv { border-bottom: var(--rule-hair) solid var(--line); }
+.conv summary { cursor: pointer; padding: 12px 0; list-style: none; }
+.conv summary::-webkit-details-marker { display: none; }
+.conv summary strong { display: block; color: var(--ink); font-weight: 600; }
+.conv summary span { font-size: 0.82rem; color: var(--muted); }
+.conv[open] summary strong { text-decoration: underline; text-decoration-color: var(--accent); }
+.conv-internal summary strong { color: var(--muted); }
+.msg { margin: 0 0 12px; padding: 10px 14px; }
+.msg small { color: var(--muted); }
+.msg p { margin: 4px 0 0; white-space: pre-wrap; color: var(--ink); font-size: 0.95rem; line-height: 1.55; }
+.msg-user { background: var(--surface); border-right: var(--rule-bar) solid var(--ink); }
+.msg-assistant { border-left: 3px solid var(--line); }
+
 /* --- Páginas de texto legal (privacidad) ---------------------------------- */
 .legal { max-width: 640px; margin: 0 auto; padding: 36px 20px 80px; font-size: 1.05rem; line-height: 1.65; color: var(--text-soft); }
 .legal h1 { margin: 0 0 18px; font: 400 4.5rem/0.9 var(--display); text-transform: uppercase; color: var(--ink); }

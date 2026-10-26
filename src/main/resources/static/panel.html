@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panel · Ray Peat Chatbot</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="img/favicon.png" type="image/png" sizes="144x144">
+  <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+  <script src="panel.js" defer></script>
+</head>
+<body class="panel-page">
+  <div class="frame">
+    <header class="topbar">
+      <a href="/" class="wordmark" aria-label="Inicio"><img src="img/logo.png" alt="" class="logo" width="30" height="30"><span class="wordmark-name">Panel</span></a>
+      <nav class="actions">
+        <button type="button" id="reload" class="ghost">Actualizar</button>
+        <button type="button" id="logout" class="ghost">Salir</button>
+      </nav>
+    </header>
+
+    <main class="panel">
+      <!-- Sin clave guardada: se pide aquí (o la trae aws/panel.ps1 en la dirección, tras #t=). -->
+      <form id="login" class="panel-login" hidden>
+        <h1>Panel</h1>
+        <label for="token">Clave del panel</label>
+        <input id="token" type="password" autocomplete="current-password" required>
+        <button type="submit" class="ghost">Entrar</button>
+        <p id="login-error" class="panel-error" hidden></p>
+      </form>
+
+      <div id="content" hidden>
+        <h1>Panel</h1>
+        <p class="panel-sub">Últimos 30 días, sin nuestras visitas ni preguntas. Fechas en hora de Madrid salvo los totales por día (UTC).</p>
+
+        <section class="kpis" id="kpis" aria-label="Resumen"></section>
+
+        <h2>Visitas por día</h2>
+        <div id="chart" class="panel-chart"></div>
+        <p class="panel-legend"><span class="sw sw-visits"></span> visitantes <span class="sw sw-askers"></span> de ellos preguntan</p>
+
+        <div class="panel-cols">
+          <section><h2>De dónde llegan</h2><table id="referrers" class="panel-table"></table></section>
+          <section><h2>De dónde son</h2><table id="locations" class="panel-table"></table></section>
+        </div>
+
+        <h2>Conversaciones</h2>
+        <div class="panel-filters">
+          <input id="search" type="search" placeholder="Buscar en preguntas y respuestas…" aria-label="Buscar">
+          <label><input id="only-down" type="checkbox"> Solo con 👎</label>
+          <label><input id="internal" type="checkbox"> Incluir las nuestras</label>
+        </div>
+        <p id="count" class="panel-sub"></p>
+        <div id="conversations"></div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

@@ -30,6 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/about").setViewName("forward:/about.html");
         registry.addViewController("/privacidad").setViewName("forward:/privacidad.html");
+        registry.addViewController("/panel").setViewName("forward:/panel.html");
     }
 
     @Bean

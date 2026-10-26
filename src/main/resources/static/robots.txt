@@ -3,5 +3,6 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /panel
 
 Sitemap: https://peatying.com/sitemap.xml
