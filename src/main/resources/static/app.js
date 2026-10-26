@@ -317,7 +317,6 @@ let hookTimer = null;
 
 function showHook() {
   hookClaim.textContent = `«${HOOKS[hookIndex][0]}»`;
-  hookClaim.setAttribute("aria-label", `${HOOKS[hookIndex][0]} Preguntar por qué`);
   hookBox.classList.remove("hook-in");
   void hookBox.offsetWidth;             // reinicia la animación de entrada
   hookBox.classList.add("hook-in");
@@ -335,9 +334,12 @@ function startHooks() {
   }, HOOK_MS);
 }
 
-const askHook = () => ask(HOOKS[hookIndex][1]);
-hookClaim.addEventListener("click", askHook);
-document.getElementById("hook-why").addEventListener("click", askHook);
+// "¿Por qué? →" empieza siempre una conversación nueva con esa pregunta.
+document.getElementById("hook-why").addEventListener("click", () => {
+  const question = HOOKS[hookIndex][1];
+  if (messages.length > 0) startOver();
+  ask(question);
+});
 
 // --- Estado vacío: 4 ejemplos al azar ---------------------------------------
 function showExamples() {
@@ -381,9 +383,16 @@ function autoGrow() {
   input.style.height = input.scrollHeight + "px";
 }
 
+// La pregunta que se está respondiendo ahora. Volver a la portada o abrir otra conversación la cancela
+// (startOver): si no, su respuesta aparecería después en la pantalla nueva, sin su pregunta.
+let currentRequest = null;
+
 async function ask(question, quote = null) {
   question = question.trim();
   if (!question || sendButton.disabled) return;
+  const request = new AbortController();
+  currentRequest = request;
+  const cancelled = () => request.signal.aborted;
 
   hideError();
   clearReply();
@@ -407,6 +416,7 @@ async function ask(question, quote = null) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ question: withQuote(question, quote), conversationId, internal: isInternal }),
+      signal: request.signal,
     });
 
     if (!response.ok) {
@@ -418,6 +428,7 @@ async function ask(question, quote = null) {
 
     // Leemos el stream de eventos según va llegando.
     for await (const { event, data } of readEvents(response)) {
+      if (cancelled()) return;          // se volvió a la portada: esta respuesta ya no pinta nada aquí
       if (event === "delta") {
         if (!live) {                    // primer trozo: quitamos el "cargando" y empezamos a escribir
           // Mientras las naranjas se van rodando, el texto que llega se acumula; luego sale sin perder nada.
@@ -436,6 +447,7 @@ async function ask(question, quote = null) {
       } else if (event === "done") {
         // Esperamos a que la máquina de escribir termine de mostrar el texto y entonces la versión final,
         // con las citas pulsables, ocupa su lugar. Tiene el mismo formato, así que no se nota el cambio.
+        if (cancelled()) return;
         conversationId = data.conversationId;     // se guarda junto con los mensajes (addMessage)
         const message = {
           role: "bot", text: data.answer, sources: data.sources,
@@ -447,6 +459,7 @@ async function ask(question, quote = null) {
         }
         if (live) {
           await live.finish();
+          if (cancelled()) return;      // se volvió a la portada mientras terminaba de escribirse
           live.element.replaceWith(addMessage(message, { animate: false }));
         } else {
           addMessage(message);
@@ -459,19 +472,24 @@ async function ask(question, quote = null) {
         finished = true;
       }
     }
-    if (!finished) {
+    if (!finished && !cancelled()) {
       // La conexión se cortó sin "done" ni "error".
       live?.remove();
       undoQuestion(questionDiv, question, "Se cortó la conexión. Inténtalo de nuevo.");
     }
   } catch (e) {
+    if (cancelled()) return;            // la cancelamos nosotros (startOver): no es un error
     // Sin conexión, o el servidor no responde.
     live?.remove();
     undoQuestion(questionDiv, question, "No hay conexión con el servidor. Inténtalo de nuevo.");
   } finally {
     loading?.stop();
-    setBusy(false);
-    focusInputIfDesktop();
+    // Si ya hay otra pregunta en marcha (se canceló esta y se hizo otra), no tocamos su estado.
+    if (currentRequest === request) {
+      currentRequest = null;
+      setBusy(false);
+      focusInputIfDesktop();
+    }
   }
 }
 
@@ -1283,6 +1301,12 @@ document.getElementById("home").addEventListener("click", (event) => {
 });
 
 function startOver() {
+  // Si había una respuesta escribiéndose, se cancela: no debe aparecer después en la pantalla nueva.
+  if (currentRequest) {
+    currentRequest.abort();
+    currentRequest = null;
+    setBusy(false);
+  }
   messages = [];
   conversationId = null;                // la próxima pregunta empieza una conversación nueva en el servidor
   conversation.replaceChildren();       // vacía la conversación en pantalla
