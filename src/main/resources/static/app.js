@@ -306,10 +306,8 @@ const HOOKS = [
   ["El colesterol te protege.", "¿Por qué decía Peat que el colesterol es protector?"],
   ["La serotonina no es la hormona de la felicidad.", "¿Por qué decía Peat que la serotonina no es la hormona de la felicidad?"],
   ["La sal no es mala: restringirla, sí.", "¿Por qué decía Peat que restringir la sal es perjudicial?"],
-  ["El café es casi un nutriente.", "¿Por qué decía Peat que el café es casi un nutriente?"],
+  ["El café protege tu salud.", "¿Por qué decía Peat que el café es bueno para la salud?"],
   ["El estrógeno es una hormona del estrés.", "¿Por qué decía Peat que el estrógeno es una hormona del estrés?"],
-  ["El CO₂ no es un desecho: te protege.", "¿Por qué decía Peat que el CO2 es protector?"],
-  ["Comer solo carne, sin gelatina, es como vivir en estrés.", "¿Por qué decía Peat que hay que comer gelatina además de carne?"],
 ];
 const HOOK_MS = 6000;
 const hookBox = document.getElementById("hook");
