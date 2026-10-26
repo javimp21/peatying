@@ -1203,5 +1203,12 @@ forgetOldConversation();
 prefillFromLink();
 historyButton.hidden = loadHistory().length === 0;
 const isInternal = readInternalFlag();
+// Para poder comprobarlo de un vistazo: en nuestros navegadores, una nota al final del pie.
+if (isInternal) {
+  const note = document.createElement("span");
+  note.className = "footer-links";
+  note.textContent = "Este navegador no cuenta en las métricas (?interno=0 para volver a contar).";
+  document.querySelector(".footer").appendChild(note);
+}
 focusInputIfDesktop();
 countVisit();

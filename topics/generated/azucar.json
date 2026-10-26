@@ -1,77 +1,118 @@
 {
-  "slug" : "azucar",
-  "name" : "el azúcar y la fruta",
-  "title" : "Ray Peat y el azúcar",
-  "question" : "¿Por qué recomendaba el azúcar?",
-  "description" : "Qué pensaba Ray Peat del azúcar y la fruta: por qué defendía la sacarosa y la fruta frente al almidón y las grasas poliinsaturadas, según sus textos.",
-  "intro" : "Según Peat, el azúcar no es el origen de la diabetes ni de la obesidad, sino una fuente de energía protectora cuando las células pueden oxidarla bien [1][2]. Para él, el verdadero problema está en el exceso de grasas poliinsaturadas (PUFA) y en los almidones, y la fruta es uno de los mejores alimentos [2].",
-  "sections" : [ {
-    "heading" : "El azúcar como protector, no como veneno",
-    "paragraphs" : [ "Peat sostenía que la glucosa protege a las células beta del páncreas frente a los ácidos grasos libres, restaurando la energía metabólica y evitando daños en las mitocondrias [1]. En su opinión, en cualquier tejido es la incapacidad de oxidar glucosa lo que provoca estrés oxidativo y daño celular [1].", "También explicaba que, para liberar la misma energía, oxidar glucosa genera más dióxido de carbono y consume menos oxígeno que oxidar ácidos grasos [1]. Según él, ese dióxido de carbono ayuda a las células a controlar el calcio y evita que se sobreexciten y mueran [1]." ]
-  }, {
-    "heading" : "Las grasas poliinsaturadas, el verdadero problema",
-    "paragraphs" : [ "Para Peat, los ácidos grasos poliinsaturados, como el linoleico y el linolénico y sus derivados, tienen efectos excitadores y promotores del estrés que desvían el metabolismo lejos de la oxidación de la glucosa [2]. Añadía que la mayor parte del daño tisular atribuido a los productos de glicación avanzada procede de la descomposición de estas grasas y no de los azúcares [2].", "Sostenía además que el PUFA bloquea la capacidad de usar el azúcar, de modo que las células sienten una carencia de glucosa y activan reacciones de estrés [3]. A su juicio, la combinación de almidón y PUFA es la que más perturba el azúcar en sangre, mucho más que unos caramelos de azúcar blanco [3]." ]
-  }, {
-    "heading" : "Azúcar y diabetes: una vieja creencia equivocada",
-    "paragraphs" : [ "Peat recordaba que la idea de que comer azúcar causa diabetes nació cuando nada se sabía de fisiología, y que, según él, sigue vigente en muchos médicos [4]. Defendía que los experimentos de Houssay, en los que el azúcar y el aceite de coco protegían frente a la diabetes, y la constatación de que los PUFA causan resistencia a la insulina, han mostrado que la obsesión con el azúcar fue una desviación peligrosa [2].", "También señalaba que en el siglo XIX algunos médicos trataron la diabetes añadiendo sacarosa a la dieta, y que en 1874 se comunicó que los diabéticos asimilaban mejor la fructosa que la glucosa [4][5]. Según Peat, con el descubrimiento de la insulina en 1922 esa terapia quedó casi olvidada [4]." ]
-  }, {
-    "heading" : "Fructosa, insulina y grasa corporal",
-    "paragraphs" : [ "Según Peat, la fructosa frena el efecto de la glucosa sobre la secreción de insulina, de modo que comer sacarosa en lugar de almidón reduce la tendencia a almacenar grasa [2]. Para él, la fructosa también hace la insulina menos dañina al bloquear de algún modo su tendencia a producir obesidad [6].", "Criticaba los estudios que acusan a la fructosa de causar resistencia a la insulina: en uno con ratas, decía, se omitía que los animales alimentados con almidón acabarían pesando el doble que los de la dieta con sacarosa [6]. Citaba además trabajos en los que una bebida de glucosa aumentaba el estrés oxidativo e inflamatorio, algo que no ocurría con fructosa ni con zumo de naranja [4]." ]
-  }, {
-    "heading" : "La fruta frente al almidón y los cereales",
-    "paragraphs" : [ "Peat consideraba la fruta un alimento excelente porque aporta una mezcla de glucosa y fructosa y mucho potasio, además de otros minerales como el magnesio [7]. Según él, ese potasio reduce la insulina que hay que secretar, por lo que la fruta se maneja con más suavidad que las mismas calorías en forma de almidón [7].", "Defendía que el almidón estimula mucho la insulina y baja el azúcar en sangre, lo que aumenta el apetito y favorece la obesidad [2]. Señalaba que el consumo de pan y pasta se asocia con la diabetes y el de fruta tiene una asociación inversa [2]. Para él, evitar cereales y legumbres y apoyarse en la fruta ayuda a minimizar los efectos de las grasas poliinsaturadas [1]." ]
-  }, {
-    "heading" : "Azúcar refinado, miel y glucémico",
-    "paragraphs" : [ "Peat describía el azúcar granulado como muy puro pero carente de nutrientes esenciales, por lo que lo veía como un recurso terapéutico temporal o un sustituto ocasional cuando no hay buena fruta [4]. Creía que los azúcares son más saludables a largo plazo junto a minerales, como los de la leche y la fruta [1]. Mencionaba también usos específicos del azúcar puro, como analgésico suave para bebés o para cubrir heridas, por su efecto germicida y protector [8].", "Sobre el índice glucémico, Peat apuntaba que el zumo de naranja y la sacarosa lo tienen más bajo que el pan o el almidón [2]. Afirmaba que algunas patatas y el arroz llegan a casi el doble que el azúcar blanco, y que este no es el causante de la obesidad ni de la enfermedad cardíaca, aunque comer demasiado de cualquier cosa engorde [9]." ]
-  } ],
-  "faq" : [ {
-    "q" : "¿Pensaba Ray Peat que el azúcar causa diabetes?",
-    "a" : "No. Según Peat, la idea de que el azúcar provoca diabetes es una creencia anterior a la ciencia que aún sostienen muchos médicos [4]. Para él, los PUFA que causan resistencia a la insulina y dañan el páncreas son un factor mucho más importante [2]."
-  }, {
-    "q" : "¿Qué opinaba Ray Peat de la fruta?",
-    "a" : "La consideraba una de las mejores fuentes de azúcar porque combina glucosa y fructosa con mucho potasio y otros minerales [7]. Sostenía que la fruta se asocia de forma inversa con la diabetes y que, usada como parte importante de la dieta, ayuda a contrarrestar los efectos de los PUFA [2][1]."
-  }, {
-    "q" : "¿Es mejor el azúcar que el almidón según Ray Peat?",
-    "a" : "Sí, para él lo es. Sostenía que el almidón es glucosa pura y estimula mucho la insulina y las reacciones de estrés, mientras que la sacarosa contiene fructosa, que frena ese estímulo [3][2]. Añadía que el almidón sube el apetito y favorece la obesidad [2]."
-  }, {
-    "q" : "¿Qué decía Ray Peat del azúcar blanco refinado?",
-    "a" : "Lo veía puro pero sin nutrientes, así que lo describía como recurso temporal o sustituto ocasional de la fruta [4]. Aun así, negaba que el azúcar blanco sea el responsable de la obesidad y la enfermedad cardíaca [9], y le atribuía efectos terapéuticos específicos, como analgésico en bebés o en heridas [8]."
-  } ],
-  "sources" : [ {
-    "title" : "Glucose and sucrose for diabetes",
-    "url" : "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml",
-    "type" : "article"
-  }, {
-    "title" : "Glycemia, starch, and sugar in context",
-    "url" : "https://raypeat.com/articles/articles/glycemia.shtml",
-    "type" : "article"
-  }, {
-    "title" : "Ask the Herb Doctor (KMUD): Food additives (2009)",
-    "url" : "https://www.toxinless.com/kmud-091001-food-additives.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Sugar issues",
-    "url" : "https://raypeat.com/articles/articles/sugar-issues.shtml",
-    "type" : "article"
-  }, {
-    "title" : "Ask the Herb Doctor (KMUD): Sugar myths 2 (2011)",
-    "url" : "https://www.toxinless.com/kmud-111021-sugar-myths-2.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Ask the Herb Doctor (KMUD): Sugar 2 (2010)",
-    "url" : "https://www.toxinless.com/kmud-101015-sugar-2.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "EastWest Healing: Glycemia starch and sugar in context (2011)",
-    "url" : "https://www.toxinless.com/ewh-110427-glycemia-starch-and-sugar-in-context.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Ask the Herb Doctor (KMUD): How irradiated cells affect other living cells in human body (2022)",
-    "url" : "https://www.toxinless.com/kmud-220318-how-irradiated-cells-affect-other-living-cells-in-human-body.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Ask the Herb Doctor (KMUD): Sugar myths (2011)",
-    "url" : "https://www.toxinless.com/kmud-110916-sugar-myths.mp3",
-    "type" : "interview"
-  } ]
+  "slug": "azucar",
+  "name": "el azúcar y la fruta",
+  "title": "Ray Peat y el azúcar",
+  "question": "¿Por qué recomendaba el azúcar?",
+  "description": "Qué pensaba Ray Peat sobre el azúcar y la fruta: por qué defendía la sacarosa y la fruta frente al almidón y su visión de la diabetes y del estrés.",
+  "intro": "Según Peat, el azúcar, sobre todo el que viene en la fruta, protege a las células, y el verdadero problema metabólico está en el exceso de grasas poliinsaturadas y en el almidón [1]. Para él, la idea de que comer azúcar causa diabetes es una creencia anticuada que desvió la atención de las causas reales de las enfermedades degenerativas [2][1].",
+  "sections": [
+    {
+      "heading": "Una creencia antigua sobre el azúcar y la diabetes",
+      "paragraphs": [
+        "Peat explicaba que la diabetes se llamó durante siglos enfermedad del azúcar porque la orina de los pacientes sabía dulce, y de ahí se supuso que comer azúcar tenía que ser la causa. Recordaba que Claude Bernard descubrió en 1848 que el cuerpo fabrica azúcar a partir de las proteínas de sus tejidos, y que aun así los pacientes seguían eliminando azúcar con una dieta sin ella [2]. Según él, esa creencia prescientífica la sigue manteniendo probablemente la mayoría de los médicos [2].",
+        "Para Peat, la obsesión dietética con el azúcar fue un desvío peligroso que retrasó la comprensión de estas enfermedades. Como argumentos citaba los experimentos de Houssay, en los que el azúcar y el aceite de coco protegían frente a la diabetes, la demostración de Randle del antagonismo entre las grasas y el uso de la glucosa, y el reconocimiento de que los ácidos grasos poliinsaturados (PUFA) provocan resistencia a la insulina y dañan el páncreas [1]."
+      ]
+    },
+    {
+      "heading": "Sacarosa y fructosa en el tratamiento de la diabetes",
+      "paragraphs": [
+        "Peat contaba que en el siglo XIX algunos médicos trataron la diabetes añadiendo mucha sacarosa a la dieta, y que en 1874 Külz comunicó que los diabéticos asimilaban mejor la fructosa que la glucosa [2]. Según él, siguieron varias décadas de informes favorables a la fructosa, hasta que el descubrimiento de la insulina en 1922 hizo que esa terapia se olvidara casi por completo [2][3].",
+        "En ese contexto, Peat sostenía que fue frecuente recomendar fructosa o sacarosa a los diabéticos en lugar de glucosa pura [3]."
+      ]
+    },
+    {
+      "heading": "Azúcar frente a almidón: insulina y grasa",
+      "paragraphs": [
+        "Según Peat, el almidón y la glucosa estimulan con eficacia la secreción de insulina, lo que favorece que la glucosa se convierta en glucógeno y en grasa. La fructosa, en cambio, frena ese estímulo de la glucosa, de modo que comer sacarosa en lugar de almidón reduce la tendencia a almacenar grasa [1]. Añadía que el almidón, al subir la insulina y bajar el azúcar en sangre, aumenta el apetito, y que por eso comer hidratos complejos es una forma razonable de favorecer la obesidad [1].",
+        "Peat criticaba un estudio con ratas, citado a menudo para tachar la fructosa de peligrosa. Según él, a las cinco semanas los animales con mucha fructosa mostraban resistencia a la insulina, pero se omitía que habían engordado mucho menos, y que con la misma dieta durante un año los alimentados con almidón pesarían el doble [4]. También decía que los almidones son glucosa pura, no la mezcla al 50 % de fructosa y glucosa, y que por eso estimulan mucho más la insulina y las reacciones de estrés [5]."
+      ]
+    },
+    {
+      "heading": "La fruta, el potasio y el índice glucémico",
+      "paragraphs": [
+        "Para Peat, la fruta tiene ventajas sobre los cereales que van más allá de la diferencia entre azúcar y almidón. Señalaba que el consumo de pan y pasta se asocia con la aparición de diabetes, mientras que el de fruta guarda una fuerte asociación inversa [1]. Explicaba que las frutas contienen aproximadamente mitad fructosa y mitad glucosa, y mucho potasio y otros minerales, como el magnesio, que ayudan a regular la glucosa [6]. Según él, ese potasio reduce la insulina que hay que segregar, y por eso el zumo de naranja o de uva se maneja con más suavidad que las mismas calorías en forma de almidón [6].",
+        "Sobre el índice glucémico, Peat observaba que el zumo de naranja y la sacarosa lo tienen más bajo que el almidón o el pan, y que, si ese índice fuese tan importante, habría que recomendar sustituir el pan blanco por refresco de cola o zumo de naranja [1]. Añadía que los índices de algunas patatas y del arroz son casi el doble que el del azúcar blanco [7]. En su opinión, los efectos de frutas y cereales sobre la salud no se reducen al azúcar en sangre [1]."
+      ]
+    },
+    {
+      "heading": "Glucosa, grasas poliinsaturadas y estrés oxidativo",
+      "paragraphs": [
+        "Según Peat, en todo tipo de tejido es el fallo en la oxidación de la glucosa lo que produce estrés oxidativo y daño celular. Sostenía que la glucosa protege a las células beta del páncreas frente a los ácidos grasos libres y que, por la misma energía liberada, produce más dióxido de carbono y usa menos oxígeno que las grasas [8]. Para él, las grasas vegetales insaturadas desvían el metabolismo lejos de la glucosa y pueden llegar a destruir el metabolismo respiratorio [1].",
+        "También defendía que la mayor parte del daño tisular atribuido a los productos finales de glicación avanzada (AGE) procede de la descomposición de las grasas poliinsaturadas y no de los azúcares [1]. Y, según él, la combinación de almidón y grasas poliinsaturadas altera el azúcar en sangre mucho más que los caramelos de azúcar blanco, porque esas grasas bloquean el uso del azúcar y las células reaccionan como si les faltara [5].",
+        "Frente a las publicaciones que acusan a la fructosa de aumentar la peroxidación lipídica, Peat citaba estudios en los que aumentaba el estado antioxidante en ratas. Citaba también uno en personas donde la glucosa elevó el estrés oxidativo e inflamatorio y la fructosa o el zumo de naranja no [2]."
+      ]
+    },
+    {
+      "heading": "Azúcar refinado, fruta y otros usos del azúcar",
+      "paragraphs": [
+        "Peat consideraba el azúcar granulado muy puro pero carente de nutrientes esenciales, por lo que lo veía como material terapéutico temporal o sustituto ocasional cuando no hay buena fruta o la miel disponible provoca alergia [2]. Pensaba que los azúcares resultan más saludables a largo plazo cuando van con abundancia de minerales, como en la leche y la fruta, que aportan potasio y calcio [8]. Como referencia, planteaba que dos litros de leche y uno de zumo de naranja al día dan suficiente fructosa y otros azúcares para resistir el estrés en general [2].",
+        "Según él, el azúcar puro también tiene usos terapéuticos específicos: un analgésico suave para bebés y, donde no hay penicilina, un relleno para heridas graves, con efecto germicida y protector [9]. Con todo, aclaraba que comiendo suficiente de cualquier cosa se gana peso, aunque no creía que el azúcar blanco sea el causante de la obesidad y de las enfermedades del corazón [7]."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Pensaba Ray Peat que el azúcar causa diabetes?",
+      "a": "No. Según Peat, la idea de que comer azúcar causa diabetes es una creencia prescientífica que aún mantienen muchos médicos [2]. Para él, los factores clave eran las grasas poliinsaturadas, que causan resistencia a la insulina y dañan el páncreas, y no el azúcar [1]."
+    },
+    {
+      "q": "¿Qué opinaba Peat de la fruta?",
+      "a": "La consideraba un alimento muy bueno por su mezcla de glucosa y fructosa y por su riqueza en potasio y otros minerales [6]. Según él, además, el consumo de fruta se asocia de forma inversa con la diabetes, al contrario que el de pan y pasta [1]."
+    },
+    {
+      "q": "¿Por qué prefería Peat el azúcar al almidón?",
+      "a": "Sostenía que el almidón es glucosa pura y estimula mucho la insulina y el apetito, lo que favorece la obesidad [1][5]. La sacarosa, al contener fructosa, reduce según él la tendencia a almacenar grasa [1]."
+    },
+    {
+      "q": "¿Recomendaba Peat el azúcar blanco refinado?",
+      "a": "Lo veía como un recurso temporal o un sustituto ocasional, porque carece de nutrientes esenciales, y consideraba mejor la fruta [2]. También destacaba usos terapéuticos concretos, como calmar el dolor de los bebés o rellenar heridas [9]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Glycemia, starch, and sugar in context",
+      "url": "https://raypeat.com/articles/articles/glycemia.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Sugar issues",
+      "url": "https://raypeat.com/articles/articles/sugar-issues.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Sugar myths 2 (2011)",
+      "url": "https://www.toxinless.com/kmud-111021-sugar-myths-2.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Sugar 2 (2010)",
+      "url": "https://www.toxinless.com/kmud-101015-sugar-2.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Food additives (2009)",
+      "url": "https://www.toxinless.com/kmud-091001-food-additives.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "EastWest Healing: Glycemia starch and sugar in context (2011)",
+      "url": "https://www.toxinless.com/ewh-110427-glycemia-starch-and-sugar-in-context.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Sugar myths (2011)",
+      "url": "https://www.toxinless.com/kmud-110916-sugar-myths.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Glucose and sucrose for diabetes",
+      "url": "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): How irradiated cells affect other living cells in human body (2022)",
+      "url": "https://www.toxinless.com/kmud-220318-how-irradiated-cells-affect-other-living-cells-in-human-body.mp3",
+      "type": "interview"
+    }
+  ]
 }

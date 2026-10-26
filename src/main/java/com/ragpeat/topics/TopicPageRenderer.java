@@ -72,7 +72,9 @@ public class TopicPageRenderer {
         for (int i = 0; i < p.sources().size(); i++) {
             Source s = p.sources().get(i);
             body.append("<li id=\"fuente-").append(i + 1).append("\"><a href=\"").append(esc(s.url()))
-                    .append("\" target=\"_blank\" rel=\"noopener\">").append(esc(s.title())).append("</a> <span>")
+                    // Algunos títulos de raypeat.com acaban en ":" ("Regeneration and degeneration:"): fuera.
+                    .append("\" target=\"_blank\" rel=\"noopener\">").append(esc(s.title().replaceAll("\\s*:\\s*$", "")))
+                    .append("</a> <span>")
                     .append("interview".equals(s.type()) ? "entrevista (transcripción automática)" : "artículo")
                     .append("</span></li>\n");
         }

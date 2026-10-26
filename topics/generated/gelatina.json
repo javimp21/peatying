@@ -1,61 +1,98 @@
 {
-  "slug" : "gelatina",
-  "name" : "la gelatina",
-  "title" : "Ray Peat y la gelatina",
-  "question" : "¿Qué decía sobre la gelatina?",
-  "description" : "Qué pensaba Ray Peat sobre la gelatina: su aporte de glicina, la ausencia de triptófano y su papel frente al estrés, la inflamación y el envejecimiento.",
-  "intro" : "Para Ray Peat, la gelatina era una proteína especialmente protectora porque aporta mucha glicina y prolina, con efectos antiinflamatorios y estabilizadores de las células [1][2]. Además carece de triptófano y tiene muy poca cisteína y metionina, aminoácidos que, según él, frenan el tiroides, favorecen la inflamación y acortan la vida [3][1].",
-  "sections" : [ {
-    "heading" : "Qué es la gelatina según Peat",
-    "paragraphs" : [ "Peat explicaba que la gelatina es la forma cocinada del colágeno, la proteína estructural que da dureza a los cuerpos animales adultos. Según él, el colágeno supone aproximadamente la mitad de la proteína del cuerpo de un animal [1][3]. Sus aminoácidos principales son glicina y prolina, con una cantidad notable de alanina [1].", "Señalaba además que mucha gente vende gelatina como si fuera colágeno, cuando no lo es: el colágeno es la forma cruda presente en los tejidos [4]. Comer gelatina, decía, no aumenta la producción propia de colágeno, sino que sirve para evitar una estimulación innecesaria del crecimiento de los tejidos [4]." ]
-  }, {
-    "heading" : "Lo que no contiene: triptófano, cisteína y metionina",
-    "paragraphs" : [ "Para Peat, el gran valor de la gelatina estaba en lo que le falta. No tiene triptófano y solo trae pequeñas cantidades de cisteína, metionina e histidina [1]. Sostenía que esos aminoácidos, muy abundantes en la carne muscular, inhiben la función tiroidea, frenan el metabolismo y promueven la inflamación [3].", "Citaba experimentos con animales en los que eliminar solo la metionina alargaba la vida máxima en torno a un 40 % [5][3]. Añadía que un adulto necesita muy poca cantidad de estos aminoácidos, porque sirven sobre todo para crecer, y que por eso la gelatina le parecía una proteína protectora para una persona madura [2][3]. Recordaba que décadas atrás los nutricionistas se asombraban de que ancianas sanas vivieran casi a base de gelatina y tostadas [3].", "También afirmaba que triptófano y cisteína se vuelven más tóxicos cuando se deshidratan y se exponen al oxígeno, y que casi todas las proteínas en polvo se degradan así. La gelatina, hasta donde él sabía, es singularmente estable frente a la deshidratación [2]." ]
-  }, {
-    "heading" : "La glicina como aminoácido calmante",
-    "paragraphs" : [ "Según Peat, un buen aporte de glicina dentro de un conjunto equilibrado de aminoácidos tiene muchas acciones antiestrés. La describía como un neurotransmisor inhibidor que favorece el sueño natural [1]. Para él, tiene en todo tipo de células una acción tranquilizadora y protectora, y los daños causados por un exceso de triptófano y serotonina parecían prevenirse o corregirse con ella [1].", "Contaba que una dosis pequeña de glicina tomada poco después de un ictus aceleraba la recuperación, y que su efecto estabilizador de los nervios resulta protector también en la epilepsia [1]. Añadía que la glicina y la alanina parecían proteger sin necesidad de ser metabolizadas, por sus simples propiedades físicas [1]." ]
-  }, {
-    "heading" : "Inflamación, fibrosis y cicatrización",
-    "paragraphs" : [ "Peat defendía que el alivio de la artritis con gelatina no se debe sobre todo a que repare el cartílago. Una parte sí se incorpora a él, pero lentamente, mientras que el alivio del dolor y la inflamación puede ser casi inmediato, parecido al de la cortisol o la aspirina [1]. Explicaba que la inflamación produce fibrosis y que, en pulmones, riñones, hígado y otros tejidos, la glicina protege contra ella, al contrario de lo que sugeriría la idea tradicional [1].", "También recogía que, al degradarse el colágeno, se liberan factores que favorecen la cicatrización y frenan la invasión tumoral, y que la propia glicina es uno de ellos [1]. Le atribuía una amplia gama de acciones antitumorales, entre ellas inhibir la formación de nuevos vasos sanguíneos [1]. Mencionaba además que una farmacopea médica de 1936 usaba soluciones de gelatina para controlar distintas hemorragias [1]." ]
-  }, {
-    "heading" : "Carne de músculo frente a animal entero",
-    "paragraphs" : [ "Peat sostenía que comer solo carne muscular produce en la sangre un equilibrio de aminoácidos igual al de un estrés extremo, en el que el exceso de cortisol descompone el músculo. El triptófano en exceso aumenta la serotonina, que estimula más cortisol, mientras que el triptófano y la cisteína del músculo suprimen el tiroides [1].", "Por eso valoraba las formas tradicionales de comer el animal entero, como la sopa de pies de pollo, la cabeza de cerdo o la sopa de cabeza de pescado, que aportan mucha glicina y gelatina [1]. Observaba que quienes comen las partes duras, como pies y alas, toman mucha más gelatina que quienes comen filetes tiernos [5]. Una sopa gelatinosa de pollo le parecía un remedio tradicional para los enfermos [4]." ]
-  }, {
-    "heading" : "Cómo y cuánto la usaba según sus escritos",
-    "paragraphs" : [ "Peat consideraba que una persona que come una ración grande de carne se beneficia de tomar 5 o 10 gramos de gelatina a la vez, para que los aminoácidos lleguen a la sangre equilibrados [1]. Decía que la gelatina en polvo no necesita cocción, aunque disolverla en agua caliente acelera algo la digestión, y que se puede incorporar a natillas, mousses, sopas, salsas o postres con zumo [1]. En cuanto a la cantidad, afirmaba que es segura incluso en grandes dosis [5] y consideraba razonables unos 100 gramos diarios para un adulto, aunque en un niño en crecimiento desplazarían otros alimentos importantes [1].", "Prefería la gelatina a la glicina pura porque algunas protecciones celulares se logran casi igual con alanina y prolina, y porque la gelatina viene con sus sustancias naturales asociadas [1]. Por eso la glicina aislada, aunque la veía como un fármaco útil y muy seguro, no debía considerarse un alimento, ya que los productos manufacturados pueden llevar contaminantes [1]." ]
-  } ],
-  "faq" : [ {
-    "q" : "¿Es lo mismo gelatina que colágeno según Ray Peat?",
-    "a" : "No. Peat explicaba que el colágeno es la forma cruda que existe en los tejidos y que la gelatina es su forma cocinada [4][1]. Criticaba que se venda gelatina como colágeno y señalaba que el colágeno auténtico purificado es muy caro [4]."
-  }, {
-    "q" : "¿Por qué prefería Peat la gelatina a la carne como proteína?",
-    "a" : "Porque la gelatina carece de triptófano y tiene muy poca cisteína y metionina, aminoácidos que, según él, inhiben el tiroides y promueven inflamación y envejecimiento [3][1]. Sostenía que comer solo músculo reproduce el equilibrio de aminoácidos del estrés, y que la gelatina ayuda a compensarlo [1]."
-  }, {
-    "q" : "¿Qué decía Peat sobre la gelatina y la artritis?",
-    "a" : "Pensaba que su efecto no se debe principalmente a reconstruir el cartílago, ya que esa incorporación es lenta [1]. Atribuía el alivio rápido del dolor y la inflamación a una acción antiinflamatoria parecida a la de la cortisol o la aspirina [1]."
-  }, {
-    "q" : "¿Por qué la glicina ayuda a dormir según Peat?",
-    "a" : "Peat la describía como un neurotransmisor inhibidor que favorece el sueño natural [1]. Explicaba que estabiliza los nervios, de modo que hace falta más estimulación para activarlos, un efecto importante en la regulación del sueño, la respiración y el ritmo cardíaco [1]."
-  } ],
-  "sources" : [ {
-    "title" : "Gelatin, stress, longevity",
-    "url" : "https://raypeat.com/articles/articles/gelatin.shtml",
-    "type" : "article"
-  }, {
-    "title" : "One Radio Network: Vitamin d thyroid evolving consciously (2019)",
-    "url" : "https://www.toxinless.com/orn-190820-vitamin-d-thyroid-evolving-consciously.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Ask the Herb Doctor (KMUD): The ten most toxic things in our food (2009)",
-    "url" : "https://www.toxinless.com/kmud-090901-the-ten-most-toxic-things-in-our-food.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "One Radio Network: Natural healing (2019)",
-    "url" : "https://www.toxinless.com/orn-190429-natural-healing.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Ask the Herb Doctor (KMUD): Radiation (2010)",
-    "url" : "https://www.toxinless.com/kmud-101217-radiation.mp3",
-    "type" : "interview"
-  } ]
+  "slug": "gelatina",
+  "name": "la gelatina",
+  "title": "Ray Peat y la gelatina",
+  "question": "¿Qué decía sobre la gelatina?",
+  "description": "Qué pensaba Ray Peat sobre la gelatina: su aporte de glicina, la ausencia de triptófano y su papel frente al estrés, la inflamación y el envejecimiento.",
+  "intro": "Para Ray Peat, la gelatina era una proteína especialmente protectora porque aporta mucha glicina y prolina, con efectos antiinflamatorios y estabilizadores de las células [1][2]. Además carece de triptófano y tiene muy poca cisteína y metionina, aminoácidos que, según él, frenan la tiroides, favorecen la inflamación y acortan la vida [3][1].",
+  "sections": [
+    {
+      "heading": "Qué es la gelatina según Peat",
+      "paragraphs": [
+        "Peat explicaba que la gelatina es la forma cocinada del colágeno, la proteína estructural que da dureza a los cuerpos animales adultos. Según él, el colágeno supone aproximadamente la mitad de la proteína del cuerpo de un animal [1][3]. Sus aminoácidos principales son glicina y prolina, con una cantidad notable de alanina [1].",
+        "Señalaba además que mucha gente vende gelatina como si fuera colágeno, cuando no lo es: el colágeno es la forma cruda presente en los tejidos [4]. Comer gelatina, decía, no aumenta la producción propia de colágeno, sino que sirve para evitar una estimulación innecesaria del crecimiento de los tejidos [4]."
+      ]
+    },
+    {
+      "heading": "Lo que no contiene: triptófano, cisteína y metionina",
+      "paragraphs": [
+        "Para Peat, el gran valor de la gelatina estaba en lo que le falta. No tiene triptófano y solo trae pequeñas cantidades de cisteína, metionina e histidina [1]. Sostenía que esos aminoácidos, muy abundantes en la carne muscular, inhiben la función tiroidea, frenan el metabolismo y promueven la inflamación [3].",
+        "Citaba experimentos con animales en los que eliminar solo la metionina alargaba la vida máxima en torno a un 40 % [5][3]. Añadía que un adulto necesita muy poca cantidad de estos aminoácidos, porque sirven sobre todo para crecer, y que por eso la gelatina le parecía una proteína protectora para una persona madura [2][3]. Recordaba que décadas atrás los nutricionistas se asombraban de que ancianas sanas vivieran casi a base de gelatina y tostadas [3].",
+        "También afirmaba que triptófano y cisteína se vuelven más tóxicos cuando se deshidratan y se exponen al oxígeno, y que casi todas las proteínas en polvo se degradan así. La gelatina, hasta donde él sabía, es singularmente estable frente a la deshidratación [2]."
+      ]
+    },
+    {
+      "heading": "La glicina como aminoácido calmante",
+      "paragraphs": [
+        "Según Peat, un buen aporte de glicina dentro de un conjunto equilibrado de aminoácidos tiene muchas acciones antiestrés. La describía como un neurotransmisor inhibidor que favorece el sueño natural [1]. Para él, tiene en todo tipo de células una acción tranquilizadora y protectora, y los daños causados por un exceso de triptófano y serotonina parecían prevenirse o corregirse con ella [1].",
+        "Contaba que una dosis pequeña de glicina tomada poco después de un ictus aceleraba la recuperación, y que su efecto estabilizador de los nervios resulta protector también en la epilepsia [1]. Añadía que la glicina y la alanina parecían proteger sin necesidad de ser metabolizadas, por sus simples propiedades físicas [1]."
+      ]
+    },
+    {
+      "heading": "Inflamación, fibrosis y cicatrización",
+      "paragraphs": [
+        "Peat defendía que el alivio de la artritis con gelatina no se debe sobre todo a que repare el cartílago. Una parte sí se incorpora a él, pero lentamente, mientras que el alivio del dolor y la inflamación puede ser casi inmediato, parecido al del cortisol o la aspirina [1]. Explicaba que la inflamación produce fibrosis y que, en pulmones, riñones, hígado y otros tejidos, la glicina protege contra ella, al contrario de lo que sugeriría la idea tradicional [1].",
+        "También recogía que, al degradarse el colágeno, se liberan factores que favorecen la cicatrización y frenan la invasión tumoral, y que la propia glicina es uno de ellos [1]. Le atribuía una amplia gama de acciones antitumorales, entre ellas inhibir la formación de nuevos vasos sanguíneos [1]. Mencionaba además que una farmacopea médica de 1936 usaba soluciones de gelatina para controlar distintas hemorragias [1]."
+      ]
+    },
+    {
+      "heading": "Carne de músculo frente a animal entero",
+      "paragraphs": [
+        "Peat sostenía que comer solo carne muscular produce en la sangre un equilibrio de aminoácidos igual al de un estrés extremo, en el que el exceso de cortisol descompone el músculo. El triptófano en exceso aumenta la serotonina, que estimula más cortisol, mientras que el triptófano y la cisteína del músculo suprimen la tiroides [1].",
+        "Por eso valoraba las formas tradicionales de comer el animal entero, como la sopa de pies de pollo, la cabeza de cerdo o la sopa de cabeza de pescado, que aportan mucha glicina y gelatina [1]. Observaba que quienes comen las partes duras, como pies y alas, toman mucha más gelatina que quienes comen filetes tiernos [5]. Una sopa gelatinosa de pollo le parecía un remedio tradicional para los enfermos [4]."
+      ]
+    },
+    {
+      "heading": "Cómo y cuánto la usaba según sus escritos",
+      "paragraphs": [
+        "Peat consideraba que una persona que come una ración grande de carne se beneficia de tomar 5 o 10 gramos de gelatina a la vez, para que los aminoácidos lleguen a la sangre equilibrados [1]. Decía que la gelatina en polvo no necesita cocción, aunque disolverla en agua caliente acelera algo la digestión, y que se puede incorporar a natillas, mousses, sopas, salsas o postres con zumo [1]. En cuanto a la cantidad, afirmaba que es segura incluso en grandes dosis [5] y consideraba razonables unos 100 gramos diarios para un adulto, aunque en un niño en crecimiento desplazarían otros alimentos importantes [1].",
+        "Prefería la gelatina a la glicina pura porque algunas protecciones celulares se logran casi igual con alanina y prolina, y porque la gelatina viene con sus sustancias naturales asociadas [1]. Por eso la glicina aislada, aunque la veía como un fármaco útil y muy seguro, no debía considerarse un alimento, ya que los productos manufacturados pueden llevar contaminantes [1]."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Es lo mismo gelatina que colágeno según Ray Peat?",
+      "a": "No. Peat explicaba que el colágeno es la forma cruda que existe en los tejidos y que la gelatina es su forma cocinada [4][1]. Criticaba que se venda gelatina como colágeno y señalaba que el colágeno auténtico purificado es muy caro [4]."
+    },
+    {
+      "q": "¿Por qué prefería Peat la gelatina a la carne como proteína?",
+      "a": "Porque la gelatina carece de triptófano y tiene muy poca cisteína y metionina, aminoácidos que, según él, inhiben la tiroides y promueven inflamación y envejecimiento [3][1]. Sostenía que comer solo músculo reproduce el equilibrio de aminoácidos del estrés, y que la gelatina ayuda a compensarlo [1]."
+    },
+    {
+      "q": "¿Qué decía Peat sobre la gelatina y la artritis?",
+      "a": "Pensaba que su efecto no se debe principalmente a reconstruir el cartílago, ya que esa incorporación es lenta [1]. Atribuía el alivio rápido del dolor y la inflamación a una acción antiinflamatoria parecida a la del cortisol o la aspirina [1]."
+    },
+    {
+      "q": "¿Por qué la glicina ayuda a dormir según Peat?",
+      "a": "Peat la describía como un neurotransmisor inhibidor que favorece el sueño natural [1]. Explicaba que estabiliza los nervios, de modo que hace falta más estimulación para activarlos, un efecto importante en la regulación del sueño, la respiración y el ritmo cardíaco [1]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Gelatin, stress, longevity",
+      "url": "https://raypeat.com/articles/articles/gelatin.shtml",
+      "type": "article"
+    },
+    {
+      "title": "One Radio Network: Vitamin d thyroid evolving consciously (2019)",
+      "url": "https://www.toxinless.com/orn-190820-vitamin-d-thyroid-evolving-consciously.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): The ten most toxic things in our food (2009)",
+      "url": "https://www.toxinless.com/kmud-090901-the-ten-most-toxic-things-in-our-food.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "One Radio Network: Natural healing (2019)",
+      "url": "https://www.toxinless.com/orn-190429-natural-healing.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Radiation (2010)",
+      "url": "https://www.toxinless.com/kmud-101217-radiation.mp3",
+      "type": "interview"
+    }
+  ]
 }

@@ -1,85 +1,127 @@
 {
-  "slug" : "tiroides",
-  "name" : "la tiroides",
-  "title" : "Ray Peat y la tiroides",
-  "question" : "¿Cómo saber si tu tiroides va lenta?",
-  "description" : "Qué pensaba Ray Peat sobre la tiroides: temperatura y pulso como indicadores, desconfianza hacia la TSH, papel del estrés y diferencias entre T3 y T4.",
-  "intro" : "Para Ray Peat, la función tiroidea es la base del metabolismo energético: según él, una tiroides baja se reconoce mejor por la temperatura, el pulso y el consumo de energía que por una sola analítica [1][2]. Sostenía que las hormonas del estrés y la TSH pueden dar una imagen engañosa de lo que ocurre de verdad en el cuerpo [1][3]. También defendía que la T3 es la forma realmente activa y que el equilibrio natural entre T4 y T3 importa [4][5].",
-  "sections" : [ {
-    "heading" : "Temperatura y pulso como señales",
-    "paragraphs" : [ "Peat recordaba que Broda Barnes defendía medir la temperatura al despertar, antes de levantarse, como la mejor base para valorar la tiroides [1]. Barnes esperaba una temperatura matinal en torno a 36,6 °C (97,8 °F) que subiera durante el día hasta unos 37 °C (98,6 °F) [6]. Para Peat, la prueba ideal para demostrar hipotiroidismo seguía siendo la medición del consumo de oxígeno, y temperatura y pulso permitían acercarse bastante a ella [2].", "Peat advertía de que la temperatura sola puede engañar. En el verano caluroso y húmedo de Eugene vio personas con síntomas claros de hipotiroidismo y temperatura normal, pero con un pulso muy bajo, porque mantener el cuerpo a esa temperatura cuesta muy poca energía cuando hace calor [6][1]. Por eso defendía combinar ambos datos, que según él funcionan mucho mejor juntos que por separado [1]. También preguntaba si la persona usaba manta eléctrica y, en ese caso, descartaba la medición [1]." ]
-  }, {
-    "heading" : "Adrenalina, cortisol y mediciones a lo largo del día",
-    "paragraphs" : [ "Según Peat, muchas personas con tiroides baja compensan con mucha adrenalina, que acelera el pulso, y con ello el cortisol sube y eleva la temperatura al despertar [1][2]. Por eso una sola medición matinal puede ser ambigua. Proponía repetirla una o dos horas después de comer, porque la comida y la luz del día bajan la adrenalina y el cortisol [2].", "Según su experiencia, quien se despertaba con un pulso de 75 y 36,7 °C (98 °F) podía bajar a un pulso de 55 o 60 y a 35,6-36,1 °C (96-97 °F) a media mañana, lo que para él indicaba una tiroides muy baja [2]. Añadía que el recuento de calorías sirve de modo parecido a medir el oxígeno, y que comer unas 1800 calorías al día con un peso estable hacía poco creíble, a su juicio, un diagnóstico de hipertiroidismo [1]." ]
-  }, {
-    "heading" : "Por qué desconfiaba de la TSH",
-    "paragraphs" : [ "Peat criticaba que la TSH, la hormona hipofisaria que estimula la tiroides, se interprete como si tuviera significado por sí sola. Según él, puede bajar al rango normal o por debajo por causas ajenas a las hormonas tiroideas [1]. Estrés, estrógeno, cortisol y adrenalina la reducen y, a su juicio, hacen que parezca que sobra tiroides cuando en realidad falta [3]. Por eso pensaba que debía tener solo un peso moderado al interpretar la función tiroidea [1].", "Además, sostenía que la TSH actúa sobre muchos tipos de células y probablemente contribuye al edema y la fibrosis [1]. Señalaba que animales sin hipófisis, o ratones enanos sin TSH, vivían más de lo normal, y que no veía motivo para fijar un límite inferior de normalidad [1]. Recomendaba apoyarse en otras pruebas, como el reflejo aquíleo, el electrocardiograma o análisis de colesterol, albúmina, glucosa, sodio y lactato [1]." ]
-  }, {
-    "heading" : "El estrés frena la conversión de T4 en T3",
-    "paragraphs" : [ "Según Peat, el cortisol inhibe la conversión de T4 en T3, que es la responsable de producir energía respiratoria y dióxido de carbono [1]. La adrenalina, además, aumenta la T3 inversa, que actúa como antagonista [1]. Para él, todas las hormonas del estrés interfieren así con la T3 activa y generan una sustancia inactiva que frena la respiración celular [3].", "Defendía también que la adrenalina libera ácidos grasos que, si son poliinsaturados (PUFA), inhiben la producción y el transporte de hormona tiroidea y dañan la respiración de las mitocondrias [1]. Para él había un círculo vicioso: el estrés causa hipotiroidismo y el hipotiroidismo causa estrés [3]. Describía el hipotiroidismo con niveles altos de noradrenalina, serotonina, cortisol y estrógeno [7]." ]
-  }, {
-    "heading" : "T3, T4 y tiroides natural",
-    "paragraphs" : [ "Peat explicaba que la T4 solo es activa tras convertirse en T3, que es la que activa el proceso oxidativo productor de calor [5]. La T4 tarda semanas en estabilizarse en el cuerpo, con una vida media de unas dos semanas, mientras que la T3 dura unas doce horas o un día [5]. Aun así, la T4 puede tener efecto en la hipófisis y reducir la TSH, aunque eso no equivale a aumentar la producción de calor [5].", "Para él, un exceso de T4 en un tejido que no la convierte con rapidez tiene efecto antitiroideo, y citaba como ejemplo cerebros cuya respiración se redujo con T4 [4]. Contó el caso de una mujer a la que subían la dosis de tiroxina mientras empeoraba, hasta caer en coma mixedematoso, y que se recuperó enseguida con T3 [8]. También sostenía que la glándula sana libera mucha T3 en relación con la T4, y que un preparado de glándula natural se parece más a ese equilibrio que la tiroxina sola [4]. Añadía que el cerebro concentra T3 y que muchas personas dicen pensar con más claridad con una proporción cercana a tres de T4 por una de T3 [4]." ]
-  }, {
-    "heading" : "Otros efectos que atribuía a la tiroides",
-    "paragraphs" : [ "Peat afirmaba que cuando la tiroides está baja la coagulación sube, y que trombosis venosas, accidentes isquémicos transitorios e ictus se resuelven, por lo general, con un suplemento tiroideo [5]. También decía que la hipofunción es una causa importante de hipertensión [1]. Sobre el temor a que tomar tiroides apague la glándula propia, sostenía que estudios con isótopos mostraron que la glándula volvía a funcionar a los pocos días de dejar la dosis [9].", "En su visión del cáncer, la tiroides mantiene la célula en estado oxidativo, y el dióxido de carbono que produce evita la formación de ácido láctico tóxico y de radicales libres [10]. Veía además el invierno y la oscuridad como un estrés que tiende a suprimir la función tiroidea y favorece la acumulación de estrógeno por la lentitud del hígado [11]." ]
-  } ],
-  "faq" : [ {
-    "q" : "¿Cómo detectaba Ray Peat una tiroides baja?",
-    "a" : "Según Peat, la mejor aproximación práctica era medir la temperatura y el pulso al despertar y de nuevo una o dos horas después de comer [2]. Consideraba que la combinación de ambos datos es mucho más fiable que cada uno por separado [1]. La prueba ideal seguía siendo, para él, el consumo de oxígeno [2]."
-  }, {
-    "q" : "¿Por qué decía Peat que la TSH no es fiable?",
-    "a" : "Sostenía que la TSH puede bajar por el estrés, el estrógeno, el cortisol o la adrenalina, y no solo por exceso de hormona tiroidea [1][3]. Por eso, a su juicio, una TSH baja puede dar la impresión errónea de hipertiroidismo en alguien que en realidad tiene el metabolismo lento [3]. Pensaba que debía tener solo un peso moderado al valorar la tiroides [1]."
-  }, {
-    "q" : "¿Qué diferencia veía Peat entre T4 y T3?",
-    "a" : "Para él, la T4 solo es activa cuando se convierte en T3, que es la que estimula el metabolismo oxidativo y la producción de calor [5]. Sostenía que un exceso de T4 en tejidos que no la convierten bien puede tener efecto antitiroideo [4]. Por eso prefería una proporción parecida a la que libera la glándula sana, con más T3 que la de la tiroxina sola [4]."
-  }, {
-    "q" : "¿Qué relación veía Peat entre estrés y tiroides?",
-    "a" : "Según Peat, las hormonas del estrés frenan la conversión de T4 en T3 y favorecen la T3 inversa, que bloquea la respiración celular [1][3]. Defendía que el hipotiroidismo provoca estrés y que el estrés, a su vez, agrava el hipotiroidismo [3]. Añadía que la oscuridad invernal es un estrés que tiende a suprimir la tiroides [11]."
-  } ],
-  "sources" : [ {
-    "title" : "TSH, temperature, pulse rate, and other indicators in hypothyroidism",
-    "url" : "https://raypeat.com/articles/articles/hypothyroidism.shtml",
-    "type" : "article"
-  }, {
-    "title" : "One Radio Network: Mr thyroid (2019)",
-    "url" : "https://www.toxinless.com/orn-190917-mr-thyroid.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "JodelleFit: Cortisol low testosterone (2019)",
-    "url" : "https://www.toxinless.com/jf-190601-cortisol-low-testosterone.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Thyroid: Therapies, Confusion, and Fraud",
-    "url" : "https://raypeat.com/articles/articles/thyroid.shtml",
-    "type" : "article"
-  }, {
-    "title" : "One Radio Network: Thyroid pufas oj sugar (2019)",
-    "url" : "https://www.toxinless.com/orn-190219-thyroid-pufas-oj-sugar.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "EastWest Healing: The thryoid (2011)",
-    "url" : "https://www.toxinless.com/ewh-110222-the-thryoid.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Thyroid, insomnia, and the insanities: Commonalities in disease",
-    "url" : "https://raypeat.com/articles/articles/thyroid-insanities.shtml",
-    "type" : "article"
-  }, {
-    "title" : "KKVV Radio: Ray peat (2008)",
-    "url" : "https://www.toxinless.com/kkvv-081031-ray-peat.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Politics & Science: Fundraiser 2 (2012)",
-    "url" : "https://www.toxinless.com/polsci-120222-fundraiser-2.mp3",
-    "type" : "interview"
-  }, {
-    "title" : "Preventing and treating cancer with progesterone.",
-    "url" : "https://raypeat.com/articles/articles/cancer-progesterone.shtml",
-    "type" : "article"
-  }, {
-    "title" : "MULTIPLE SCLEROSIS AND OTHER HORMONE-RELATED BRAIN SYNDROMES (1993)",
-    "url" : "https://raypeat.com/articles/articles/multiple-sclerosis.shtml",
-    "type" : "article"
-  } ]
+  "slug": "tiroides",
+  "name": "la tiroides",
+  "title": "Ray Peat y la tiroides",
+  "question": "¿Cómo saber si tu tiroides va lenta?",
+  "description": "Qué pensaba Ray Peat sobre la tiroides: temperatura y pulso como indicadores, desconfianza hacia la TSH, papel del estrés y diferencias entre T3 y T4.",
+  "intro": "Para Ray Peat, la función tiroidea es la base del metabolismo energético: según él, una tiroides baja se reconoce mejor por la temperatura, el pulso y el consumo de energía que por una sola analítica [1][2]. Sostenía que las hormonas del estrés y la TSH pueden dar una imagen engañosa de lo que ocurre de verdad en el cuerpo [1][3]. También defendía que la T3 es la forma realmente activa y que el equilibrio natural entre T4 y T3 importa [4][5].",
+  "sections": [
+    {
+      "heading": "Temperatura y pulso como señales",
+      "paragraphs": [
+        "Peat recordaba que Broda Barnes defendía medir la temperatura al despertar, antes de levantarse, como la mejor base para valorar la tiroides [1]. Barnes esperaba una temperatura matinal en torno a 36,6 °C (97,8 °F) que subiera durante el día hasta unos 37 °C (98,6 °F) [6]. Para Peat, la prueba ideal para demostrar hipotiroidismo seguía siendo la medición del consumo de oxígeno, y temperatura y pulso permitían acercarse bastante a ella [2].",
+        "Peat advertía de que la temperatura sola puede engañar. En el verano caluroso y húmedo de Eugene vio personas con síntomas claros de hipotiroidismo y temperatura normal, pero con un pulso muy bajo, porque mantener el cuerpo a esa temperatura cuesta muy poca energía cuando hace calor [6][1]. Por eso defendía combinar ambos datos, que según él funcionan mucho mejor juntos que por separado [1]. También preguntaba si la persona usaba manta eléctrica y, en ese caso, descartaba la medición [1]."
+      ]
+    },
+    {
+      "heading": "Adrenalina, cortisol y mediciones a lo largo del día",
+      "paragraphs": [
+        "Según Peat, muchas personas con tiroides baja compensan con mucha adrenalina, que acelera el pulso, y con ello el cortisol sube y eleva la temperatura al despertar [1][2]. Por eso una sola medición matinal puede ser ambigua. Proponía repetirla una o dos horas después de comer, porque la comida y la luz del día bajan la adrenalina y el cortisol [2].",
+        "Según su experiencia, quien se despertaba con un pulso de 75 y 36,7 °C (98 °F) podía bajar a un pulso de 55 o 60 y a 35,6-36,1 °C (96-97 °F) a media mañana, lo que para él indicaba una tiroides muy baja [2]. Añadía que el recuento de calorías sirve de modo parecido a medir el oxígeno, y que comer unas 1800 calorías al día con un peso estable hacía poco creíble, a su juicio, un diagnóstico de hipertiroidismo [1]."
+      ]
+    },
+    {
+      "heading": "Por qué desconfiaba de la TSH",
+      "paragraphs": [
+        "Peat criticaba que la TSH, la hormona hipofisaria que estimula la tiroides, se interprete como si tuviera significado por sí sola. Según él, puede bajar al rango normal o por debajo por causas ajenas a las hormonas tiroideas [1]. Estrés, estrógeno, cortisol y adrenalina la reducen y, a su juicio, hacen que parezca que sobra tiroides cuando en realidad falta [3]. Por eso pensaba que debía tener solo un peso moderado al interpretar la función tiroidea [1].",
+        "Además, sostenía que la TSH actúa sobre muchos tipos de células y probablemente contribuye al edema y la fibrosis [1]. Señalaba que animales sin hipófisis, o ratones enanos sin TSH, vivían más de lo normal, y que no veía motivo para fijar un límite inferior de normalidad [1]. Recomendaba apoyarse en otras pruebas, como el reflejo aquíleo, el electrocardiograma o análisis de colesterol, albúmina, glucosa, sodio y lactato [1]."
+      ]
+    },
+    {
+      "heading": "El estrés frena la conversión de T4 en T3",
+      "paragraphs": [
+        "Según Peat, el cortisol inhibe la conversión de T4 en T3, que es la responsable de producir energía respiratoria y dióxido de carbono [1]. La adrenalina, además, aumenta la T3 inversa, que actúa como antagonista [1]. Para él, todas las hormonas del estrés interfieren así con la T3 activa y generan una sustancia inactiva que frena la respiración celular [3].",
+        "Defendía también que la adrenalina libera ácidos grasos que, si son poliinsaturados (PUFA), inhiben la producción y el transporte de hormona tiroidea y dañan la respiración de las mitocondrias [1]. Para él había un círculo vicioso: el estrés causa hipotiroidismo y el hipotiroidismo causa estrés [3]. Describía el hipotiroidismo con niveles altos de noradrenalina, serotonina, cortisol y estrógeno [7]."
+      ]
+    },
+    {
+      "heading": "T3, T4 y tiroides natural",
+      "paragraphs": [
+        "Peat explicaba que la T4 solo es activa tras convertirse en T3, que es la que activa el proceso oxidativo productor de calor [5]. La T4 tarda semanas en estabilizarse en el cuerpo, con una vida media de unas dos semanas, mientras que la T3 dura unas doce horas o un día [5]. Aun así, la T4 puede tener efecto en la hipófisis y reducir la TSH, aunque eso no equivale a aumentar la producción de calor [5].",
+        "Para él, un exceso de T4 en un tejido que no la convierte con rapidez tiene efecto antitiroideo, y citaba como ejemplo cerebros cuya respiración se redujo con T4 [4]. Contó el caso de una mujer a la que subían la dosis de tiroxina mientras empeoraba, hasta caer en coma mixedematoso, y que se recuperó enseguida con T3 [8]. También sostenía que la glándula sana libera mucha T3 en relación con la T4, y que un preparado de glándula natural se parece más a ese equilibrio que la tiroxina sola [4]. Añadía que el cerebro concentra T3 y que muchas personas dicen pensar con más claridad con una proporción cercana a tres de T4 por una de T3 [4]."
+      ]
+    },
+    {
+      "heading": "Otros efectos que atribuía a la tiroides",
+      "paragraphs": [
+        "Peat afirmaba que cuando la tiroides está baja la coagulación sube, y que trombosis venosas, accidentes isquémicos transitorios e ictus se resuelven, por lo general, con un suplemento tiroideo [5]. También decía que la hipofunción es una causa importante de hipertensión [1]. Sobre el temor a que tomar tiroides apague la glándula propia, sostenía que estudios con isótopos mostraron que la glándula volvía a funcionar a los pocos días de dejar la dosis [9].",
+        "En su visión del cáncer, la tiroides mantiene la célula en estado oxidativo, y el dióxido de carbono que produce evita la formación de ácido láctico tóxico y de radicales libres [10]. Veía además el invierno y la oscuridad como un estrés que tiende a suprimir la función tiroidea y favorece la acumulación de estrógeno por la lentitud del hígado [11]."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "¿Cómo detectaba Ray Peat una tiroides baja?",
+      "a": "Según Peat, la mejor aproximación práctica era medir la temperatura y el pulso al despertar y de nuevo una o dos horas después de comer [2]. Consideraba que la combinación de ambos datos es mucho más fiable que cada uno por separado [1]. La prueba ideal seguía siendo, para él, el consumo de oxígeno [2]."
+    },
+    {
+      "q": "¿Por qué decía Peat que la TSH no es fiable?",
+      "a": "Sostenía que la TSH puede bajar por el estrés, el estrógeno, el cortisol o la adrenalina, y no solo por exceso de hormona tiroidea [1][3]. Por eso, a su juicio, una TSH baja puede dar la impresión errónea de hipertiroidismo en alguien que en realidad tiene el metabolismo lento [3]. Pensaba que debía tener solo un peso moderado al valorar la tiroides [1]."
+    },
+    {
+      "q": "¿Qué diferencia veía Peat entre T4 y T3?",
+      "a": "Para él, la T4 solo es activa cuando se convierte en T3, que es la que estimula el metabolismo oxidativo y la producción de calor [5]. Sostenía que un exceso de T4 en tejidos que no la convierten bien puede tener efecto antitiroideo [4]. Por eso prefería una proporción parecida a la que libera la glándula sana, con más T3 que la de la tiroxina sola [4]."
+    },
+    {
+      "q": "¿Qué relación veía Peat entre estrés y tiroides?",
+      "a": "Según Peat, las hormonas del estrés frenan la conversión de T4 en T3 y favorecen la T3 inversa, que bloquea la respiración celular [1][3]. Defendía que el hipotiroidismo provoca estrés y que el estrés, a su vez, agrava el hipotiroidismo [3]. Añadía que la oscuridad invernal es un estrés que tiende a suprimir la tiroides [11]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "TSH, temperature, pulse rate, and other indicators in hypothyroidism",
+      "url": "https://raypeat.com/articles/articles/hypothyroidism.shtml",
+      "type": "article"
+    },
+    {
+      "title": "One Radio Network: Mr thyroid (2019)",
+      "url": "https://www.toxinless.com/orn-190917-mr-thyroid.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "JodelleFit: Cortisol low testosterone (2019)",
+      "url": "https://www.toxinless.com/jf-190601-cortisol-low-testosterone.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Thyroid: Therapies, Confusion, and Fraud",
+      "url": "https://raypeat.com/articles/articles/thyroid.shtml",
+      "type": "article"
+    },
+    {
+      "title": "One Radio Network: Thyroid pufas oj sugar (2019)",
+      "url": "https://www.toxinless.com/orn-190219-thyroid-pufas-oj-sugar.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "EastWest Healing: The thryoid (2011)",
+      "url": "https://www.toxinless.com/ewh-110222-the-thryoid.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Thyroid, insomnia, and the insanities: Commonalities in disease",
+      "url": "https://raypeat.com/articles/articles/thyroid-insanities.shtml",
+      "type": "article"
+    },
+    {
+      "title": "KKVV Radio: Ray peat (2008)",
+      "url": "https://www.toxinless.com/kkvv-081031-ray-peat.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Politics & Science: Fundraiser 2 (2012)",
+      "url": "https://www.toxinless.com/polsci-120222-fundraiser-2.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Preventing and treating cancer with progesterone.",
+      "url": "https://raypeat.com/articles/articles/cancer-progesterone.shtml",
+      "type": "article"
+    },
+    {
+      "title": "MULTIPLE SCLEROSIS AND OTHER HORMONE-RELATED BRAIN SYNDROMES (1993)",
+      "url": "https://raypeat.com/articles/articles/multiple-sclerosis.shtml",
+      "type": "article"
+    }
+  ]
 }

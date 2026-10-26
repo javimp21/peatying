@@ -9,6 +9,7 @@ if (-not (Get-Command aws -ErrorAction SilentlyContinue)) { $aws = "$env:LOCALAP
 $instanceId = "i-0a296d03feb87d054"
 # La salida lleva emojis (👍/👎): la CLI de AWS (Python) y la consola tienen que usar UTF-8.
 $env:PYTHONUTF8 = "1"
+$env:PYTHONIOENCODING = "utf-8"
 [Console]::OutputEncoding = [Text.Encoding]::UTF8
 
 # La sesión de "aws login" caduca a las pocas horas: lo comprobamos antes para dar un mensaje claro.
@@ -36,5 +37,8 @@ $commandId = & $aws ssm send-command --instance-ids $instanceId --document-name 
 Remove-Item $paramsFile
 
 & $aws ssm wait command-executed --command-id $commandId --instance-id $instanceId 2>$null
-& $aws ssm get-command-invocation --command-id $commandId --instance-id $instanceId `
+# Recogemos la salida en una variable en vez de dejar que la CLI escriba directamente en la consola:
+# en la consola de Windows (que no es UTF-8) fallaba con los emojis ("'charmap' codec can't encode").
+$report = & $aws ssm get-command-invocation --command-id $commandId --instance-id $instanceId `
     --query StandardOutputContent --output text
+$report

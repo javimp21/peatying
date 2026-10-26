@@ -77,8 +77,14 @@ public class InterviewFileStore {
                 List.of(new Section("", turns)));
     }
 
-    /** "Ask the Herb Doctor (KMUD): Cholesterol is an important molecule (2008)". */
+    /**
+     * "Ask the Herb Doctor (KMUD): Cholesterol is an important molecule (2008)". Los programas de 2020-2022
+     * no tienen tema en el archivo: "Ask the Herb Doctor (KMUD), 2021-01-15" (la fecha entera, porque hay varios por año).
+     */
     static String title(Episode episode) {
+        if (episode.topic() == null || episode.topic().isBlank()) {
+            return episode.show() + (episode.date() == null ? "" : ", " + episode.date());
+        }
         String year = episode.date() == null ? "" : " (" + episode.date().substring(0, 4) + ")";
         return episode.show() + ": " + episode.topic() + year;
     }
