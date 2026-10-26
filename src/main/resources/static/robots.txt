@@ -1,0 +1,7 @@
+# Buscadores y asistentes de IA (Google, Bing, ChatGPT, Claude, Perplexity...) pueden leer toda la web,
+# menos la API del chat, que no es una página.
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://peatying.com/sitemap.xml

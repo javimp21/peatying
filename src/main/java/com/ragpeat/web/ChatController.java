@@ -41,7 +41,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 public class ChatController {
 
     private static final Logger log = LoggerFactory.getLogger(ChatController.class);
-    static final int MAX_QUESTION_LENGTH = 500;
+    static final int MAX_QUESTION_LENGTH = 3000;   // da para pegar una analítica (PersonalData quita los datos personales al guardar)
     private static final long STREAM_TIMEOUT_MS = 120_000;
 
     /** Cuántos mensajes anteriores ve Claude: 6 = las 3 últimas preguntas con sus respuestas. */

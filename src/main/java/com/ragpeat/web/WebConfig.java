@@ -29,6 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/about").setViewName("forward:/about.html");
+        registry.addViewController("/privacidad").setViewName("forward:/privacidad.html");
     }
 
     @Bean
@@ -39,7 +40,8 @@ public class WebConfig implements WebMvcConfigurer {
         // "/" NO va aquí: Spring la sirve reenviando internamente a index.html (un "forward"), y con
         // este filtro la respuesta salía vacía. Sin fecha ni huella, el navegador la pide entera
         // cada vez, que para un HTML tan pequeño no importa.
-        registration.addUrlPatterns("/index.html", "/app.js", "/styles.css", "/about.html", "/about.js", "/img/*");
+        registration.addUrlPatterns("/index.html", "/app.js", "/styles.css", "/about.html", "/about.js",
+                "/privacidad.html", "/contact.js", "/robots.txt", "/sitemap.xml", "/img/*");
         return registration;
     }
 }

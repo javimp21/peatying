@@ -3,7 +3,7 @@
 # caduque y redirige http:// a https:// sin que tengamos que hacer nada más.
 
 peatying.com {
-	# Las peticiones a la API son una pregunta de 500 caracteres como mucho: cualquier cosa más grande
+	# Las peticiones a la API son una pregunta de 3000 caracteres como mucho: cualquier cosa más grande
 	# es un abuso (subir megas para agotar la memoria). Se corta aquí, antes de llegar a la app.
 	request_body {
 		max_size 16KB

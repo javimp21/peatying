@@ -27,6 +27,22 @@ EOF
 # APP_TAG también en .env: así cualquier "docker compose run ..." posterior (stats, index...) usa
 # la versión desplegada y no la imagen "latest", que es antigua.
 
+# Base de datos DB-IP Lite (país y ciudad de una IP; CC BY 4.0). Sale una nueva cada mes: la bajamos
+# si no está o si tiene más de 35 días. Si falla la descarga, seguimos con la que hubiera (o sin ninguna).
+GEO=data/geo/dbip-city-lite.mmdb
+if [ ! -f "$GEO" ] || [ -n "$(find "$GEO" -mtime +35)" ]; then
+  mkdir -p data/geo
+  if curl -sfL "https://download.db-ip.com/free/dbip-city-lite-$(date -u +%Y-%m).mmdb.gz" | gunzip > "$GEO.new"; then
+    mv "$GEO.new" "$GEO"
+  else
+    rm -f "$GEO.new"
+    echo "Aviso: no se pudo descargar DB-IP Lite"
+  fi
+fi
+# umask 077 la dejaría solo para root: la app corre como otro usuario y tiene que poder leerla.
+chmod 755 data/geo 2>/dev/null || true
+chmod 644 "$GEO" 2>/dev/null || true
+
 # Iniciar sesión en ECR (también con el rol) y arrancar la versión pedida.
 aws ecr get-login-password --region "$REGION" | docker login --username AWS --password-stdin "$REGISTRY"
 export APP_TAG

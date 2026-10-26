@@ -92,7 +92,10 @@ body {
 }
 .wordmark { font: 400 1.15rem/1 var(--slab); text-transform: uppercase; color: inherit; text-decoration: none; }
 .wordmark em { font-style: normal; color: var(--muted); }
-.wordmark .logo { width: 1.25em; height: 1.25em; margin-right: 0.45em; vertical-align: -0.28em; }
+.wordmark .logo { width: 1.7em; height: 1.7em; vertical-align: -0.5em; }
+/* Solo la naranja: en la portada el título ya dice "Ray Peat". En la conversación, que no tiene título, sí sale el nombre. */
+.wordmark-name { display: none; margin-left: 0.5em; }
+.chatting .wordmark-name { display: inline; }
 .pill-link {
   padding: 10px 16px;
   border: 1px solid var(--ink);
@@ -509,6 +512,23 @@ li .source-panel { margin: 8px 0 4px; }
 .sources-label { margin-right: 8px; font: 400 0.8rem var(--slab); text-transform: uppercase; color: var(--ink); }
 .sources a:hover { color: var(--text-soft); }
 
+/* --- Citas en Inglés | Español: dos botones pegados, el activo relleno de tinta --- */
+.lang-toggle { display: flex; align-items: center; margin-top: 14px; font-size: 0.82rem; color: var(--muted); }
+.lang-toggle span { margin-right: 8px; }
+.lang-toggle button {
+  padding: 4px 10px;
+  border: var(--rule-hair) solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+.lang-toggle button + button { border-left: 0; }   /* pegados: un solo filete entre los dos */
+.lang-toggle button:hover { background: var(--surface); }
+.lang-toggle button[aria-pressed="true"] { background: var(--ink); color: var(--frame); }
+.lang-toggle button:disabled { cursor: progress; }
+.lang-toggle button:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+
 /* --- 👍/👎 bajo cada respuesta: discreto, gris, y en color solo el que está votado --- */
 .feedback {
   display: flex;
@@ -548,6 +568,16 @@ li .source-panel { margin: 8px 0 4px; }
   text-align: center;
 }
 .footer a { color: var(--muted); }
+.footer-links { display: block; margin-top: 8px; }
+
+/* --- Páginas de texto legal (privacidad) ---------------------------------- */
+.legal { max-width: 640px; margin: 0 auto; padding: 36px 20px 80px; font-size: 1.05rem; line-height: 1.65; color: var(--text-soft); }
+.legal h1 { margin: 0 0 18px; font: 400 4.5rem/0.9 var(--display); text-transform: uppercase; color: var(--ink); }
+.legal h2 { margin: 34px 0 8px; padding-top: 12px; border-top: var(--rule-bar) solid var(--ink); font: 400 1.15rem/1.2 var(--slab); text-transform: uppercase; color: var(--ink); }
+.legal ul { padding-left: 1.2em; }
+.legal li + li { margin-top: 10px; }
+.legal a { color: var(--ink); }
+.legal-small { margin-top: 34px; font-size: 0.85rem; color: var(--muted); }
 
 /* Oculto a la vista pero visible para lectores de pantalla */
 .visually-hidden {
@@ -626,7 +656,7 @@ li .source-panel { margin: 8px 0 4px; }
 }
 .cover-text, .cover-scroll { position: relative; z-index: 1; }
 /* En esta página la barra de arriba flota sobre la foto en vez de ocupar su propia franja. */
-.about-page .topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 2; color: #f4f4f5; }
+.about-page .topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 2; color: #f4f4f5; border-bottom: 0; }   /* sobre la foto, la raya gruesa la cortaba */
 .about-page .wordmark em { color: #c9cacf; }
 .about-page .topbar .ghost { color: #f4f4f5; background: rgba(14, 15, 17, 0.35); backdrop-filter: blur(6px); border-color: rgba(255, 255, 255, 0.18); }
 .about-page .frame { position: relative; }

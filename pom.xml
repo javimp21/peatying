@@ -61,6 +61,13 @@
 			<version>2.73.0</version>
 		</dependency>
 
+		<!-- Lector del formato .mmdb: país y ciudad aproximados de una IP con la base de datos DB-IP Lite -->
+		<dependency>
+			<groupId>com.maxmind.db</groupId>
+			<artifactId>maxmind-db</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+
 		<!-- Acceso a base de datos con SQL (JdbcClient) y gestión de conexiones -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

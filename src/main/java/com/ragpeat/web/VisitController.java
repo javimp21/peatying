@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * La página llama a POST /api/visit al cargarse: así contamos visitantes aunque no pregunten nada.
- * Anónimo: solo se guarda la huella diaria (ver VisitorHasher), nunca la IP.
+ * Anónimo: se guarda la huella diaria (ver VisitorHasher) y el país y la ciudad aproximados, nunca la IP.
  */
 @RestController
 public class VisitController {
@@ -28,9 +28,12 @@ public class VisitController {
      */
     private final RateLimiter limiter = new RateLimiter(30, Duration.ofHours(1), 100_000, Clock.systemUTC());
 
-    public VisitController(JdbcClient jdbc, ClientInfo clientInfo) {
+    private final GeoLocator geo;
+
+    public VisitController(JdbcClient jdbc, ClientInfo clientInfo, GeoLocator geo) {
         this.jdbc = jdbc;
         this.clientInfo = clientInfo;
+        this.geo = geo;
     }
 
     /** referrer: la página de la que viene el visitante (document.referrer), o vacío si llega directo. */
@@ -41,13 +44,18 @@ public class VisitController {
         if (!limiter.tryAcquire(clientInfo.ip(http))) {
             return ResponseEntity.noContent().build(); // no contamos, pero tampoco damos pistas
         }
+        // País y ciudad aproximados; la IP se usa aquí y no se guarda.
+        GeoLocator.Location location = geo.locate(clientInfo.ip(http));
         // ON CONFLICT DO NOTHING: si este visitante ya contó hoy, no hacemos nada (ni error ni duplicado).
         jdbc.sql("""
-                INSERT INTO page_views (day, visitor_hash, referrer) VALUES (CURRENT_DATE, :visitor, :referrer)
+                INSERT INTO page_views (day, visitor_hash, referrer, country, city)
+                VALUES (CURRENT_DATE, :visitor, :referrer, :country, :city)
                 ON CONFLICT DO NOTHING
                 """)
                 .param("visitor", clientInfo.visitorHash(http))
                 .param("referrer", referrerHost(request == null ? null : request.referrer()))
+                .param("country", location.country())
+                .param("city", location.city())
                 .update();
         return ResponseEntity.noContent().build();
     }

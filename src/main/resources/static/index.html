@@ -3,15 +3,20 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ray Peat en español</title>
-  <meta name="description" content="Pregunta en español sobre las ideas de Ray Peat. Cada respuesta cita sus artículos y entrevistas originales.">
+  <title>Ray Peat Chatbot · Descubre la teoría bioenergética en español</title>
+  <meta name="description" content="Pregunta en español a un chatbot sobre las ideas de Ray Peat: tiroides, azúcar, estrés, hormonas, grasas, metabolismo… Cada respuesta cita sus artículos y entrevistas originales.">
   <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://peatying.com/">
+  <!-- Para Google: el nombre de la web que sale encima del título en los resultados (en vez de "peatying.com"). -->
+  <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "WebSite", "name": "Ray Peat Chatbot", "alternateName": "Ray Peat en español", "url": "https://peatying.com/", "inLanguage": "es"}
+  </script>
   <link rel="preload" href="fonts/six-caps-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/archivo-narrow-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <!-- Previsualización al compartir el enlace (WhatsApp, Telegram, X, LinkedIn...): protocolo Open Graph. -->
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Ray Peat en español">
-  <meta property="og:title" content="Ray Peat en español">
+  <meta property="og:site_name" content="Ray Peat Chatbot">
+  <meta property="og:title" content="Ray Peat Chatbot · Descubre la teoría bioenergética en español">
   <meta property="og:description" content="Pregunta en español sobre las ideas de Ray Peat. Cada respuesta cita sus artículos y entrevistas originales.">
   <meta property="og:url" content="https://peatying.com/">
   <meta property="og:image" content="https://peatying.com/img/og.jpg">
@@ -20,7 +25,7 @@
   <meta property="og:image:alt" content="Retrato de Ray Peat al aire libre, junto al texto «Las ideas de Ray Peat en español»">
   <meta property="og:locale" content="es_ES">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="img/logo.png" type="image/png">
+  <link rel="icon" href="img/favicon.png" type="image/png" sizes="144x144">
   <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -28,7 +33,7 @@
   <!-- Toda la app vive dentro de una gran tarjeta redondeada -->
   <div class="frame">
     <header class="topbar">
-      <a href="/" id="home" class="wordmark"><img src="img/logo.png" alt="" class="logo" width="22" height="22">Peatying</a>
+      <a href="/" id="home" class="wordmark" aria-label="Inicio"><img src="img/logo.png" alt="" class="logo" width="30" height="30"><span class="wordmark-name">Ray Peat</span></a>
       <nav class="actions">
         <a href="/about" class="ghost"><span class="wide-only">Sobre Ray Peat</span><span class="narrow-only">About</span></a>
         <!-- Solo se ven cuando hay conversación (app.js los muestra) -->
@@ -59,7 +64,7 @@
         </div>
         <div class="ask-pill">
           <label for="question" class="visually-hidden">Tu pregunta</label>
-          <textarea id="question" name="question" rows="1" maxlength="500" required
+          <textarea id="question" name="question" rows="1" maxlength="3000" required
                     placeholder="Prueba: «¿Qué pensaba del azúcar?»"></textarea>
           <button type="submit" id="send" class="send" aria-label="Preguntar">
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
@@ -83,6 +88,12 @@
     Pueden contener errores y no son consejo médico.
     Las preguntas se guardan de forma anónima para mejorar el servicio.
     Proyecto independiente, sin relación con Ray Peat ni con raypeat.com.
+    <span class="footer-links">
+      Contacto:
+      <a class="email" data-user="fjaviermap" data-domain="gmail.com">fjaviermap [arroba] gmail.com</a> ·
+      <a href="/privacidad">Privacidad</a> ·
+      Ubicación por <a href="https://db-ip.com" target="_blank" rel="noopener">DB-IP</a>
+    </span>
   </footer>
 
   <!-- Easter egg: un exprimidor. La media naranja baja, gira apretando el cono y el zumo sale por la boquilla al vaso.
@@ -130,5 +141,6 @@
   </div>
 
   <script src="app.js"></script>
+  <script src="contact.js"></script>
 </body>
 </html>

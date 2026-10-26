@@ -117,8 +117,8 @@ function readInternalFlag() {
 // --- Preguntar sobre un trozo de la respuesta ----------------------------------
 // Al seleccionar texto de una respuesta aparece un botón flotante para pedir que lo aclare o lo amplíe,
 // sin tener que copiar el trozo y pegarlo en la caja.
-const MAX_FRAGMENT = 200;          // la pregunta entera (cita incluida) tiene un máximo de 500 caracteres
-const MAX_QUESTION = 500;
+const MAX_FRAGMENT = 200;          // la pregunta entera (cita incluida) tiene un máximo de MAX_QUESTION caracteres
+const MAX_QUESTION = 3000;         // da para pegar una analítica; igual que MAX_QUESTION_LENGTH en ChatController
 
 const selectionAsk = document.createElement("div");
 selectionAsk.className = "selection-ask";
@@ -164,7 +164,7 @@ function setReply(fragment) {
   replyQuote = fragment;
   replyText.textContent = fragment;
   replyBox.hidden = false;
-  // La cita también ocupa sitio en los 500 caracteres: dejamos para la pregunta solo lo que queda.
+  // La cita también ocupa sitio en los MAX_QUESTION caracteres: dejamos para la pregunta solo lo que queda.
   input.maxLength = MAX_QUESTION - withQuote("", fragment).length;
 }
 
@@ -173,6 +173,16 @@ function clearReply() {
   replyBox.hidden = true;
   input.maxLength = MAX_QUESTION;
 }
+
+// Al pegar algo más largo de lo que cabe, el navegador lo corta sin decir nada (maxlength).
+// Avisamos, para que nadie crea que se ha mandado entero (p. ej. una analítica larga).
+input.addEventListener("paste", (event) => {
+  const pasted = event.clipboardData?.getData("text") ?? "";
+  const selected = input.selectionEnd - input.selectionStart;
+  if (input.value.length - selected + pasted.length > input.maxLength) {
+    showToast(`El texto es demasiado largo: solo caben ${input.maxLength.toLocaleString("es-ES")} caracteres y se ha cortado el final.`);
+  }
+});
 
 /** Lo que recibe el bot: la parte de su respuesta a la que se refiere la pregunta, y la pregunta. */
 function withQuote(question, quote) {
@@ -656,6 +666,8 @@ function renderAnswer(message) {
   body.className = "answer-body";
   body.innerHTML = renderMarkdown(answer, byNumber, false);
   div.appendChild(body);
+  const quotes = [...body.querySelectorAll(".quote-en")];
+  if (quotes.length > 0) div.appendChild(quoteLanguageToggle(message, quotes));
 
   // Lista de fuentes al final, con enlace al artículo (un artículo solo una vez).
   if (sources.length > 0) {
@@ -689,6 +701,61 @@ function renderAnswer(message) {
     if (button) toggleSource(div, button, byNumber.get(Number(button.dataset.n)));
   });
   return div;
+}
+
+// --- Citas en inglés o en español ------------------------------------------------
+// Las citas literales salen en inglés, tal cual las escribió Peat. Con "Español" se traducen
+// (una sola vez: la traducción se guarda en el mensaje) y con "Inglés" vuelven al original.
+
+function quoteLanguageToggle(message, quotes) {
+  const originals = quotes.map((q) => q.textContent);
+  const group = document.createElement("div");
+  group.className = "lang-toggle";
+  group.setAttribute("role", "group");
+  group.setAttribute("aria-label", "Idioma de las citas");
+  const label = document.createElement("span");
+  label.textContent = "Citas en";
+
+  const buttons = ["Inglés", "Español"].map((name) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = name;
+    group.append(button);
+    return button;
+  });
+  group.prepend(label);
+
+  const paint = (spanish) => {
+    quotes.forEach((q, i) => { q.textContent = spanish ? message.translations[i] : originals[i]; });
+    buttons[0].setAttribute("aria-pressed", String(!spanish));
+    buttons[1].setAttribute("aria-pressed", String(spanish));
+  };
+  buttons[0].addEventListener("click", () => paint(false));
+  buttons[1].addEventListener("click", async () => {
+    if (!message.translations) {
+      buttons[1].disabled = true;
+      buttons[1].textContent = "Traduciendo…";
+      try {
+        const response = await fetch("/api/translate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ texts: originals }),
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || "HTTP " + response.status);
+        message.translations = data.translations;
+      } catch (e) {
+        showToast("No se han podido traducir las citas. Prueba otra vez.");
+        return;
+      } finally {
+        buttons[1].disabled = false;
+        buttons[1].textContent = "Español";
+      }
+    }
+    paint(true);
+  });
+  paint(false);
+  return group;
 }
 
 // --- 👍/👎 ----------------------------------------------------------------------
@@ -814,7 +881,11 @@ function renderMarkdown(text, byNumber, live) {
  * Mientras se escribe (byNumber = null) las citas aún no se pueden pulsar: se pintan igual, pero inactivas.
  */
 function formatInline(text, byNumber) {
-  return escapeHtml(text)
+  let html = escapeHtml(text);
+  // Las citas literales en inglés ("...") van en un <span>: el botón Español las traduce (ver quoteLanguageToggle).
+  // Solo en la respuesta terminada: mientras se escribe, una cita puede estar a medias.
+  if (byNumber) html = html.replace(/(["“])([^"“”<>]{2,400}?)(["”])/g, '$1<span class="quote-en">$2</span>$3');
+  return html
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     // La cita y el signo que la sigue ("[2]." o "[2],") van juntos en un <span> que no se parte de línea:
     // si no, a veces el punto se quedaba solo al principio de la línea siguiente.

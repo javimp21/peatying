@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Las páginas que queremos que aparezcan en Google. Se le indica en robots.txt y en Google Search Console. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://peatying.com/</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://peatying.com/about</loc><lastmod>2026-10-26</lastmod></url>
+  <url><loc>https://peatying.com/privacidad</loc><lastmod>2026-10-26</lastmod></url>
+</urlset>

@@ -33,6 +33,7 @@ public class StatsCommand implements CommandLineRunner {
         }
         printVisits();
         printReferrers();
+        printLocations();
         printDaily();
         printTotals();
         printThumbsDown();
@@ -79,6 +80,28 @@ public class StatsCommand implements CommandLineRunner {
         System.out.println("\n=== De dónde llegan (últimos 30 días)");
         for (Map<String, Object> r : rows) {
             System.out.printf("%-30s %6s%n", r.get("origen"), r.get("visitantes"));
+        }
+        if (rows.isEmpty()) {
+            System.out.println("(todavía nada)");
+        }
+    }
+
+    /** País y ciudad aproximados (desde que se guardan; las visitas anteriores salen como "desconocido"). */
+    private void printLocations() {
+        List<Map<String, Object>> rows = jdbc.sql("""
+                SELECT coalesce(country, 'desconocido') AS pais, coalesce(city, '') AS ciudad, count(*) AS visitantes
+                FROM page_views
+                WHERE day > CURRENT_DATE - 30
+                GROUP BY 1, 2
+                ORDER BY 3 DESC, 1, 2
+                LIMIT 20
+                """)
+                .query()
+                .listOfRows();
+
+        System.out.println("\n=== De dónde son (aproximado, últimos 30 días)");
+        for (Map<String, Object> r : rows) {
+            System.out.printf("%-20s %-24s %6s%n", r.get("pais"), r.get("ciudad"), r.get("visitantes"));
         }
         if (rows.isEmpty()) {
             System.out.println("(todavía nada)");
