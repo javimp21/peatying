@@ -84,7 +84,8 @@ public class ChatService {
 
     public ChatService(AnthropicClient claude, SearchService searchService,
                        @Value("${anthropic.model}") String model,
-                       @Value("classpath:prompts/system.md") Resource systemPromptFile) throws IOException {
+                       // Se puede cambiar para probar otro prompt sin recompilar: --chat.system-prompt=file:otro.md
+                       @Value("${chat.system-prompt:classpath:prompts/system.md}") Resource systemPromptFile) throws IOException {
         this.claude = claude;
         this.searchService = searchService;
         this.model = model;

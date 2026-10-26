@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RagPeatApplication {
 
 	/** Comandos de terminal (download, index...). Con ellos no hace falta arrancar el servidor web. */
-	private static final Set<String> COMMANDS = Set.of("download", "index", "index-interviews", "embed", "search", "ask", "eval", "compare", "stats", "redact", "topics");
+	private static final Set<String> COMMANDS = Set.of("download", "index", "index-interviews", "embed", "search", "ask", "eval", "compare", "quality", "stats", "redact", "topics");
 
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(RagPeatApplication.class);

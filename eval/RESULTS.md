@@ -1,5 +1,26 @@
 # Resultados de evaluación
 
+## Calidad de las respuestas (26-10-2026)
+
+`quality`: 31 preguntas reales de la web (`quality.json`, algunas con conversación previa), cada una con una nota
+de qué se espera. Un juez (Claude Sonnet 5.5) puntúa si responde a lo que se pide, lo que sobra, los avisos
+innecesarios, el formato y lo que se atribuye a Peat sin estar en los fragmentos citados.
+
+| 31 preguntas | Nota | Responde (1-5) | Formato bien | Partes que sobran | Avisos innecesarios | Sin respaldo | Palabras | Coste por respuesta |
+|---|---|---|---|---|---|---|---|---|
+| Prompt anterior, Haiku | 6,2 | 3,9 | 14 | 55 | 29 | 53 | 188 | ~0,002 $ |
+| Prompt nuevo (v2), Haiku | 6,8 | 4,2 | 29 | 35 | 13 | 66 | 183 | ~0,002 $ |
+| Prompt nuevo (v3), Haiku | 6,7 | 4,2 | 31 | 48 | 16 | 72 | 195 | ~0,002 $ |
+| Prompt nuevo (v3), Sonnet | 7,0 | 4,4 | 25 | 66 | 24 | 64 | 242 | ~0,03 $ |
+
+- El prompt nuevo empieza por qué quiere la persona: si pide una cena o una rutina, la construye con las ideas de
+  Peat en vez de decir que él no habló de ese caso. Prosa para explicar y listas solo para pasos u opciones.
+- Se adopta v3 con Haiku: igual que v2 dentro del ruido, y corrige casos concretos (varias cenas, nada de primera
+  persona). Sonnet mejora poco y cuesta unas 17 veces más.
+- "Sin respaldo" es estricto: muchas son matices ("prefiero" contado como "recomendaba"). Es lo siguiente a mejorar.
+- Banco automático (`eval`) con el mismo día: prompt anterior 30/34, nuevo 31/34 (los fallos son de fuentes esperadas).
+- Una ejecución por variante: diferencias de ±0,3 en la nota son ruido.
+
 ## RAG vs. Claude sin RAG (19-10-2026)
 
 Mismo modelo para responder en los dos casos (Claude Haiku 5.5). El juez (Claude Sonnet 5.5) extrae de cada
