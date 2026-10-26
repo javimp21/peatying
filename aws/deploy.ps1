@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 
 $aws = "aws"
 if (-not (Get-Command aws -ErrorAction SilentlyContinue)) { $aws = "$env:LOCALAPPDATA\Programs\Amazon\AWSCLIV2\aws.exe" }
-$instanceId = "i-0a296d03feb87d054"
+. "$PSScriptRoot\config.ps1"      # $instanceId (no está en git: ver config.example.ps1)
 $dbHost = & $aws rds describe-db-instances --db-instance-identifier ragpeat-db --query "DBInstances[0].Endpoint.Address" --output text
 
 # Cada archivo viaja en base64 dentro del comando: así no hay problemas con comillas ni saltos de línea.

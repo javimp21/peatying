@@ -6,7 +6,8 @@ set -euo pipefail
 DB_HOST="$1"
 APP_TAG="${2:-latest}"
 REGION=eu-west-1
-REGISTRY=984546305267.dkr.ecr.eu-west-1.amazonaws.com
+# El número de cuenta lo pregunta el propio servidor (con su rol): así no está escrito en el repositorio.
+REGISTRY=$(aws sts get-caller-identity --query Account --output text).dkr.ecr.${REGION}.amazonaws.com
 cd /opt/ragpeat
 
 # Lee un parámetro cifrado de Parameter Store. Puede hacerlo gracias al ROL del servidor:
@@ -24,6 +25,7 @@ ANTHROPIC_API_KEY=$(param /ragpeat/anthropic-api-key)
 VOYAGE_API_KEY=$(param /ragpeat/voyage-api-key)
 ADMIN_TOKEN=$(param /ragpeat/admin-token 2>/dev/null || true)
 APP_TAG=${APP_TAG}
+REGISTRY=${REGISTRY}
 EOF
 # APP_TAG también en .env: así cualquier "docker compose run ..." posterior (stats, index...) usa
 # la versión desplegada y no la imagen "latest", que es antigua.

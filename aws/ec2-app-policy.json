@@ -5,7 +5,7 @@
       "Sid": "LeerSoloNuestrosParametros",
       "Effect": "Allow",
       "Action": ["ssm:GetParameter", "ssm:GetParameters", "ssm:GetParametersByPath"],
-      "Resource": "arn:aws:ssm:eu-west-1:984546305267:parameter/ragpeat/*"
+      "Resource": "arn:aws:ssm:eu-west-1:<ACCOUNT_ID>:parameter/ragpeat/*"
     },
     {
       "Sid": "DescifrarParametrosSoloAtravesDeSSM",
@@ -18,7 +18,7 @@
       "Sid": "EscribirLogsDeLaApp",
       "Effect": "Allow",
       "Action": ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents", "logs:DescribeLogStreams"],
-      "Resource": "arn:aws:logs:eu-west-1:984546305267:log-group:/ragpeat/*"
+      "Resource": "arn:aws:logs:eu-west-1:<ACCOUNT_ID>:log-group:/ragpeat/*"
     }
   ]
 }

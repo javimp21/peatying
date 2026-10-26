@@ -2,7 +2,7 @@
 # Caddy recibe las visitas (puertos 80/443), pone el HTTPS y le pasa las peticiones a la app.
 services:
   app:
-    image: 984546305267.dkr.ecr.eu-west-1.amazonaws.com/rag-peat:${APP_TAG:-latest}
+    image: ${REGISTRY}/rag-peat:${APP_TAG:-latest}   # REGISTRY y APP_TAG: los escribe deploy.sh en .env
     restart: unless-stopped            # si se cae o se reinicia el servidor, vuelve a arrancar sola
     env_file: .env                     # DB_URL, DB_PASSWORD y las claves (lo genera deploy.sh desde Parameter Store)
     environment:

@@ -40,3 +40,6 @@ eval/results/*
 ### Datos descargados ###
 # Los artículos tienen copyright: se quedan en local, no se suben a GitHub.
 data/
+
+# Datos de la cuenta de AWS (ver aws/config.example.ps1)
+aws/config.ps1

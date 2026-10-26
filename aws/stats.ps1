@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 
 $aws = "aws"
 if (-not (Get-Command aws -ErrorAction SilentlyContinue)) { $aws = "$env:LOCALAPPDATA\Programs\Amazon\AWSCLIV2\aws.exe" }
-$instanceId = "i-0a296d03feb87d054"
+. "$PSScriptRoot\config.ps1"      # $instanceId (no está en git: ver config.example.ps1)
 # La salida lleva emojis (👍/👎): la CLI de AWS (Python) y la consola tienen que usar UTF-8.
 $env:PYTHONUTF8 = "1"
 $env:PYTHONIOENCODING = "utf-8"
