@@ -21,6 +21,19 @@ innecesarios, el formato y lo que se atribuye a Peat sin estar en los fragmentos
 - Banco automático (`eval`) con el mismo día: prompt anterior 30/34, nuevo 31/34 (los fallos son de fuentes esperadas).
 - Una ejecución por variante: diferencias de ±0,3 en la nota son ruido.
 
+### v4 (27-10-2026), 39 preguntas (8 más, de conversaciones propias)
+
+| 39 preguntas, Haiku | Nota | Responde (1-5) | Formato bien | Partes que sobran | Avisos innecesarios | Sin respaldo | Palabras |
+|---|---|---|---|---|---|---|---|
+| v3, pasada 1 | 6,8 | 4,2 | 39 | 57 | 23 | 83 | 187 |
+| v3, pasada 2 | 6,6 | 4,1 | 36 | 55 | 15 | 87 | 181 |
+| v4 | 6,9 | 4,2 | 37 | 50 | 18 | 71 | 191 |
+
+- v4: en las propuestas, cada punto separa la propuesta (sin atribuírsela a Peat) de la razón (lo que él dijo, con
+  cita), y elige 3 o 4 ideas antes de escribir. Baja lo atribuido sin respaldo (71 frente a 83-87); la nota sube
+  poco, al límite del ruido. Se adopta.
+- Pendiente: respuestas demasiado largas para preguntas de una palabra («patata»).
+
 ## RAG vs. Claude sin RAG (19-10-2026)
 
 Mismo modelo para responder en los dos casos (Claude Haiku 5.5). El juez (Claude Sonnet 5.5) extrae de cada
