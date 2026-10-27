@@ -68,6 +68,8 @@
     "expect": "Por qué veía peligroso el exceso de hierro y cómo evitarlo." },
   { "id": "leche-cruda", "question": "recomienda más la leche cruda o pasteurizada fresca?",
     "expect": "Responder a la elección concreta (cruda o pasteurizada) según lo que dijo, sin desviarse a si la leche es buena en general." },
+  { "id": "espacio", "question": "Peat fue al espacio? Comia piedras lunares?",
+    "expect": "Es una broma: contestar en una o dos frases, con naturalidad, y sugerir una pregunta de verdad. Sin rellenar con fragmentos que solo se parecen a las palabras (comida de astronauta, la Luna)." },
   { "id": "hola", "question": "hola",
     "expect": "Saludar brevemente y sugerir dos o tres temas o preguntas posibles sobre Ray Peat. Sin buscar ni citar." },
   { "id": "patata", "question": "patata",
