@@ -75,3 +75,18 @@ eficiente de producir energía". Peat escribió lo contrario: "I have begun thin
 
 `eval` con Claude Haiku 5.5: 29/30 aprobadas. El único fallo fue un falso positivo del corrector
 («medicina moderna» tomada por cita en inglés). 7 citas literales, ninguna inventada. Coste ~0,03 $.
+
+### Juez ajustado al criterio del dueño y prompt v5 (27-10-2026)
+
+Javi puntuó 10 respuestas del examen. El juez anterior era unos 2 puntos más duro con los matices de atribución y no
+penalizaba lo que más le molesta: sacar contexto que nadie ha dado (la menstruación), comparaciones no pedidas,
+responder a ciegas a una sola palabra y decir que Peat «no habló de X como tal». Se añadió ese criterio al juez.
+Con el juez nuevo, sus notas y las del juez quedan a 1 punto o menos en 6 de 10 preguntas.
+
+v5: pregunta qué quiere saber ante mensajes de una palabra, no supone nada de quien pregunta, no dice que Peat no
+habló de algo (responde con el tema general), nunca dice que no dio cantidades, y guiones en vez de números.
+
+| 39 preguntas, Haiku, juez ajustado | Nota | Responde (1-5) | Avisos innecesarios | Sin respaldo | Palabras |
+|---|---|---|---|---|---|
+| v4 | 7,3 | 4,2 | 17 | 80 | 190 |
+| v5 | 7,5 | 4,2 | 11 | 81 | 179 |
