@@ -39,6 +39,11 @@ public class IndexService {
         return index(interview.slug(), interview.title(), interview.url(), "interview", interviewChunker.split(interview));
     }
 
+    @Transactional
+    public int index(BookFileStore.Page page) {
+        return index(page.slug(), page.title(), page.url(), "book", chunker.split(page.text()));
+    }
+
     private int index(String slug, String title, String url, String sourceType, List<String> chunks) {
         // El título también cuenta como cambio: va delante de cada chunk al calcular su embedding.
         boolean sameTitle = repository.findTitle(slug).map(title::equals).orElse(false);

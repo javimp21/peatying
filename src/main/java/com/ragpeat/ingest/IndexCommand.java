@@ -22,11 +22,14 @@ public class IndexCommand implements CommandLineRunner {
 
     private final ArticleFileStore store;
     private final InterviewFileStore interviewStore;
+    private final BookFileStore bookStore;
     private final IndexService indexService;
 
-    public IndexCommand(ArticleFileStore store, InterviewFileStore interviewStore, IndexService indexService) {
+    public IndexCommand(ArticleFileStore store, InterviewFileStore interviewStore, BookFileStore bookStore,
+                        IndexService indexService) {
         this.store = store;
         this.interviewStore = interviewStore;
+        this.bookStore = bookStore;
         this.indexService = indexService;
     }
 
@@ -34,6 +37,10 @@ public class IndexCommand implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (List.of(args).contains("index-interviews")) {
             indexInterviews();
+            return;
+        }
+        if (List.of(args).contains("index-books")) {
+            indexBooks();
             return;
         }
         if (!List.of(args).contains("index")) {
@@ -65,5 +72,20 @@ public class IndexCommand implements CommandLineRunner {
         }
         log.info("Revisadas {} entrevistas: {} cambiadas ({} chunks nuevos), el resto sin cambios",
                 interviews.size(), changed, writtenChunks);
+    }
+
+    /** "index-books": las páginas de los libros (data/books). */
+    private void indexBooks() throws Exception {
+        List<BookFileStore.Page> pages = bookStore.loadAll();
+        int changed = 0, writtenChunks = 0;
+        for (BookFileStore.Page page : pages) {
+            int written = indexService.index(page);
+            if (written > 0) {
+                changed++;
+                writtenChunks += written;
+            }
+        }
+        log.info("Revisadas {} páginas de libros: {} cambiadas ({} chunks nuevos), el resto sin cambios",
+                pages.size(), changed, writtenChunks);
     }
 }

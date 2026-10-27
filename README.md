@@ -1,6 +1,6 @@
 # Peatying — Ray Peat's ideas, in Spanish
 
-**[peatying.com](https://peatying.com)** · A Spanish chatbot about the ideas of biologist Ray Peat (1936–2022). Every answer is grounded in his own words — 78 articles and 221 radio interviews — and cites them, with the original text and audio one click away.
+**[peatying.com](https://peatying.com)** · A Spanish chatbot about the ideas of biologist Ray Peat (1936–2022). Every answer is grounded in his own words — 78 articles, 5 books and 221 radio interviews — and cites them, with the original text and audio one click away (books are cited by page, without showing their copyrighted text).
 
 ![peatying.com](src/main/resources/static/img/og.jpg)
 
@@ -34,10 +34,11 @@ flowchart LR
 ```
 
 1. **Articles.** A Jsoup scraper downloads the 78 articles from raypeat.com, handling two HTML layouts, a Windows-1252 charset, broken characters, epigraphs mistaken for titles and bibliographies. Text is split into ~1,500-character chunks on paragraph boundaries and embedded with Voyage AI (`voyage-4`, 1024 dims). Re-indexing is incremental.
-2. **Interviews.** ~250 hours of public radio and podcast audio, transcribed by my own pipeline (below). Chunks keep who is speaking, and only Peat's words count as his opinion.
-3. **Hybrid search.** One SQL query combines pgvector cosine distance (meaning, works across languages) with Postgres full-text search (exact terms like "pregnenolone"), merged with Reciprocal Rank Fusion, with a per-type quota (3 articles + 2 interviews per 5 results) so the written work is never crowded out.
-4. **Agentic answer.** Claude gets the question and a `search_peat` tool. It rewrites the question in English, picks keywords, may search again from another angle (max 3 searches), then answers in Spanish citing passages as `[n]`. The loop is written by hand against the Messages API, not a framework.
-5. **Streaming.** Tokens are streamed over server-sent events from virtual threads; the frontend renders markdown live and turns `[n]` into buttons that open the original passage, which can be translated to Spanish on demand.
+2. **Books.** His 5 books, extracted from PDF with printed page numbers recovered from the page headers (a fixed offset per book, taken from the most common value so misread numbers don't matter). Each page is its own document (Generative Energy, p. 35). The text is used to answer but never sent to the browser: the source panel shows only book, page and where to buy it.
+3. **Interviews.** ~250 hours of public radio and podcast audio, transcribed by my own pipeline (below). Chunks keep who is speaking, and only Peat's words count as his opinion.
+4. **Hybrid search.** One SQL query combines pgvector cosine distance (meaning, works across languages) with Postgres full-text search (exact terms like "pregnenolone"), merged with Reciprocal Rank Fusion, with a per-type quota (3 written passages from articles and books + 2 interviews per 5 results) so the written work is never crowded out.
+5. **Agentic answer.** Claude gets the question and a `search_peat` tool. It rewrites the question in English, picks keywords, may search again from another angle (max 3 searches), then answers in Spanish citing passages as `[n]`. The loop is written by hand against the Messages API, not a framework.
+6. **Streaming.** Tokens are streamed over server-sent events from virtual threads; the frontend renders markdown live and turns `[n]` into buttons that open the original passage, which can be translated to Spanish on demand.
 
 ### Transcription pipeline
 
@@ -97,6 +98,8 @@ java -jar target/rag-peat-0.0.1-SNAPSHOT.jar download          # scrape the arti
 java -jar target/rag-peat-0.0.1-SNAPSHOT.jar index             # chunk them into Postgres
 python scripts/transcribe_interviews.py urls.txt               # transcribe interviews into data/transcripts/
 java -jar target/rag-peat-0.0.1-SNAPSHOT.jar index-interviews  # chunk the transcripts
+python scripts/extract_books.py <folder with the PDFs>          # books into data/books/ (never committed)
+java -jar target/rag-peat-0.0.1-SNAPSHOT.jar index-books       # one document per printed page
 java -jar target/rag-peat-0.0.1-SNAPSHOT.jar embed             # compute embeddings
 java -jar target/rag-peat-0.0.1-SNAPSHOT.jar                   # web app on http://localhost:8080
 ```

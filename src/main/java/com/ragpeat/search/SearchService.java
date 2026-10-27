@@ -51,21 +51,24 @@ public class SearchService {
 
         // Hay casi tres veces más texto de entrevistas que de artículos: si compitieran juntos, las
         // entrevistas taparían a los artículos, que son la fuente más fiable (texto escrito por Peat, literal).
-        // Por eso cada tipo tiene sitio reservado: de 5 resultados, 3 artículos y 2 entrevistas.
+        // Por eso cada tipo tiene sitio reservado: de 5 resultados, 3 de texto escrito por Peat y 2 entrevistas.
+        // Lo escrito son los artículos y los libros: compiten juntos por esos 3 puestos.
         int interviews = limit * 2 / 5;
 
         return jdbc.sql("""
                 WITH semantic AS (
                     -- <=> es la "distancia coseno" de pgvector: cuanto menor, más parecido el significado.
-                    -- PARTITION BY: la posición se cuenta por separado dentro de los artículos y de las entrevistas.
-                    SELECT c.id, d.source_type,
-                           ROW_NUMBER() OVER (PARTITION BY d.source_type ORDER BY c.embedding <=> CAST(:vector AS vector)) AS rank
+                    -- PARTITION BY: la posición se cuenta por separado dentro de lo escrito y de las entrevistas.
+                    SELECT c.id, CASE WHEN d.source_type = 'interview' THEN 'interview' ELSE 'written' END AS source_type,
+                           ROW_NUMBER() OVER (PARTITION BY d.source_type = 'interview'
+                                              ORDER BY c.embedding <=> CAST(:vector AS vector)) AS rank
                     FROM chunks c JOIN documents d ON d.id = c.document_id
                     WHERE c.embedding IS NOT NULL
                 ),
                 keyword AS (
-                    SELECT c.id, d.source_type,
-                           ROW_NUMBER() OVER (PARTITION BY d.source_type ORDER BY ts_rank(c.content_tsv, q) DESC) AS rank
+                    SELECT c.id, CASE WHEN d.source_type = 'interview' THEN 'interview' ELSE 'written' END AS source_type,
+                           ROW_NUMBER() OVER (PARTITION BY d.source_type = 'interview'
+                                              ORDER BY ts_rank(c.content_tsv, q) DESC) AS rank
                     FROM chunks c JOIN documents d ON d.id = c.document_id,
                          websearch_to_tsquery('english', :keywords) AS q
                     WHERE c.content_tsv @@ q        -- @@ = "el chunk contiene la búsqueda"

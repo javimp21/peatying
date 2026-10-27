@@ -47,7 +47,11 @@ public class EmbedCommand implements CommandLineRunner {
             // Al chunk le ponemos delante el título del documento: así el vector sabe de qué
             // trata el texto aunque el trozo no lo diga (p. ej. un párrafo que solo dice "this hormone").
             List<String> texts = batch.stream()
-                    .map(c -> (c.sourceType().equals("interview") ? "Ray Peat interview, \"" : "Ray Peat, \"")
+                    .map(c -> (switch (c.sourceType()) {
+                        case "interview" -> "Ray Peat interview, \"";
+                        case "book" -> "Ray Peat, book \"";
+                        default -> "Ray Peat, \"";
+                    })
                             + c.title() + "\"\n\n" + c.content())
                     .toList();
 

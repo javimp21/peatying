@@ -64,7 +64,7 @@ public class ChatService {
     private static Tool searchTool(int resultsPerSearch) {
         return Tool.builder()
             .name("search_peat")
-            .description("Busca en los artículos y entrevistas de Ray Peat (en inglés) y devuelve los "
+            .description("Busca en los artículos, libros y entrevistas de Ray Peat (en inglés) y devuelve los "
                     + resultsPerSearch + " fragmentos más relevantes, numerados para poder citarlos.")
             .inputSchema(Tool.InputSchema.builder()
                     .properties(Tool.InputSchema.Properties.builder()
@@ -270,8 +270,8 @@ public class ChatService {
         StringBuilder text = new StringBuilder();
         for (SearchResult result : searchService.search(input.query(), input.keywords(), resultsPerSearch)) {
             int number = numberOf(result, sources);
-            // Claude tiene que saber qué es entrevista: es una transcripción automática y no se cita entre comillas.
-            text.append("[").append(number).append("] ").append(result.isInterview() ? "ENTREVISTA (transcripción automática: NO citar entre comillas): " : "ARTÍCULO: ")
+            // Claude tiene que saber qué es entrevista (transcripción automática) y qué es libro.
+            text.append("[").append(number).append("] ").append(result.label()).append(": ")
                     .append(result.title())
                     .append(" (").append(result.url()).append(")\n")
                     .append(result.content()).append("\n\n");

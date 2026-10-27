@@ -1159,6 +1159,23 @@ function toggleSource(messageDiv, button, source) {
   number.textContent = source.number;
   const title = document.createElement("h3");
   title.textContent = source.title;
+
+  // Libros: tienen derechos de autor y el servidor no manda su texto. Solo libro, página y dónde comprarlo.
+  if (source.type === "book") {
+    meta.append(number, "Libro");
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = "Por derechos de autor, el texto del libro no se muestra aquí.";
+    const buy = document.createElement("a");
+    buy.href = source.url;
+    buy.target = "_blank";
+    buy.rel = "noopener";
+    buy.textContent = "Comprar el libro en raypeat.com ↗";
+    panel.append(meta, title, note, buy);
+    placeSourcePanel(messageDiv, button, panel, source);
+    return;
+  }
+
   const text = document.createElement("p");
   text.className = "source-text";
   text.textContent = source.text;       // el texto original de Peat, en inglés
@@ -1179,7 +1196,11 @@ function toggleSource(messageDiv, button, source) {
     panel.append(note);
   }
   panel.append(link);
-  // Justo debajo de donde está la cita: dentro del punto de la lista, o después del párrafo.
+  placeSourcePanel(messageDiv, button, panel, source);
+}
+
+// Justo debajo de donde está la cita: dentro del punto de la lista, o después del párrafo.
+function placeSourcePanel(messageDiv, button, panel, source) {
   const item = button.closest("li");
   if (item) item.appendChild(panel);
   else button.closest("p").after(panel);

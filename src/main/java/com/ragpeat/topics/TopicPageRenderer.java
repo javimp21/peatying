@@ -76,7 +76,7 @@ public class TopicPageRenderer {
                     // Algunos títulos de raypeat.com acaban en ":" ("Regeneration and degeneration:"): fuera.
                     .append("\" target=\"_blank\" rel=\"noopener\">").append(esc(s.title().replaceAll("\\s*:\\s*$", "")))
                     .append("</a> <span>")
-                    .append("interview".equals(s.type()) ? "entrevista (transcripción automática)" : "artículo")
+                    .append("interview".equals(s.type()) ? "entrevista (transcripción automática)" : "book".equals(s.type()) ? "libro" : "artículo")
                     .append("</span></li>\n");
         }
         body.append("</ol>\n");

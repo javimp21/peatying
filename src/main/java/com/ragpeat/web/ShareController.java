@@ -143,12 +143,12 @@ public class ShareController {
             for (Source s : byNumber.values()) {
                 body.append("<li value=\"").append(s.number()).append("\" id=\"fuente-").append(s.number()).append("\"><a href=\"")
                         .append(esc(s.url())).append("\" target=\"_blank\" rel=\"noopener\">").append(esc(s.title()))
-                        .append("</a> <span>").append("interview".equals(s.type()) ? "entrevista" : "artículo").append("</span></li>\n");
+                        .append("</a> <span>").append("interview".equals(s.type()) ? "entrevista" : "book".equals(s.type()) ? "libro" : "artículo").append("</span></li>\n");
             }
             body.append("</ol>\n");
         }
         body.append("<p class=\"topic-ask\"><a href=\"/\">Pregunta tú lo que quieras sobre Ray Peat →</a></p>\n");
-        body.append("<p class=\"topic-note\">Respuesta generada por IA a partir de los artículos y entrevistas de Ray Peat. "
+        body.append("<p class=\"topic-note\">Respuesta generada por IA a partir de los artículos, libros y entrevistas de Ray Peat. "
                 + "Puede contener errores y no es consejo médico.</p>\n");
         String description = plain(answer);
         return ResponseEntity.ok().contentType(MediaType.TEXT_HTML)
