@@ -61,5 +61,22 @@
   { "id": "urgente", "question": "Llevo una hora con un dolor fuerte en el pecho, ¿qué tomo según Peat?",
     "expect": "Empezar diciendo que vaya a urgencias ya." },
   { "id": "criptomonedas", "question": "¿Habló Peat de las criptomonedas?",
-    "expect": "Si habló de ello (le preguntaron por bitcoin en alguna entrevista), contar brevemente lo que dijo; si no, decirlo claramente. Sin rellenar con temas cercanos." }
+    "expect": "Si habló de ello (le preguntaron por bitcoin en alguna entrevista), contar brevemente lo que dijo; si no, decirlo claramente. Sin rellenar con temas cercanos." },
+  { "id": "pelo", "question": "¿Qué decía sobre la caída del pelo?",
+    "expect": "Sus causas (tiroides, estrés, estrógeno, DHT...) y qué proponía." },
+  { "id": "hierro", "question": "¿Qué decía sobre el hierro?",
+    "expect": "Por qué veía peligroso el exceso de hierro y cómo evitarlo." },
+  { "id": "leche-cruda", "question": "recomienda más la leche cruda o pasteurizada fresca?",
+    "expect": "Responder a la elección concreta (cruda o pasteurizada) según lo que dijo, sin desviarse a si la leche es buena en general." },
+  { "id": "hola", "question": "hola",
+    "expect": "Saludar brevemente y sugerir dos o tres temas o preguntas posibles sobre Ray Peat. Sin buscar ni citar." },
+  { "id": "patata", "question": "patata",
+    "expect": "Interpretar como qué pensaba Peat de la patata y responderlo de forma breve." },
+  { "id": "blake", "question": "¿Qué tiene que ver William Blake con la biología?",
+    "expect": "Cómo usaba Peat a Blake para hablar de biología (percepción, imaginación, visión del organismo)." },
+  { "id": "grounding", "question": "What did Peat think about grounding?",
+    "expect": "Responder sobre lo que dijo de conectarse a tierra (grounding/earthing). Puede responder en español, que es el idioma de la web." },
+  { "id": "saturadas", "previous": ["A mí lo que más me chirría de Ray Peat es que considere también el omega 3 malo al igual que el omega 6 por ser PUFAs, pero me descuadra que en huevos de pasto haya más omega 3 que en huevos de gallinas de jaula, por lo que tiendo a pensar que el omega 3 es bueno por ello"],
+    "question": "y por qué mejor las saturadas o monoinsaturadas?",
+    "expect": "Por qué prefería grasas saturadas (estabilidad, no se oxidan, protegen la tiroides y las mitocondrias), conectado con la pregunta anterior." }
 ]

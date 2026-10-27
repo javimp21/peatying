@@ -118,7 +118,7 @@ public class TopicPageRenderer {
                 + "<a href=\"/\">chatbot</a>.</p>\n<ul class=\"topic-index\">\n");
         for (Page p : pages) {
             body.append("<li><a href=\"/temas/").append(p.slug()).append("\">").append(esc(p.title()))
-                    .append("</a><span>").append(esc(p.description())).append("</span></li>\n");
+                    .append("</a> <span>").append(esc(p.description())).append("</span></li>\n");
         }
         body.append("</ul>\n");
         return document("Temas: las ideas de Ray Peat en español", "Las ideas de Ray Peat sobre el azúcar, la tiroides, "
