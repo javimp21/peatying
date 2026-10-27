@@ -102,7 +102,33 @@ class GraderTest {
         var q = new EvalQuestion("k", "absent", "?", List.of());
 
         assertThat(grader.grade(q, answer("En estos artículos Peat no menciona la kombucha.")).passed()).isTrue();
+        assertThat(grader.grade(q, answer("Peat no dejó una opinión sobre la kombucha en particular.")).passed()).isTrue();
         assertThat(grader.grade(q, answer("La kombucha es excelente para la tiroides.")).passed()).isFalse();
+    }
+
+    private ChatAnswer citingBookPage(String content) {
+        TreeMap<Integer, SearchResult> cited = new TreeMap<>();
+        cited.put(1, new SearchResult(1, "book-generative-energy-p035", "Generative Energy, p. 35",
+                "https://raypeat.com/products.shtml#generative-energy-p35", "book", content, 0));
+        return new ChatAnswer("Según su libro, la gelatina protege [1].", cited, 1, 0, 0);
+    }
+
+    @Test
+    void unaPaginaDeLibroCuentaComoFuente_siTrataElTema() {
+        var q = new EvalQuestion("g", "direct", "?", List.of("gelatin"), "gelatin");
+
+        var onTopic = grader.grade(q, citingBookPage("Gelatin is anti-inflammatory. Eating gelatin balances the amino acids."));
+        var inPassing = grader.grade(q, citingBookPage("Milk, cheese and eggs are good foods; gelatin is another option."));
+
+        assertThat(onTopic.sourceHit()).isTrue();
+        assertThat(inPassing.sourceHit()).isFalse();
+    }
+
+    @Test
+    void sinTerminosDeLibro_unaPaginaDeLibroNoCuenta() {
+        var q = new EvalQuestion("g", "direct", "?", List.of("gelatin"));
+
+        assertThat(grader.grade(q, citingBookPage("Gelatin, gelatin, gelatin.")).sourceHit()).isFalse();
     }
 
     @Test

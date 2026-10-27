@@ -90,3 +90,11 @@ habló de algo (responde con el tema general), nunca dice que no dio cantidades,
 |---|---|---|---|---|---|
 | v4 | 7,3 | 4,2 | 17 | 80 | 190 |
 | v5 | 7,5 | 4,2 | 11 | 81 | 179 |
+
+### Banco automático con libros (27-10-2026)
+
+Con los 5 libros en el corpus, el bot cita a menudo una página de libro en vez del artículo esperado, y el banco
+lo contaba como fallo (28/34). Ahora cada pregunta lleva `bookTerms` (términos del tema en inglés): una página de
+libro citada cuenta como fuente esperada si los menciona al menos dos veces. El texto de los libros también entra en
+la comprobación de citas literales. Resultado: 32/34; los dos fallos son «setas» (solo cita entrevistas) y un
+«no dejó una opinión» que el corrector no reconocía como admitir que Peat no habló de algo (ya corregido).

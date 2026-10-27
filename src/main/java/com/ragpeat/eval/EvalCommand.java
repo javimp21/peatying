@@ -11,6 +11,7 @@ import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.chat.ChatService;
 import com.ragpeat.eval.Grader.Grade;
 import com.ragpeat.ingest.ArticleFileStore;
+import com.ragpeat.ingest.BookFileStore;
 import com.ragpeat.ingest.InterviewFileStore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -33,14 +34,16 @@ public class EvalCommand implements CommandLineRunner {
     private final ChatService chatService;
     private final ArticleFileStore store;
     private final InterviewFileStore interviewStore;
+    private final BookFileStore bookStore;
     private final JsonMapper json;
     private final String model;
 
     public EvalCommand(ChatService chatService, ArticleFileStore store, InterviewFileStore interviewStore,
-                       JsonMapper json, @Value("${anthropic.model}") String model) {
+                       BookFileStore bookStore, JsonMapper json, @Value("${anthropic.model}") String model) {
         this.chatService = chatService;
         this.store = store;
         this.interviewStore = interviewStore;
+        this.bookStore = bookStore;
         this.json = json;
         this.model = model;
     }
@@ -56,7 +59,7 @@ public class EvalCommand implements CommandLineRunner {
         }
         List<EvalQuestion> questions = json.readValue(Path.of("eval", "questions.json").toFile(),
                 new TypeReference<List<EvalQuestion>>() {});
-        Grader grader = new Grader(store.loadAll(), interviewStore.loadAll());
+        Grader grader = new Grader(store.loadAll(), interviewStore.loadAll(), bookStore.loadAll());
 
         List<Result> results = new ArrayList<>();
         for (EvalQuestion q : questions) {

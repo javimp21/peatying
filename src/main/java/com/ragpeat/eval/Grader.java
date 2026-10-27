@@ -6,9 +6,11 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.ingest.Article;
+import com.ragpeat.ingest.BookFileStore;
 import com.ragpeat.ingest.Interview;
 import com.ragpeat.search.SearchResult;
 
@@ -34,7 +36,7 @@ public class Grader {
 
     /** Frases con las que el bot reconoce que algo no está en los artículos. */
     private static final Pattern ADMITS_ABSENCE = Pattern.compile(
-            "(?i)no (lo )?(menciona|mencionó|habla|habló|comenta|comentó|aparece|aparecen|trata|trató|dice|dijo|tenía|encontr|encuentro|se menciona|hay)");
+            "(?i)no (lo )?(menciona|mencionó|habla|habló|comenta|comentó|aparece|aparecen|trata|trató|dice|dijo|dejó|dio|expresó|tuvo|tenía|encontr|encuentro|se menciona|hay)");
 
     /** El texto de todos los artículos, normalizado, para comprobar que las citas literales existen. */
     private final String corpus;
@@ -42,7 +44,13 @@ public class Grader {
     private final String interviewCorpus;
 
     public Grader(List<Article> articles, List<Interview> interviews) {
-        this.corpus = normalize(articles.stream().map(Article::text).collect(Collectors.joining(" ")));
+        this(articles, interviews, List.of());
+    }
+
+    /** Los libros también son texto escrito por Peat: una cita literal de un libro no es inventada. */
+    public Grader(List<Article> articles, List<Interview> interviews, List<BookFileStore.Page> books) {
+        this.corpus = normalize(Stream.concat(articles.stream().map(Article::text), books.stream().map(BookFileStore.Page::text))
+                .collect(Collectors.joining(" ")));
         this.interviewCorpus = normalize(interviews.stream()
                 .flatMap(i -> i.sections().stream())
                 .flatMap(s -> s.turns().stream())
@@ -58,11 +66,20 @@ public class Grader {
     public record Grade(boolean passed, boolean sourceHit, int quotes, List<String> invalidQuotes,
                         List<String> interviewQuotes, String reason) {}
 
+    /** Una página de libro trata el tema si menciona sus términos al menos dos veces (una sola puede ser de pasada). */
+    static boolean isRelevantBookPage(SearchResult source, String bookTerms) {
+        if (!source.isBook() || bookTerms == null || bookTerms.isBlank()) {
+            return false;
+        }
+        return Pattern.compile("(?i)" + bookTerms).matcher(source.content()).results().count() >= 2;
+    }
+
     public Grade grade(EvalQuestion q, ChatAnswer answer) {
         Set<String> citedSlugs = answer.citedSources().values().stream()
                 .map(SearchResult::slug)
                 .collect(Collectors.toSet());
-        boolean sourceHit = q.expectedArticles().stream().anyMatch(citedSlugs::contains);
+        boolean sourceHit = q.expectedArticles().stream().anyMatch(citedSlugs::contains)
+                || answer.citedSources().values().stream().anyMatch(s -> isRelevantBookPage(s, q.bookTerms()));
 
         List<String> quotes = quotesIn(answer.text());
         List<String> notInArticles = quotes.stream().filter(quote -> !corpus.contains(normalize(quote))).toList();
@@ -74,7 +91,7 @@ public class Grader {
         String reason = switch (q.type()) {
             case "direct", "concept" -> {
                 if (citedSlugs.isEmpty()) yield "no cita ninguna fuente";
-                if (!sourceHit) yield "no cita ninguno de los artículos esperados (cita " + citedSlugs + ")";
+                if (!sourceHit) yield "no cita ninguna de las fuentes esperadas (cita " + citedSlugs + ")";
                 yield null;
             }
             case "absent" -> ADMITS_ABSENCE.matcher(answer.text()).find()
