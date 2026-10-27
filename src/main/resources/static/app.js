@@ -115,9 +115,8 @@ const TEXT = {
     remove: "Borrar",
     removeLabel: (title) => `Borrar «${title}»`,
     clearConfirm: "¿Borrar todas las conversaciones guardadas en este navegador?",
-    mdTitle: "# Conversación · Ray Peat en español",
     mdDocument: (name) => `_Documento adjunto: ${name}_`,
-    mdFooter: "Respuestas generadas por IA a partir de los artículos de raypeat.com y de sus entrevistas de radio. No son consejo médico.",
+    mdFooter: "Respuestas generadas por IA a partir de los artículos, libros y entrevistas de Ray Peat. Pueden contener errores y no son consejo médico.",
     fileTooBig: "El archivo tiene que pesar menos de 5 MB.",
     readingDocument: (name) => `📄 ${name} · leyendo el documento…`,
     documentFail: "No he podido leer el documento. Prueba otra vez.",
@@ -171,7 +170,6 @@ const TEXT = {
     remove: "Delete",
     removeLabel: (title) => `Delete “${title}”`,
     clearConfirm: "Delete all the conversations saved in this browser?",
-    mdTitle: "# Conversation · Ray Peat Chatbot",
     mdDocument: (name) => `_Attached document: ${name}_`,
     mdFooter: "AI-generated answers based on Ray Peat's articles, books and radio interviews. Not medical advice.",
     fileTooBig: "The file must be smaller than 5 MB.",
@@ -1134,6 +1132,7 @@ async function shareAnswer(message, button) {
           conversationId: message.conversationId,
           messageId: message.messageId,
           sources: message.sources.map((s) => ({ number: s.number, url: s.url })),
+          lang: LANG,                   // la página compartida sale en el idioma de esta
         }),
       });
       if (!response.ok) throw new Error("HTTP " + response.status);
@@ -1543,34 +1542,49 @@ function startOver() {
   focusInputIfDesktop();
 }
 
-// --- Descargar la conversación como Markdown --------------------------------
+// --- Descargar la conversación en PDF ---------------------------------------------
+// Sin librerías: montamos una hoja con la conversación (con el diseño de la web) y abrimos el diálogo de
+// imprimir del navegador, donde se elige "Guardar como PDF" (en el iPhone: Compartir → Guardar en Archivos).
+// El CSS de impresión oculta todo lo demás. El título de la pestaña da nombre al archivo.
 downloadButton.addEventListener("click", () => {
-  const lines = [TEXT.mdTitle, ""];
+  const sheet = document.createElement("article");
+  sheet.className = "print-sheet";
+  const date = new Intl.DateTimeFormat(TEXT.locale, { dateStyle: "long" }).format(new Date());
+  let html = `<header><span class="print-brand">Ray Peat Chatbot</span><span>peatying.com · ${escapeHtml(date)}</span></header>`;
   for (const m of messages) {
     if (m.role === "user") {
-      lines.push(`## ${m.text}`, "");
-      if (m.quote) lines.push(`> ${m.quote}`, "");
+      html += `<h2>${escapeHtml(m.text)}</h2>`;
+      if (m.quote) html += `<blockquote>${escapeHtml(m.quote)}</blockquote>`;
     } else if (m.role === "doc") {
-      lines.push(TEXT.mdDocument(m.name), "");
+      html += `<p class="print-doc">${escapeHtml(TEXT.mdDocument(m.name).replace(/_/g, ""))}</p>`;
     } else {
-      lines.push(m.text, "");
-      if (m.sources.length > 0) {
-        lines.push("Fuentes:");
-        m.sources.forEach((s) => lines.push(`- [${s.number}] ${s.title}: ${s.url}`));
-        lines.push("");
-      }
+      html += `<div class="print-answer">${renderMarkdown(m.text, null)}</div>`;
+      html += printSources(m.sources || []);
     }
   }
-  lines.push("---", TEXT.mdFooter);
+  html += `<footer>${escapeHtml(TEXT.mdFooter)}</footer>`;
+  sheet.innerHTML = html;
+  document.body.append(sheet);
 
-  // Creamos el archivo en memoria (Blob) y simulamos un clic en un enlace de descarga.
-  const blob = new Blob([lines.join("\n")], { type: "text/markdown;charset=utf-8" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `ray-peat-chat-${new Date().toISOString().slice(0, 10)}.md`;
-  link.click();
-  URL.revokeObjectURL(link.href);       // liberamos la memoria del archivo temporal
+  const title = document.title;
+  document.title = `ray-peat-chat-${new Date().toISOString().slice(0, 10)}`;
+  window.addEventListener("afterprint", () => { sheet.remove(); document.title = title; }, { once: true });
+  window.print();
 });
+
+/** Las fuentes de una respuesta para el PDF: una línea por documento, con sus números y su dirección. */
+function printSources(sources) {
+  if (sources.length === 0) return "";
+  const byUrl = new Map();
+  for (const s of sources) byUrl.set(s.url, [...(byUrl.get(s.url) || []), s]);
+  const items = [...byUrl.values()].map((group) => {
+    const { title, url } = group[0];
+    const numbers = group.map((s) => s.number).join(", ");
+    const link = url.replace(/#.*$/, "");    // los libros llevan #pagina: en papel basta la dirección
+    return `<li><b>${numbers}</b> · ${escapeHtml(title)} — <span class="print-url">${escapeHtml(link)}</span></li>`;
+  });
+  return `<div class="print-sources"><strong>${TEXT.sources}</strong><ul>${items.join("")}</ul></div>`;
+}
 
 /**
  * peatying.com/?q=... (los botones de las páginas de temas): deja la pregunta escrita en la caja,

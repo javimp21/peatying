@@ -42,6 +42,22 @@ public class ShareController {
 
     private static final String SITE = "https://peatying.com";
     private static final String QUOTE_PREFIX = "Sobre esta parte de tu respuesta anterior: «";
+    private static final String QUOTE_PREFIX_EN = "About this part of your previous answer: “";
+
+    /** Los textos fijos de la página, en los dos idiomas de la web. */
+    record Labels(String lang, String locale, String home, String topicsUrl, String topics, String toChat,
+                  String crumbs, String sources, String article, String interview, String book, String ask, String note) {}
+
+    private static final Labels ES = new Labels("es", "es_ES", "/", "/temas", "Temas", "Ir al chat",
+            "Respuesta compartida", "Fuentes", "artículo", "entrevista", "libro",
+            "Pregunta tú lo que quieras sobre Ray Peat →",
+            "Respuesta generada por IA a partir de los artículos, libros y entrevistas de Ray Peat. "
+                    + "Puede contener errores y no es consejo médico.");
+    private static final Labels EN = new Labels("en", "en_GB", "/en", "/en/topics", "Topics", "Go to the chat",
+            "Shared answer", "Sources", "article", "interview", "book",
+            "Ask anything about Ray Peat →",
+            "AI-generated answer based on Ray Peat's articles, books and interviews. "
+                    + "It may contain errors and is not medical advice.");
     private static final Pattern CITATION = Pattern.compile("\\[(\\d+)]");
     private static final char[] ALPHABET = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789".toCharArray();
 
@@ -59,7 +75,7 @@ public class ShareController {
 
     record SourceRef(int number, String url) {}
 
-    record ShareRequest(UUID conversationId, Long messageId, List<SourceRef> sources) {}
+    record ShareRequest(UUID conversationId, Long messageId, List<SourceRef> sources, String lang) {}
 
     record ShareResponse(String url) {}
 
@@ -106,10 +122,11 @@ public class ShareController {
 
         String id = newId();
         jdbc.sql("""
-                INSERT INTO shared_answers (id, message_id, question, answer, sources)
-                VALUES (:id, :m, :q, :a, CAST(:s AS jsonb))
+                INSERT INTO shared_answers (id, message_id, question, answer, sources, lang)
+                VALUES (:id, :m, :q, :a, CAST(:s AS jsonb), :lang)
                 """)
                 .param("id", id).param("m", request.messageId())
+                .param("lang", "en".equals(request.lang()) ? "en" : "es")   // solo dos valores posibles
                 .param("q", withoutQuote(question.get())).param("a", answer.get())
                 .param("s", json.writeValueAsString(sources))
                 .update();
@@ -120,14 +137,15 @@ public class ShareController {
     public ResponseEntity<String> page(@PathVariable String id) {
         List<Map<String, Object>> rows = jdbc.sql("""
                 UPDATE shared_answers SET views = views + 1 WHERE id = :id
-                RETURNING question, answer, sources::text AS sources
+                RETURNING question, answer, sources::text AS sources, lang
                 """).param("id", id).query().listOfRows();
         if (rows.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).contentType(MediaType.TEXT_HTML)
                     .body(document("Respuesta no encontrada", "", SITE + "/r/" + id,
-                            "<h1>No existe</h1><p>Esta respuesta compartida no existe. <a href=\"/\">Pregunta tú</a>.</p>"));
+                            "<h1>No existe</h1><p>Esta respuesta compartida no existe. <a href=\"/\">Pregunta tú</a>.</p>", ES));
         }
         Map<String, Object> row = rows.getFirst();
+        Labels t = "en".equals(row.get("lang")) ? EN : ES;
         String question = (String) row.get("question");
         String answer = (String) row.get("answer");
         List<Source> sources = json.readValue((String) row.get("sources"), new TypeReference<List<Source>>() {});
@@ -135,25 +153,47 @@ public class ShareController {
         sources.forEach(s -> byNumber.put(s.number(), s));
 
         StringBuilder body = new StringBuilder();
-        body.append("<p class=\"topic-crumbs\">Respuesta compartida · <a href=\"/\">Ray Peat Chatbot</a></p>\n");
-        body.append("<h1 class=\"share-question\">").append(esc(question)).append("</h1>\n");
+        body.append("<p class=\"topic-crumbs\">").append(t.crumbs()).append(" · <a href=\"").append(t.home())
+                .append("\">Ray Peat Chatbot</a></p>\n");
+        body.append("<h1 class=\"share-question\">").append(invertedMarks(esc(question))).append("</h1>\n");
         body.append("<div class=\"share-answer\">").append(markdown(answer, byNumber)).append("</div>\n");
         if (!byNumber.isEmpty()) {
-            body.append("<h2>Fuentes</h2>\n<ol class=\"topic-sources\">\n");
-            for (Source s : byNumber.values()) {
-                body.append("<li value=\"").append(s.number()).append("\" id=\"fuente-").append(s.number()).append("\"><a href=\"")
-                        .append(esc(s.url())).append("\" target=\"_blank\" rel=\"noopener\">").append(esc(s.title()))
-                        .append("</a> <span>").append("interview".equals(s.type()) ? "entrevista" : "book".equals(s.type()) ? "libro" : "artículo").append("</span></li>\n");
-            }
-            body.append("</ol>\n");
+            body.append("<h2>").append(t.sources()).append("</h2>\n").append(sourceList(byNumber, t));
         }
-        body.append("<p class=\"topic-ask\"><a href=\"/\">Pregunta tú lo que quieras sobre Ray Peat →</a></p>\n");
-        body.append("<p class=\"topic-note\">Respuesta generada por IA a partir de los artículos, libros y entrevistas de Ray Peat. "
-                + "Puede contener errores y no es consejo médico.</p>\n");
+        body.append("<p class=\"topic-ask\"><a href=\"").append(t.home()).append("\">").append(t.ask()).append("</a></p>\n");
+        body.append("<p class=\"topic-note\">").append(esc(t.note())).append("</p>\n");
         String description = plain(answer);
         return ResponseEntity.ok().contentType(MediaType.TEXT_HTML)
                 .body(document(question, description.length() > 155 ? description.substring(0, 152) + "…" : description,
-                        SITE + "/r/" + id, body.toString()));
+                        SITE + "/r/" + id, body.toString(), t));
+    }
+
+    /**
+     * Las fuentes, una vez cada documento: a menudo se citan varios trozos del mismo artículo ([1], [2], [3])
+     * y salían tres "Coconut Oil" seguidos. Cada número conserva su ancla (#fuente-2) para los enlaces del texto.
+     */
+    static String sourceList(Map<Integer, Source> byNumber, Labels t) {
+        Map<String, List<Source>> byUrl = new java.util.LinkedHashMap<>();
+        byNumber.values().forEach(s -> byUrl.computeIfAbsent(s.url(), u -> new ArrayList<>()).add(s));
+        StringBuilder html = new StringBuilder("<ul class=\"topic-sources share-sources\">\n");
+        for (List<Source> group : byUrl.values()) {
+            Source s = group.getFirst();
+            html.append("<li>");
+            for (int i = 0; i < group.size(); i++) {
+                int n = group.get(i).number();
+                html.append(i == 0 ? "" : ", ").append("<span class=\"share-n\" id=\"fuente-").append(n).append("\">").append(n).append("</span>");
+            }
+            html.append(" · <a href=\"").append(esc(s.url())).append("\" target=\"_blank\" rel=\"noopener\">").append(esc(s.title()))
+                    .append("</a> <span>")
+                    .append("interview".equals(s.type()) ? t.interview() : "book".equals(s.type()) ? t.book() : t.article())
+                    .append("</span></li>\n");
+        }
+        return html.append("</ul>\n").toString();
+    }
+
+    /** "¿" y "¡" van en otra letra: la del título (Six Caps) los dibuja mal y montan sobre la siguiente. */
+    static String invertedMarks(String html) {
+        return html.replaceAll("([¿¡])", "<span class=\"inverted-mark\">$1</span>");
     }
 
     // --- Piezas ---------------------------------------------------------------------------
@@ -164,10 +204,14 @@ public class ShareController {
         return new String(id);
     }
 
-    /** "Sobre esta parte de tu respuesta anterior: «…»\n\n¿pregunta?" -> "¿pregunta?" */
+    /** "Sobre esta parte de tu respuesta anterior: «…»\n\n¿pregunta?" -> "¿pregunta?" (y lo mismo en inglés). */
     static String withoutQuote(String question) {
         if (question.startsWith(QUOTE_PREFIX)) {
             int end = question.indexOf("»\n\n");
+            if (end > 0) return question.substring(end + 3).strip();
+        }
+        if (question.startsWith(QUOTE_PREFIX_EN)) {
+            int end = question.indexOf("”\n\n");
             if (end > 0) return question.substring(end + 3).strip();
         }
         return question;
@@ -227,11 +271,11 @@ public class ShareController {
         return HtmlUtils.htmlEscape(text, "UTF-8");
     }
 
-    private static String document(String title, String description, String url, String body) {
+    private static String document(String title, String description, String url, String body, Labels t) {
         String shortTitle = title.length() > 90 ? title.substring(0, 87) + "…" : title;
         return """
                 <!doctype html>
-                <html lang="es">
+                <html lang="%5$s">
                 <head>
                   <meta charset="utf-8">
                   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -245,7 +289,7 @@ public class ShareController {
                   <meta property="og:description" content="%2$s">
                   <meta property="og:url" content="%3$s">
                   <meta property="og:image" content="https://peatying.com/img/og.jpg">
-                  <meta property="og:locale" content="es_ES">
+                  <meta property="og:locale" content="%6$s">
                   <meta name="twitter:card" content="summary_large_image">
                   <link rel="icon" href="/img/favicon.png" type="image/png" sizes="144x144">
                   <link rel="stylesheet" href="/styles.css">
@@ -253,14 +297,15 @@ public class ShareController {
                 <body class="topic-page">
                   <div class="frame">
                     <header class="topbar">
-                      <a href="/" class="wordmark" aria-label="Inicio"><img src="/img/logo.png" alt="" class="logo" width="30" height="30"><span class="wordmark-name">Ray Peat</span></a>
-                      <nav class="actions"><a class="ghost" href="/temas">Temas</a><a class="ghost" href="/">Ir al chat</a></nav>
+                      <a href="%7$s" class="wordmark" aria-label="Ray Peat Chatbot"><img src="/img/logo.png" alt="" class="logo" width="30" height="30"><span class="wordmark-name">Ray Peat</span></a>
+                      <nav class="actions"><a class="ghost" href="%8$s">%9$s</a><a class="ghost" href="%7$s">%10$s</a></nav>
                     </header>
                     <main class="topic">
                 %4$s    </main>
                   </div>
                 </body>
                 </html>
-                """.formatted(esc(shortTitle), esc(description), esc(url), body);
+                """.formatted(esc(shortTitle), esc(description), esc(url), body,
+                        t.lang(), t.locale(), t.home(), t.topicsUrl(), t.topics(), t.toChat());
     }
 }
