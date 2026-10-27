@@ -114,6 +114,7 @@ public class ChatService {
      */
     public ChatAnswer answer(List<Turn> history, String question, String document, ChatListener listener) {
         List<SearchResult> sources = new ArrayList<>(); // todos los fragmentos vistos; su posición+1 es su número [n]
+        List<String> queries = new ArrayList<>();       // las búsquedas que pidió Claude (para el examen)
         int searches = 0;
         long inputTokens = 0, outputTokens = 0;
 
@@ -177,7 +178,8 @@ public class ChatService {
                         .flatMap(block -> block.text().stream())
                         .map(TextBlock::text)
                         .collect(Collectors.joining());
-                return new ChatAnswer(text, citedIn(text, sources), searches, inputTokens, outputTokens);
+                return new ChatAnswer(text, citedIn(text, sources), searches, inputTokens, outputTokens,
+                        List.copyOf(sources), List.copyOf(queries));
             }
 
             // Caso a): ejecutamos cada búsqueda pedida y devolvemos todos los resultados en UN mensaje.
@@ -192,6 +194,7 @@ public class ChatService {
                             + "buscado no digas que Peat no habla: ofrece buscarlo en otra pregunta.";
                 } else {
                     searches++;
+                    queries.add(String.valueOf(toolUse._input()));
                     result = runSearch(toolUse, sources, listener);
                 }
                 toolResults.add(ContentBlockParam.ofToolResult(ToolResultBlockParam.builder()

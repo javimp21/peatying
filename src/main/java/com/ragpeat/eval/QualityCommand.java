@@ -53,7 +53,10 @@ public class QualityCommand implements CommandLineRunner {
                   @JsonPropertyDescription("Nota global de 1 a 10") int score,
                   String comment) {}
 
-    record Result(QualityQuestion question, String answer, Review review,
+    /** Un fragmento que recibió el bot, resumido para el archivo de resultados. */
+    record Seen(int number, String slug, String content) {}
+
+    record Result(QualityQuestion question, String answer, Review review, List<String> queries, List<Seen> seen,
                   long inputTokens, long outputTokens, long millis) {}
 
     private final ChatService chatService;
@@ -64,6 +67,7 @@ public class QualityCommand implements CommandLineRunner {
     private final String judgePrompt;
     private final String promptName;
     private final int limit;
+    private final boolean judge;
 
     private long judgeInput, judgeOutput;
 
@@ -72,7 +76,9 @@ public class QualityCommand implements CommandLineRunner {
                           @Value("${eval.judge-model}") String judgeModel,
                           @Value("classpath:prompts/judge-quality.md") Resource judgePrompt,
                           @Value("${chat.system-prompt:classpath:prompts/system.md}") String promptName,
-                          @Value("${eval.limit:1000}") int limit) throws IOException {
+                          @Value("${eval.limit:1000}") int limit,
+                          // --eval.judge=false: solo responde y guarda lo que encontró la búsqueda, sin pagar al juez.
+                          @Value("${eval.judge:true}") boolean judge) throws IOException {
         this.chatService = chatService;
         this.claude = claude;
         this.json = json;
@@ -81,6 +87,7 @@ public class QualityCommand implements CommandLineRunner {
         this.judgePrompt = judgePrompt.getContentAsString(StandardCharsets.UTF_8);
         this.promptName = promptName;
         this.limit = limit;
+        this.judge = judge;
     }
 
     @Override
@@ -140,7 +147,10 @@ public class QualityCommand implements CommandLineRunner {
                 + "\n\nRESPUESTA:\n<answer>\n" + answer.text() + "\n</answer>"
                 + "\n\nFRAGMENTOS CITADOS:\n" + (sources.isEmpty() ? "(ninguno)" : sources);
 
-        return new Result(q, answer.text(), judge(input), answer.inputTokens(), answer.outputTokens(), millis);
+        List<Seen> seen = java.util.stream.IntStream.range(0, answer.seen().size())
+                .mapToObj(i -> new Seen(i + 1, answer.seen().get(i).slug(), answer.seen().get(i).content())).toList();
+        Review review = judge ? judge(input) : new Review(0, List.of(), List.of(), true, "", List.of(), 0, "sin juez");
+        return new Result(q, answer.text(), review, answer.queries(), seen, answer.inputTokens(), answer.outputTokens(), millis);
     }
 
     private Review judge(String input) {
