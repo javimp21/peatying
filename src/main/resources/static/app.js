@@ -1,6 +1,32 @@
 // Lógica de la página del chat. JavaScript sin frameworks: solo el navegador.
 
-const EXAMPLES = [
+// La misma página sirve en español (/) y en inglés (/en): el idioma lo dice <html lang>.
+const LANG = document.documentElement.lang === "en" ? "en" : "es";
+
+const EXAMPLES_EN = [
+  "Why did he recommend sugar?",
+  "What did he think of vegetable oils?",
+  "What did he think of serotonin?",
+  "Why is CO2 protective?",
+  "What did he say about gelatin?",
+  "Is coffee good or bad?",
+  "What did he think of cholesterol?",
+  "What did he think of academic science?",
+  "What is stress for Peat?",
+  "What did he say about iron?",
+  "Why did he say salt is not bad?",
+  "What does William Blake have to do with biology?",
+  "Why did he distrust fish oil?",
+  "How can you tell if your thyroid is slow without tests?",
+  "Is milk good or bad?",
+  "Can drinking a lot of water be bad?",
+  "What did he think of vegetables?",
+  "Where do hot flashes come from?",
+  "Why did he like coconut oil?",
+  "Does intelligence depend on metabolism?",
+];
+
+const EXAMPLES_ES = [
   "¿Por qué recomendaba el azúcar?",
   "¿Qué opinaba de los aceites vegetales?",
   "¿Qué pensaba de la serotonina?",
@@ -23,6 +49,7 @@ const EXAMPLES = [
   "¿Por qué le gustaba el aceite de coco?",
   "¿La inteligencia depende del metabolismo?",
 ];
+const EXAMPLES = LANG === "en" ? EXAMPLES_EN : EXAMPLES_ES;
 
 // Frases que van rotando mientras el bot busca y piensa (sin puntos: los tres puntos los pinta la animación).
 const LOADING_PHRASES = [
@@ -37,8 +64,130 @@ const LOADING_PHRASES = [
 const FIRST_PHRASE_CYCLES = 2;  // veces que se repite la primera frase antes de pasar a la segunda
 const LOADING_CYCLE_MS = 2400;  // solo si las animaciones están desactivadas; si no, manda el CSS (ver showLoading)
 
-const FIRST_PLACEHOLDER = "Prueba: «¿Qué pensaba del azúcar?»";
-const NEXT_PLACEHOLDER = "Escribe otra pregunta…";
+// Los textos de la interfaz, en los dos idiomas.
+const TEXT = {
+  es: {
+    firstPlaceholder: "Prueba: «¿Qué pensaba del azúcar?»",
+    nextPlaceholder: "Escribe otra pregunta…",
+    internalOn: "Este navegador ya no cuenta en las métricas.",
+    internalOff: "Este navegador vuelve a contar en las métricas.",
+    internalNote: "Este navegador no cuenta en las métricas (?interno=0 para volver a contar).",
+    clarify: "Aclarar esto",
+    clarifyQuestion: "¿Me aclaras esto?",
+    askAbout: "Preguntar sobre esto",
+    tooLong: (n) => `El texto es demasiado largo: solo caben ${n.toLocaleString("es-ES")} caracteres y se ha cortado el final.`,
+    quote: (quote, question) => `Sobre esta parte de tu respuesta anterior: «${quote}»\n\n${question}`,
+    genericError: "Algo ha fallado. Inténtalo de nuevo.",
+    tooMany: "Has hecho muchas preguntas seguidas. Prueba de nuevo dentro de un rato.",
+    connectionCut: "Se cortó la conexión. Inténtalo de nuevo.",
+    noConnection: "No hay conexión con el servidor. Inténtalo de nuevo.",
+    docAttached: (name) => `📄 Has adjuntado «${name}». Lo tendré en cuenta en esta conversación.`,
+    sources: "Fuentes",
+    translateFail: "No se ha podido traducir. Prueba otra vez.",
+    helpful: "Me ha servido",
+    notHelpful: "No me ha servido",
+    thanks: "¡Gracias!",
+    wasHelpful: "¿Te ha servido?",
+    share: "Compartir",
+    reasonPlaceholder: "¿Qué ha fallado? (opcional: algo incorrecto, que no responda a lo que preguntabas…)",
+    reasonLabel: "Qué ha fallado en la respuesta",
+    send: "Enviar",
+    notNow: "Ahora no",
+    reasonThanks: "Gracias: nos sirve para mejorar las respuestas.",
+    sendFail: "No se ha podido enviar. Prueba otra vez.",
+    shareFail: "No se ha podido crear el enlace. Prueba otra vez.",
+    linkCopied: "Enlace copiado. Pégalo donde quieras compartirlo.",
+    copyLink: "Copia este enlace:",
+    citeLabel: (n) => `Ver el texto original de la fuente ${n}`,
+    book: "Libro",
+    bookNote: "Por derechos de autor, el texto del libro no se muestra aquí.",
+    buyBook: "Comprar el libro en raypeat.com ↗",
+    interview: "Entrevista",
+    article: "Artículo",
+    listen: "Escuchar el audio original",
+    readArticle: "Leer el artículo completo",
+    transcriptNote: "Transcripción automática del audio original: puede tener algún error.",
+    conversation: "Conversación",
+    locale: "es-ES",
+    rename: "Renombrar",
+    renameLabel: (title) => `Renombrar «${title}»`,
+    newName: "Nuevo nombre de la conversación",
+    remove: "Borrar",
+    removeLabel: (title) => `Borrar «${title}»`,
+    clearConfirm: "¿Borrar todas las conversaciones guardadas en este navegador?",
+    mdTitle: "# Conversación · Ray Peat en español",
+    mdDocument: (name) => `_Documento adjunto: ${name}_`,
+    mdFooter: "Respuestas generadas por IA a partir de los artículos de raypeat.com y de sus entrevistas de radio. No son consejo médico.",
+    fileTooBig: "El archivo tiene que pesar menos de 5 MB.",
+    readingDocument: (name) => `📄 ${name} · leyendo el documento…`,
+    documentFail: "No he podido leer el documento. Prueba otra vez.",
+  },
+  en: {
+    firstPlaceholder: "Try: “What did he think of sugar?”",
+    nextPlaceholder: "Ask another question…",
+    internalOn: "This browser no longer counts in the metrics.",
+    internalOff: "This browser counts in the metrics again.",
+    internalNote: "This browser doesn't count in the metrics (?interno=0 to count again).",
+    clarify: "Clarify this",
+    clarifyQuestion: "Can you clarify this?",
+    askAbout: "Ask about this",
+    tooLong: (n) => `The text is too long: only ${n.toLocaleString("en-GB")} characters fit, so the end was cut off.`,
+    quote: (quote, question) => `About this part of your previous answer: “${quote}”\n\n${question}`,
+    genericError: "Something went wrong. Please try again.",
+    tooMany: "You've asked a lot of questions in a row. Please try again in a while.",
+    connectionCut: "The connection was cut. Please try again.",
+    noConnection: "Can't reach the server. Please try again.",
+    docAttached: (name) => `📄 You attached “${name}”. I'll take it into account in this conversation.`,
+    sources: "Sources",
+    translateFail: "Couldn't translate it. Please try again.",
+    helpful: "Helpful",
+    notHelpful: "Not helpful",
+    thanks: "Thanks!",
+    wasHelpful: "Was this helpful?",
+    share: "Share",
+    reasonPlaceholder: "What went wrong? (optional: something incorrect, it didn't answer your question…)",
+    reasonLabel: "What went wrong with the answer",
+    send: "Send",
+    notNow: "Not now",
+    reasonThanks: "Thanks: it helps us improve the answers.",
+    sendFail: "Couldn't send it. Please try again.",
+    shareFail: "Couldn't create the link. Please try again.",
+    linkCopied: "Link copied. Paste it wherever you want to share it.",
+    copyLink: "Copy this link:",
+    citeLabel: (n) => `Show the original text of source ${n}`,
+    book: "Book",
+    bookNote: "For copyright reasons, the book's text isn't shown here.",
+    buyBook: "Buy the book at raypeat.com ↗",
+    interview: "Interview",
+    article: "Article",
+    listen: "Listen to the original audio",
+    readArticle: "Read the full article",
+    transcriptNote: "Automatic transcript of the original audio: it may contain errors.",
+    conversation: "Conversation",
+    locale: "en-GB",
+    rename: "Rename",
+    renameLabel: (title) => `Rename “${title}”`,
+    newName: "New name for the conversation",
+    remove: "Delete",
+    removeLabel: (title) => `Delete “${title}”`,
+    clearConfirm: "Delete all the conversations saved in this browser?",
+    mdTitle: "# Conversation · Ray Peat Chatbot",
+    mdDocument: (name) => `_Attached document: ${name}_`,
+    mdFooter: "AI-generated answers based on Ray Peat's articles, books and radio interviews. Not medical advice.",
+    fileTooBig: "The file must be smaller than 5 MB.",
+    readingDocument: (name) => `📄 ${name} · reading the document…`,
+    documentFail: "I couldn't read the document. Please try again.",
+  },
+}[LANG];
+
+/** Los errores del servidor vienen en español: en inglés usamos los nuestros, según el código HTTP. */
+function serverError(data, status) {
+  if (LANG === "es" && data?.error) return data.error;
+  return status === 429 ? TEXT.tooMany : TEXT.genericError;
+}
+
+const FIRST_PLACEHOLDER = TEXT.firstPlaceholder;
+const NEXT_PLACEHOLDER = TEXT.nextPlaceholder;
 const INTERNAL_KEY = "rp-internal";
 const STORAGE_KEY = "rp-chat-v1";      // donde se guardaba la conversación antes (ver forgetOldConversation)
 
@@ -106,7 +255,7 @@ function readInternalFlag() {
       if (on) localStorage.setItem(INTERNAL_KEY, "1");
       else localStorage.removeItem(INTERNAL_KEY);
       history.replaceState(null, "", location.pathname);   // quitamos ?interno de la dirección
-      showToast(on ? "Este navegador ya no cuenta en las métricas." : "Este navegador vuelve a contar en las métricas.");
+      showToast(on ? TEXT.internalOn : TEXT.internalOff);
     }
     return localStorage.getItem(INTERNAL_KEY) === "1";
   } catch (e) {
@@ -128,8 +277,8 @@ let selectedFragment = "";
 // "Aclarar esto" pregunta directamente; "Preguntar sobre esto" deja la cita encima de la caja
 // (como al responder a un mensaje en WhatsApp) para que la persona escriba su pregunta.
 const SELECTION_ACTIONS = [
-  ["Aclarar esto", (fragment) => ask("¿Me aclaras esto?", fragment)],
-  ["Preguntar sobre esto", (fragment) => { setReply(fragment); input.focus(); }],
+  [TEXT.clarify, (fragment) => ask(TEXT.clarifyQuestion, fragment)],
+  [TEXT.askAbout, (fragment) => { setReply(fragment); input.focus(); }],
 ];
 for (const [label, action] of SELECTION_ACTIONS) {
   const button = document.createElement("button");
@@ -180,13 +329,13 @@ input.addEventListener("paste", (event) => {
   const pasted = event.clipboardData?.getData("text") ?? "";
   const selected = input.selectionEnd - input.selectionStart;
   if (input.value.length - selected + pasted.length > input.maxLength) {
-    showToast(`El texto es demasiado largo: solo caben ${input.maxLength.toLocaleString("es-ES")} caracteres y se ha cortado el final.`);
+    showToast(TEXT.tooLong(input.maxLength));
   }
 });
 
 /** Lo que recibe el bot: la parte de su respuesta a la que se refiere la pregunta, y la pregunta. */
 function withQuote(question, quote) {
-  return quote ? `Sobre esta parte de tu respuesta anterior: «${quote}»\n\n${question}` : question;
+  return quote ? TEXT.quote(quote, question) : question;
 }
 
 // selectionchange salta con el ratón, con el dedo y con el teclado. Esperamos un poco a que la
@@ -300,7 +449,16 @@ function closeJuicer() {
 
 // --- Gancho: afirmaciones de Peat que chocan con lo habitual ------------------
 // Todas están respaldadas en sus textos (ver las páginas de /temas). Van rotando; al pulsar, se pregunta por qué.
-const HOOKS = [
+const HOOKS_EN = [
+  ["Sugar doesn't cause diabetes.", "Why did Peat say that sugar doesn't cause diabetes?"],
+  ["Vegetable oils are toxic.", "Why did Peat say that vegetable oils are toxic?"],
+  ["Cholesterol protects you.", "Why did Peat say that cholesterol is protective?"],
+  ["Serotonin is not the happiness hormone.", "Why did Peat say that serotonin is not the happiness hormone?"],
+  ["Salt isn't bad: restricting it is.", "Why did Peat say that restricting salt is harmful?"],
+  ["Coffee protects your health.", "Why did Peat say that coffee is good for your health?"],
+  ["Estrogen is a stress hormone.", "Why did Peat say that estrogen is a stress hormone?"],
+];
+const HOOKS_ES = [
   ["El azúcar no causa la diabetes.", "¿Por qué decía Peat que el azúcar no causa la diabetes?"],
   ["Los aceites vegetales son tóxicos.", "¿Por qué decía Peat que los aceites vegetales son tóxicos?"],
   ["El colesterol te protege.", "¿Por qué decía Peat que el colesterol es protector?"],
@@ -309,6 +467,7 @@ const HOOKS = [
   ["El café protege tu salud.", "¿Por qué decía Peat que el café es bueno para la salud?"],
   ["El estrógeno es una hormona del estrés.", "¿Por qué decía Peat que el estrógeno es una hormona del estrés?"],
 ];
+const HOOKS = LANG === "en" ? HOOKS_EN : HOOKS_ES;
 const HOOK_MS = 6000;
 const hookBox = document.getElementById("hook");
 const hookClaim = document.getElementById("hook-claim");
@@ -316,7 +475,7 @@ let hookIndex = Math.floor(Math.random() * HOOKS.length);
 let hookTimer = null;
 
 function showHook() {
-  hookClaim.textContent = `«${HOOKS[hookIndex][0]}»`;
+  hookClaim.textContent = LANG === "en" ? `“${HOOKS[hookIndex][0]}”` : `«${HOOKS[hookIndex][0]}»`;
   hookBox.classList.remove("hook-in");
   void hookBox.offsetWidth;             // reinicia la animación de entrada
   hookBox.classList.add("hook-in");
@@ -339,7 +498,7 @@ function reserveHookHeight() {
   const byHeight = by.offsetHeight;
   let needed = 0;
   for (const [claim] of HOOKS) {
-    probe.textContent = `«${claim}»`;
+    probe.textContent = LANG === "en" ? `“${claim}”` : `«${claim}»`;
     const height = probe.offsetHeight;
     // ¿Dónde acaba la última línea? Si llega a la zona de la firma, esta frase necesita una fila más.
     const range = document.createRange();
@@ -463,7 +622,7 @@ async function ask(question, quote = null) {
     if (!response.ok) {
       // 400 o 429: el servidor manda un JSON normal con un mensaje pensado para el usuario.
       const data = await response.json().catch(() => ({}));
-      undoQuestion(questionDiv, question, data.error || "Algo ha fallado. Inténtalo de nuevo.");
+      undoQuestion(questionDiv, question, serverError(data, response.status));
       return;
     }
 
@@ -509,20 +668,20 @@ async function ask(question, quote = null) {
         finished = true;
       } else if (event === "error") {
         live?.remove();
-        undoQuestion(questionDiv, question, data.error);
+        undoQuestion(questionDiv, question, serverError(data, 500));
         finished = true;
       }
     }
     if (!finished && !cancelled()) {
       // La conexión se cortó sin "done" ni "error".
       live?.remove();
-      undoQuestion(questionDiv, question, "Se cortó la conexión. Inténtalo de nuevo.");
+      undoQuestion(questionDiv, question, TEXT.connectionCut);
     }
   } catch (e) {
     if (cancelled()) return;            // la cancelamos nosotros (startOver): no es un error
     // Sin conexión, o el servidor no responde.
     live?.remove();
-    undoQuestion(questionDiv, question, "No hay conexión con el servidor. Inténtalo de nuevo.");
+    undoQuestion(questionDiv, question, TEXT.noConnection);
   } finally {
     loading?.stop();
     // Si ya hay otra pregunta en marcha (se canceló esta y se hizo otra), no tocamos su estado.
@@ -747,7 +906,7 @@ function render(message) {
 function renderDocNote({ name }) {
   const div = document.createElement("div");
   div.className = "message doc";
-  div.textContent = `📄 Has adjuntado «${name}». Lo tendré en cuenta en esta conversación.`;
+  div.textContent = TEXT.docAttached(name);
   return div;
 }
 
@@ -782,7 +941,7 @@ function renderAnswer(message) {
     list.className = "sources";
     const label = document.createElement("span");
     label.className = "sources-label";
-    label.textContent = "Fuentes";
+    label.textContent = TEXT.sources;
     list.append(label);
     const seen = new Set();
     for (const s of sources) {
@@ -815,6 +974,7 @@ function renderAnswer(message) {
 // La traducción se pide una sola vez y se guarda en la fuente (y en el historial): no se vuelve a pagar.
 
 function sourceLanguageToggle(source, textElement) {
+  if (LANG === "en") return "";         // en inglés el original ya se lee tal cual
   const group = document.createElement("div");
   group.className = "lang-toggle";
   group.setAttribute("role", "group");
@@ -848,7 +1008,7 @@ function sourceLanguageToggle(source, textElement) {
         source.translation = data.translations[0];
         saveCurrentConversation();
       } catch (e) {
-        showToast("No se ha podido traducir. Prueba otra vez.");
+        showToast(TEXT.translateFail);
         return;
       } finally {
         buttons[1].disabled = false;
@@ -872,8 +1032,8 @@ function feedbackRow(message) {
   row.className = "feedback";
   const label = document.createElement("span");
   const buttons = [
-    { value: 1, name: "Me ha servido" },
-    { value: -1, name: "No me ha servido" },
+    { value: 1, name: TEXT.helpful },
+    { value: -1, name: TEXT.notHelpful },
   ].map(({ value, name }) => {
     const button = document.createElement("button");
     button.type = "button";
@@ -891,7 +1051,7 @@ function feedbackRow(message) {
   });
 
   const paint = () => {
-    label.textContent = message.vote ? "¡Gracias!" : "¿Te ha servido?";
+    label.textContent = message.vote ? TEXT.thanks : TEXT.wasHelpful;
     buttons[0].setAttribute("aria-pressed", String(message.vote === 1));
     buttons[1].setAttribute("aria-pressed", String(message.vote === -1));
   };
@@ -901,7 +1061,7 @@ function feedbackRow(message) {
   share.type = "button";
   share.className = "share";
   share.innerHTML = SHARE_SVG;
-  share.append("Compartir");
+  share.append(TEXT.share);
   share.addEventListener("click", () => shareAnswer(message, share));
   row.append(label, ...buttons, share);
   return row;
@@ -915,16 +1075,16 @@ function showReasonBox(row, message) {
   const text = document.createElement("textarea");
   text.rows = 2;
   text.maxLength = 500;
-  text.placeholder = "¿Qué ha fallado? (opcional: algo incorrecto, que no responda a lo que preguntabas…)";
-  text.setAttribute("aria-label", "Qué ha fallado en la respuesta");
+  text.placeholder = TEXT.reasonPlaceholder;
+  text.setAttribute("aria-label", TEXT.reasonLabel);
   const send = document.createElement("button");
   send.type = "submit";
   send.className = "ghost";
-  send.textContent = "Enviar";
+  send.textContent = TEXT.send;
   const skip = document.createElement("button");
   skip.type = "button";
   skip.className = "link-button";
-  skip.textContent = "Ahora no";
+  skip.textContent = TEXT.notNow;
   skip.addEventListener("click", () => box.remove());
   box.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -940,11 +1100,11 @@ function showReasonBox(row, message) {
       if (!response.ok) throw new Error("HTTP " + response.status);
       const thanks = document.createElement("p");
       thanks.className = "feedback-reason";
-      thanks.textContent = "Gracias: nos sirve para mejorar las respuestas.";
+      thanks.textContent = TEXT.reasonThanks;
       box.replaceWith(thanks);
     } catch (e) {
       send.disabled = false;
-      showToast("No se ha podido enviar. Prueba otra vez.");
+      showToast(TEXT.sendFail);
     }
   });
   box.append(text, send, skip);
@@ -980,7 +1140,7 @@ async function shareAnswer(message, button) {
       message.shareUrl = location.origin + (await response.json()).url;
       saveCurrentConversation();
     } catch (e) {
-      showToast("No se ha podido crear el enlace. Prueba otra vez.");
+      showToast(TEXT.shareFail);
       return;
     } finally {
       button.disabled = false;
@@ -994,9 +1154,9 @@ async function shareAnswer(message, button) {
   }
   try {
     await navigator.clipboard.writeText(message.shareUrl);
-    showToast("Enlace copiado. Pégalo donde quieras compartirlo.");
+    showToast(TEXT.linkCopied);
   } catch (e) {
-    prompt("Copia este enlace:", message.shareUrl);
+    prompt(TEXT.copyLink, message.shareUrl);
   }
 }
 
@@ -1099,7 +1259,7 @@ function formatInline(text, byNumber) {
       let chip;
       if (!byNumber) chip = `<span class="cite pending">${n}</span>`;
       else if (byNumber.has(Number(n)))
-        chip = `<button type="button" class="cite" data-n="${n}" aria-expanded="false" aria-label="Ver el texto original de la fuente ${n}">${n}</button>`;
+        chip = `<button type="button" class="cite" data-n="${n}" aria-expanded="false" aria-label="${TEXT.citeLabel(n)}">${n}</button>`;
       else return match;
       return `<span class="cite-wrap">${chip}${punctuation}</span>`;
     });
@@ -1162,15 +1322,15 @@ function toggleSource(messageDiv, button, source) {
 
   // Libros: tienen derechos de autor y el servidor no manda su texto. Solo libro, página y dónde comprarlo.
   if (source.type === "book") {
-    meta.append(number, "Libro");
+    meta.append(number, TEXT.book);
     const note = document.createElement("p");
     note.className = "source-note";
-    note.textContent = "Por derechos de autor, el texto del libro no se muestra aquí.";
+    note.textContent = TEXT.bookNote;
     const buy = document.createElement("a");
     buy.href = source.url;
     buy.target = "_blank";
     buy.rel = "noopener";
-    buy.textContent = "Comprar el libro en raypeat.com ↗";
+    buy.textContent = TEXT.buyBook;
     panel.append(meta, title, note, buy);
     placeSourcePanel(messageDiv, button, panel, source);
     return;
@@ -1179,20 +1339,20 @@ function toggleSource(messageDiv, button, source) {
   const text = document.createElement("p");
   text.className = "source-text";
   text.textContent = source.text;       // el texto original de Peat, en inglés
-  meta.append(number, interview ? "Entrevista" : "Artículo", sourceLanguageToggle(source, text));
+  meta.append(number, interview ? TEXT.interview : TEXT.article, sourceLanguageToggle(source, text));
   const link = document.createElement("a");
   link.href = source.url;
   link.target = "_blank";
   link.rel = "noopener";
   link.textContent = `${shortUrl(source.url)} ↗`;
-  link.setAttribute("aria-label", interview ? "Escuchar el audio original" : "Leer el artículo completo");
+  link.setAttribute("aria-label", interview ? TEXT.listen : TEXT.readArticle);
 
   panel.append(meta, title, text);
   // Las transcripciones son automáticas (Whisper): avisamos de que puede haber errores de reconocimiento.
   if (interview) {
     const note = document.createElement("p");
     note.className = "source-note";
-    note.textContent = "Transcripción automática del audio original: puede tener algún error.";
+    note.textContent = TEXT.transcriptNote;
     panel.append(note);
   }
   panel.append(link);
@@ -1251,7 +1411,7 @@ function saveCurrentConversation() {
   // El nombre: el puesto a mano con "Renombrar" o, si no, la primera pregunta (o el documento, si aún no hay).
   const previous = history.find((h) => h.id === conversationId);
   const automatic = (messages.find((m) => m.role === "user")?.text
-    ?? (currentDocumentName() ? `📄 ${currentDocumentName()}` : "Conversación")).slice(0, 120);
+    ?? (currentDocumentName() ? `📄 ${currentDocumentName()}` : TEXT.conversation)).slice(0, 120);
   const title = previous?.renamed ? previous.title : automatic;
   const entry = { id: conversationId, title, renamed: Boolean(previous?.renamed), updatedAt: Date.now(), messages };
   const others = history.filter((h) => h.id !== conversationId);
@@ -1271,7 +1431,7 @@ function openConversation(entry) {
 
 function showHistory() {
   historyList.replaceChildren();
-  const dateFormat = new Intl.DateTimeFormat("es-ES", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  const dateFormat = new Intl.DateTimeFormat(TEXT.locale, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   for (const entry of loadHistory()) {
     const item = document.createElement("li");
     const open = document.createElement("button");
@@ -1288,14 +1448,14 @@ function showHistory() {
     const rename = document.createElement("button");
     rename.type = "button";
     rename.className = "history-action";
-    rename.textContent = "Renombrar";
-    rename.setAttribute("aria-label", `Renombrar «${entry.title}»`);
+    rename.textContent = TEXT.rename;
+    rename.setAttribute("aria-label", TEXT.renameLabel(entry.title));
     rename.addEventListener("click", () => {
       const field = document.createElement("input");
       field.className = "history-rename";
       field.value = entry.title;
       field.maxLength = 120;
-      field.setAttribute("aria-label", "Nuevo nombre de la conversación");
+      field.setAttribute("aria-label", TEXT.newName);
       let done = false;
       const finish = (save) => {
         if (done) return;
@@ -1323,8 +1483,8 @@ function showHistory() {
     const remove = document.createElement("button");
     remove.type = "button";
     remove.className = "history-action";
-    remove.textContent = "Borrar";
-    remove.setAttribute("aria-label", `Borrar «${entry.title}»`);
+    remove.textContent = TEXT.remove;
+    remove.setAttribute("aria-label", TEXT.removeLabel(entry.title));
     remove.addEventListener("click", () => {
       storeHistory(loadHistory().filter((h) => h.id !== entry.id));
       item.remove();
@@ -1339,7 +1499,7 @@ function showHistory() {
 historyButton.addEventListener("click", showHistory);
 document.getElementById("history-close").addEventListener("click", () => historyDialog.close());
 document.getElementById("history-clear").addEventListener("click", () => {
-  if (!confirm("¿Borrar todas las conversaciones guardadas en este navegador?")) return;
+  if (!confirm(TEXT.clearConfirm)) return;
   storeHistory([]);
   historyDialog.close();
 });
@@ -1385,13 +1545,13 @@ function startOver() {
 
 // --- Descargar la conversación como Markdown --------------------------------
 downloadButton.addEventListener("click", () => {
-  const lines = ["# Conversación · Ray Peat en español", ""];
+  const lines = [TEXT.mdTitle, ""];
   for (const m of messages) {
     if (m.role === "user") {
       lines.push(`## ${m.text}`, "");
       if (m.quote) lines.push(`> ${m.quote}`, "");
     } else if (m.role === "doc") {
-      lines.push(`_Documento adjunto: ${m.name}_`, "");
+      lines.push(TEXT.mdDocument(m.name), "");
     } else {
       lines.push(m.text, "");
       if (m.sources.length > 0) {
@@ -1401,7 +1561,7 @@ downloadButton.addEventListener("click", () => {
       }
     }
   }
-  lines.push("---", "Respuestas generadas por IA a partir de los artículos de raypeat.com y de sus entrevistas de radio. No son consejo médico.");
+  lines.push("---", TEXT.mdFooter);
 
   // Creamos el archivo en memoria (Blob) y simulamos un clic en un enlace de descarga.
   const blob = new Blob([lines.join("\n")], { type: "text/markdown;charset=utf-8" });
@@ -1450,9 +1610,9 @@ function showDocChip(text) {
 
 async function uploadDocument(file) {
   hideError();
-  if (file.size > MAX_DOCUMENT_BYTES) return showError("El archivo tiene que pesar menos de 5 MB.");
+  if (file.size > MAX_DOCUMENT_BYTES) return showError(TEXT.fileTooBig);
   attachButton.disabled = true;
-  showDocChip(`📄 ${file.name} · leyendo el documento…`);
+  showDocChip(TEXT.readingDocument(file.name));
   try {
     const form = new FormData();
     form.append("file", file);
@@ -1460,7 +1620,7 @@ async function uploadDocument(file) {
     form.append("internal", String(isInternal));
     const response = await fetch("/api/document", { method: "POST", body: form });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || "No he podido leer el documento. Prueba otra vez.");
+    if (!response.ok) throw new Error(LANG === "es" && data.error ? data.error : TEXT.documentFail);
     conversationId = data.conversationId;
     setChatting(true);
     addMessage({ role: "doc", name: data.name });
@@ -1509,7 +1669,7 @@ const isInternal = readInternalFlag();
 if (isInternal) {
   const note = document.createElement("span");
   note.className = "footer-links";
-  note.textContent = "Este navegador no cuenta en las métricas (?interno=0 para volver a contar).";
+  note.textContent = TEXT.internalNote;
   document.querySelector(".footer").appendChild(note);
 }
 focusInputIfDesktop();

@@ -31,6 +31,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/about").setViewName("forward:/about.html");
         registry.addViewController("/privacidad").setViewName("forward:/privacidad.html");
         registry.addViewController("/panel").setViewName("forward:/panel.html");
+        // La versión en inglés: la misma app, con los textos en inglés (app.js mira <html lang>).
+        registry.addViewController("/en").setViewName("forward:/en/index.html");
+        registry.addViewController("/en/").setViewName("forward:/en/index.html");
+        registry.addViewController("/en/about").setViewName("forward:/en/about.html");
+        registry.addViewController("/en/privacy").setViewName("forward:/en/privacy.html");
     }
 
     @Bean

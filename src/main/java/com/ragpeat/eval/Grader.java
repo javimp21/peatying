@@ -36,7 +36,7 @@ public class Grader {
 
     /** Frases con las que el bot reconoce que algo no está en los artículos. */
     private static final Pattern ADMITS_ABSENCE = Pattern.compile(
-            "(?i)no (lo )?(menciona|mencionó|habla|habló|comenta|comentó|aparece|aparecen|trata|trató|dice|dijo|dejó|dio|expresó|tuvo|tenía|encontr|encuentro|se menciona|hay)");
+            "(?i)no (lo )?(menciona|mencionó|habla|habló|comenta|comentó|aparece|aparecen|trata|trató|dice|dijo|dejó|dio|expresó|valoró|opinó|tuvo|tenía|encontr|encuentro|se menciona|hay)");
 
     /** El texto de todos los artículos, normalizado, para comprobar que las citas literales existen. */
     private final String corpus;
