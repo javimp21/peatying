@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * La página llama a POST /api/visit al cargarse: así contamos visitantes aunque no pregunten nada.
- * Anónimo: se guarda la huella diaria (ver VisitorHasher) y el país y la ciudad aproximados, nunca la IP.
+ * Anónimo: se guarda la huella diaria (ver VisitorHasher) y el país, nunca la IP.
  */
 @RestController
 public class VisitController {
@@ -44,18 +44,17 @@ public class VisitController {
         if (!limiter.tryAcquire(clientInfo.ip(http))) {
             return ResponseEntity.noContent().build(); // no contamos, pero tampoco damos pistas
         }
-        // País y ciudad aproximados; la IP se usa aquí y no se guarda.
-        GeoLocator.Location location = geo.locate(clientInfo.ip(http));
+        // El país; la IP se usa aquí y no se guarda.
+        String country = geo.country(clientInfo.ip(http));
         // ON CONFLICT DO NOTHING: si este visitante ya contó hoy, no hacemos nada (ni error ni duplicado).
         jdbc.sql("""
-                INSERT INTO page_views (day, visitor_hash, referrer, country, city)
-                VALUES (CURRENT_DATE, :visitor, :referrer, :country, :city)
+                INSERT INTO page_views (day, visitor_hash, referrer, country)
+                VALUES (CURRENT_DATE, :visitor, :referrer, :country)
                 ON CONFLICT DO NOTHING
                 """)
                 .param("visitor", clientInfo.visitorHash(http))
                 .param("referrer", referrerHost(request == null ? null : request.referrer()))
-                .param("country", location.country())
-                .param("city", location.city())
+                .param("country", country)
                 .update();
         return ResponseEntity.noContent().build();
     }

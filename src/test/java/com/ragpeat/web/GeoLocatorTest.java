@@ -19,9 +19,9 @@ class GeoLocatorTest {
     @Test
     void unknownWithoutDatabaseOrWithBadInput() {
         GeoLocator geo = new GeoLocator();
-        assertThat(geo.locate(null)).isEqualTo(GeoLocator.Location.UNKNOWN);
-        assertThat(geo.locate("example.com")).isEqualTo(GeoLocator.Location.UNKNOWN);   // nada de consultas DNS
-        assertThat(geo.locate("127.0.0.1").country()).isNull();                          // IP local: sin país
+        assertThat(geo.country(null)).isNull();
+        assertThat(geo.country("example.com")).isNull();   // nada de consultas DNS
+        assertThat(geo.country("127.0.0.1")).isNull();     // IP local: sin país
     }
 
     /** Solo si está descargada la base de datos (data/geo, ver deploy.sh). */
@@ -29,7 +29,7 @@ class GeoLocatorTest {
     void locatesAPublicIp() {
         assumeTrue(GeoLocator.DATABASE.isFile(), "sin data/geo/dbip-city-lite.mmdb");
         GeoLocator geo = new GeoLocator();
-        assertThat(geo.locate("8.8.8.8").country()).isEqualTo("Estados Unidos");
-        assertThat(GeoLocator.country(Map.of("iso_code", "ES"))).isEqualTo("España");
+        assertThat(geo.country("8.8.8.8")).isEqualTo("Estados Unidos");
+        assertThat(GeoLocator.countryName(Map.of("iso_code", "ES"))).isEqualTo("España");
     }
 }

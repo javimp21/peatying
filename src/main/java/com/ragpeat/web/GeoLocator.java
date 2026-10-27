@@ -14,11 +14,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * País y ciudad aproximados de una IP, con la base de datos gratuita DB-IP Lite (licencia CC BY 4.0:
+ * País de una IP, con la base de datos gratuita DB-IP Lite (licencia CC BY 4.0:
  * hay que enlazar a db-ip.com, está en el pie de la web). El archivo está en nuestro servidor:
  * la IP no se manda a ningún servicio de fuera. deploy.sh lo descarga y lo renueva cada mes.
  *
  * Si el archivo no está (p. ej. en local sin descargarlo), todo sigue funcionando: la ubicación queda vacía.
+ *
+ * La ciudad no se usa: con datos móviles (y muchas fibras) la IP es la de la salida de la operadora,
+ * así que alguien de Madrid salía en Barcelona. El país sí es fiable.
  */
 @Component
 public class GeoLocator {
@@ -26,10 +29,6 @@ public class GeoLocator {
     private static final Logger log = LoggerFactory.getLogger(GeoLocator.class);
     static final File DATABASE = new File("data/geo/dbip-city-lite.mmdb");
     private static final Locale SPANISH = Locale.forLanguageTag("es");
-
-    public record Location(String country, String city) {
-        static final Location UNKNOWN = new Location(null, null);
-    }
 
     private final Reader reader;
 
@@ -48,20 +47,21 @@ public class GeoLocator {
         this.reader = opened;
     }
 
-    public Location locate(String ip) {
+    /** El país en español, o null si no se sabe. */
+    public String country(String ip) {
         // Solo IPs escritas en números: con un nombre, getByName haría una consulta DNS.
         if (reader == null || ip == null || !ip.matches("[0-9a-fA-F:.]{2,45}")) {
-            return Location.UNKNOWN;
+            return null;
         }
         try {
             @SuppressWarnings("unchecked")
             Map<String, Object> record = reader.get(InetAddress.getByName(ip), Map.class);
             if (record == null) {
-                return Location.UNKNOWN;    // IP privada o sin datos
+                return null;    // IP privada o sin datos
             }
-            return new Location(country(record.get("country")), name(record.get("city")));
+            return countryName(record.get("country"));
         } catch (IOException | IllegalArgumentException e) {
-            return Location.UNKNOWN;        // IP mal formada o archivo dañado: no merece romper la visita
+            return null;        // IP mal formada o archivo dañado: no merece romper la visita
         }
     }
 
@@ -69,7 +69,7 @@ public class GeoLocator {
      * {"iso_code": "US", ...} -> "Estados Unidos". El nombre en español de DB-IP es el oficial de la ISO
      * ("Estados Unidos de América (los)"); el de Java es el de uso normal.
      */
-    static String country(Object place) {
+    static String countryName(Object place) {
         if (place instanceof Map<?, ?> map && map.get("iso_code") instanceof String code && code.length() == 2) {
             return Locale.of("", code).getDisplayCountry(SPANISH);
         }

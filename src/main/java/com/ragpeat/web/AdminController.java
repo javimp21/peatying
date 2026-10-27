@@ -98,9 +98,9 @@ public class AdminController {
                 GROUP BY 1 ORDER BY 2 DESC LIMIT 15
                 """).query().listOfRows());
         result.put("locations", jdbc.sql("""
-                SELECT coalesce(country, 'Desconocido') AS country, coalesce(city, '') AS city, count(*) AS visitors
+                SELECT coalesce(country, 'Desconocido') AS country, count(*) AS visitors
                 FROM page_views WHERE day > CURRENT_DATE - 30
-                GROUP BY 1, 2 ORDER BY 3 DESC LIMIT 20
+                GROUP BY 1 ORDER BY 2 DESC LIMIT 20
                 """).query().listOfRows());
         result.put("votes", jdbc.sql("""
                 SELECT count(*) FILTER (WHERE m.feedback = 1) AS up,
@@ -127,7 +127,7 @@ public class AdminController {
         List<Map<String, Object>> conversations = jdbc.sql("""
                 SELECT c.id, c.created_at AS started, c.internal, c.document_name, c.document_text,
                        (SELECT max(m.created_at) FROM chat_messages m WHERE m.conversation_id = c.id) AS last_at,
-                       p.country, p.city, p.referrer
+                       p.country, p.referrer
                 FROM conversations c
                 LEFT JOIN page_views p ON p.visitor_hash = c.visitor_hash AND p.day = c.created_at::date
                 WHERE (:internas OR NOT c.internal)

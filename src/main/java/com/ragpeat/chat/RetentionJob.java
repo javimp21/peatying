@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * No guardamos nada para siempre (ver la página de privacidad):
  *  - conversaciones (y sus mensajes, por el ON DELETE CASCADE): 12 meses;
- *  - visitas (huella anónima del día, origen y ciudad aproximada): 24 meses, para ver tendencias.
+ *  - visitas (huella anónima del día, origen y país): 24 meses, para ver tendencias.
  * Se ejecuta cada noche; si el servidor estuvo apagado, lo pendiente se borra en la siguiente pasada.
  */
 @Component
