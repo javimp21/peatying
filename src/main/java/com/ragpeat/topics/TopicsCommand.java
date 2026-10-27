@@ -43,6 +43,7 @@ public class TopicsCommand implements CommandLineRunner {
     private static final Logger log = LoggerFactory.getLogger(TopicsCommand.class);
     private static final Path TOPICS = Path.of("topics", "topics.json");
     private static final Path GENERATED = Path.of("topics", "generated");
+    private static final Path GENERATED_EN = Path.of("topics", "generated-en");
     private static final int RESULTS_PER_SEARCH = 6;
     private static final Pattern CITATION = Pattern.compile("\\[(\\d+)]");
 
@@ -119,15 +120,19 @@ public class TopicsCommand implements CommandLineRunner {
             }
         }
         // Se pintan todas las que haya generadas, en el orden de topics.json (también el índice y el sitemap).
+        // La traducción al inglés (topics/generated-en/<slug español>.json) se hizo a mano, sin la API: aquí solo se pinta.
         List<Page> pages = new ArrayList<>();
+        List<Page> english = new ArrayList<>();
         for (Topic topic : topics) {
             Path file = GENERATED.resolve(topic.slug() + ".json");
             if (Files.exists(file)) {
                 pages.add(json.readValue(file.toFile(), Page.class));
+                Path translation = GENERATED_EN.resolve(topic.slug() + ".json");
+                english.add(Files.exists(translation) ? json.readValue(translation.toFile(), Page.class) : null);
             }
         }
-        renderer.writeAll(pages);
-        log.info("Pintadas {} páginas de temas", pages.size());
+        renderer.writeAll(pages, english);
+        log.info("Pintadas {} páginas de temas ({} en inglés)", pages.size(), english.stream().filter(p -> p != null).count());
     }
 
     private Page generate(Topic topic) {

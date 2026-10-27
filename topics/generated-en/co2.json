@@ -1,0 +1,142 @@
+{
+  "slug": "co2",
+  "name": "carbon dioxide (CO2)",
+  "title": "Ray Peat on CO2",
+  "question": "Why is CO2 protective?",
+  "description": "What Ray Peat thought about carbon dioxide (CO2): a protective factor against stress, lactic acid and inflammation, and its link to altitude.",
+  "intro": "For Ray Peat, carbon dioxide is not just a toxic waste product of respiration but a fundamental, universal protective factor in living things [1]. He held that efficient respiration produces plenty of CO2, and that it protects against fatigue, inflammation, oedema and stress [2][3]. According to him, medicine has undervalued this gas precisely because it is so safe [4].",
+  "sections": [
+    {
+      "heading": "CO2 as a protector against free radicals",
+      "paragraphs": [
+        "Peat pointed out that in hospitals, lung damage from free radicals was observed when patients were ventilated too intensely. That is why so-called permissive hypercapnia is practised, letting CO2 accumulate with an antioxidant effect [5]. He also recalled that this concept has been discussed in medical journals, although few biologists recognise CO2 as a universal protective factor [1].",
+        "He also cited studies in horses in which, when the CO2 in the blood was tripled, free radicals could no longer be detected. From this he deduced that we are designed to live with much more CO2 than is available at the altitude where we live [5]."
+      ]
+    },
+    {
+      "heading": "CO2 versus lactic acid",
+      "paragraphs": [
+        "A central idea of Peat's is that CO2 and lactic acid have opposite effects [6]. According to him, shutting down lactic acid production is one of CO2's basic protective functions, because lactate activates inflammatory signals [3]. That is why he argued that sugar should be metabolised all the way to CO2 and not diverted into lactic acid, to which he also attributed a role in promoting tumours [7].",
+        "He held that in stress, fatigue, hypothyroidism or excess estrogen, lactate, ammonia and free fatty acids rise while CO2 falls [8][9]. In that state the Krebs cycle is limited by the lack of CO2 and glucose is wasted as lactate, so fatigued muscle resembles tumour metabolism [9]."
+      ]
+    },
+    {
+      "heading": "Altitude and CO2 retention",
+      "paragraphs": [
+        "Peat explained that, with lower oxygen pressure, the lungs expel less CO2 and the body retains more [10][11]. According to him, this would explain why at high altitude there is less dementia, heart disease and cancer, and why people live longer [12]. He mentioned a study with an 18 times higher incidence of high blood pressure in low-altitude populations [10].",
+        "He added that people living at altitude can work very intensely without producing lactate, which he called the lactate paradox [13]. For him, taking bicarbonate at a moderate altitude would to some extent mimic altitude or better thyroid function [12]."
+      ]
+    },
+    {
+      "heading": "Inflammation, oedema and healing",
+      "paragraphs": [
+        "Peat stated that CO2 is increasingly used to prevent inflammation and oedema, for example by avoiding adhesions in abdominal surgery and protecting the lungs during mechanical ventilation. According to him, it inhibits inflammatory cytokines and prostaglandins and reduces the permeability of the intestine [14].",
+        "He linked low CO2, together with excess estrogen and lactate, to fibrosis. He also held that putting an injured limb in a bag of pure CO2 reduces pain and speeds healing [14]."
+      ]
+    },
+    {
+      "heading": "Ammonia, polyamines and fluid balance",
+      "paragraphs": [
+        "According to Peat, increasing CO2 tends to steer ammonia towards urea synthesis and away from polyamines. Bicarbonate would protect against ammonia toxicity, and CO2 would react with amino groups, which could explain its anticonvulsant, anticancer and anti-stress effects [2].",
+        "He also linked hypothyroidism with deficient CO2 production, which would cause salt loss and water retention [11]. He added that carbonic anhydrases regulate the local concentration of CO2 and could influence the skeleton, nerve excitability and water accumulation [1]."
+      ]
+    },
+    {
+      "heading": "Adapting to CO2, and its medical use",
+      "paragraphs": [
+        "Peat described how repeated exposure to slightly uncomfortable CO2, for example by breathing into a bag, gradually reduces lactate, adrenaline and free fatty acids. This would correct the tendency to over-breathe [5].",
+        "He recalled that in 1940 Yandell Henderson took it for granted that CO2 would be a permanent part of medicine, in anaesthesia, surgery and resuscitation. For Peat, however, it was used less afterwards, and he attributed this to its safety making people believe it couldn't be effective [4]."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why did Ray Peat say CO2 is beneficial?",
+      "a": "According to Peat, CO2 protects against free radicals, fatigue, oedema and inflammation [5][2]. It also suppresses the production of lactic acid, which for him activates inflammatory signals [3]."
+    },
+    {
+      "q": "What link did Peat see between altitude and carbon dioxide?",
+      "a": "He held that at higher altitude, with less oxygen pressure, the body expels less CO2 and retains more [10][12]. He attributed to this the lower frequency of degenerative diseases in high-altitude populations [11]."
+    },
+    {
+      "q": "What did Peat think of hyperventilation?",
+      "a": "For him, excess oxygen amounts to hyperventilating and produces an abnormally low level of CO2 in the blood [9]. He said that repeated exposure to a bit more CO2 lets you adapt and reduce the tendency to over-breathe [5]."
+    },
+    {
+      "q": "What role does CO2 play in sugar metabolism according to Peat?",
+      "a": "Peat held that when cells use sugar well, they produce more CO2 and this curbs the formation of lactic acid [7]. For him, glucose produces more CO2 than fat when oxidised and is metabolised more efficiently, needing less oxygen [6]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Protective CO2 and aging",
+      "url": "https://raypeat.com/articles/articles/co2.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Meat physiology, stress, and degenerative physiology",
+      "url": "https://raypeat.com/articles/articles/meat-physiology-stress.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Heart 3 (2013)",
+      "url": "https://www.toxinless.com/kmud-130719-heart-3.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Genes, Carbon Dioxide and Adaptation",
+      "url": "https://raypeat.com/articles/articles/genes-carbon-dioxide-adaptation.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Altitude (2010)",
+      "url": "https://www.toxinless.com/kmud-100716-altitude.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Mitonchondria and mortality:",
+      "url": "https://raypeat.com/articles/articles/mitochondria-mortality.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Sugar 1 (2010)",
+      "url": "https://www.toxinless.com/kmud-100917-sugar-1.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Lactate vs. CO2 in wounds, sickness, and aging; the other approach to cancer",
+      "url": "https://raypeat.com/articles/articles/lactate.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Fatigue, aging, and recuperation",
+      "url": "https://raypeat.com/articles/articles/fatigue-aging-recuperation.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Cholesterol, longevity, intelligence, and health.",
+      "url": "https://raypeat.com/articles/articles/cholesterol-longevity.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Water: swelling, tension, pain, fatigue, aging",
+      "url": "https://raypeat.com/articles/articles/water.shtml",
+      "type": "article"
+    },
+    {
+      "title": "One Radio Network: Mr thyroid (2019)",
+      "url": "https://www.toxinless.com/orn-190917-mr-thyroid.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Field biology (2014)",
+      "url": "https://www.toxinless.com/kmud-140919-field-biology.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Regeneration and degeneration:",
+      "url": "https://raypeat.com/articles/articles/regeneration-degeneration.shtml",
+      "type": "article"
+    }
+  ]
+}

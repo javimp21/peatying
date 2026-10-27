@@ -1,0 +1,119 @@
+{
+  "slug": "stress-cortisol",
+  "name": "stress and cortisol",
+  "title": "Ray Peat on stress",
+  "question": "What is stress for Peat?",
+  "description": "What Ray Peat thought about stress and cortisol: from adrenaline to damage to the thymus, the role of glucose, protective steroids and fats.",
+  "intro": "For Ray Peat, stress is above all an energy problem: when available glucose runs short, the body turns first to adrenaline and then to cortisol, which obtains sugar by breaking down tissues [1][2]. He held that damage appears when stress is prolonged, and that it depends on the glucose available, on protective steroids and on the type of fat stored in the tissues [3][4].",
+  "sections": [
+    {
+      "heading": "First adrenaline, then cortisol",
+      "paragraphs": [
+        "According to Peat, the brain needs sugar to work. When stored glycogen runs out and adrenaline can't raise blood glucose, cortisol comes into play [1]. For him, cortisol gets that sugar by breaking down tissues: first the most fragile ones, such as the thymus, and then muscle and skin [1][2]. He stated that the thymus can be consumed in two or three hours of intense stress [1]. If that sugar doesn't solve the problem, stress becomes chronic and recurring, with more adrenaline and more cortisol [2]."
+      ]
+    },
+    {
+      "heading": "The steroids that protect against cortisol",
+      "paragraphs": [
+        "Peat explained that the brain, lungs and heart are spared from stress partly because, in a healthy person, they are heavily saturated with androgens, especially testosterone and DHEA, which block the destructive action of cortisol. If those protective steroids are missing, the damage to those organs can be serious [1]. He also highlighted progesterone, which according to him protects against excess cortisol, estrogen and androgens [5].",
+        "He told how Hans Selye kept animals without adrenal glands alive and healthy by giving them progesterone daily, because it regulates sugar and salt in a way similar to the adrenals [6]. He added that after the age of thirty, the renewal of the adrenals slows down and the zone that produces sex hormones is lost. This increases the proportion of cells producing aldosterone and cortisol relative to those making androgens and progesterone [5]."
+      ]
+    },
+    {
+      "heading": "Glucose and food as a brake",
+      "paragraphs": [
+        "Peat described the work of Robert Sapolsky, who showed that brain cells exposed to glucocorticoids survive if they are given extra glucose [7]. According to Peat, neurons and thymus cells can also be rescued with an excess of glucose that offsets cortisol, which is why he stated that sugar curbs stress hormones [4]. He added that cortisol and free fatty acids make it harder to get energy from glucose, while glucose and insulin favour the regeneration of the pancreas's beta cells [5].",
+        "In an interview he held that getting plenty of calcium from milk and cheese, plenty of sugar from fruit, and eating in small amounts helps keep cortisol and stress hormones low [8]. Of coffee he said that it is anti-inflammatory, anti-stress and very broadly protective [8]."
+      ]
+    },
+    {
+      "heading": "Polyunsaturated fats and the vicious circle of stress",
+      "paragraphs": [
+        "For Peat, in a healthy person stress hormones are produced only in the amount needed, because free saturated fatty acids inhibit the production of adrenaline and adrenal steroids [3]. When fat stores contain mostly polyunsaturated fatty acids (PUFA), these stimulate cortisol, adrenaline and other stress hormones, which releases even more fatty acids. According to him, that is how the stress reaction goes from self-limiting to self-amplifying [3].",
+        "He also held that PUFA make thymus cells more sensitive to cortisol, which would partly explain their immunosuppressive effect [4]. He added that the more saturated the tissues are, the longer an animal's life expectancy, and he linked this to the thyroid and to protective steroids [9]."
+      ]
+    },
+    {
+      "heading": "What prolonged stress damages, according to Peat",
+      "paragraphs": [
+        "Peat stated that stress, whatever its cause, is especially harmful to the nervous, immune and reproductive systems. Among its features he listed inflammation, lipid peroxidation, tissue atrophy and mitochondrial decline [10]. According to him, Meerson's work showed that the cortisol and free fatty acids mobilised by stress are toxic to mitochondria and block the efficient use of glucose, with an effect similar to diabetes [10].",
+        "Peat explained that, for Selye, extreme stress damages the adrenal cortex and can kill the animal, and that the breakdown of unsaturated fatty acids seems to play a part in that damage [5]. For him, exhaustion from excess stress is generalised and can't be reduced to adrenal insufficiency [10]. He also considered it maladaptive for cellular respiration to shut down during stress, because oxidative metabolism produces far more energy than glycolysis [11]."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is cortisol according to Ray Peat?",
+      "a": "For Peat, cortisol is the stress hormone that comes into action when adrenaline isn't enough to keep blood glucose up and there is no stored glycogen left [1][2]. It obtains sugar by breaking down tissues such as the thymus, muscle and skin, which is why he considered it potentially harmful if stress goes on [1]."
+    },
+    {
+      "q": "Why is the thymus so sensitive to stress?",
+      "a": "According to Peat, the thymus is a very fragile tissue that cortisol turns into sugar straight away, as soon as glycogen runs out [1]. He held that its cells can be rescued with extra glucose, but that PUFA make them more sensitive to cortisol [4]."
+    },
+    {
+      "q": "How are polyunsaturated fats related to stress?",
+      "a": "Peat held that when tissues store mostly PUFA, these are released during stress and stimulate more cortisol and adrenaline, in a vicious circle [3]. For him, with little PUFA the stress reaction limits itself [3]."
+    },
+    {
+      "q": "What did Peat say helps lower cortisol?",
+      "a": "In an interview he stated that getting calcium from milk and cheese, sugar from fruit, and eating in small amounts helps keep cortisol low [8]. In his articles he argued that glucose curbs stress hormones and that protective steroids, such as progesterone and androgens, counteract cortisol [4][1][5]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "ELUV: Effects of stress and trauma on the body (2014)",
+      "url": "https://www.toxinless.com/eluv-140101-effects-of-stress-and-trauma-on-the-body.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Positive thinking sleep repair (2018)",
+      "url": "https://www.toxinless.com/kmud-180615-positive-thinking-sleep-repair.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Fats, functions & malfunctions",
+      "url": "https://raypeat.com/articles/articles/fats-functions-malfunctions.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Glycemia, starch, and sugar in context",
+      "url": "https://raypeat.com/articles/articles/glycemia.shtml",
+      "type": "article"
+    },
+    {
+      "title": "When energy fails: Edema, heart failure, hypertension, sarcopenia, etc.",
+      "url": "https://raypeat.com/articles/articles/edema-heart-failure-hypertension-sarcopenia.shtml",
+      "type": "article"
+    },
+    {
+      "title": "EastWest Healing: Glycemia starch and sugar in context (2011)",
+      "url": "https://www.toxinless.com/ewh-110427-glycemia-starch-and-sugar-in-context.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Growth hormone: Hormone of Stress, Aging, & Death?",
+      "url": "https://raypeat.com/articles/articles/growth-hormone.shtml",
+      "type": "article"
+    },
+    {
+      "title": "World Puja: Foundational hormones (2012)",
+      "url": "https://www.toxinless.com/wp-121123-foundational-hormones.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "JodelleFit: Cortisol low testosterone (2019)",
+      "url": "https://www.toxinless.com/jf-190601-cortisol-low-testosterone.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Immunodeficiency, dioxins, stress, and the hormones",
+      "url": "https://raypeat.com/articles/articles/immunodeficiency.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Mitonchondria and mortality:",
+      "url": "https://raypeat.com/articles/articles/mitochondria-mortality.shtml",
+      "type": "article"
+    }
+  ]
+}

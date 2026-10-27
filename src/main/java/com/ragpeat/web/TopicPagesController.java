@@ -21,4 +21,15 @@ public class TopicPagesController {
     public String topic(@PathVariable String slug) {
         return "forward:/temas/" + slug + ".html";
     }
+
+    // Las mismas páginas en inglés (static/en/topics/), con su propio slug: /en/topics/sugar.
+    @GetMapping({"/en/topics", "/en/topics/"})
+    public String englishIndex() {
+        return "forward:/en/topics/index.html";
+    }
+
+    @GetMapping("/en/topics/{slug:[a-z0-9-]+}")
+    public String englishTopic(@PathVariable String slug) {
+        return "forward:/en/topics/" + slug + ".html";
+    }
 }

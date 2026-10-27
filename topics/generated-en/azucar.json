@@ -1,0 +1,118 @@
+{
+  "slug": "sugar",
+  "name": "sugar and fruit",
+  "title": "Ray Peat on sugar",
+  "question": "Why did he recommend sugar?",
+  "description": "What Ray Peat thought about sugar and fruit: why he defended sucrose and fruit over starch, and how he saw diabetes and stress.",
+  "intro": "According to Peat, sugar, especially the sugar in fruit, protects cells, and the real metabolic problem lies in excess polyunsaturated fats and in starch [1]. For him, the idea that eating sugar causes diabetes is an outdated belief that drew attention away from the real causes of degenerative disease [2][1].",
+  "sections": [
+    {
+      "heading": "An old belief about sugar and diabetes",
+      "paragraphs": [
+        "Peat explained that for centuries diabetes was called the sugar disease because patients' urine tasted sweet, and from that it was assumed that eating sugar had to be the cause. He recalled that Claude Bernard discovered in 1848 that the body makes sugar from the proteins of its own tissues, and that patients kept excreting sugar even on a sugar-free diet [2]. In his view, most doctors probably still hold that prescientific belief [2].",
+        "For Peat, the dietary obsession with sugar was a dangerous detour that delayed the understanding of these diseases. As evidence he cited Houssay's experiments, in which sugar and coconut oil protected against diabetes; Randle's demonstration of the antagonism between fats and the use of glucose; and the recognition that polyunsaturated fatty acids (PUFA) cause insulin resistance and damage the pancreas [1]."
+      ]
+    },
+    {
+      "heading": "Sucrose and fructose in the treatment of diabetes",
+      "paragraphs": [
+        "Peat told how, in the 19th century, some doctors treated diabetes by adding plenty of sucrose to the diet, and how in 1874 Külz reported that diabetics assimilated fructose better than glucose [2]. According to him, several decades of favourable reports on fructose followed, until the discovery of insulin in 1922 caused that therapy to be almost completely forgotten [2][3].",
+        "In that context, Peat held that it was common to recommend fructose or sucrose to diabetics instead of pure glucose [3]."
+      ]
+    },
+    {
+      "heading": "Sugar versus starch: insulin and fat",
+      "paragraphs": [
+        "According to Peat, starch and glucose are efficient at stimulating insulin secretion, which favours the conversion of glucose into glycogen and fat. Fructose, by contrast, curbs that stimulus from glucose, so eating sucrose instead of starch reduces the tendency to store fat [1]. He added that starch, by raising insulin and lowering blood sugar, increases appetite, which is why eating complex carbohydrates is a reasonable way to promote obesity [1].",
+        "Peat criticised a rat study often cited to brand fructose as dangerous. According to him, after five weeks the animals on a lot of fructose showed insulin resistance, but the study left out that they had gained much less weight, and that on the same diet for a year the starch-fed animals would weigh twice as much [4]. He also said that starches are pure glucose, not the 50/50 mix of fructose and glucose, and that this is why they stimulate insulin and stress reactions much more [5]."
+      ]
+    },
+    {
+      "heading": "Fruit, potassium and the glycaemic index",
+      "paragraphs": [
+        "For Peat, fruit has advantages over grains that go beyond the difference between sugar and starch. He pointed out that eating bread and pasta is associated with developing diabetes, while eating fruit has a strong inverse association with it [1]. He explained that fruits contain roughly half fructose and half glucose, plus a lot of potassium and other minerals, such as magnesium, that help regulate glucose [6]. According to him, that potassium reduces the insulin that has to be secreted, which is why orange or grape juice is handled more gently than the same calories as starch [6].",
+        "On the glycaemic index, Peat observed that orange juice and sucrose have a lower one than starch or bread, and that if the index were so important, people would have to be advised to replace white bread with cola or orange juice [1]. He added that the indices of some potatoes and of rice are almost double that of white sugar [7]. In his opinion, the health effects of fruits and grains can't be reduced to blood sugar [1]."
+      ]
+    },
+    {
+      "heading": "Glucose, polyunsaturated fats and oxidative stress",
+      "paragraphs": [
+        "According to Peat, in every kind of tissue it is the failure to oxidise glucose that produces oxidative stress and cell damage. He held that glucose protects the beta cells of the pancreas against free fatty acids and that, for the same energy released, it produces more carbon dioxide and uses less oxygen than fats [8]. For him, unsaturated vegetable fats shift metabolism away from glucose and can end up destroying respiratory metabolism [1].",
+        "He also argued that most of the tissue damage attributed to advanced glycation end products (AGEs) comes from the breakdown of polyunsaturated fats and not from sugars [1]. And, according to him, the combination of starch and polyunsaturated fats disturbs blood sugar far more than white sugar sweets, because those fats block the use of sugar and cells react as if they were short of it [5].",
+        "Against publications blaming fructose for increasing lipid peroxidation, Peat cited studies in which it increased antioxidant status in rats. He also cited one in people where glucose raised oxidative and inflammatory stress and fructose or orange juice did not [2]."
+      ]
+    },
+    {
+      "heading": "Refined sugar, fruit and other uses of sugar",
+      "paragraphs": [
+        "Peat considered granulated sugar very pure but lacking essential nutrients, so he saw it as a temporary therapeutic material or an occasional substitute when good fruit isn't available or the available honey causes allergies [2]. He thought sugars are healthier in the long run when they come with plenty of minerals, as in milk and fruit, which provide potassium and calcium [8]. As a reference, he suggested that two quarts of milk and one of orange juice a day provide enough fructose and other sugars to resist stress in general [2].",
+        "According to him, pure sugar also has specific therapeutic uses: a mild painkiller for babies and, where there is no penicillin, a dressing for serious wounds, with a germicidal and protective effect [9]. Even so, he made clear that eating enough of anything makes you gain weight, although he didn't believe white sugar causes obesity and heart disease [7]."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Did Ray Peat think sugar causes diabetes?",
+      "a": "No. According to Peat, the idea that eating sugar causes diabetes is a prescientific belief that many doctors still hold [2]. For him, the key factors were polyunsaturated fats, which cause insulin resistance and damage the pancreas, not sugar [1]."
+    },
+    {
+      "q": "What did Peat think of fruit?",
+      "a": "He considered it a very good food because of its mix of glucose and fructose and its richness in potassium and other minerals [6]. According to him, eating fruit is also inversely associated with diabetes, unlike eating bread and pasta [1]."
+    },
+    {
+      "q": "Why did Peat prefer sugar to starch?",
+      "a": "He held that starch is pure glucose and strongly stimulates insulin and appetite, which promotes obesity [1][5]. Sucrose, because it contains fructose, reduces the tendency to store fat, according to him [1]."
+    },
+    {
+      "q": "Did Peat recommend refined white sugar?",
+      "a": "He saw it as a temporary resource or an occasional substitute, because it lacks essential nutrients, and he considered fruit better [2]. He also highlighted specific therapeutic uses, such as soothing babies' pain or dressing wounds [9]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "Glycemia, starch, and sugar in context",
+      "url": "https://raypeat.com/articles/articles/glycemia.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Sugar issues",
+      "url": "https://raypeat.com/articles/articles/sugar-issues.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Sugar myths 2 (2011)",
+      "url": "https://www.toxinless.com/kmud-111021-sugar-myths-2.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Sugar 2 (2010)",
+      "url": "https://www.toxinless.com/kmud-101015-sugar-2.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Food additives (2009)",
+      "url": "https://www.toxinless.com/kmud-091001-food-additives.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "EastWest Healing: Glycemia starch and sugar in context (2011)",
+      "url": "https://www.toxinless.com/ewh-110427-glycemia-starch-and-sugar-in-context.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Sugar myths (2011)",
+      "url": "https://www.toxinless.com/kmud-110916-sugar-myths.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Glucose and sucrose for diabetes",
+      "url": "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): How irradiated cells affect other living cells in human body (2022)",
+      "url": "https://www.toxinless.com/kmud-220318-how-irradiated-cells-affect-other-living-cells-in-human-body.mp3",
+      "type": "interview"
+    }
+  ]
+}
