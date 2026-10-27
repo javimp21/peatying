@@ -34,6 +34,20 @@ innecesarios, el formato y lo que se atribuye a Peat sin estar en los fragmentos
   poco, al límite del ruido. Se adopta.
 - Pendiente: respuestas demasiado largas para preguntas de una palabra («patata»).
 
+### Fragmentos por búsqueda (27-10-2026), prompt v4
+
+| 39 preguntas, Haiku | Nota | Responde (1-5) | Partes que sobran | Sin respaldo | Coste respuestas |
+|---|---|---|---|---|---|
+| 5 por búsqueda | 6,9 | 4,2 | 50 | 71 | 0,068 $ |
+| 8 por búsqueda | 7,0 | 4,4 | 51 | 81 | 0,077 $ |
+| 10 por búsqueda | 7,0 | 4,3 | 57 | 93 | 0,086 $ |
+
+- Diagnóstico previo: en las respuestas flojas, lo que faltaba (zanahoria cruda para la digestión, vitamina A con
+  el LDL, cómo evitar el exceso de hierro) estaba en el corpus pero no entre los fragmentos recibidos.
+- Con más fragmentos llega algo más de material relevante, pero lo clave sigue sin llegar (la zanahoria: 1-2 de
+  16-20) porque el modelo no sabe buscarlo, y sube lo atribuido sin respaldo. La nota no cambia más allá del ruido.
+- Se mantienen 5 (`chat.results-per-search`, configurable).
+
 ## RAG vs. Claude sin RAG (19-10-2026)
 
 Mismo modelo para responder en los dos casos (Claude Haiku 5.5). El juez (Claude Sonnet 5.5) extrae de cada

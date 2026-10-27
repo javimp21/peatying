@@ -56,14 +56,14 @@ public class ChatService {
     // marcadores sin mirar: con 3, el bot acababa diciendo "Peat no habla de X" sin haberlo buscado.
     private static final int MAX_SEARCHES_WITH_DOCUMENT = 6;
     private static final int MAX_TURNS = 9;         // red de seguridad contra un bucle infinito
-    private static final int RESULTS_PER_SEARCH = 5;
     private static final Pattern CITATION = Pattern.compile("\\[(\\d+)]"); // "[3]" -> captura "3"
 
     /** La herramienta tal como la ve Claude: nombre, para qué sirve y qué datos necesita (JSON Schema). */
-    private static final Tool SEARCH_TOOL = Tool.builder()
+    private static Tool searchTool(int resultsPerSearch) {
+        return Tool.builder()
             .name("search_peat")
             .description("Busca en los artículos y entrevistas de Ray Peat (en inglés) y devuelve los "
-                    + RESULTS_PER_SEARCH + " fragmentos más relevantes, numerados para poder citarlos.")
+                    + resultsPerSearch + " fragmentos más relevantes, numerados para poder citarlos.")
             .inputSchema(Tool.InputSchema.builder()
                     .properties(Tool.InputSchema.Properties.builder()
                             .putAdditionalProperty("query", JsonValue.from(Map.of(
@@ -76,22 +76,30 @@ public class ChatService {
                     .required(List.of("query", "keywords"))
                     .build())
             .build();
+    }
 
     private final AnthropicClient claude;
     private final SearchService searchService;
     private final String model;
     private final String systemPrompt;
+    private final int resultsPerSearch;
+    private final Tool searchTool;
 
     public ChatService(AnthropicClient claude, SearchService searchService,
                        @Value("${anthropic.model}") String model,
                        // Se puede cambiar para probar otro prompt sin recompilar: --chat.system-prompt=file:otro.md
-                       @Value("${chat.system-prompt:classpath:prompts/system.md}") Resource systemPromptFile) throws IOException {
+                       @Value("${chat.system-prompt:classpath:prompts/system.md}") Resource systemPromptFile,
+                       // Fragmentos por búsqueda. Con 5, en preguntas de una sola búsqueda se quedaban fuera
+                       // medidas concretas (p. ej. la zanahoria cruda para la digestión).
+                       @Value("${chat.results-per-search:5}") int resultsPerSearch) throws IOException {
         this.claude = claude;
         this.searchService = searchService;
         this.model = model;
         // El prompt está en un archivo aparte (src/main/resources/prompts/system.md) para poder
         // leerlo y cambiarlo cómodamente, sin tocar Java.
         this.systemPrompt = systemPromptFile.getContentAsString(StandardCharsets.UTF_8);
+        this.resultsPerSearch = resultsPerSearch;
+        this.searchTool = searchTool(resultsPerSearch);
     }
 
     /** Una pregunta suelta, sin avisos intermedios: para la terminal y el banco de pruebas. */
@@ -142,7 +150,7 @@ public class ChatService {
                 .system(system)
                 // effort: cuánto "piensa" el modelo antes de responder. MEDIUM es un buen equilibrio para empezar.
                 .outputConfig(OutputConfig.builder().effort(OutputConfig.Effort.MEDIUM).build())
-                .addTool(SEARCH_TOOL);
+                .addTool(searchTool);
 
         // Primero, la conversación anterior; al final, la pregunta nueva. Así Claude entiende
         // preguntas como "¿y por qué?" o "explícamelo más simple".
@@ -238,7 +246,7 @@ public class ChatService {
         listener.onSearch(input.query());
 
         StringBuilder text = new StringBuilder();
-        for (SearchResult result : searchService.search(input.query(), input.keywords(), RESULTS_PER_SEARCH)) {
+        for (SearchResult result : searchService.search(input.query(), input.keywords(), resultsPerSearch)) {
             int number = numberOf(result, sources);
             // Claude tiene que saber qué es entrevista: es una transcripción automática y no se cita entre comillas.
             text.append("[").append(number).append("] ").append(result.isInterview() ? "ENTREVISTA (transcripción automática: NO citar entre comillas): " : "ARTÍCULO: ")
@@ -275,7 +283,7 @@ public class ChatService {
         return cited;
     }
 
-    /** Los datos que Claude manda al usar search_peat (los mismos campos que el JSON Schema de SEARCH_TOOL). */
+    /** Los datos que Claude manda al usar search_peat (los mismos campos que el JSON Schema de searchTool). */
     record SearchInput(String query, String keywords) {}
 
     /** Si el fragmento ya salió en una búsqueda anterior, conserva su número; si no, le da uno nuevo. */
