@@ -175,7 +175,7 @@ function conversationCard(c) {
   const title = document.createElement("strong");
   title.textContent = questions[0]?.content.slice(0, 140) ?? "(sin preguntas)";
   const meta = document.createElement("span");
-  const place = c.city ? `${c.city}, ${c.country}` : (c.country || "ubicación desconocida");
+  const place = c.city ? `${c.city} (aprox.), ${c.country}` : (c.country || "ubicación desconocida");
   const down = c.messages.filter((m) => m.feedback === -1).length;
   const up = c.messages.filter((m) => m.feedback === 1).length;
   // La hora de la última pregunta (las conversaciones vienen ordenadas por ella); si empezó antes, también el inicio.
