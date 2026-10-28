@@ -115,8 +115,6 @@ const TEXT = {
     remove: "Borrar",
     removeLabel: (title) => `Borrar «${title}»`,
     clearConfirm: "¿Borrar todas las conversaciones guardadas en este navegador?",
-    mdDocument: (name) => `_Documento adjunto: ${name}_`,
-    mdFooter: "Respuestas generadas por IA a partir de los artículos, libros y entrevistas de Ray Peat. Pueden contener errores y no son consejo médico.",
     fileTooBig: "El archivo tiene que pesar menos de 5 MB.",
     readingDocument: (name) => `📄 ${name} · leyendo el documento…`,
     documentFail: "No he podido leer el documento. Prueba otra vez.",
@@ -170,8 +168,6 @@ const TEXT = {
     remove: "Delete",
     removeLabel: (title) => `Delete “${title}”`,
     clearConfirm: "Delete all the conversations saved in this browser?",
-    mdDocument: (name) => `_Attached document: ${name}_`,
-    mdFooter: "AI-generated answers based on Ray Peat's articles, books and radio interviews. Not medical advice.",
     fileTooBig: "The file must be smaller than 5 MB.",
     readingDocument: (name) => `📄 ${name} · reading the document…`,
     documentFail: "I couldn't read the document. Please try again.",
@@ -196,7 +192,6 @@ const errorBox = document.getElementById("error");
 const examplesBox = document.getElementById("examples");
 const conversation = document.getElementById("conversation");
 const newChatButton = document.getElementById("new-chat");
-const downloadButton = document.getElementById("download");
 
 // El estado de la conversación: la lista de mensajes. La pantalla se dibuja a partir de aquí,
 // y es lo que se descarga.
@@ -601,7 +596,6 @@ function setChatting(chatting) {
   document.body.classList.toggle("chatting", chatting); // el CSS encoge la portada y fija la caja abajo
   examplesBox.hidden = chatting;
   newChatButton.hidden = !chatting;
-  downloadButton.hidden = !chatting;
   input.placeholder = chatting ? NEXT_PLACEHOLDER : FIRST_PLACEHOLDER;
   if (!chatting) reserveHookHeight();   // por si cambió el ancho mientras estaba oculta
 }
@@ -1592,50 +1586,6 @@ function startOver() {
   hideSelectionAsk();
   window.scrollTo({ top: 0, behavior: "smooth" });
   focusInputIfDesktop();
-}
-
-// --- Descargar la conversación en PDF ---------------------------------------------
-// Sin librerías: montamos una hoja con la conversación (con el diseño de la web) y abrimos el diálogo de
-// imprimir del navegador, donde se elige "Guardar como PDF" (en el iPhone: Compartir → Guardar en Archivos).
-// El CSS de impresión oculta todo lo demás. El título de la pestaña da nombre al archivo.
-downloadButton.addEventListener("click", () => {
-  const sheet = document.createElement("article");
-  sheet.className = "print-sheet";
-  const date = new Intl.DateTimeFormat(TEXT.locale, { dateStyle: "long" }).format(new Date());
-  let html = `<header><span class="print-brand">Ray Peat Chatbot</span><span>peatying.com · ${escapeHtml(date)}</span></header>`;
-  for (const m of messages) {
-    if (m.role === "user") {
-      html += `<h2>${escapeHtml(m.text)}</h2>`;
-      if (m.quote) html += `<blockquote>${escapeHtml(m.quote)}</blockquote>`;
-    } else if (m.role === "doc") {
-      html += `<p class="print-doc">${escapeHtml(TEXT.mdDocument(m.name).replace(/_/g, ""))}</p>`;
-    } else {
-      html += `<div class="print-answer">${renderMarkdown(m.text, null)}</div>`;
-      html += printSources(m.sources || []);
-    }
-  }
-  html += `<footer>${escapeHtml(TEXT.mdFooter)}</footer>`;
-  sheet.innerHTML = html;
-  document.body.append(sheet);
-
-  const title = document.title;
-  document.title = `ray-peat-chat-${new Date().toISOString().slice(0, 10)}`;
-  window.addEventListener("afterprint", () => { sheet.remove(); document.title = title; }, { once: true });
-  window.print();
-});
-
-/** Las fuentes de una respuesta para el PDF: una línea por documento, con sus números y su dirección. */
-function printSources(sources) {
-  if (sources.length === 0) return "";
-  const byUrl = new Map();
-  for (const s of sources) byUrl.set(s.url, [...(byUrl.get(s.url) || []), s]);
-  const items = [...byUrl.values()].map((group) => {
-    const { title, url } = group[0];
-    const numbers = group.map((s) => s.number).join(", ");
-    const link = url.replace(/#.*$/, "");    // los libros llevan #pagina: en papel basta la dirección
-    return `<li><b>${numbers}</b> · ${escapeHtml(title)} — <span class="print-url">${escapeHtml(link)}</span></li>`;
-  });
-  return `<div class="print-sources"><strong>${TEXT.sources}</strong><ul>${items.join("")}</ul></div>`;
 }
 
 /**
