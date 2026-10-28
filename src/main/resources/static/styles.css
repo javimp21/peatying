@@ -92,7 +92,20 @@ body {
 }
 .wordmark { font: 400 1.15rem/1 var(--slab); text-transform: uppercase; color: inherit; text-decoration: none; }
 .wordmark em { font-style: normal; color: var(--muted); }
-.wordmark .logo { width: 1.7em; height: 1.7em; vertical-align: -0.5em; }
+.wordmark .logo { width: 1.7em; height: 1.7em; vertical-align: -0.5em; transform-origin: 50% 90%; animation: nod 7s ease-in-out 1.2s infinite; }
+.wordmark:hover .logo { animation: wiggle 0.6s ease-in-out; }
+/* La naranja del logo asiente de vez en cuando: casi todo el ciclo quieta, y un pequeño saltito con giro. */
+@keyframes nod {
+  0%, 84%, 100% { transform: none; }
+  88% { transform: translateY(-3px) rotate(-8deg); }
+  92% { transform: translateY(0) rotate(6deg); }
+  96% { transform: rotate(-2deg); }
+}
+@keyframes wiggle {
+  25% { transform: rotate(-12deg); }
+  50% { transform: rotate(10deg); }
+  75% { transform: rotate(-5deg); }
+}
 /* Solo la naranja: en la portada el título ya dice "Ray Peat". En la conversación, que no tiene título, sí sale el nombre. */
 .wordmark-name { display: none; margin-left: 0.5em; }   /* arriba a la izquierda, solo la naranja (también en la conversación) */
 .pill-link {
@@ -133,7 +146,26 @@ body {
 }
 
 /* --- Portada (estado vacío) ------------------------------------------------ */
-.hero { padding: 40px 0 28px; transition: padding 0.3s ease; }
+.hero { position: relative; padding: 40px 0 28px; transition: padding 0.3s ease; }
+/* La mascota saludando, a la derecha del título. Si le pasas el ratón rápido por encima, se balancea como un
+   tentetieso (app.js). Es un botón: al pulsarla sale el exprimidor (easter egg, ver app.js). */
+.hero-mascot {
+  position: absolute;
+  top: 58px; right: 3%;
+  height: 230px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-origin: 50% 100%;
+}
+/* La entrada va en la imagen y el balanceo (rotate, desde app.js) en el botón, para que no se pisen. */
+.hero-mascot img {
+  display: block;
+  width: auto; height: 100%;
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s both;
+}
+.hero-mascot:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 4px; }
 .hero h1 {
   margin: 0;
   font: 400 1rem/0.88 var(--display);
@@ -247,6 +279,15 @@ body {
   outline-offset: 3px;
 }
 
+/* Si algo falla, la mascota lee (buscando qué ha pasado) junto al mensaje. */
+.error::before {
+  content: "";
+  display: inline-block;
+  width: 1.6em; height: 2.2em;
+  margin-right: 10px;
+  vertical-align: middle;
+  background: url("/img/mascota/reading.webp") center / contain no-repeat;
+}
 .error {
   margin: 0 0 10px;
   padding: 10px 18px;
@@ -353,6 +394,19 @@ body {
      2. Al llegar al final, los tres puntos saltan en ola: cada uno empieza a saltar
         mientras el anterior todavía está cayendo (animation-delay escalonado).        */
 .message.loading { color: var(--muted); font-weight: 500; }
+/* La mascota pensando: sube y baja despacio, al ritmo del brillo de la frase (2,4 s). */
+.message.loading .thinker {
+  display: inline-block;
+  vertical-align: middle;
+  width: auto; height: 3.2em;
+  margin-right: 10px;
+  animation: ponder 2.4s ease-in-out infinite;
+}
+@keyframes ponder {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-3px) rotate(-3deg); }
+}
+.message.loading.rolling .thinker { animation: fade-out 0.5s ease forwards; }
 
 .message.loading .phrase {
   /* El texto se "pinta" con un degradado: gris - blanco - gris. Movemos el degradado y parece
@@ -797,6 +851,8 @@ li .source-panel { margin: 8px 0 4px; }
   .wide-only { display: none; }       /* "Nueva conversación" -> "Nueva" */
   .narrow-only { display: inline; }   /* "Sobre Ray Peat" -> "About" */
   .main { padding: 0 14px 18px; }
+  .hero h1 { max-width: calc(100% - 102px); }
+  .hero-mascot { top: 30px; right: 0; height: 104px; }
   .hero { padding: 28px 0 24px; }
   .lead { font-size: 1rem; }
   .ask-pill { padding: 8px 8px 8px 18px; }
@@ -856,6 +912,39 @@ li .source-panel { margin: 8px 0 4px; }
 .cover h1, .cover-sub { text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55); }
 .cover-kicker { margin: 0; font-size: 0.85rem; letter-spacing: 0.25em; color: #c9cacf; }
 .cover h1 { margin: 6px 0 14px; font: 400 clamp(6rem, 30vw, 15rem)/0.88 var(--display); text-transform: uppercase; letter-spacing: 0.02em; }
+/* La mascota, leyendo sentada sobre la R del título (en la T parecía empalada en el palo). Todo va en "em"
+   (el tamaño de la letra), así que se queda en su sitio en cualquier pantalla. Medidas de la fuente (Six Caps):
+   la R sube 0,84 em sobre la línea de base, que aquí cae justo en el borde de abajo de la letra, y va de
+   0,02 a 0,23 em de ancho. En la imagen, el "asiento" está al 78 % de su altura: lo de debajo son las patas. */
+.letter-seat { position: relative; display: inline-block; }
+.sit-mascot {
+  position: absolute;
+  left: 0.125em;                        /* el centro de la R */
+  bottom: calc(0.84em - 0.22 * 0.6em);  /* asiento en lo alto de la R; las patas (22 % de la imagen) por debajo */
+  height: 0.6em;
+  aspect-ratio: 241 / 360;              /* el de la imagen */
+  translate: -50% 0;
+}
+.sit-mascot img { display: block; width: 100%; height: 100%; }
+/* Parpadea mientras lee: dos párpados del color de la cara que bajan sobre las pupilas y vuelven a subir.
+   Posición en % de la imagen (medida sobre sitting.webp). Un parpadeo cada 4,5 s. */
+.sit-mascot .lid {
+  position: absolute;
+  top: 43.6%;
+  width: 8%; height: 6.6%;
+  background: #fe941d;
+  border-bottom: max(1px, 0.007em) solid #3a281c;   /* la raya del ojo cerrado, del grosor de los contornos */
+  border-radius: 0 0 50% 50% / 0 0 35% 35%;          /* abajo, una curva suave: ojo cerrado, no una "U" */
+  transform-origin: 50% 0;
+  scale: 1 0;
+  animation: blink 4.5s ease-in-out 1.5s infinite;
+}
+.sit-mascot .lid-left { left: 33.1%; }
+.sit-mascot .lid-right { left: 60.3%; }
+@keyframes blink {
+  0%, 95%, 100% { scale: 1 0; }
+  97.5% { scale: 1 1; }
+}
 .cover-sub { max-width: 30ch; margin: 0 auto; font-size: clamp(1.1rem, 3.5vw, 1.35rem); color: #d6d7db; }
 .cover-sub em { font-style: normal; font-weight: 700; color: #f6b39a; }
 .cover .cover-scroll {
@@ -892,7 +981,9 @@ li .source-panel { margin: 8px 0 4px; }
   }
   .cover::after { width: 44%; background: linear-gradient(to bottom, rgba(14, 15, 17, 0.6) 0%, rgba(14, 15, 17, 0) 20%); }
   .cover h1, .cover-sub { text-shadow: none; }
-  .cover-kicker { color: var(--muted); }
+  /* Las fechas van encima de la R, donde se sienta la mascota: empiezan a su derecha. Mismo tamaño que el h1
+     (0,45 de su letra: lo que ocupa la R con la mascota encima). */
+  .cover-kicker { color: var(--muted); padding-left: calc(clamp(6rem, 30vw, 15rem) * 0.45); }
   .cover-sub { margin: 0; color: var(--text-soft); }
   .cover-sub em { color: var(--gold); }
   .cover .cover-scroll { left: 72%; color: var(--muted); }
@@ -935,7 +1026,7 @@ li .source-panel { margin: 8px 0 4px; }
 
 /* --- Easter egg: el exprimidor ------------------------------------------------
    Todo dura 3,4 s y arranca al añadir la clase .play (app.js la quita y la pone para repetir). */
-/* Pequeño, justo debajo de "en español" (app.js lo coloca), sin tapar la página: aparece y se desvanece. */
+/* Pequeño, al lado de la mascota (app.js lo coloca), sin tapar la página: aparece y se desvanece. */
 .juicer {
   position: absolute;
   z-index: 40;
@@ -1026,3 +1117,11 @@ li .source-panel { margin: 8px 0 4px; }
   .print-sheet .print-doc { color: #555; font-style: italic; }
   .print-sheet footer { margin-top: 22px; padding-top: 6px; border-top: 1px solid #141414; font-size: 8pt; color: #666; }
 }
+
+/* --- Página 404 (static/error/404.html): la mascota leyendo, buscando la página ------------------- */
+.not-found { max-width: 520px; margin: 0 auto; padding: 48px 20px; text-align: center; }
+.not-found h1 { margin: 18px 0 8px; font: 400 2.6rem/1 var(--display); text-transform: uppercase; }
+.not-found p { color: var(--text-soft); }
+.not-found .not-found-en { color: var(--muted); font-size: 0.9rem; }
+.not-found .pill-link { display: inline-block; margin-top: 12px; }
+.not-found-mascot { width: auto; height: 200px; transform-origin: 50% 100%; animation: ponder 2.4s ease-in-out infinite; }

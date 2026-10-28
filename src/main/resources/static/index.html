@@ -54,8 +54,12 @@
 
     <main class="main">
       <section class="hero">
-        <!-- Easter egg: pulsar "Peat" exprime una naranja (ver #juicer). -->
-        <h1><span class="kick">Las ideas de</span> <span class="name">Ray <span id="egg">Peat</span></span> <em class="kick">en español</em></h1>
+        <!-- La mascota (una naranja con canas y gafas) saluda en la portada; desaparece al conversar, como el título.
+             Easter egg: al pulsarla, sale un exprimidor que exprime una naranja (ver #juicer). -->
+        <button type="button" id="mascot" class="hero-mascot" aria-label="Exprimir la naranja">
+          <img src="/img/mascota/hello.webp" alt="" width="136" height="160">
+        </button>
+        <h1><span class="kick">Las ideas de</span> <span class="name">Ray Peat</span> <em class="kick">en español</em></h1>
         <p class="lead">Pregunta lo que quieras. Cada respuesta cita sus artículos, libros y entrevistas originales.</p>
         <p class="hero-meta">Ray Peat, 1936–2022 · 78 artículos, 5 libros y 221 entrevistas</p>
       </section>
@@ -137,7 +141,7 @@
     <button type="button" id="history-clear" class="history-clear">Borrar todo el historial</button>
   </dialog>
 
-  <!-- Easter egg: un exprimidor. La media naranja baja, gira apretando el cono y el zumo sale por la boquilla al vaso.
+  <!-- Easter egg (al pulsar la mascota): un exprimidor. La media naranja baja, gira apretando el cono y el zumo sale por la boquilla al vaso.
        Es decorativo: aria-hidden para que los lectores de pantalla lo ignoren. -->
   <div id="juicer" class="juicer" hidden aria-hidden="true">
     <figure>

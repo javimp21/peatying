@@ -417,19 +417,20 @@ function elementOf(node) {
   return node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
 }
 
-// --- Easter egg: pulsar "Peat" en el título exprime una naranja ----------------
+// --- Easter egg: pulsar la mascota exprime una naranja -------------------------------
 const juicer = document.getElementById("juicer");
+const mascot = document.getElementById("mascot");
 let juicerTimer;
-const egg = document.getElementById("egg");
-egg.addEventListener("click", () => {
+mascot.addEventListener("click", () => {
   juicer.hidden = false;
-  // Centrado justo debajo de la palabra, sin salirse de la pantalla por los lados.
-  const rect = egg.getBoundingClientRect();
+  // Al lado de la mascota: a la derecha si cabe en la pantalla y si no a la izquierda, a la altura de sus pies.
+  const rect = mascot.getBoundingClientRect();
   const width = juicer.offsetWidth;
-  const left = Math.min(Math.max(8, rect.left + rect.width / 2 - width / 2),
-                        document.documentElement.clientWidth - width - 8);
+  const height = juicer.offsetHeight;
+  const pageWidth = document.documentElement.clientWidth;
+  const left = rect.right + 8 + width <= pageWidth - 8 ? rect.right + 8 : Math.max(8, rect.left - width - 8);
   juicer.style.left = `${left + window.scrollX}px`;
-  juicer.style.top = `${rect.bottom + window.scrollY + 4}px`;
+  juicer.style.top = `${rect.bottom - height + window.scrollY}px`;
   // Quitar y volver a poner la clase reinicia la animación. Leer offsetWidth obliga al navegador a
   // aplicar el cambio entre medias; sin eso, juntaría las dos cosas y no se repetiría.
   juicer.classList.remove("play");
@@ -443,6 +444,51 @@ function closeJuicer() {
   clearTimeout(juicerTimer);
   juicer.hidden = true;
   juicer.classList.remove("play");
+}
+
+// --- La mascota, un tentetieso: si le pasas el ratón rápido por encima, se balancea ---------
+// Al entrar el ratón recibe un empujón hacia donde iba, proporcional a su velocidad (despacio no la mueve).
+// Luego es un muelle amortiguado: vuelve a ponerse recta, pasándose cada vez menos, hasta pararse.
+const SWAY_STIFFNESS = 60;      // cuánto tira el muelle hacia la posición recta (más = oscila más rápido)
+const SWAY_DAMPING = 3;         // cuánto frena (menos = más rebotes)
+const SWAY_MIN_SPEED = 0.3;     // px/ms por debajo de los cuales no hay empujón
+const SWAY_MAX_PUSH = 220;      // grados/s como mucho: que no acabe tumbada
+let pointerX = null, pointerTime = 0;
+let swayAngle = 0, swaySpeed = 0, swayFrame = 0, swayTime = 0;
+
+// Dónde estaba el ratón la última vez: la velocidad se calcula al entrar, desde ese punto hasta el de entrada.
+document.addEventListener("pointermove", (event) => {
+  pointerX = event.clientX;
+  pointerTime = event.timeStamp;
+}, { passive: true });
+
+mascot.addEventListener("pointerenter", (event) => {
+  if (event.pointerType !== "mouse" || pointerX === null) return;
+  const pointerSpeed = (event.clientX - pointerX) / Math.max(1, event.timeStamp - pointerTime);   // px/ms
+  if (Math.abs(pointerSpeed) < SWAY_MIN_SPEED) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  // Ratón hacia la derecha -> se inclina a la derecha (giro positivo, con el eje en los pies).
+  // Varios empujones seguidos se suman, pero con el mismo tope.
+  swaySpeed = Math.max(-SWAY_MAX_PUSH, Math.min(SWAY_MAX_PUSH, swaySpeed + pointerSpeed * 120));
+  if (!swayFrame) {
+    swayTime = performance.now();
+    swayFrame = requestAnimationFrame(swayStep);
+  }
+});
+
+function swayStep(now) {
+  const dt = Math.min(0.05, (now - swayTime) / 1000);   // segundos; tope por si la pestaña estuvo en segundo plano
+  swayTime = now;
+  swaySpeed += (-SWAY_STIFFNESS * swayAngle - SWAY_DAMPING * swaySpeed) * dt;
+  swayAngle += swaySpeed * dt;
+  if (Math.abs(swayAngle) < 0.05 && Math.abs(swaySpeed) < 0.5) {
+    swayAngle = swaySpeed = 0;
+    swayFrame = 0;
+    mascot.style.rotate = "";
+    return;
+  }
+  mascot.style.rotate = `${swayAngle}deg`;
+  swayFrame = requestAnimationFrame(swayStep);
 }
 
 // --- Gancho: afirmaciones de Peat que chocan con lo habitual ------------------
@@ -817,6 +863,12 @@ function showLoading() {
   // a la segunda (que ya se queda): si la respuesta llega rápido, solo se ve una.
   const [first, second] = [...LOADING_PHRASES].sort(() => Math.random() - 0.5);
 
+  // La mascota pensando, delante de la frase (la misma imagen para las dos frases).
+  const thinker = document.createElement("img");
+  thinker.className = "thinker";
+  thinker.src = "/img/mascota/thinking.webp";
+  thinker.alt = "";
+
   const show = (text) => {
     // Estructura: <span class="phrase">Peatying</span><span class="dots"><i class="orange"></i>×3</span>
     // Al reemplazar los elementos, las animaciones CSS empiezan de cero con cada frase nueva.
@@ -830,7 +882,7 @@ function showLoading() {
       orange.className = "orange";        // una mini naranja dibujada con CSS (ver styles.css)
       dots.appendChild(orange);
     }
-    div.replaceChildren(phrase, dots);
+    div.replaceChildren(thinker, phrase, dots);
     return dots;
   };
 
