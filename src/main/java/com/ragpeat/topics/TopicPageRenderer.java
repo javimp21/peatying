@@ -48,7 +48,7 @@ public class TopicPageRenderer {
             "Pregúntale al chatbot: ", "«", "»",
             "Resumen hecho con IA a partir de los artículos y entrevistas de Ray Peat que se citan. "
                     + "Puede contener errores y no es consejo médico. Proyecto independiente, sin relación con Ray Peat ni con raypeat.com.",
-            "Temas: las ideas de Ray Peat en español",
+            "Temas: las ideas de Ray Peat",
             "Las ideas de Ray Peat sobre el azúcar, la tiroides, el estrés, los aceites vegetales y más, resumidas en español con sus fuentes.",
             "Lo que pensaba Ray Peat sobre cada tema, resumido en español y con enlaces a sus artículos y entrevistas originales. "
                     + "Para preguntar lo que quieras, usa el <a href=\"/\">chatbot</a>.");
