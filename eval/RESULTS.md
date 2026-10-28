@@ -98,3 +98,30 @@ lo contaba como fallo (28/34). Ahora cada pregunta lleva `bookTerms` (términos 
 libro citada cuenta como fuente esperada si los menciona al menos dos veces. El texto de los libros también entra en
 la comprobación de citas literales. Resultado: 32/34; los dos fallos son «setas» (solo cita entrevistas) y un
 «no dejó una opinión» que el corrector no reconocía como admitir que Peat no habló de algo (ya corregido).
+
+### Bot contra Claude Sonnet 5.5 con búsqueda web (28-10-2026)
+
+12 conversaciones de 4 mensajes (`eval/compare-conversations.json`), sacadas de patrones reales del panel: palabras
+clave sueltas, contexto personal que se arrastra, peticiones prácticas, temas de los que Peat habló poco y una
+conversación en inglés. El rival es Claude Sonnet con búsqueda web y sin acceso a peatying.com, como alguien que
+pregunta en claude.ai. Cuatro jueces (Claude Opus) ven las dos respuestas como A y B en orden aleatorio
+(`eval/compare_packets.py`) y comprueban en los textos originales las 3 afirmaciones más concretas que cada respuesta
+atribuye a Peat (`eval/judge-compare.md`).
+
+| 48 mensajes | Bot (Haiku + RAG) | Sonnet + búsqueda web |
+|---|---|---|
+| Afirmaciones sobre Peat apoyadas en sus textos | 141/144 (98 %) | 78/93 (84 %) |
+| No encontradas / contradichas | 2 / 1 | 13 / 2 |
+| Nota media (1-10) | 8,0 | 5,8 |
+| Responde a lo que se pide (1-5) | 4,6 | 3,9 |
+| Mejor respuesta | 39 | 6 (3 empates) |
+
+Comprobación manual de 15 veredictos del juez: 13 correctos; los 2 errores eran afirmaciones del bot marcadas como no
+encontradas que sí están (creatina y vitamina E en *Nutrition for Women*; sal antes de dormir en una entrevista).
+Sesgos a tener en cuenta: el juez busca en el mismo corpus que usa el bot, así que lo que Sonnet saca de boletines
+o emails de Peat cuenta como «no encontrado»; y el estilo puede delatar cuál es cuál.
+
+Sonnet ganó en: la conversación en inglés (el bot respondía en español a los seguimientos: corregido en el prompt,
+el idioma lo decide el último mensaje; 8/8 en inglés al repetirla), las preguntas que piden juzgar a Peat («¿tenía
+evidencia?», «¿se equivocó en algo?»: el bot solo usa sus textos y esquiva el juicio) y el minoxidil (el bot dijo
+que Peat no habló de él; un artículo dice que hay que evitarlo y la búsqueda no lo encontró).
