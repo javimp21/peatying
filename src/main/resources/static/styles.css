@@ -314,6 +314,20 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
 }
 .examples button:hover { background: var(--ink); color: var(--frame); }
+/* Las preguntas que sugiere el bot (cuando pregunta qué quieres saber): botones como los ejemplos. */
+.suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 12px; }
+.suggestions button {
+  padding: 8px 14px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font: 500 0.98rem var(--sans);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.suggestions button:hover { background: var(--ink); color: var(--frame); }
+.suggestions button:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
 
 /* --- Conversación ---------------------------------------------------------- */
 .conversation { display: flex; flex-direction: column; gap: 22px; }

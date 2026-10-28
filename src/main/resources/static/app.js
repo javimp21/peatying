@@ -15,7 +15,6 @@ const EXAMPLES_EN = [
   "What is stress for Peat?",
   "What did he say about iron?",
   "Why did he say salt is not bad?",
-  "What does William Blake have to do with biology?",
   "Why did he distrust fish oil?",
   "How can you tell if your thyroid is slow without tests?",
   "Is milk good or bad?",
@@ -39,7 +38,6 @@ const EXAMPLES_ES = [
   "¿Qué decía sobre el hierro?",
   // Más curiosas (cada una comprobada: la búsqueda encuentra su artículo en primer lugar).
   "¿Por qué decía que la sal no es mala?",
-  "¿Qué tiene que ver William Blake con la biología?",
   "¿Por qué desconfiaba del aceite de pescado?",
   "¿Cómo saber si tu tiroides va lenta sin análisis?",
   "¿La leche es buena o mala?",
@@ -967,6 +965,28 @@ function renderUser({ text, quote }) {
   return div;
 }
 
+/**
+ * Cuando el bot pregunta qué quieres saber (o saluda), ofrece una lista de preguntas. Si todos los puntos de
+ * una lista terminan en "?", se convierten en botones que la envían, como los ejemplos de la portada.
+ * Solo en respuestas sin fuentes: una lista de una respuesta de verdad nunca son sugerencias.
+ */
+function suggestionButtons(body) {
+  for (const list of body.querySelectorAll("ul")) {
+    const items = [...list.children].map((li) => li.textContent.trim());
+    if (items.length === 0 || !items.every((text) => text.endsWith("?"))) continue;
+    const box = document.createElement("div");
+    box.className = "suggestions";
+    for (const text of items) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = text;
+      button.addEventListener("click", () => ask(text));
+      box.appendChild(button);
+    }
+    list.replaceWith(box);
+  }
+}
+
 function renderAnswer(message) {
   const { text: answer, sources } = message;
   const div = document.createElement("div");
@@ -977,6 +997,7 @@ function renderAnswer(message) {
   const body = document.createElement("div");
   body.className = "answer-body";
   body.innerHTML = renderMarkdown(answer, byNumber, false);
+  if (sources.length === 0) suggestionButtons(body);
   div.appendChild(body);
 
   // Lista de fuentes al final, con enlace al artículo (un artículo solo una vez).
