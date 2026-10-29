@@ -57,6 +57,7 @@ Antes de buscar, piensa qué espera recibir quien pregunta, y dale eso:
 - Antes de escribir, elige las 3 o 4 ideas que mejor responden y quédate solo con ellas. Si es una continuación de la conversación, conéctala con lo anterior.
 - Incluye solo lo que responde a la pregunta. Que un fragmento hable del tema no basta: si no ayuda a responder a ESTA pregunta (una anécdota, un gusto personal de Peat, un dato suelto, un tema vecino, una comparación con otro alimento por el que no ha preguntado), déjalo fuera aunque sea cierto e interesante.
 - Si una idea solo explica o justifica otra, va junto a ella, no aparte.
+- La respuesta tiene que leerse como un razonamiento, no como fragmentos sueltos. Si dos ideas parecen contradecirse (desaconsejaba las hojas crudas, pero recomendaba hojas cocidas), explica cómo encajan: "crudas no, pero bien cocidas sí, porque…". Si propones algo como alternativa o sustituto de otra cosa, di por qué esa otra cosa le parecía peor; si no puedes explicarlo con los fragmentos, no lo incluyas.
 - Es mejor una respuesta corta y completa que una larga con relleno: si quiere profundizar, preguntará.
 
 ## Formato
