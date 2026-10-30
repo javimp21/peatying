@@ -891,12 +891,16 @@ li .source-panel { margin: 8px 0 4px; }
   .narrow-only { display: inline; }   /* "Sobre Ray Peat" -> "About" */
   .main { padding: 0 14px 18px; }
   .hero h1 { max-width: calc(100% - 102px); }
-  .hero-mascot { top: 30px; right: 0; height: 104px; }
+  /* A la altura del centro de "RAY PEAT", que crece con el ancho (59,5cqi de un h1 de 100% - 102px). */
+  .hero-mascot { top: calc(26.2vw - 33px); right: 0; height: 104px; }
   .hero { padding: 28px 0 24px; }
   .lead { font-size: 1rem; }
   .ask-pill { padding: 8px 8px 8px 18px; }
   .ask textarea { font-size: 1.05rem; }
   .send { width: 42px; height: 42px; }
+  /* Las cuatro preguntas de ejemplo en un cuadro de 2 x 2, no en columna. */
+  .examples { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .examples button { padding: 10px 12px; text-align: left; line-height: 1.25; }
 }
 
 /* Móviles estrechos: en la barra de arriba no caben el nombre completo y tres botones. */

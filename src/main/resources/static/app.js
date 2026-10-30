@@ -457,7 +457,34 @@ document.addEventListener("pointermove", (event) => {
 
 mascot.addEventListener("pointerenter", (event) => {
   if (event.pointerType !== "mouse" || pointerX === null) return;
-  const pointerSpeed = (event.clientX - pointerX) / Math.max(1, event.timeStamp - pointerTime);   // px/ms
+  pushMascot((event.clientX - pointerX) / Math.max(1, event.timeStamp - pointerTime));   // px/ms
+});
+
+// En el móvil, lo mismo al pasar el dedo por encima. Con touchmove, que sigue llegando mientras la página
+// se desplaza (los eventos pointer se cancelan en cuanto el navegador empieza a hacer scroll).
+let touchX = null, touchTime = 0, touchInside = false;
+document.addEventListener("touchstart", (event) => {
+  const touch = event.touches[0];
+  touchX = touch.clientX;
+  touchTime = event.timeStamp;
+  touchInside = isOverMascot(touch);
+}, { passive: true });
+document.addEventListener("touchmove", (event) => {
+  if (touchX === null) return;
+  const touch = event.touches[0];
+  const inside = isOverMascot(touch);
+  if (inside && !touchInside) pushMascot((touch.clientX - touchX) / Math.max(1, event.timeStamp - touchTime));
+  touchInside = inside;
+  touchX = touch.clientX;
+  touchTime = event.timeStamp;
+}, { passive: true });
+
+function isOverMascot(touch) {
+  const rect = mascot.getBoundingClientRect();
+  return touch.clientX >= rect.left && touch.clientX <= rect.right && touch.clientY >= rect.top && touch.clientY <= rect.bottom;
+}
+
+function pushMascot(pointerSpeed) {
   if (Math.abs(pointerSpeed) < SWAY_MIN_SPEED) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   // Ratón hacia la derecha -> se inclina a la derecha (giro positivo, con el eje en los pies).
@@ -467,7 +494,7 @@ mascot.addEventListener("pointerenter", (event) => {
     swayTime = performance.now();
     swayFrame = requestAnimationFrame(swayStep);
   }
-});
+}
 
 function swayStep(now) {
   const dt = Math.min(0.05, (now - swayTime) / 1000);   // segundos; tope por si la pestaña estuvo en segundo plano
