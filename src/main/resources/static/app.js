@@ -679,7 +679,8 @@ async function ask(question, quote = null) {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question: withQuote(question, quote), conversationId, internal: isInternal }),
+      // lang: el idioma de esta página. El bot lo usa solo si el mensaje no deja claro el suyo ("CFS", "TSH").
+      body: JSON.stringify({ question: withQuote(question, quote), conversationId, internal: isInternal, lang: LANG }),
       signal: request.signal,
     });
 

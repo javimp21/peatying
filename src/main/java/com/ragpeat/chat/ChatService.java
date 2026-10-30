@@ -123,6 +123,15 @@ public class ChatService {
      *                 se haya subido hace varias preguntas.
      */
     public ChatAnswer answer(List<Turn> history, String question, String document, ChatListener listener) {
+        return answer(history, question, document, null, listener);
+    }
+
+    /**
+     * @param pageLang el idioma de la página desde la que se pregunta ("es", "en") o null. Solo decide cuando el
+     *                 mensaje no deja claro su idioma: "CFS" desde peatying.com/en se responde en inglés.
+     */
+    public ChatAnswer answer(List<Turn> history, String question, String document, String pageLang,
+                             ChatListener listener) {
         List<SearchResult> sources = new ArrayList<>(); // todos los fragmentos vistos; su posición+1 es su número [n]
         List<String> queries = new ArrayList<>();       // las búsquedas que pidió Claude (para el examen)
         int searches = 0;
@@ -138,6 +147,9 @@ public class ChatService {
                 .build());
         if (document != null && !document.isBlank()) {
             system.add(TextBlockParam.builder().text(documentSection(document)).build());
+        }
+        if (pageLang != null) {
+            system.add(TextBlockParam.builder().text(pageLanguageSection(pageLang)).build());
         }
 
         // El builder guarda la conversación entera. Cada vuelta le añadimos mensajes y lo volvemos a enviar:
@@ -265,6 +277,13 @@ public class ChatService {
      * etiquetas de los fragmentos), y justo después de buscar el modelo a veces se dejaba arrastrar y respondía en
      * español a una pregunta en inglés. Repetirle la pregunta aquí, lo último que lee antes de escribir, lo evita.
      */
+    static String pageLanguageSection(String pageLang) {
+        String language = "en".equals(pageLang) ? "inglés" : "español";
+        return "## Página desde la que escribe\nLa persona está en la versión en " + language + " de la web. Si su "
+                + "mensaje no deja claro el idioma (una sigla como «CFS» o «TSH», un nombre, una palabra suelta) y no "
+                + "hay mensajes anteriores que lo aclaren, responde en " + language + ".";
+    }
+
     static String languageReminder(String question) {
         String quoted = question.length() > 300 ? question.substring(0, 300) + "…" : question;
         return "\n---\nResponde en el idioma de este mensaje de la persona (si está en inglés, todo en inglés, "

@@ -70,7 +70,8 @@ public class ChatController {
     // Lo que llega y lo que sale, como records: Spring los convierte de/a JSON automáticamente.
     /** conversationId: null en la primera pregunta; después, el que devolvimos en la respuesta anterior. */
     /** internal: true desde un navegador nuestro (marcado con ?interno); sus conversaciones no cuentan en las métricas. */
-    record ChatRequest(String question, UUID conversationId, Boolean internal) {}
+    /** lang: el idioma de la página desde la que se pregunta ("es" o "en"); cualquier otra cosa se ignora. */
+    record ChatRequest(String question, UUID conversationId, Boolean internal, String lang) {}
 
     record Source(int number, String title, String url, String type, String text) {}
 
@@ -117,12 +118,14 @@ public class ChatController {
         String visitor = clientInfo.visitorHash(http);
         SseEmitter emitter = new SseEmitter(STREAM_TIMEOUT_MS);
         boolean internal = Boolean.TRUE.equals(request.internal());
-        executor.execute(() -> respond(question, request.conversationId(), visitor, internal, emitter));
+        String pageLang = "en".equals(request.lang()) || "es".equals(request.lang()) ? request.lang() : null;
+        executor.execute(() -> respond(question, request.conversationId(), visitor, internal, pageLang, emitter));
         return ResponseEntity.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(emitter);
     }
 
     /** Se ejecuta en un hilo virtual: genera la respuesta y la va mandando por el emitter. */
-    private void respond(String question, UUID requestedId, String visitor, boolean internal, SseEmitter emitter) {
+    private void respond(String question, UUID requestedId, String visitor, boolean internal, String pageLang,
+                         SseEmitter emitter) {
         long start = System.currentTimeMillis();
         try {
             // Si nos mandan una conversación que existe, seguimos en ella; si no (primera pregunta,
@@ -134,7 +137,7 @@ public class ChatController {
             List<Turn> history = conversations.lastTurns(conversationId, HISTORY_MESSAGES);
             String document = conversations.documentText(conversationId);   // null si no adjuntó nada
 
-            ChatAnswer answer = chatService.answer(history, question, document, new ChatListener() {
+            ChatAnswer answer = chatService.answer(history, question, document, pageLang, new ChatListener() {
                 @Override
                 public void onText(String delta) {
                     send(emitter, "delta", Map.of("text", delta));
