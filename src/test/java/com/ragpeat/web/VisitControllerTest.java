@@ -21,4 +21,18 @@ class VisitControllerTest {
         assertThat(VisitController.referrerHost("https://peatying.com/about")).isNull();
         assertThat(VisitController.referrerHost("http://localhost:8080/")).isNull();
     }
+
+    @Test
+    void laMarcaDelEnlace_mandaSobreElReferrer() {
+        assertThat(VisitController.origin(new VisitController.VisitRequest("", "reddit"))).isEqualTo("reddit");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.reddit.com/", " Reddit "))).isEqualTo("reddit");
+    }
+
+    @Test
+    void marcaRaraOVacia_seUsaElReferrer() {
+        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.google.com/", "<script>"))).isEqualTo("google.com");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.google.com/", "x".repeat(31)))).isEqualTo("google.com");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("", null))).isNull();
+        assertThat(VisitController.origin(null)).isNull();
+    }
 }

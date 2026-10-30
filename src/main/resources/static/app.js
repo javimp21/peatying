@@ -219,7 +219,8 @@ function countVisit() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     // De qué página viene (el servidor guarda solo el dominio). Vacío si se llega directo.
-    body: JSON.stringify({ referrer: document.referrer }),
+    // ref: la marca de un enlace que pusimos nosotros (?ref=reddit), para saberlo aunque la app no diga el origen.
+    body: JSON.stringify({ referrer: document.referrer, ref: new URLSearchParams(location.search).get("ref") }),
   }).catch(() => {});
 }
 

@@ -36,8 +36,12 @@ public class VisitController {
         this.geo = geo;
     }
 
-    /** referrer: la página de la que viene el visitante (document.referrer), o vacío si llega directo. */
-    record VisitRequest(String referrer) {}
+    /**
+     * referrer: la página de la que viene el visitante (document.referrer), o vacío si llega directo.
+     * ref: la marca de un enlace nuestro (peatying.com/en?ref=reddit). Si viene, manda sobre el referrer:
+     * las apps (Reddit, WhatsApp...) no dicen de dónde viene la visita, pero el enlace sí.
+     */
+    record VisitRequest(String referrer, String ref) {}
 
     @PostMapping("/api/visit")
     public ResponseEntity<Void> visit(@RequestBody(required = false) VisitRequest request, HttpServletRequest http) {
@@ -53,10 +57,23 @@ public class VisitController {
                 ON CONFLICT DO NOTHING
                 """)
                 .param("visitor", clientInfo.visitorHash(http))
-                .param("referrer", referrerHost(request == null ? null : request.referrer()))
+                .param("referrer", origin(request))
                 .param("country", country)
                 .update();
         return ResponseEntity.noContent().build();
+    }
+
+    /** De dónde llega: la marca del enlace ("reddit") si la hay; si no, el dominio de la página de origen. */
+    static String origin(VisitRequest request) {
+        if (request == null) {
+            return null;
+        }
+        String ref = request.ref() == null ? "" : request.ref().strip().toLowerCase(Locale.ROOT);
+        // Solo letras, números y guiones, y corta: la escribe quien comparte el enlace, pero cualquiera puede cambiarla.
+        if (ref.matches("[a-z0-9-]{1,30}")) {
+            return ref;
+        }
+        return referrerHost(request.referrer());
     }
 
     /**
