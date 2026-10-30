@@ -211,7 +211,7 @@ public class ChatService {
                 }
                 toolResults.add(ContentBlockParam.ofToolResult(ToolResultBlockParam.builder()
                         .toolUseId(toolUse.id()) // así Claude sabe a qué petición corresponde cada resultado
-                        .content(result)
+                        .content(result + languageReminder(question))
                         .build()));
             }
             request.addMessage(MessageParam.builder()
@@ -258,6 +258,17 @@ public class ChatService {
             });
         }
         return accumulator.message();
+    }
+
+    /**
+     * Va al final de cada resultado de búsqueda. Todo lo que rodea a la pregunta está en español (instrucciones,
+     * etiquetas de los fragmentos), y justo después de buscar el modelo a veces se dejaba arrastrar y respondía en
+     * español a una pregunta en inglés. Repetirle la pregunta aquí, lo último que lee antes de escribir, lo evita.
+     */
+    static String languageReminder(String question) {
+        String quoted = question.length() > 300 ? question.substring(0, 300) + "…" : question;
+        return "\n---\nResponde en el idioma de este mensaje de la persona (si está en inglés, todo en inglés, "
+                + "también el párrafo sobre la medicina actual): «" + quoted + "»";
     }
 
     /** Lee lo que Claude pidió buscar, busca, y le devuelve los fragmentos como texto numerado. */
