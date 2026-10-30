@@ -224,7 +224,7 @@ public class TopicPageRenderer {
                   <meta name="viewport" content="width=device-width, initial-scale=1">
                   <title>%1$s · Ray Peat Chatbot</title>
                   <meta name="description" content="%2$s">
-                  <meta name="color-scheme" content="light">
+                  <meta name="color-scheme" content="light dark">
                   <link rel="canonical" href="%3$s">
                 %8$s  <meta property="og:type" content="article">
                   <meta property="og:site_name" content="Ray Peat Chatbot">

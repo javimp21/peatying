@@ -63,6 +63,33 @@
   --sans: "Archivo Narrow", "Arial Narrow", system-ui, sans-serif;
 }
 
+/* Modo oscuro: sigue al ajuste del móvil o del ordenador (sin botón). El mismo cartel, en negativo: papel
+   tostado muy oscuro, tinta crema y el bermellón un poco más luminoso para que se lea sobre lo oscuro.
+   Los botones negros pasan a crema con texto oscuro: van con --ink y --frame, así que se invierten solos. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: oklch(19% 0.012 70);
+    --frame: oklch(19% 0.012 70);
+    --surface: oklch(23.5% 0.014 70);
+    --surface-2: oklch(27% 0.016 70);
+    --line: oklch(38% 0.016 70);
+    --ink: oklch(91% 0.022 88);
+    --text-soft: oklch(82% 0.02 85);
+    --muted: oklch(68% 0.02 80);
+    --accent: oklch(66% 0.17 36);
+    --accent-text: oklch(71% 0.16 38);
+    --error-text: oklch(75% 0.14 36);
+    --input-bg: oklch(15.5% 0.01 70);
+    --placeholder: oklch(60% 0.02 80);
+    --bot-text: oklch(88% 0.02 85);
+    --float-bg: color-mix(in oklab, oklch(23.5% 0.014 70) 88%, transparent);
+    --float-bg-solid: oklch(23.5% 0.014 70);
+    --quote-bg: oklch(24% 0.014 70);
+    --shadow: rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+}
+
 * { box-sizing: border-box; }
 
 body {

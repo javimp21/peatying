@@ -282,7 +282,7 @@ public class ShareController {
                   <title>%1$s · Ray Peat Chatbot</title>
                   <meta name="description" content="%2$s">
                   <meta name="robots" content="noindex">
-                  <meta name="color-scheme" content="light">
+                  <meta name="color-scheme" content="light dark">
                   <meta property="og:type" content="article">
                   <meta property="og:site_name" content="Ray Peat Chatbot">
                   <meta property="og:title" content="%1$s">
