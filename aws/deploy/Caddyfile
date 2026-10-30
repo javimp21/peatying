@@ -21,7 +21,8 @@ peatying.com {
 	}
 }
 
-# www.peatying.com lleva a la dirección principal (301 = redirección permanente).
-www.peatying.com {
+# www.peatying.com lleva a la dirección principal (301 = redirección permanente). También con http://, de un
+# solo salto: si no, Caddy primero pasaría a https://www y de ahí a https://peatying.com.
+www.peatying.com, http://www.peatying.com {
 	redir https://peatying.com{uri} permanent
 }

@@ -144,9 +144,18 @@ public class TopicPageRenderer {
                     "acceptedAnswer", Map.of("@type", "Answer", "text", plain(f.a()))));
         }
         Map<String, Object> faqPage = Map.of("@context", "https://schema.org", "@type", "FAQPage", "mainEntity", questions);
+        // Las migas de pan, para que Google muestre "peatying.com › Temas › ..." en vez de la URL.
+        Map<String, Object> breadcrumbs = Map.of("@context", "https://schema.org", "@type", "BreadcrumbList", "itemListElement", List.of(
+                crumb(1, "Ray Peat Chatbot", SITE + t.home()),
+                crumb(2, t.topics(), SITE + t.base()),
+                crumb(3, p.title(), url)));
 
-        return document(title, p.description(), url, json.writeValueAsString(List.of(article, faqPage)), body.toString(),
+        return document(title, p.description(), url, json.writeValueAsString(List.of(article, faqPage, breadcrumbs)), body.toString(),
                 t, otherPath);
+    }
+
+    private static Map<String, Object> crumb(int position, String name, String url) {
+        return Map.of("@type", "ListItem", "position", position, "name", name, "item", url);
     }
 
     /** El botón que lleva al chat con la pregunta ya escrita (no se envía sola: la persona decide). */
