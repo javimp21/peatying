@@ -280,14 +280,17 @@ public class ChatService {
     static String pageLanguageSection(String pageLang) {
         String language = "en".equals(pageLang) ? "inglés" : "español";
         return "## Página desde la que escribe\nLa persona está en la versión en " + language + " de la web. Si su "
-                + "mensaje no deja claro el idioma (una sigla como «CFS» o «TSH», un nombre, una palabra suelta) y no "
-                + "hay mensajes anteriores que lo aclaren, responde en " + language + ".";
+                + "mensaje no deja claro el idioma y no hay mensajes anteriores que lo aclaren, responde en " + language
+                + ". Cuenta como no claro todo mensaje que no sea una frase: una sigla («CFS», «TSH»), un nombre o un "
+                + "término suelto, aunque se parezca a una palabra de otro idioma o esté mal escrito («triglicerides», "
+                + "«vitamina D», «colesterol»).";
     }
 
     static String languageReminder(String question) {
         String quoted = question.length() > 300 ? question.substring(0, 300) + "…" : question;
         return "\n---\nResponde en el idioma de este mensaje de la persona (si está en inglés, todo en inglés, "
-                + "también el párrafo sobre la medicina actual): «" + quoted + "»";
+                + "también el párrafo sobre la medicina actual, que entonces empieza por «Today, mainstream medicine»): «"
+                + quoted + "»";
     }
 
     /** Lee lo que Claude pidió buscar, busca, y le devuelve los fragmentos como texto numerado. */
