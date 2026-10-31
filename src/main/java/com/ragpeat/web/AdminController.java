@@ -95,12 +95,12 @@ public class AdminController {
         result.put("referrers", jdbc.sql("""
                 SELECT coalesce(referrer, 'directo') AS origin, count(*) AS visitors
                 FROM page_views WHERE day > CURRENT_DATE - 30
-                GROUP BY 1 ORDER BY 2 DESC LIMIT 15
+                GROUP BY 1 ORDER BY 2 DESC LIMIT 100
                 """).query().listOfRows());
         result.put("locations", jdbc.sql("""
                 SELECT coalesce(country, 'Desconocido') AS country, count(*) AS visitors
                 FROM page_views WHERE day > CURRENT_DATE - 30
-                GROUP BY 1 ORDER BY 2 DESC LIMIT 20
+                GROUP BY 1 ORDER BY 2 DESC LIMIT 250   -- todos los países (hay unos 200)
                 """).query().listOfRows());
         result.put("votes", jdbc.sql("""
                 SELECT count(*) FILTER (WHERE m.feedback = 1) AS up,
