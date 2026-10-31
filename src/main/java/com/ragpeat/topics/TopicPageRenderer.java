@@ -231,7 +231,7 @@ public class TopicPageRenderer {
                   <meta property="og:title" content="%1$s">
                   <meta property="og:description" content="%2$s">
                   <meta property="og:url" content="%3$s">
-                  <meta property="og:image" content="https://peatying.com/img/og.jpg">
+                  <meta property="og:image" content="https://peatying.com/img/og-mascota.jpg">
                   <meta property="og:locale" content="%7$s">
                   <meta name="twitter:card" content="summary_large_image">
                   <link rel="icon" href="/img/favicon.png" type="image/png" sizes="144x144">
