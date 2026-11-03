@@ -297,8 +297,13 @@ body {
 .mic:hover { color: var(--ink); }
 .mic:disabled { cursor: progress; opacity: 0.5; }
 .mic:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
-.mic.recording { color: var(--accent); animation: mic-pulse 1.2s ease-in-out infinite; }
-@keyframes mic-pulse { 50% { transform: scale(1.18); } }
+/* Grabando: el micrófono se cambia por un cuadrado de "parar" en blanco sobre rojo, que late para que se vea. */
+.mic .icon-stop { display: none; }
+.mic.recording .icon-mic { display: none; }
+.mic.recording .icon-stop { display: block; }
+.mic.recording { background: var(--accent); color: #fff; animation: mic-pulse 1.4s ease-in-out infinite; }
+.mic.recording:hover { color: #fff; }
+@keyframes mic-pulse { 50% { box-shadow: 0 0 0 6px color-mix(in oklch, var(--accent) 30%, transparent); } }
 @media (prefers-reduced-motion: reduce) { .mic.recording { animation: none; } }
 
 /* "📄 analitica.pdf": el documento de la conversación, encima de la caja. */

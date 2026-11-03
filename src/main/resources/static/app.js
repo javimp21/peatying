@@ -117,8 +117,8 @@ const TEXT = {
     readingDocument: (name) => `📄 ${name} · leyendo el documento…`,
     documentFail: "No he podido leer el documento. Prueba otra vez.",
     micStart: "Preguntar por voz",
-    micStop: "Terminar y pasar a texto",
-    listening: (s) => `🎙️ Te escucho… ${s} s`,   // corto: en el móvil la caja es estrecha
+    micStop: "Parar y pasar a texto",
+    listening: (s) => `🔴 Te escucho… ${s} s`,   // corto: en el móvil la caja es estrecha
     transcribing: "🎙️ Pasando a texto…",
     micDenied: "El navegador no deja usar el micrófono. Permítelo para esta web y prueba otra vez.",
     voiceTooLong: "La grabación es demasiado larga: como mucho, un minuto.",
@@ -179,7 +179,7 @@ const TEXT = {
     documentFail: "I couldn't read the document. Please try again.",
     micStart: "Ask by voice",
     micStop: "Stop and turn into text",
-    listening: (s) => `🎙️ Listening… ${s} s`,
+    listening: (s) => `🔴 Listening… ${s} s`,
     transcribing: "🎙️ Turning into text…",
     micDenied: "The browser won't let the site use the microphone. Allow it for this site and try again.",
     voiceTooLong: "The recording is too long: one minute at most.",
@@ -1747,7 +1747,9 @@ async function startRecording() {
   const chunks = [];
   recorder = new MediaRecorder(stream);
   recorder.addEventListener("dataavailable", (event) => { if (event.data.size) chunks.push(event.data); });
+  const stopListening = listenForSilence(stream, () => recorder?.stop());
   recorder.addEventListener("stop", () => {
+    stopListening();
     stream.getTracks().forEach((track) => track.stop());   // apaga el micrófono (y el aviso rojo del navegador)
     clearInterval(recordTimer);
     recorder = null;
@@ -1762,6 +1764,37 @@ async function startRecording() {
     showRecording(true, seconds);
     if (seconds >= MAX_RECORDING_SECONDS) recorder?.stop();
   }, 1000);
+}
+
+/**
+ * Para la grabación sola cuando la persona deja de hablar: así basta con hablar y darle a enviar.
+ * Mide el volumen 10 veces por segundo. "Hablando" es bastante más alto que el ruido de fondo de los primeros
+ * instantes (con un tope: quien empieza a hablar nada más pulsar no debe subir el listón); tras haber hablado,
+ * SILENCE_MS seguidos por debajo terminan. Antes de hablar no corta nunca: solo el minuto máximo.
+ * Devuelve la función que deja de escuchar.
+ */
+const SILENCE_MS = 1800;
+function listenForSilence(stream, onSilence) {
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtx) return () => {};      // sin esto, se para con el botón, como siempre
+  const context = new AudioCtx();
+  const analyser = context.createAnalyser();
+  analyser.fftSize = 1024;
+  context.createMediaStreamSource(stream).connect(analyser);
+  const samples = new Float32Array(analyser.fftSize);
+  const start = Date.now();
+  let noise = null, spoke = false, quietSince = null;
+  const timer = setInterval(() => {
+    analyser.getFloatTimeDomainData(samples);
+    const level = Math.sqrt(samples.reduce((sum, v) => sum + v * v, 0) / samples.length);
+    const now = Date.now();
+    if (now - start < 300) { noise = Math.max(noise ?? 0, level); return; }   // el ruido de la habitación
+    const loud = level > Math.max(Math.min(noise ?? 0, 0.02) * 2.5, 0.015);
+    if (loud) { spoke = true; quietSince = null; return; }
+    quietSince ??= now;
+    if (spoke && now - quietSince > SILENCE_MS) onSilence();
+  }, 100);
+  return () => { clearInterval(timer); context.close().catch(() => {}); };
 }
 
 /** Mientras graba: el micrófono en rojo y el contador en la caja (donde suele ir el ejemplo de pregunta). */
