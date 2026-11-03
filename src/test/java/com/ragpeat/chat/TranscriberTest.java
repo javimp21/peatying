@@ -24,11 +24,11 @@ class TranscriberTest {
         assertThat(Transcriber.fixName("What did Ray Pede think about thyroid?")).isEqualTo("What did Ray Peat think about thyroid?");
         assertThat(Transcriber.fixName("¿Qué decía ray pete del café?")).isEqualTo("¿Qué decía Ray Peat del café?");
         for (String heard : new String[] {"Ray Pid", "Ray Pit", "Ray Pitt", "Ray Pied", "Ray Peed", "Ray Pede", "Ray Peat",
-                "Rey Pít", "Rey Pit", "rey pid", "Rey Peat"}) {
+                "Rey Pít", "Rey Pit", "rey pid", "Rey Peat", "Rai Peat", "Rai Pit", "Rei Pit", "Ray Pít"}) {
             assertThat(Transcriber.fixName("¿Qué opinaba " + heard + " del azúcar?")).isEqualTo("¿Qué opinaba Ray Peat del azúcar?");
         }
         for (String normal : new String[] {"Mi médico pide análisis y el rey pide paz", "El rey pidió la cuenta",
-                "A ray of light", "Ray Peterson"}) {
+                "A ray of light", "Ray Peterson", "El rei pide", "Una raya pita"}) {
             assertThat(Transcriber.fixName(normal)).isEqualTo(normal);
         }
         assertThat(Transcriber.fixName("Ray Peterson and a ray of light")).isEqualTo("Ray Peterson and a ray of light");
