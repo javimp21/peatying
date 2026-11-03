@@ -86,8 +86,9 @@ public class Transcriber {
         return response == null || response.text() == null ? "" : fixName(response.text().strip());
     }
 
-    // Aun con la pista de vocabulario, a veces sale "Ray Pede", "Ray Pete" o "Ray Pit".
-    private static final Pattern NAME = Pattern.compile("(?i)\\bray\\s+p(?:ede|ete|eet|eat|eit|it|ead|et)\\b");
+    // Aun con la pista de vocabulario, a veces sale "Ray Pede", "Ray Pete", "Ray Pit" o "Ray Pid": "Ray" y una P,
+    // vocales y una d o t al final. Solo detrás de "Ray", para no tocar palabras normales ("pide", "pito").
+    private static final Pattern NAME = Pattern.compile("(?i)\\bray\\s+p[eiay]+[dt]{1,2}e?\\b");
 
     static String fixName(String text) {
         return NAME.matcher(text).replaceAll("Ray Peat");

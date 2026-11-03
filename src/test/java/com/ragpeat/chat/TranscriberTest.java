@@ -23,6 +23,10 @@ class TranscriberTest {
     void corrigeElNombreDePeatMalEntendido_sinTocarOtrasPalabras() {
         assertThat(Transcriber.fixName("What did Ray Pede think about thyroid?")).isEqualTo("What did Ray Peat think about thyroid?");
         assertThat(Transcriber.fixName("¿Qué decía ray pete del café?")).isEqualTo("¿Qué decía Ray Peat del café?");
+        for (String heard : new String[] {"Ray Pid", "Ray Pit", "Ray Pitt", "Ray Pied", "Ray Peed", "Ray Pede", "Ray Peat"}) {
+            assertThat(Transcriber.fixName("¿Qué opinaba " + heard + " del azúcar?")).isEqualTo("¿Qué opinaba Ray Peat del azúcar?");
+        }
+        assertThat(Transcriber.fixName("Mi médico pide análisis y el rey pide paz")).isEqualTo("Mi médico pide análisis y el rey pide paz");
         assertThat(Transcriber.fixName("Ray Peterson and a ray of light")).isEqualTo("Ray Peterson and a ray of light");
     }
 
