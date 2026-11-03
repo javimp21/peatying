@@ -31,6 +31,26 @@ class ChatServiceTest {
     }
 
     @Test
+    void elHistorial_recortaLasRespuestasAntiguas_peroNoLasPreguntasNiLasDosUltimas() {
+        String larga = "x".repeat(2000);
+        String contexto = "Estuve 17 años en prisión, tomo tiroides por mi cuenta. " + "y".repeat(2000);
+        List<Turn> history = List.of(
+                new Turn(Turn.USER, contexto), new Turn(Turn.ASSISTANT, larga),
+                new Turn(Turn.USER, "¿y el café?"), new Turn(Turn.ASSISTANT, larga),
+                new Turn(Turn.USER, "¿y la luz?"), new Turn(Turn.ASSISTANT, larga),
+                new Turn(Turn.USER, "¿y la sal?"), new Turn(Turn.ASSISTANT, "corta"));
+
+        List<Turn> compact = ChatService.compact(history);
+
+        assertThat(compact).hasSize(8);
+        assertThat(compact.get(0).content()).isEqualTo(contexto);                         // pregunta: entera
+        assertThat(compact.get(1).content()).hasSize(ChatService.OLD_ANSWER_CHARS + 1);   // antigua: recortada (+ "…")
+        assertThat(compact.get(3).content()).hasSize(ChatService.OLD_ANSWER_CHARS + 1);
+        assertThat(compact.get(5).content()).isEqualTo(larga);                            // penúltima: entera
+        assertThat(compact.get(7).content()).isEqualTo("corta");                          // última: entera
+    }
+
+    @Test
     void ignoraCitasQueNoExisten() {
         SortedMap<Integer, SearchResult> cited = ChatService.citedIn("Algo [7] y nada [0].", sources);
 

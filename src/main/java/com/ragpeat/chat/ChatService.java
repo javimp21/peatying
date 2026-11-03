@@ -176,7 +176,7 @@ public class ChatService {
 
         // Primero, la conversación anterior; al final, la pregunta nueva. Así Claude entiende
         // preguntas como "¿y por qué?" o "explícamelo más simple".
-        for (Turn turn : history) {
+        for (Turn turn : compact(history)) {
             if (Turn.USER.equals(turn.role())) {
                 request.addUserMessage(turn.content());
             } else {
@@ -333,6 +333,29 @@ public class ChatService {
                     .append(result.content()).append("\n\n");
         }
         return text.isEmpty() ? "No se encontró nada." : text.toString();
+    }
+
+    /** Respuestas que van enteras: las dos últimas (para "¿y eso por qué?" hace falta lo que se dijo justo antes). */
+    static final int FULL_ANSWERS = 2;
+    /** Hasta dónde se recortan las respuestas más antiguas: lo justo para saber de qué se habló. */
+    static final int OLD_ANSWER_CHARS = 600;
+
+    /**
+     * La conversación anterior, con las respuestas antiguas recortadas. Las preguntas van siempre enteras: ahí está
+     * lo que la persona contó de sí misma (su edad, su situación, lo que toma), que es lo que no se debe olvidar.
+     * Así caben más preguntas atrás sin que cada pregunta nueva cueste mucho más.
+     */
+    static List<Turn> compact(List<Turn> history) {
+        long answers = history.stream().filter(t -> Turn.ASSISTANT.equals(t.role())).count();
+        List<Turn> result = new ArrayList<>(history.size());
+        int seen = 0;
+        for (Turn turn : history) {
+            boolean old = Turn.ASSISTANT.equals(turn.role()) && ++seen <= answers - FULL_ANSWERS;
+            result.add(old && turn.content().length() > OLD_ANSWER_CHARS
+                    ? new Turn(turn.role(), turn.content().substring(0, OLD_ANSWER_CHARS) + "…")
+                    : turn);
+        }
+        return result;
     }
 
     /**

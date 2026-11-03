@@ -44,8 +44,11 @@ public class ChatController {
     static final int MAX_QUESTION_LENGTH = 3000;   // da para pegar una analítica (PersonalData quita los datos personales al guardar)
     private static final long STREAM_TIMEOUT_MS = 120_000;
 
-    /** Cuántos mensajes anteriores ve Claude: 6 = las 3 últimas preguntas con sus respuestas. */
-    private static final int HISTORY_MESSAGES = 6;
+    /**
+     * Cuántos mensajes anteriores ve Claude: 20 = las 10 últimas preguntas con sus respuestas (las antiguas, recortadas:
+     * ver ChatService.compact). Con 3, alguien que contaba su situación al principio la "olvidaba" a la cuarta pregunta.
+     */
+    private static final int HISTORY_MESSAGES = 20;
 
     private final ChatService chatService;
     private final ConversationRepository conversations;
