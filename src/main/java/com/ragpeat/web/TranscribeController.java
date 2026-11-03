@@ -31,8 +31,11 @@ public class TranscribeController {
 
     private final Transcriber transcriber;
     private final ClientInfo clientInfo;
-    /** Cada transcripción cuesta: límite propio, más o menos el de preguntas (una por pregunta). */
-    private final RateLimiter limiter = new RateLimiter(20, Duration.ofHours(1), 200, 1500, Clock.systemUTC());
+    /**
+     * Cada transcripción cuesta según los minutos de audio, y un script puede mandar audios muy comprimidos de muchos
+     * minutos: topes bajos. 30 por persona y día sobran para preguntar por voz; 300 en total, de sobra para el uso real.
+     */
+    private final RateLimiter limiter = new RateLimiter(20, Duration.ofHours(1), 30, 300, Clock.systemUTC());
 
     public TranscribeController(Transcriber transcriber, ClientInfo clientInfo) {
         this.transcriber = transcriber;
