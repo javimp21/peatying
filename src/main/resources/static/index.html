@@ -108,6 +108,12 @@
           <label for="question" class="visually-hidden">Tu pregunta</label>
           <textarea id="question" name="question" rows="1" maxlength="3000" required
                     placeholder="Prueba: «¿Qué pensaba del azúcar?»"></textarea>
+          <!-- Preguntar por voz: oculto hasta que app.js comprueba que el navegador y el servidor pueden. -->
+          <button type="button" id="mic" class="mic" aria-label="Preguntar por voz" aria-pressed="false"
+                  title="Preguntar por voz" hidden>
+            <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true" fill="none" stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg>
+          </button>
           <button type="submit" id="send" class="send" aria-label="Preguntar">
             <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
               <path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2"

@@ -287,6 +287,20 @@ body {
 .attach:disabled { cursor: progress; opacity: 0.5; }
 .attach:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
 
+/* Micrófono para preguntar por voz, junto al botón de enviar. Grabando: en rojo y latiendo. */
+.mic {
+  flex: none; width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border: 0; background: transparent; color: var(--muted); cursor: pointer;
+}
+.mic[hidden] { display: none; }
+.mic:hover { color: var(--ink); }
+.mic:disabled { cursor: progress; opacity: 0.5; }
+.mic:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 2px; }
+.mic.recording { color: var(--accent); animation: mic-pulse 1.2s ease-in-out infinite; }
+@keyframes mic-pulse { 50% { transform: scale(1.18); } }
+@media (prefers-reduced-motion: reduce) { .mic.recording { animation: none; } }
+
 /* "📄 analitica.pdf": el documento de la conversación, encima de la caja. */
 .doc-chip {
   display: inline-flex; align-items: center; gap: 8px;

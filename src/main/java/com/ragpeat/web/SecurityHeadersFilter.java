@@ -19,7 +19,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
  *    impide que otra web nos meta dentro de un iframe para engañar al usuario (clickjacking).
  *  - X-Content-Type-Options: el navegador no "adivina" el tipo de un archivo; usa el que decimos.
  *  - Referrer-Policy: al pulsar un enlace a raypeat.com solo viaja nuestro dominio, no la URL completa.
- *  - Permissions-Policy: la página no puede pedir cámara, micrófono ni ubicación.
+ *  - Permissions-Policy: la página no puede pedir cámara ni ubicación. El micrófono, solo nuestra propia web
+ *    (self: el botón de preguntar por voz), nunca algo incrustado de otro sitio; y el navegador pregunta antes.
  *
  * El HTTPS obligatorio (Strict-Transport-Security) lo pone Caddy, que es quien sirve el HTTPS.
  */
@@ -40,7 +41,7 @@ public class SecurityHeadersFilter extends OncePerRequestFilter {
         response.setHeader("Content-Security-Policy", CSP);
         response.setHeader("X-Content-Type-Options", "nosniff");
         response.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-        response.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+        response.setHeader("Permissions-Policy", "camera=(), microphone=(self), geolocation=()");
         chain.doFilter(request, response);
     }
 }

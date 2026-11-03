@@ -56,6 +56,7 @@ Sonnet never rewrites the text: it only returns ranges of sentence numbers per s
 ## Product
 
 - **Chat** in Spanish (`/`) and English (`/en`), answering in the language of each question, with follow-up questions, "clarify this" on any selected fragment, conversation history kept in the browser (rename, delete, resume), Markdown download.
+- **Questions by voice**: a microphone button records in the browser (MediaRecorder), Whisper on Groq turns it into text in under a second, and the text lands in the box to review before sending. The audio is never stored.
 - **Lab results and reports**: attach a PDF or a photo and ask about it. Claude reads the file, personal data is redacted, only the text is kept and the file is discarded; the bot then explains what Peat said about each value.
 - **20 topic pages** in each language (`/temas`, `/en/topics`) generated from the same sources with Sonnet, reviewed by hand, with FAQ and schema.org data — static text that search engines and AI assistants can read, unlike chat answers.
 - **Shareable answers** (`/r/<id>`): a server-side copy with link previews for WhatsApp/Telegram.
@@ -67,7 +68,7 @@ Sonnet never rewrites the text: it only returns ranges of sentence numbers per s
 
 - **Backend:** Java 21, Spring Boot 4, JdbcClient (plain SQL), Flyway, anthropic-java SDK
 - **Data:** PostgreSQL 17 + pgvector, Voyage AI embeddings
-- **LLM:** Claude Haiku 5.5 (answers, translations), Claude Sonnet 5.5 (speaker attribution, topic pages, evaluation judge), Whisper on Groq (speech to text)
+- **LLM:** Claude Haiku 5.5 (answers, translations), Claude Sonnet 5.5 (speaker attribution, topic pages, evaluation judge), Whisper on Groq (speech to text, for the interviews and for voice questions)
 - **Frontend:** vanilla HTML/CSS/JS, no framework — streaming renderer, self-hosted fonts, strict CSP
 - **Infra:** AWS EC2 (ARM, Docker Compose) + RDS Postgres, Caddy for HTTPS, ECR, SSM Parameter Store for secrets, deploys via SSM Run Command (no SSH), CloudWatch logs
 

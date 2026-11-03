@@ -116,6 +116,14 @@ const TEXT = {
     fileTooBig: "El archivo tiene que pesar menos de 5 MB.",
     readingDocument: (name) => `📄 ${name} · leyendo el documento…`,
     documentFail: "No he podido leer el documento. Prueba otra vez.",
+    micStart: "Preguntar por voz",
+    micStop: "Terminar y pasar a texto",
+    listening: (s) => `🎙️ Te escucho… ${s} s`,   // corto: en el móvil la caja es estrecha
+    transcribing: "🎙️ Pasando a texto…",
+    micDenied: "El navegador no deja usar el micrófono. Permítelo para esta web y prueba otra vez.",
+    voiceTooLong: "La grabación es demasiado larga: como mucho, un minuto.",
+    nothingHeard: "No he oído nada. Prueba otra vez, más cerca del micrófono.",
+    voiceFail: "No he podido pasar tu voz a texto. Prueba otra vez.",
   },
   en: {
     firstPlaceholder: "Try: “What did he think of sugar?”",
@@ -169,6 +177,14 @@ const TEXT = {
     fileTooBig: "The file must be smaller than 5 MB.",
     readingDocument: (name) => `📄 ${name} · reading the document…`,
     documentFail: "I couldn't read the document. Please try again.",
+    micStart: "Ask by voice",
+    micStop: "Stop and turn into text",
+    listening: (s) => `🎙️ Listening… ${s} s`,
+    transcribing: "🎙️ Turning into text…",
+    micDenied: "The browser won't let the site use the microphone. Allow it for this site and try again.",
+    voiceTooLong: "The recording is too long: one minute at most.",
+    nothingHeard: "I didn't hear anything. Try again, closer to the microphone.",
+    voiceFail: "I couldn't turn your voice into text. Please try again.",
   },
 }[LANG];
 
@@ -1706,11 +1722,91 @@ function currentDocumentName() {
   return [...messages].reverse().find((m) => m.role === "doc")?.name ?? null;
 }
 
+// --- Preguntar por voz ------------------------------------------------------
+// Se graba en el navegador, el servidor lo pasa a texto (Whisper en Groq) y el texto queda en la caja para
+// revisarlo antes de enviar: así una palabra mal entendida no le llega al bot. El audio no se guarda.
+const MAX_RECORDING_SECONDS = 60;
+const micButton = document.getElementById("mic");
+let recorder = null;
+let recordTimer = null;
+
+// El botón solo aparece si el navegador sabe grabar y el servidor tiene con qué transcribir.
+if (navigator.mediaDevices?.getUserMedia && window.MediaRecorder) {
+  fetch("/api/transcribe").then((r) => r.json()).then((d) => { micButton.hidden = !d.enabled; }).catch(() => {});
+}
+micButton.addEventListener("click", () => (recorder ? recorder.stop() : startRecording()));
+
+async function startRecording() {
+  hideError();
+  let stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  } catch (e) {
+    return showError(TEXT.micDenied);
+  }
+  const chunks = [];
+  recorder = new MediaRecorder(stream);
+  recorder.addEventListener("dataavailable", (event) => { if (event.data.size) chunks.push(event.data); });
+  recorder.addEventListener("stop", () => {
+    stream.getTracks().forEach((track) => track.stop());   // apaga el micrófono (y el aviso rojo del navegador)
+    clearInterval(recordTimer);
+    recorder = null;
+    showRecording(false);
+    transcribe(new Blob(chunks, { type: chunks[0]?.type || "audio/webm" }));
+  });
+  recorder.start();
+  let seconds = 0;
+  showRecording(true, seconds);
+  recordTimer = setInterval(() => {
+    seconds++;
+    showRecording(true, seconds);
+    if (seconds >= MAX_RECORDING_SECONDS) recorder?.stop();
+  }, 1000);
+}
+
+/** Mientras graba: el micrófono en rojo y el contador en la caja (donde suele ir el ejemplo de pregunta). */
+function showRecording(on, seconds) {
+  micButton.classList.toggle("recording", on);
+  micButton.setAttribute("aria-pressed", String(on));
+  micButton.setAttribute("aria-label", on ? TEXT.micStop : TEXT.micStart);
+  micButton.title = on ? TEXT.micStop : TEXT.micStart;
+  const chatting = document.body.classList.contains("chatting");
+  input.placeholder = on ? TEXT.listening(seconds) : (chatting ? NEXT_PLACEHOLDER : FIRST_PLACEHOLDER);
+}
+
+async function transcribe(audio) {
+  if (audio.size < 1000) return;          // un toque sin querer: nada que transcribir
+  micButton.disabled = true;
+  const placeholder = input.placeholder;
+  input.placeholder = TEXT.transcribing;
+  try {
+    const form = new FormData();
+    form.append("audio", audio);
+    const response = await fetch("/api/transcribe", { method: "POST", body: form });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      throw new Error(response.status === 429 ? TEXT.tooMany
+        : data.error === "too-long" ? TEXT.voiceTooLong
+        : data.error === "nothing-heard" ? TEXT.nothingHeard : TEXT.voiceFail);
+    }
+    // Si ya había algo escrito, el texto dictado se añade detrás.
+    input.value = input.value.trim() ? `${input.value.trim()} ${data.text}` : data.text;
+    autoGrow();
+    input.focus();
+  } catch (e) {
+    showError(e.message);
+  } finally {
+    input.placeholder = placeholder;
+    micButton.disabled = false;
+  }
+}
+
 // --- Utilidades -------------------------------------------------------------
 function setBusy(busy) {
   sendButton.disabled = busy;
   input.disabled = busy;
   attachButton.disabled = busy;
+  micButton.disabled = busy;
 }
 
 function showError(message) {

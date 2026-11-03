@@ -6,5 +6,6 @@
 
 $env:VOYAGE_API_KEY    = [Environment]::GetEnvironmentVariable("VOYAGE_API_KEY", "User")
 $env:ANTHROPIC_API_KEY = [Environment]::GetEnvironmentVariable("ANTHROPIC_API_KEY", "User")
+$env:GROQ_API_KEY      = [Environment]::GetEnvironmentVariable("GROQ_API_KEY", "User")   # preguntas por voz (opcional)
 
 java -jar "$PSScriptRoot\target\rag-peat-0.0.1-SNAPSHOT.jar"
