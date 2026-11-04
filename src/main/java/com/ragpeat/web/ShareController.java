@@ -282,7 +282,7 @@ public class ShareController {
                   <title>%1$s · Ray Peat Chatbot</title>
                   <meta name="description" content="%2$s">
                   <meta name="robots" content="noindex">
-                  <meta name="color-scheme" content="light dark">
+                  <meta name="color-scheme" content="light">
                   <meta property="og:type" content="article">
                   <meta property="og:site_name" content="Ray Peat Chatbot">
                   <meta property="og:title" content="%1$s">
@@ -292,6 +292,7 @@ public class ShareController {
                   <meta property="og:locale" content="%6$s">
                   <meta name="twitter:card" content="summary_large_image">
                   <link rel="icon" href="/img/favicon-mascota.png" type="image/png" sizes="144x144">
+                  <script src="/theme.js"></script>
                   <link rel="stylesheet" href="/styles.css">
                 </head>
                 <body class="topic-page">

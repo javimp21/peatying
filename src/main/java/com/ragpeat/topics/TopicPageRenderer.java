@@ -224,7 +224,7 @@ public class TopicPageRenderer {
                   <meta name="viewport" content="width=device-width, initial-scale=1">
                   <title>%1$s · Ray Peat Chatbot</title>
                   <meta name="description" content="%2$s">
-                  <meta name="color-scheme" content="light dark">
+                  <meta name="color-scheme" content="light">
                   <link rel="canonical" href="%3$s">
                 %8$s  <meta property="og:type" content="article">
                   <meta property="og:site_name" content="Ray Peat Chatbot">
@@ -236,6 +236,7 @@ public class TopicPageRenderer {
                   <meta name="twitter:card" content="summary_large_image">
                   <link rel="icon" href="/img/favicon-mascota.png" type="image/png" sizes="144x144">
                   <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+                  <script src="/theme.js"></script>
                   <link rel="stylesheet" href="/styles.css">
                 %4$s</head>
                 <body class="topic-page">

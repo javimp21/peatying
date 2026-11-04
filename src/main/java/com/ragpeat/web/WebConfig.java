@@ -46,7 +46,7 @@ public class WebConfig implements WebMvcConfigurer {
         // "/" NO va aquí: Spring la sirve reenviando internamente a index.html (un "forward"), y con
         // este filtro la respuesta salía vacía. Sin fecha ni huella, el navegador la pide entera
         // cada vez, que para un HTML tan pequeño no importa.
-        registration.addUrlPatterns("/index.html", "/app.js", "/styles.css", "/about.html", "/about.js",
+        registration.addUrlPatterns("/index.html", "/app.js", "/theme.js", "/styles.css", "/about.html", "/about.js",
                 "/privacidad.html", "/contact.js", "/panel.js", "/robots.txt", "/sitemap.xml", "/img/*");
         // /temas/* tampoco: /temas/azucar es otro forward (ver TopicPagesController) y saldría vacía.
         return registration;
