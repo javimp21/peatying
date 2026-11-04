@@ -100,4 +100,14 @@ public class RateLimiter {
         todayCount++;
         return true;
     }
+
+    /** ¿Ha agotado esta IP su ventana? Solo mira, no cuenta nada. No mira el tope global: otro no podría bloquearla. */
+    public synchronized boolean atLimit(String ip) {
+        Deque<Instant> times = requestsByIp.get(ip);
+        if (times == null) {
+            return false;
+        }
+        Instant since = clock.instant().minus(window);
+        return times.stream().filter(time -> !time.isBefore(since)).count() >= perIpLimit;
+    }
 }

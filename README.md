@@ -61,7 +61,7 @@ Sonnet never rewrites the text: it only returns ranges of sentence numbers per s
 - **20 topic pages** in each language (`/temas`, `/en/topics`) generated from the same sources with Sonnet, reviewed by hand, with FAQ and schema.org data — static text that search engines and AI assistants can read, unlike chat answers.
 - **Shareable answers** (`/r/<id>`): a server-side copy with link previews for WhatsApp/Telegram.
 - **Feedback**: 👍/👎 per answer with an optional "what went wrong".
-- **Private dashboard** (`/panel`): visits and the share of visitors who ask, origins, countries, cost, votes, and the conversations, with personal data already redacted, to review answer quality and find what to fix — behind a secret token kept in SSM Parameter Store.
+- **Private dashboard** (`/panel`): visits and the share of visitors who ask, origins, countries, cost, votes, and the conversations, with personal data already redacted, to review answer quality and find what to fix — behind a secret token kept in SSM Parameter Store, which the browser exchanges for a 7-day `HttpOnly` session cookie instead of storing it.
 - **SEO**: sitemap, canonical URLs, structured data, IndexNow pings, Google Search Console and Bing Webmaster Tools.
 
 ## Stack

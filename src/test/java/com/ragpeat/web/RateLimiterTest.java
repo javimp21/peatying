@@ -35,6 +35,22 @@ class RateLimiterTest {
     }
 
     @Test
+    void atLimit_soloMira_yNoDependeDeLoQueHaganOtros() {
+        FakeClock clock = new FakeClock();
+        RateLimiter limiter = new RateLimiter(2, Duration.ofMinutes(60), 2, clock);
+
+        assertThat(limiter.atLimit("1.1.1.1")).isFalse();
+        assertThat(limiter.atLimit("1.1.1.1")).isFalse();      // mirar no gasta intentos
+        limiter.tryAcquire("1.1.1.1");
+        limiter.tryAcquire("1.1.1.1");
+        assertThat(limiter.atLimit("1.1.1.1")).isTrue();
+        assertThat(limiter.atLimit("2.2.2.2")).isFalse();      // aunque el tope global ya esté lleno
+
+        clock.advance(Duration.ofMinutes(61));
+        assertThat(limiter.atLimit("1.1.1.1")).isFalse();
+    }
+
+    @Test
     void elLimiteDiarioEsParaTodos() {
         FakeClock clock = new FakeClock();
         RateLimiter limiter = new RateLimiter(10, Duration.ofMinutes(60), 2, clock);

@@ -10,19 +10,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.WebUtils;
 
 /**
  * Los datos del panel privado (peatying.com/panel): métricas y conversaciones completas.
  *
- * Protegido con una clave secreta (admin.token, que deploy.sh lee de Parameter Store): la página la manda en
- * la cabecera "Authorization: Bearer ...". Sin clave configurada, estas direcciones no existen (404).
+ * Protegido con una clave secreta (admin.token, que deploy.sh lee de Parameter Store). La página la manda una vez, en
+ * la cabecera "Authorization: Bearer ...", a POST /api/admin/session, y recibe una sesión en una cookie HttpOnly (ver
+ * AdminSessions): la clave no se queda en el navegador y ningún JavaScript puede leer la sesión.
+ * Sin clave configurada, estas direcciones no existen (404).
  * Un límite de intentos fallidos por IP impide probar claves a lo loco.
  */
 @RestController
@@ -31,10 +39,13 @@ public class AdminController {
     // Precios de Claude Haiku 5.5 en dólares por token (0,10 y 0,50 $ por millón), como en StatsCommand.
     private static final double INPUT_PRICE = 0.10 / 1_000_000, OUTPUT_PRICE = 0.50 / 1_000_000;
 
+    static final String SESSION_COOKIE = "rp_admin";
+
     private final JdbcClient jdbc;
     private final ClientInfo clientInfo;
     private final byte[] token;
     private final RateLimiter failures = new RateLimiter(10, Duration.ofHours(1), 1000, Clock.systemUTC());
+    private final AdminSessions sessions = new AdminSessions(Clock.systemUTC());
 
     public AdminController(JdbcClient jdbc, ClientInfo clientInfo, @Value("${admin.token:}") String token) {
         this.jdbc = jdbc;
@@ -42,10 +53,16 @@ public class AdminController {
         this.token = token.getBytes(StandardCharsets.UTF_8);
     }
 
-    /** null si la clave es buena; si no, la respuesta de error que hay que devolver. */
-    private ResponseEntity<?> denied(HttpServletRequest http) {
-        if (token.length < 20) {
-            return ResponseEntity.notFound().build();          // panel desactivado
+    private boolean disabled() {
+        return token.length < 20;
+    }
+
+    /** null si la clave de la cabecera es buena; si no, la respuesta de error que hay que devolver. */
+    private ResponseEntity<?> wrongKey(HttpServletRequest http) {
+        String ip = clientInfo.ip(http);
+        // Antes de comparar: pasado el límite no se mira la clave, o se podría seguir probando sin freno.
+        if (failures.atLimit(ip)) {
+            return ResponseEntity.status(429).build();
         }
         String header = http.getHeader("Authorization");
         byte[] given = (header != null && header.startsWith("Bearer ") ? header.substring(7) : "")
@@ -54,10 +71,65 @@ public class AdminController {
         if (MessageDigest.isEqual(given, token)) {
             return null;
         }
-        if (!failures.tryAcquire(clientInfo.ip(http))) {
-            return ResponseEntity.status(429).build();
-        }
+        failures.tryAcquire(ip);
         return ResponseEntity.status(401).build();
+    }
+
+    /** Entrar: si la clave es buena, abre una sesión y la deja en la cookie. */
+    @PostMapping("/api/admin/session")
+    public ResponseEntity<?> login(HttpServletRequest http) {
+        if (disabled()) {
+            return ResponseEntity.notFound().build();          // panel desactivado
+        }
+        ResponseEntity<?> no = wrongKey(http);
+        if (no != null) {
+            return no;
+        }
+        closeSession(http);                                    // la de antes de este navegador, si la había
+        return ResponseEntity.noContent()
+                .header(HttpHeaders.SET_COOKIE, cookie(sessions.open(), AdminSessions.LIFETIME).toString()).build();
+    }
+
+    /** Salir: la sesión deja de valer aunque alguien hubiera copiado la cookie. */
+    @DeleteMapping("/api/admin/session")
+    public ResponseEntity<?> logout(HttpServletRequest http) {
+        if (disabled()) {
+            return ResponseEntity.notFound().build();
+        }
+        closeSession(http);
+        return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie("", Duration.ZERO).toString()).build();
+    }
+
+    private void closeSession(HttpServletRequest http) {
+        Cookie cookie = WebUtils.getCookie(http, SESSION_COOKIE);
+        if (cookie != null) {
+            sessions.close(cookie.getValue());
+        }
+    }
+
+    /**
+     * HttpOnly: JavaScript no la ve. Secure: solo por HTTPS (los navegadores la aceptan también en http://localhost).
+     * SameSite=Strict: otra web no puede hacer que el navegador la mande. Path: solo viaja a /api/admin.
+     */
+    static ResponseCookie cookie(String value, Duration maxAge) {
+        return ResponseCookie.from(SESSION_COOKIE, value)
+                .httpOnly(true).secure(true).sameSite("Strict").path("/api/admin").maxAge(maxAge).build();
+    }
+
+    /**
+     * null si la petición trae una sesión abierta o la clave en la cabecera; si no, la respuesta de error.
+     * La clave sigue valiendo para los scripts de revisión: ningún navegador la guarda, y otra web no puede añadirla.
+     * Sin cookie ni cabecera no cuenta como intento fallido: es solo abrir la página sin haber entrado.
+     */
+    private ResponseEntity<?> denied(HttpServletRequest http) {
+        if (disabled()) {
+            return ResponseEntity.notFound().build();          // panel desactivado
+        }
+        Cookie cookie = WebUtils.getCookie(http, SESSION_COOKIE);
+        if (cookie != null && sessions.isValid(cookie.getValue())) {
+            return null;
+        }
+        return http.getHeader("Authorization") == null ? ResponseEntity.status(401).build() : wrongKey(http);
     }
 
     /** Las cifras: por día, de dónde llegan, de dónde son y totales. Sin nuestras conversaciones. */

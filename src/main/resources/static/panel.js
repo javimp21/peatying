@@ -1,47 +1,74 @@
 // Panel privado: métricas y conversaciones. Lee /api/admin/* con la clave del panel.
 // Todo lo que escribieron los visitantes se pinta con textContent (como texto), nunca como HTML.
 
-const TOKEN_KEY = "rp-panel-token";
+// La clave solo sirve para abrir una sesión, que queda en una cookie que JavaScript no puede leer (ver AdminController).
+const OLD_TOKEN_KEY = "rp-panel-token";   // aquí se guardaba la clave antes: se usa una última vez y se borra
 const $ = (id) => document.getElementById(id);
 let conversations = [];
 
-// aws/panel.ps1 abre peatying.com/panel#t=CLAVE: la guardamos y la quitamos de la dirección.
+// aws/panel.ps1 abre peatying.com/panel#t=CLAVE: la leemos y la quitamos de la dirección.
 // (Lo que va tras # nunca se envía al servidor ni queda en sus registros.)
 // Con "&movil" (código QR de aws/panel.ps1 -Movil) la clave se queda en la dirección: en el iPhone, el icono
 // de "Añadir a pantalla de inicio" guarda la dirección y no comparte datos con Safari.
-if (location.hash.startsWith("#t=")) {
-  const [value, ...flags] = location.hash.slice(3).split("&");
-  try { localStorage.setItem(TOKEN_KEY, decodeURIComponent(value)); } catch (e) { /* nada */ }
-  if (!flags.includes("movil")) history.replaceState(null, "", location.pathname);
+function keyInAddress() {
+  if (!location.hash.startsWith("#t=")) return null;
+  return decodeURIComponent(location.hash.slice(3).split("&")[0]);
 }
-const token = () => { try { return localStorage.getItem(TOKEN_KEY); } catch (e) { return null; } };
+let startupKey = keyInAddress();
+if (startupKey && !location.hash.includes("&movil")) history.replaceState(null, "", location.pathname);
+try {
+  startupKey = startupKey || localStorage.getItem(OLD_TOKEN_KEY);
+  localStorage.removeItem(OLD_TOKEN_KEY);
+} catch (e) { /* nada */ }
 
 async function api(path) {
-  const response = await fetch(path, { headers: { Authorization: `Bearer ${token()}` } });
+  const response = await fetch(path);
   if (response.status === 401 || response.status === 404) throw new Error("clave");
   if (!response.ok) throw new Error("HTTP " + response.status);
   return response.json();
 }
 
+async function openSession(key) {
+  const response = await fetch("/api/admin/session", { method: "POST", headers: { Authorization: `Bearer ${key}` } });
+  if (response.status === 401 || response.status === 404) throw new Error("clave");
+  if (response.status === 429) throw new Error("intentos");
+  if (!response.ok) throw new Error("HTTP " + response.status);
+}
+
+async function show() {
+  const [summary, list] = await Promise.all([
+    api("/api/admin/summary"),
+    api(`/api/admin/conversations?internas=${$("internal").checked}`),
+  ]);
+  $("login").hidden = true;
+  $("content").hidden = false;
+  renderSummary(summary);
+  conversations = list;
+  renderConversations();
+}
+
+// Primero con la sesión que ya haya; sin ella, se abre una si hay clave a mano. Así, abrir el panel muchas veces
+// (el icono del móvil lleva la clave en la dirección) no abre una sesión nueva cada vez.
 async function load() {
-  if (!token()) return showLogin();
   try {
-    const [summary, list] = await Promise.all([
-      api("/api/admin/summary"),
-      api(`/api/admin/conversations?internas=${$("internal").checked}`),
-    ]);
-    $("login").hidden = true;
-    $("content").hidden = false;
-    renderSummary(summary);
-    conversations = list;
-    renderConversations();
+    await show();
   } catch (e) {
-    if (e.message === "clave") {
-      try { localStorage.removeItem(TOKEN_KEY); } catch (err) { /* nada */ }
-      showLogin("La clave no es correcta.");
-    } else {
-      alert("No se pudieron cargar los datos: " + e.message);
-    }
+    if (e.message !== "clave") return alert("No se pudieron cargar los datos: " + e.message);
+    const key = startupKey || keyInAddress();
+    startupKey = null;
+    if (!key) return showLogin();
+    await enter(key);
+  }
+}
+
+async function enter(key) {
+  try {
+    await openSession(key);
+    await show();
+  } catch (e) {
+    if (e.message === "clave") showLogin("La clave no es correcta.");
+    else if (e.message === "intentos") showLogin("Demasiados intentos. Prueba dentro de una hora.");
+    else alert("No se pudieron cargar los datos: " + e.message);
   }
 }
 
@@ -55,15 +82,20 @@ function showLogin(error) {
 
 $("login").addEventListener("submit", (event) => {
   event.preventDefault();
-  try { localStorage.setItem(TOKEN_KEY, $("token").value.trim()); } catch (e) { /* nada */ }
+  const key = $("token").value.trim();
   $("token").value = "";
-  load();
+  enter(key);
 });
-$("logout").addEventListener("click", () => {
+$("logout").addEventListener("click", async () => {
   // Para no salir sin querer: después habría que volver a abrirlo con aws/panel.ps1.
-  if (!confirm("¿Salir del panel? Este navegador olvidará la clave.")) return;
-  try { localStorage.removeItem(TOKEN_KEY); } catch (e) { /* nada */ }
-  showLogin();
+  if (!confirm("¿Salir del panel? Se cerrará la sesión de este navegador.")) return;
+  try {
+    const response = await fetch("/api/admin/session", { method: "DELETE" });
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    showLogin();
+  } catch (e) {
+    alert("No se pudo cerrar la sesión: " + e.message);
+  }
 });
 $("reload").addEventListener("click", load);
 $("internal").addEventListener("change", load);
