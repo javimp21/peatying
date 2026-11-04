@@ -138,6 +138,7 @@ const TEXT = {
     quote: (quote, question) => `About this part of your previous answer: “${quote}”\n\n${question}`,
     genericError: "Something went wrong. Please try again.",
     tooMany: "You've asked a lot of questions in a row. Please try again in a while.",
+    busy: "A lot of people are asking right now. Please try again in a few seconds.",
     connectionCut: "The connection was cut. Please try again.",
     noConnection: "Can't reach the server. Please try again.",
     docAttached: (name) => `📄 You attached “${name}”. I'll take it into account in this conversation.`,
@@ -191,7 +192,7 @@ const TEXT = {
 /** Los errores del servidor vienen en español: en inglés usamos los nuestros, según el código HTTP. */
 function serverError(data, status) {
   if (LANG === "es" && data?.error) return data.error;
-  return status === 429 ? TEXT.tooMany : TEXT.genericError;
+  return status === 429 ? TEXT.tooMany : status === 503 ? TEXT.busy : TEXT.genericError;
 }
 
 const FIRST_PLACEHOLDER = TEXT.firstPlaceholder;

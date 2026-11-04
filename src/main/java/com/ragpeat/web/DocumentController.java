@@ -5,12 +5,14 @@ import java.time.Clock;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Semaphore;
 
 import com.ragpeat.chat.ConversationRepository;
 import com.ragpeat.chat.DocumentReader;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +36,12 @@ public class DocumentController {
     private final ClientInfo clientInfo;
     /** Leer un documento cuesta más que una pregunta: límite propio, aparte del de preguntas. */
     private final RateLimiter limiter = new RateLimiter(5, Duration.ofHours(1), 300, Clock.systemUTC());
+    /**
+     * Documentos leyéndose a la vez como mucho. Cada uno ocupa un hilo del servidor mientras Claude lo lee (hasta
+     * minutos): sin tope, muchos a la vez dejarían a la web sin hilos para las demás peticiones.
+     */
+    static final int MAX_CONCURRENT = 4;
+    private final Semaphore reading = new Semaphore(MAX_CONCURRENT);
 
     public DocumentController(DocumentReader reader, ConversationRepository conversations, ClientInfo clientInfo) {
         this.reader = reader;
@@ -58,29 +66,38 @@ public class DocumentController {
         if (kind.isEmpty()) {
             return ResponseEntity.badRequest().body(new ErrorResponse("Solo se pueden adjuntar PDF o fotos (JPG, PNG o WebP)."));
         }
-        if (!limiter.tryAcquire(clientInfo.ip(http))) {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-                    .body(new ErrorResponse("Has adjuntado muchos documentos seguidos. Prueba dentro de un rato."));
+        // Antes del límite por IP: si no hay hueco, no se le gasta un documento.
+        if (!reading.tryAcquire()) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header(HttpHeaders.RETRY_AFTER, "30")
+                    .body(new ErrorResponse("Hay muchos documentos leyéndose ahora. Prueba otra vez en un momento."));
         }
-
-        Optional<String> text;
         try {
-            text = reader.read(data, kind.get());
-        } catch (RuntimeException e) {
-            log.warn("No se pudo leer un documento: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
-                    .body(new ErrorResponse("No he podido leer el documento ahora. Prueba otra vez."));
-        }
-        if (text.isEmpty()) {
-            return ResponseEntity.unprocessableEntity()
-                    .body(new ErrorResponse("No he encontrado texto legible en el documento. Si es una foto, prueba con más luz."));
-        }
+            if (!limiter.tryAcquire(clientInfo.ip(http))) {
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                        .body(new ErrorResponse("Has adjuntado muchos documentos seguidos. Prueba dentro de un rato."));
+            }
 
-        UUID id = conversationId != null && conversations.exists(conversationId)
-                ? conversationId
-                : conversations.create(clientInfo.visitorHash(http), internal);
-        conversations.saveDocument(id, displayName(file.getOriginalFilename()), text.get());
-        return ResponseEntity.ok(new DocumentResponse(id, displayName(file.getOriginalFilename())));
+            Optional<String> text;
+            try {
+                text = reader.read(data, kind.get());
+            } catch (RuntimeException e) {
+                log.warn("No se pudo leer un documento: {}", e.getMessage());
+                return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                        .body(new ErrorResponse("No he podido leer el documento ahora. Prueba otra vez."));
+            }
+            if (text.isEmpty()) {
+                return ResponseEntity.unprocessableEntity()
+                        .body(new ErrorResponse("No he encontrado texto legible en el documento. Si es una foto, prueba con más luz."));
+            }
+
+            UUID id = conversationId != null && conversations.exists(conversationId)
+                    ? conversationId
+                    : conversations.create(clientInfo.visitorHash(http), internal);
+            conversations.saveDocument(id, displayName(file.getOriginalFilename()), text.get());
+            return ResponseEntity.ok(new DocumentResponse(id, displayName(file.getOriginalFilename())));
+        } finally {
+            reading.release();
+        }
     }
 
     /** Solo el nombre, corto y sin rutas ni caracteres raros (se muestra en la página y en el panel). */

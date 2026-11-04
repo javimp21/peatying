@@ -5,11 +5,13 @@ import java.time.Clock;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Semaphore;
 
 import com.ragpeat.chat.Transcriber;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +38,9 @@ public class TranscribeController {
      * minutos: topes bajos. 30 por persona y día sobran para preguntar por voz; 300 en total, de sobra para el uso real.
      */
     private final RateLimiter limiter = new RateLimiter(20, Duration.ofHours(1), 30, 300, Clock.systemUTC());
+    /** Grabaciones transcribiéndose a la vez como mucho: cada una ocupa un hilo del servidor mientras Groq responde. */
+    static final int MAX_CONCURRENT = 6;
+    private final Semaphore transcribing = new Semaphore(MAX_CONCURRENT);
 
     public TranscribeController(Transcriber transcriber, ClientInfo clientInfo) {
         this.transcriber = transcriber;
@@ -66,10 +71,15 @@ public class TranscribeController {
         if (kind.isEmpty()) {
             return ResponseEntity.badRequest().body(new ErrorResponse("bad-format"));
         }
-        if (!limiter.tryAcquire(clientInfo.ip(http))) {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(new ErrorResponse("too-many"));
+        // Antes del límite por IP: si no hay hueco, no se le gasta una grabación.
+        if (!transcribing.tryAcquire()) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header(HttpHeaders.RETRY_AFTER, "30")
+                    .body(new ErrorResponse("busy"));
         }
         try {
+            if (!limiter.tryAcquire(clientInfo.ip(http))) {
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(new ErrorResponse("too-many"));
+            }
             String text = transcriber.transcribe(data, kind.get());
             if (text.isEmpty()) {
                 return ResponseEntity.unprocessableEntity().body(new ErrorResponse("nothing-heard"));
@@ -78,6 +88,8 @@ public class TranscribeController {
         } catch (RuntimeException e) {
             log.warn("No se pudo transcribir un audio: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ErrorResponse("failed"));
+        } finally {
+            transcribing.release();
         }
     }
 }

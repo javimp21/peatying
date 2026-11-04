@@ -3,11 +3,13 @@ package com.ragpeat.web;
 import java.time.Clock;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import com.ragpeat.chat.QuoteTranslator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,9 @@ public class TranslateController {
     private final ClientInfo clientInfo;
     /** Contador propio, aparte del de preguntas: traducir no debe gastar el cupo de preguntas. */
     private final RateLimiter rateLimiter = new RateLimiter(40, Duration.ofMinutes(60), 1000, Clock.systemUTC());
+    /** Traducciones a la vez como mucho: cada una ocupa un hilo del servidor mientras Claude traduce. */
+    static final int MAX_CONCURRENT = 8;
+    private final Semaphore translating = new Semaphore(MAX_CONCURRENT);
 
     public TranslateController(QuoteTranslator translator, ClientInfo clientInfo) {
         this.translator = translator;
@@ -50,15 +55,22 @@ public class TranslateController {
                 || texts.stream().anyMatch(t -> t == null || t.isBlank() || t.length() > MAX_TEXT_LENGTH)) {
             return ResponseEntity.badRequest().body(new ErrorResponse("Nada que traducir."));
         }
-        if (!rateLimiter.tryAcquire(clientInfo.ip(http))) {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-                    .body(new ErrorResponse("Demasiadas traducciones seguidas. Prueba dentro de un rato."));
+        // Antes del límite por IP: si no hay hueco, no se le gasta una traducción.
+        if (!translating.tryAcquire()) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header(HttpHeaders.RETRY_AFTER, "30")
+                    .body(new ErrorResponse("Hay muchas traducciones a la vez. Prueba otra vez en un momento."));
         }
         try {
+            if (!rateLimiter.tryAcquire(clientInfo.ip(http))) {
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                        .body(new ErrorResponse("Demasiadas traducciones seguidas. Prueba dentro de un rato."));
+            }
             return ResponseEntity.ok(new TranslateResponse(translator.toSpanish(texts)));
         } catch (RuntimeException e) {
             log.warn("No se pudo traducir: {}", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(new ErrorResponse("No se pudo traducir ahora."));
+        } finally {
+            translating.release();
         }
     }
 }

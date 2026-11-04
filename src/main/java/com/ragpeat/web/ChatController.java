@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.chat.ChatListener;
@@ -13,10 +14,11 @@ import com.ragpeat.chat.ChatService;
 import com.ragpeat.chat.ConversationRepository;
 import com.ragpeat.chat.ConversationRepository.AnswerMetrics;
 import com.ragpeat.chat.Turn;
-import jakarta.annotation.PreDestroy;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +37,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
  *   event: done     data: {"answer": ..., "sources": [...]}   la respuesta final, con sus fuentes
  *   event: error    data: {"error": "..."}            algo falló a mitad
  *
- * Si la pregunta no es válida o se pasa del límite, responde como antes: un JSON con 400 o 429.
+ * Si la pregunta no es válida o se pasa del límite, responde como antes: un JSON con 400 o 429. Si ya hay demasiadas
+ * respuestas generándose a la vez, 503.
  */
 @RestController
 public class ChatController {
@@ -56,18 +59,25 @@ public class ChatController {
     private final ClientInfo clientInfo;
 
     /**
+     * Cuántas respuestas se generan a la vez como mucho. Los límites por IP y por día cuentan preguntas, no cuántas
+     * van en paralelo: sin esto, muchas IPs a la vez podrían abrir cientos de llamadas a Claude y a Voyage de golpe.
+     */
+    private final Semaphore generating;
+
+    /**
      * La respuesta se genera en OTRO hilo: así el hilo que atiende la petición queda libre enseguida
      * y la conexión sigue abierta mientras Claude escribe. Usamos hilos virtuales (Java 21): son tan
      * ligeros que podemos tener miles a la vez esperando a Claude sin agotar el servidor.
      */
-    private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
+    private final ThreadFactory workers = Thread.ofVirtual().name("chat-", 0).factory();
 
     public ChatController(ChatService chatService, ConversationRepository conversations, RateLimiter rateLimiter,
-                          ClientInfo clientInfo) {
+                          ClientInfo clientInfo, @Value("${chat.limit.concurrent:20}") int maxConcurrent) {
         this.chatService = chatService;
         this.conversations = conversations;
         this.rateLimiter = rateLimiter;
         this.clientInfo = clientInfo;
+        this.generating = new Semaphore(maxConcurrent);
     }
 
     // Lo que llega y lo que sale, como records: Spring los convierte de/a JSON automáticamente.
@@ -110,25 +120,59 @@ public class ChatController {
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse("La pregunta debe tener entre 1 y " + MAX_QUESTION_LENGTH + " caracteres."));
         }
-        // 429 Too Many Requests: esta persona (o todo el mundo hoy) ha llegado al límite.
-        if (!rateLimiter.tryAcquire(clientInfo.ip(http))) {
-            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-                    .body(new ErrorResponse("Has hecho muchas preguntas seguidas. Prueba de nuevo dentro de un rato."));
+        // 503: ya hay demasiadas respuestas en marcha. Va antes del límite por IP para no gastarle una pregunta.
+        if (!generating.tryAcquire()) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header(HttpHeaders.RETRY_AFTER, "30")
+                    .body(new ErrorResponse("Hay muchas preguntas a la vez. Prueba de nuevo en unos segundos."));
         }
+        boolean started = false;
+        try {
+            // 429 Too Many Requests: esta persona (o todo el mundo hoy) ha llegado al límite.
+            if (!rateLimiter.tryAcquire(clientInfo.ip(http))) {
+                return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                        .body(new ErrorResponse("Has hecho muchas preguntas seguidas. Prueba de nuevo dentro de un rato."));
+            }
 
-        // La huella se calcula aquí, en el hilo de la petición: el objeto "http" no se puede usar
-        // desde otro hilo cuando la petición ya ha pasado a modo streaming.
-        String visitor = clientInfo.visitorHash(http);
-        SseEmitter emitter = new SseEmitter(STREAM_TIMEOUT_MS);
-        boolean internal = Boolean.TRUE.equals(request.internal());
-        String pageLang = "en".equals(request.lang()) || "es".equals(request.lang()) ? request.lang() : null;
-        executor.execute(() -> respond(question, request.conversationId(), visitor, internal, pageLang, emitter));
-        return ResponseEntity.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(emitter);
+            // La huella se calcula aquí, en el hilo de la petición: el objeto "http" no se puede usar
+            // desde otro hilo cuando la petición ya ha pasado a modo streaming.
+            String visitor = clientInfo.visitorHash(http);
+            SseEmitter emitter = new SseEmitter(STREAM_TIMEOUT_MS);
+            boolean internal = Boolean.TRUE.equals(request.internal());
+            String pageLang = "en".equals(request.lang()) || "es".equals(request.lang()) ? request.lang() : null;
+            AtomicBoolean closed = new AtomicBoolean();
+            Thread worker = workers.newThread(() -> {
+                try {
+                    respond(question, request.conversationId(), visitor, internal, pageLang, emitter, closed);
+                } finally {
+                    generating.release();
+                }
+            });
+            // Si la conexión termina antes que la respuesta (la persona cierra la página, se agota el tiempo o falla
+            // la red), se deja de generar: interrumpir el hilo corta la llamada a Claude o a Voyage que esté en curso.
+            // Cuando la respuesta ya ha terminado, interrumpir un hilo acabado no hace nada.
+            Runnable cancel = () -> {
+                closed.set(true);
+                worker.interrupt();
+            };
+            emitter.onTimeout(cancel);
+            emitter.onError(e -> cancel.run());
+            emitter.onCompletion(cancel);
+            worker.start();
+            started = true;
+            return ResponseEntity.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(emitter);
+        } finally {
+            if (!started) {
+                generating.release();
+            }
+        }
     }
 
-    /** Se ejecuta en un hilo virtual: genera la respuesta y la va mandando por el emitter. */
+    /**
+     * Se ejecuta en un hilo virtual: genera la respuesta y la va mandando por el emitter.
+     * @param closed true cuando la conexión ya terminó y chat() ha interrumpido este hilo.
+     */
     private void respond(String question, UUID requestedId, String visitor, boolean internal, String pageLang,
-                         SseEmitter emitter) {
+                         SseEmitter emitter, AtomicBoolean closed) {
         long start = System.currentTimeMillis();
         try {
             // Si nos mandan una conversación que existe, seguimos en ella; si no (primera pregunta,
@@ -162,29 +206,42 @@ public class ChatController {
                             answer.inputTokens(), answer.outputTokens(), answer.searches()));
             send(emitter, "done", new ChatResponse(answer.text(), sources, conversationId, messageId));
             emitter.complete();
+        } catch (ClientGone e) {
+            log.debug("El cliente se desconectó: se deja de generar la respuesta");
         } catch (Exception e) {
+            if (closed.get()) {
+                // chat() interrumpió el hilo porque la conexión ya terminó: no es un fallo y no queda nadie a quien avisar.
+                log.debug("Respuesta cancelada: la conexión terminó antes");
+                return;
+            }
             // Falló algo nuestro o de un servicio externo (Claude, Voyage, la base de datos).
             // Al usuario no le enseñamos detalles internos; los dejamos en el log para nosotros.
             log.error("Error respondiendo a la pregunta", e);
-            send(emitter, "error", new ErrorResponse("No he podido responder ahora mismo. Inténtalo de nuevo en unos minutos."));
-            emitter.complete();
+            try {
+                send(emitter, "error", new ErrorResponse("No he podido responder ahora mismo. Inténtalo de nuevo en unos minutos."));
+                emitter.complete();
+            } catch (ClientGone gone) {
+                log.debug("No se pudo avisar del error: el cliente se desconectó");
+            }
+        }
+    }
+
+    /** La conexión con el navegador ya no existe: no tiene sentido seguir pagando por generar la respuesta. */
+    private static final class ClientGone extends RuntimeException {
+        ClientGone(Exception cause) {
+            super(cause.getMessage(), cause, false, false);
         }
     }
 
     /**
-     * Manda un evento. Si el usuario ha cerrado la página, el envío falla: no es un error nuestro,
-     * así que lo anotamos y seguimos. (La respuesta de Claude se termina de generar igualmente.)
+     * Manda un evento. Si el usuario ha cerrado la página o se agotó el tiempo, el envío falla: no es un error
+     * nuestro, pero sí la señal para dejar de generar (ClientGone corta el bucle de Claude en ChatService).
      */
     private void send(SseEmitter emitter, String event, Object data) {
         try {
             emitter.send(SseEmitter.event().name(event).data(data, MediaType.APPLICATION_JSON));
         } catch (IOException | IllegalStateException e) {
-            log.debug("No se pudo enviar el evento '{}': el cliente se desconectó", event);
+            throw new ClientGone(e);
         }
-    }
-
-    @PreDestroy
-    void shutdown() {
-        executor.shutdown(); // al parar la app, no aceptar más tareas
     }
 }
