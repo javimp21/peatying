@@ -75,7 +75,7 @@ public class DocumentReader {
                 .model(model)
                 .maxTokens(4000L)
                 .addUserMessageOfBlockParams(List.of(file, ContentBlockParam.ofText(PROMPT)))
-                .build());
+                .build(), AnthropicConfig.WEB_REQUEST);
         String text = response.content().stream().flatMap(b -> b.text().stream()).map(TextBlock::text)
                 .reduce("", String::concat).strip();
         if (text.isEmpty() || text.equals("SIN TEXTO")) {

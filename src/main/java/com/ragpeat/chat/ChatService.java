@@ -270,7 +270,7 @@ public class ChatService {
     private Message streamTurn(MessageCreateParams params, ChatListener listener) {
         MessageAccumulator accumulator = MessageAccumulator.create();
         // try-with-resources: la conexión de streaming se cierra sola al terminar, incluso si hay un error.
-        try (StreamResponse<RawMessageStreamEvent> stream = claude.messages().createStreaming(params)) {
+        try (StreamResponse<RawMessageStreamEvent> stream = claude.messages().createStreaming(params, AnthropicConfig.WEB_REQUEST)) {
             stream.stream().forEach(event -> {
                 accumulator.accumulate(event);
                 event.contentBlockDelta()
@@ -321,7 +321,10 @@ public class ChatService {
     private String runSearch(ToolUseBlock toolUse, List<SearchResult> sources, ChatListener listener) {
         // La entrada llega como JSON: {"query": "...", "keywords": "..."}. convert() la pasa al record.
         SearchInput input = toolUse._input().convert(SearchInput.class);
-        log.info("Claude busca -> query: \"{}\" | keywords: \"{}\"", input.query(), input.keywords());
+        // Solo tamaños: la búsqueda sale de la pregunta (puede llevar nombres o datos de salud) y los logs van a
+        // CloudWatch, que no pasa por el filtro de datos personales ni se borra a los 12 meses.
+        log.info("Claude busca -> query: {} caracteres | keywords: {} caracteres",
+                input.query() == null ? 0 : input.query().length(), input.keywords() == null ? 0 : input.keywords().length());
         listener.onSearch(input.query());
 
         StringBuilder text = new StringBuilder();

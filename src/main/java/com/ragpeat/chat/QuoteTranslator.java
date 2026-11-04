@@ -45,7 +45,7 @@ public class QuoteTranslator {
                 .maxTokens(6000L)
                 .outputConfig(OutputConfig.builder().effort(OutputConfig.Effort.LOW).build())
                 .addUserMessage(PROMPT + json.writeValueAsString(quotes))
-                .build());
+                .build(), AnthropicConfig.WEB_REQUEST);
         String text = response.content().stream()
                 .flatMap(block -> block.text().stream())
                 .map(TextBlock::text)

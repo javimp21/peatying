@@ -89,7 +89,7 @@ Sonnet never rewrites the text: it only returns ranges of sentence numbers per s
 
 Content-Security-Policy and other security headers, HSTS, no SSH (port 22 closed), private encrypted database, least-privilege IAM role, secrets only in SSM. Public pages built from user actions (shared answers) only contain text read from the database and sources verified against the corpus, never what the browser sends.
 
-No IPs are stored. Visitors are counted with a daily-salted anonymous hash; the country comes from an offline DB-IP database on the server, so the IP never leaves it (the city was dropped: on mobile data it is the carrier's, not the user's). Questions are stored with ID numbers, birth dates, record numbers, emails and phones redacted, and deleted after 12 months by a nightly job. No cookies; the chat history lives only in the user's browser.
+No IPs are stored. Visitors are counted with a daily-salted anonymous hash; the country comes from an offline DB-IP database on the server, so the IP never leaves it (the city was dropped: on mobile data it is the carrier's, not the user's). Questions are stored with ID numbers, birth dates, record numbers, emails and phones redacted, and deleted after 12 months by a nightly job; logs record only the size of each search, never its text. No cookies; the chat history lives only in the user's browser.
 
 ## Run locally
 

@@ -69,7 +69,7 @@ public class LanguageHint {
                     .maxTokens(20L)
                     .outputConfig(OutputConfig.builder().effort(OutputConfig.Effort.LOW).build())
                     .addUserMessage(PROMPT + own)
-                    .build());
+                    .build(), AnthropicConfig.WEB_REQUEST);
             String name = response.content().stream()
                     .flatMap(block -> block.text().stream())
                     .map(TextBlock::text)
