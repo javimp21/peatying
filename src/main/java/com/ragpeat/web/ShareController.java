@@ -86,9 +86,14 @@ public class ShareController {
         if (request.conversationId() == null || request.messageId() == null) {
             return ResponseEntity.badRequest().build();
         }
-        // Ya compartida: el mismo enlace (sin gastar el límite).
-        Optional<String> existing = jdbc.sql("SELECT id FROM shared_answers WHERE message_id = :m")
-                .param("m", request.messageId()).query(String.class).optional();
+        // Ya compartida: el mismo enlace (sin gastar el límite). También aquí hace falta el id secreto de la
+        // conversación: los ids de los mensajes son correlativos y, sin comprobarlo, cualquiera podría ir probándolos
+        // y sacar el enlace de las respuestas que otros compartieron.
+        Optional<String> existing = jdbc.sql("""
+                SELECT s.id FROM shared_answers s
+                JOIN chat_messages m ON m.id = s.message_id
+                WHERE s.message_id = :m AND m.conversation_id = :c AND m.role = 'assistant'
+                """).param("m", request.messageId()).param("c", request.conversationId()).query(String.class).optional();
         if (existing.isPresent()) {
             return ResponseEntity.ok(new ShareResponse("/r/" + existing.get()));
         }
