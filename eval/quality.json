@@ -73,7 +73,7 @@
   { "id": "hola", "question": "hola",
     "expect": "Saludar brevemente y sugerir dos o tres temas o preguntas posibles sobre Ray Peat. Sin buscar ni citar." },
   { "id": "patata", "question": "patata",
-    "expect": "Es un mensaje de una sola palabra: preguntar en una frase qué quiere saber, con 2 o 3 opciones concretas (qué pensaba de ella, si encaja en su dieta, cómo prepararla)." },
+    "expect": "Una sola palabra que nombra un tema concreto: contar directamente lo principal que decía Peat de la patata, sin preguntar antes qué quiere saber." },
   { "id": "blake", "question": "¿Qué tiene que ver William Blake con la biología?",
     "expect": "Cómo usaba Peat a Blake para hablar de biología (percepción, imaginación, visión del organismo)." },
   { "id": "grounding", "question": "What did Peat think about grounding?",

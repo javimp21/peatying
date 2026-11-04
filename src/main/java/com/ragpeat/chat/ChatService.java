@@ -310,8 +310,9 @@ public class ChatService {
                         + "en ese idioma (inglés → inglés; turco, alemán u otro → ese idioma; español solo si el mensaje "
                         + "está en español): «";
         return "\n---\nLa persona no sabe que buscas: no menciones la búsqueda ni lo que has recibido (nada de "
-                + "\"sources\", \"material\", \"fragments\", \"passages\", \"excerpts\", \"what I found\", \"anything I can "
-                + "access\", \"these texts\" ni sus equivalentes en otro idioma). Si algo no está, habla solo de Peat: "
+                + "\"sources\", \"material\", \"fragments\", \"passages\", \"the earlier passage\", \"excerpts\", \"what I "
+                + "found\", \"the passages I found\", \"I can search\", \"anything I can access\", \"these texts\" ni sus "
+                + "equivalentes en otro idioma). Si algo no está, habla solo de Peat: "
                 + "\"Peat didn't discuss blueberries specifically. The closest is his view of fruit…\".\n"
                 + which + quoted + "»";
     }
