@@ -226,21 +226,6 @@ document.addEventListener("pointerdown", (event) => {
   if (isTouch && document.activeElement === input && !event.target.closest("#ask-form")) input.blur();
 });
 
-/**
- * Avisa al servidor de que alguien ha abierto la página, para contar visitas aunque no pregunte.
- * Es anónimo (el servidor solo guarda una huella diaria) y si falla no pasa nada: no molesta al usuario.
- */
-function countVisit() {
-  if (isInternal) return;               // nuestras propias visitas no cuentan
-  fetch("/api/visit", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    // De qué página viene (el servidor guarda solo el dominio). Vacío si se llega directo.
-    // ref: la marca de un enlace que pusimos nosotros (?ref=reddit), para saberlo aunque la app no diga el origen.
-    body: JSON.stringify({ referrer: document.referrer, ref: new URLSearchParams(location.search).get("ref") }),
-  }).catch(() => {});
-}
-
 /** Un aviso pequeño abajo que desaparece solo a los 4 segundos. */
 function showToast(text) {
   const toast = document.createElement("div");
@@ -1869,4 +1854,3 @@ if (isInternal) {
   document.querySelector(".footer").appendChild(note);
 }
 focusInputIfDesktop();
-countVisit();

@@ -174,6 +174,11 @@ public class AdminController {
                 FROM page_views WHERE day > CURRENT_DATE - 30
                 GROUP BY 1 ORDER BY 2 DESC LIMIT 250   -- todos los países (hay unos 200)
                 """).query().listOfRows());
+        result.put("aiBots", jdbc.sql("""
+                SELECT bot, page, sum(hits) AS hits
+                FROM ai_bot_hits WHERE day > CURRENT_DATE - 30
+                GROUP BY 1, 2 ORDER BY 3 DESC LIMIT 500
+                """).query().listOfRows());
         result.put("votes", jdbc.sql("""
                 SELECT count(*) FILTER (WHERE m.feedback = 1) AS up,
                        count(*) FILTER (WHERE m.feedback = -1) AS down,

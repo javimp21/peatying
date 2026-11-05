@@ -40,8 +40,9 @@ public class VisitController {
      * referrer: la página de la que viene el visitante (document.referrer), o vacío si llega directo.
      * ref: la marca de un enlace nuestro (peatying.com/en?ref=reddit). Si viene, manda sobre el referrer:
      * las apps (Reddit, WhatsApp...) no dicen de dónde viene la visita, pero el enlace sí.
+     * utm: la marca que añaden otros al enlazarnos (ChatGPT pone utm_source=chatgpt.com). Por lo mismo, va antes del referrer.
      */
-    record VisitRequest(String referrer, String ref) {}
+    record VisitRequest(String referrer, String ref, String utm) {}
 
     @PostMapping("/api/visit")
     public ResponseEntity<Void> visit(@RequestBody(required = false) VisitRequest request, HttpServletRequest http) {
@@ -63,17 +64,25 @@ public class VisitController {
         return ResponseEntity.noContent().build();
     }
 
-    /** De dónde llega: la marca del enlace ("reddit") si la hay; si no, el dominio de la página de origen. */
+    /** De dónde llega: la marca del enlace ("reddit", "chatgpt.com") si la hay; si no, el dominio de la página de origen. */
     static String origin(VisitRequest request) {
         if (request == null) {
             return null;
         }
-        String ref = request.ref() == null ? "" : request.ref().strip().toLowerCase(Locale.ROOT);
-        // Solo letras, números y guiones, y corta: la escribe quien comparte el enlace, pero cualquiera puede cambiarla.
+        String ref = mark(request.ref());
+        // Solo letras, números y guiones (en utm, también puntos) y corta: la pone quien enlaza, pero cualquiera puede cambiarla.
         if (ref.matches("[a-z0-9-]{1,30}")) {
             return ref;
         }
+        String utm = mark(request.utm());
+        if (utm.matches("[a-z0-9.-]{1,30}")) {
+            return utm;
+        }
         return referrerHost(request.referrer());
+    }
+
+    private static String mark(String value) {
+        return value == null ? "" : value.strip().toLowerCase(Locale.ROOT);
     }
 
     /**

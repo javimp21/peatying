@@ -27,6 +27,7 @@ public class RetentionJob {
     public void purge() {
         int conversations = jdbc.sql("DELETE FROM conversations WHERE created_at < now() - interval '12 months'").update();
         int visits = jdbc.sql("DELETE FROM page_views WHERE day < CURRENT_DATE - interval '24 months'").update();
+        jdbc.sql("DELETE FROM ai_bot_hits WHERE day < CURRENT_DATE - interval '24 months'").update();
         if (conversations > 0 || visits > 0) {
             log.info("Borradas {} conversaciones de hace más de 12 meses y {} visitas de hace más de 24", conversations, visits);
         }

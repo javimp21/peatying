@@ -298,6 +298,7 @@ public class ShareController {
                   <meta name="twitter:card" content="summary_large_image">
                   <link rel="icon" href="/img/favicon-mascota.png" type="image/png" sizes="144x144">
                   <script src="/theme.js"></script>
+                  <script src="/visit.js"></script>
                   <link rel="stylesheet" href="/styles.css">
                 </head>
                 <body class="topic-page">

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.ragpeat.topics.TopicsCommand.Faq;
 import com.ragpeat.topics.TopicsCommand.Page;
@@ -22,7 +23,7 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Convierte el contenido de cada tema en una página HTML fija, en español (static/temas/<slug>.html) y en
  * inglés (static/en/topics/<slug>.html), más el índice de cada idioma y el sitemap.xml con todas las páginas.
- * Sin JavaScript: así cualquier buscador o asistente de IA puede leerla entera.
+ * El contenido no necesita JavaScript: así cualquier buscador o asistente de IA puede leerla entera.
  * Cada página enlaza con su traducción (hreflang) para que Google sepa que son la misma en dos idiomas.
  */
 @Component
@@ -36,7 +37,7 @@ public class TopicPageRenderer {
     record Lang(String code, String locale, Path out, String base, String home, String topics, String toChat,
                 String crumbs, String faq, String sources, String article, String interview, String book,
                 String ask, String open, String close, String note, String indexTitle, String indexDescription,
-                String indexIntro) {
+                String indexIntro, String related) {
 
         String type(String type) {
             return "interview".equals(type) ? interview : "book".equals(type) ? book : article;
@@ -51,7 +52,8 @@ public class TopicPageRenderer {
             "Temas: las ideas de Ray Peat",
             "Las ideas de Ray Peat sobre el azúcar, la tiroides, el estrés, los aceites vegetales y más, resumidas en español con sus fuentes.",
             "Lo que pensaba Ray Peat sobre cada tema, resumido en español y con enlaces a sus artículos y entrevistas originales. "
-                    + "Para preguntar lo que quieras, usa el <a href=\"/\">chatbot</a>.");
+                    + "Para preguntar lo que quieras, usa el <a href=\"/\">chatbot</a>.",
+            "Temas relacionados");
 
     static final Lang EN = new Lang("en", "en_GB", STATIC.resolve("en").resolve("topics"), "/en/topics", "/en", "Topics",
             "Go to the chat", "Topics", "Frequently asked questions", "Sources", "article",
@@ -61,7 +63,8 @@ public class TopicPageRenderer {
             "Topics: Ray Peat's ideas explained",
             "Ray Peat's ideas on sugar, the thyroid, stress, vegetable oils and more, summarised with their sources.",
             "What Ray Peat thought about each topic, summarised with links to his original articles and interviews. "
-                    + "To ask anything you like, use the <a href=\"/en\">chatbot</a>.");
+                    + "To ask anything you like, use the <a href=\"/en\">chatbot</a>.",
+            "Related topics");
 
     private final JsonMapper json;
 
@@ -72,17 +75,27 @@ public class TopicPageRenderer {
     /**
      * @param pages   los temas en español, en el orden del índice.
      * @param english su traducción, en el mismo orden (null donde un tema aún no está traducido).
+     * @param related por cada tema (slug en español), los temas a los que enlaza (slugs en español).
      */
-    public void writeAll(List<Page> pages, List<Page> english) throws IOException {
+    public void writeAll(List<Page> pages, List<Page> english, Map<String, List<String>> related) throws IOException {
         List<Page> translated = new ArrayList<>();
         Files.createDirectories(ES.out());
         Files.createDirectories(EN.out());
+        // Los enlaces se escriben en español; su posición da la misma página en inglés.
+        Map<String, Integer> position = new LinkedHashMap<>();
+        for (int i = 0; i < pages.size(); i++) {
+            position.put(pages.get(i).slug(), i);
+        }
         for (int i = 0; i < pages.size(); i++) {
             Page es = pages.get(i);
             Page en = english.get(i);
-            Files.writeString(ES.out().resolve(es.slug() + ".html"), page(es, ES, en == null ? null : EN.base() + "/" + en.slug()));
+            List<Integer> links = related.getOrDefault(es.slug(), List.of()).stream()
+                    .map(position::get).filter(Objects::nonNull).toList();
+            Files.writeString(ES.out().resolve(es.slug() + ".html"), page(es, ES, en == null ? null : EN.base() + "/" + en.slug(),
+                    links.stream().map(pages::get).toList()));
             if (en != null) {
-                Files.writeString(EN.out().resolve(en.slug() + ".html"), page(en, EN, ES.base() + "/" + es.slug()));
+                Files.writeString(EN.out().resolve(en.slug() + ".html"), page(en, EN, ES.base() + "/" + es.slug(),
+                        links.stream().map(english::get).filter(Objects::nonNull).toList()));
                 translated.add(en);
             }
         }
@@ -95,8 +108,11 @@ public class TopicPageRenderer {
 
     // --- Una página de tema ----------------------------------------------------------
 
-    /** @param otherPath la misma página en el otro idioma (/en/topics/sugar), o null si no existe. */
-    String page(Page p, Lang t, String otherPath) {
+    /**
+     * @param otherPath la misma página en el otro idioma (/en/topics/sugar), o null si no existe.
+     * @param related   los temas a los que enlaza: el índice ya llega a todos, pero así cada página lleva a las cercanas.
+     */
+    String page(Page p, Lang t, String otherPath, List<Page> related) {
         String url = SITE + t.base() + "/" + p.slug();
         // Corto a propósito (Bing avisa a partir de ~70 caracteres): "Ray Peat y el azúcar · Ray Peat Chatbot".
         String title = p.title();
@@ -117,6 +133,14 @@ public class TopicPageRenderer {
         }
         body.append("</dl>\n");
         body.append(askBox(p.question(), t));
+        if (!related.isEmpty()) {
+            body.append("<h2>").append(t.related()).append("</h2>\n<ul class=\"topic-related\">\n");
+            for (Page other : related) {
+                body.append("<li><a href=\"").append(t.base()).append("/").append(other.slug()).append("\">")
+                        .append(esc(other.title())).append("</a></li>\n");
+            }
+            body.append("</ul>\n");
+        }
         body.append("<h2>").append(t.sources()).append("</h2>\n<ol class=\"topic-sources\">\n");
         for (int i = 0; i < p.sources().size(); i++) {
             Source s = p.sources().get(i);
@@ -237,6 +261,7 @@ public class TopicPageRenderer {
                   <link rel="icon" href="/img/favicon-mascota.png" type="image/png" sizes="144x144">
                   <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
                   <script src="/theme.js"></script>
+                  <script src="/visit.js"></script>
                   <link rel="stylesheet" href="/styles.css">
                 %4$s</head>
                 <body class="topic-page">

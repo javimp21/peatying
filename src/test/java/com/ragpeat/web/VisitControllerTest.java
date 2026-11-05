@@ -24,15 +24,22 @@ class VisitControllerTest {
 
     @Test
     void laMarcaDelEnlace_mandaSobreElReferrer() {
-        assertThat(VisitController.origin(new VisitController.VisitRequest("", "reddit"))).isEqualTo("reddit");
-        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.reddit.com/", " Reddit "))).isEqualTo("reddit");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("", "reddit", null))).isEqualTo("reddit");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.reddit.com/", " Reddit ", null))).isEqualTo("reddit");
     }
 
     @Test
     void marcaRaraOVacia_seUsaElReferrer() {
-        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.google.com/", "<script>"))).isEqualTo("google.com");
-        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.google.com/", "x".repeat(31)))).isEqualTo("google.com");
-        assertThat(VisitController.origin(new VisitController.VisitRequest("", null))).isNull();
+        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.google.com/", "<script>", "<script>"))).isEqualTo("google.com");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.google.com/", "x".repeat(31), "x".repeat(31)))).isEqualTo("google.com");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("", null, null))).isNull();
         assertThat(VisitController.origin(null)).isNull();
+    }
+
+    @Test
+    void laMarcaDeChatGpt_seVeAunqueLaAppNoDigaElOrigen_peroLaNuestraManda() {
+        assertThat(VisitController.origin(new VisitController.VisitRequest("", null, "chatgpt.com"))).isEqualTo("chatgpt.com");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("https://www.google.com/", null, " ChatGPT.com "))).isEqualTo("chatgpt.com");
+        assertThat(VisitController.origin(new VisitController.VisitRequest("", "reddit", "chatgpt.com"))).isEqualTo("reddit");
     }
 }

@@ -106,7 +106,32 @@ $("only-down").addEventListener("change", renderConversations);
 
 const num = (n) => Number(n || 0).toLocaleString("es-ES");
 
-function renderSummary({ visits, daily, referrers, locations, votes }) {
+/** Para qué lee cada rastreador, según lo que cuenta cada compañía. El nombre sale de ahí: ver AiBotCounter. */
+const BOT_PURPOSE = {
+  "ChatGPT-User": "para responder a alguien",
+  "Claude-User": "para responder a alguien",
+  "Perplexity-User": "para responder a alguien",
+  "Meta-ExternalFetcher": "para responder a alguien",
+  "MistralAI-User": "para responder a alguien",
+  "OAI-SearchBot": "para su buscador",
+  "Claude-SearchBot": "para su buscador",
+  "PerplexityBot": "para su buscador",
+  "DuckAssistBot": "para su buscador",
+};
+
+function renderAiBots(rows) {
+  const total = (key) => {
+    const sums = new Map();
+    rows.forEach((r) => sums.set(r[key], (sums.get(r[key]) || 0) + Number(r.hits)));
+    return [...sums].sort((a, b) => b[1] - a[1]);
+  };
+  const bots = total("bot").map(([bot, hits]) => [`${bot} · ${BOT_PURPOSE[bot] || "para entrenar o indexar"}`, hits]);
+  fillTable($("ai-bots"), bots);
+  fillTable($("ai-pages"), total("page"));
+  $("ai-bots-top").textContent = top3(total("bot")) || "Ninguna lectura todavía";
+}
+
+function renderSummary({ visits, daily, referrers, locations, aiBots, votes }) {
   const last30 = (rows) => rows.filter((r) => new Date(r.day) > Date.now() - 30 * 864e5);
   const sum = (rows, key) => rows.reduce((total, r) => total + Number(r[key] || 0), 0);
   const visitors = sum(last30(visits), "visitors");
@@ -134,6 +159,7 @@ function renderSummary({ visits, daily, referrers, locations, votes }) {
   // Con el desplegable cerrado, los tres primeros se ven igualmente en la cabecera.
   $("referrers-top").textContent = top3(referrers.map((r) => [r.origin, r.visitors]));
   $("locations-top").textContent = top3(locations.map((r) => [r.country, r.visitors]));
+  renderAiBots(aiBots);
 }
 
 const top3 = (rows) => rows.slice(0, 3).map(([name, n]) => `${name} ${num(n)}`).join(" · ");

@@ -74,7 +74,8 @@ public class TopicsCommand implements CommandLineRunner {
             Entre 4 y 6 secciones (1 o 2 párrafos cada una) y entre 3 y 4 preguntas.
             """;
 
-    record Topic(String slug, String name, String title, String question, List<List<String>> searches) {}
+    /** related: los temas a los que enlaza su página, elegidos a mano (slugs en español). */
+    record Topic(String slug, String name, String title, String question, List<String> related, List<List<String>> searches) {}
 
     record Section(String heading, List<String> paragraphs) {}
 
@@ -123,7 +124,9 @@ public class TopicsCommand implements CommandLineRunner {
         // La traducción al inglés (topics/generated-en/<slug español>.json) se hizo a mano, sin la API: aquí solo se pinta.
         List<Page> pages = new ArrayList<>();
         List<Page> english = new ArrayList<>();
+        Map<String, List<String>> related = new LinkedHashMap<>();
         for (Topic topic : topics) {
+            related.put(topic.slug(), topic.related());
             Path file = GENERATED.resolve(topic.slug() + ".json");
             if (Files.exists(file)) {
                 pages.add(json.readValue(file.toFile(), Page.class));
@@ -131,7 +134,7 @@ public class TopicsCommand implements CommandLineRunner {
                 english.add(Files.exists(translation) ? json.readValue(translation.toFile(), Page.class) : null);
             }
         }
-        renderer.writeAll(pages, english);
+        renderer.writeAll(pages, english, related);
         log.info("Pintadas {} páginas de temas ({} en inglés)", pages.size(), english.stream().filter(p -> p != null).count());
     }
 
