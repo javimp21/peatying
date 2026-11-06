@@ -116,6 +116,7 @@ const TEXT = {
     fileTooBig: "El archivo tiene que pesar menos de 5 MB.",
     readingDocument: (name) => `📄 ${name} · leyendo el documento…`,
     documentFail: "No he podido leer el documento. Prueba otra vez.",
+    tooManyDocuments: (max) => `Ya hay ${max} documentos en esta conversación. Para adjuntar otro, empieza una nueva.`,
     micStart: "Preguntar por voz",
     micStop: "Parar y pasar a texto",
     listening: (s) => `🔴 Te escucho… ${s} s`,   // corto: en el móvil la caja es estrecha
@@ -178,6 +179,7 @@ const TEXT = {
     fileTooBig: "The file must be smaller than 5 MB.",
     readingDocument: (name) => `📄 ${name} · reading the document…`,
     documentFail: "I couldn't read the document. Please try again.",
+    tooManyDocuments: (max) => `This conversation already has ${max} documents. To attach another, start a new one.`,
     micStart: "Ask by voice",
     micStop: "Stop and turn into text",
     listening: (s) => `🔴 Listening… ${s} s`,
@@ -1508,7 +1510,7 @@ function saveCurrentConversation() {
   // El nombre: el puesto a mano con "Renombrar" o, si no, la primera pregunta (o el documento, si aún no hay).
   const previous = history.find((h) => h.id === conversationId);
   const automatic = (messages.find((m) => m.role === "user")?.text
-    ?? (currentDocumentName() ? `📄 ${currentDocumentName()}` : TEXT.conversation)).slice(0, 120);
+    ?? (documentNames().length ? `📄 ${documentNames()[0]}` : TEXT.conversation)).slice(0, 120);
   const title = previous?.renamed ? previous.title : automatic;
   const entry = { id: conversationId, title, renamed: Boolean(previous?.renamed), updatedAt: Date.now(), messages };
   const others = history.filter((h) => h.id !== conversationId);
@@ -1520,7 +1522,7 @@ function openConversation(entry) {
   conversationId = entry.id;
   setChatting(true);
   for (const message of entry.messages) addMessage(message, { animate: false });
-  if (currentDocumentName()) showDocChip(`📄 ${currentDocumentName()}`);
+  showDocChip(documentsChipText());
   historyDialog.close();
   // Abajo del todo, donde se sigue preguntando (sin animación: es una conversación que ya existía).
   window.scrollTo({ top: document.body.scrollHeight });
@@ -1658,7 +1660,9 @@ function prefillFromLink() {
 // --- Adjuntar un documento (analítica, informe...) ---------------------------------
 // El servidor saca el texto del PDF o de la foto, lo guarda con la conversación sin datos personales y
 // descarta el archivo. Desde ese momento el bot lo tiene delante en todas las preguntas de la conversación.
+// Se acumulan, hasta MAX_DOCUMENTS (el servidor también lo comprueba).
 const MAX_DOCUMENT_BYTES = 5 * 1024 * 1024;
+const MAX_DOCUMENTS = 3;
 const attachButton = document.getElementById("attach");
 const docInput = document.getElementById("doc-input");
 const docChip = document.getElementById("doc-chip");
@@ -1678,6 +1682,7 @@ function showDocChip(text) {
 
 async function uploadDocument(file) {
   hideError();
+  if (documentNames().length >= MAX_DOCUMENTS) return showError(TEXT.tooManyDocuments(MAX_DOCUMENTS));
   if (file.size > MAX_DOCUMENT_BYTES) return showError(TEXT.fileTooBig);
   attachButton.disabled = true;
   showDocChip(TEXT.readingDocument(file.name));
@@ -1692,20 +1697,25 @@ async function uploadDocument(file) {
     conversationId = data.conversationId;
     setChatting(true);
     addMessage({ role: "doc", name: data.name });
-    showDocChip(`📄 ${data.name}`);
+    showDocChip(documentsChipText());
     saveCurrentConversation();
     focusInputIfDesktop();
   } catch (e) {
-    showDocChip(currentDocumentName() ? `📄 ${currentDocumentName()}` : "");
+    showDocChip(documentsChipText());
     showError(e.message);
   } finally {
     attachButton.disabled = false;
   }
 }
 
-/** El último documento adjuntado en esta conversación (se puede sustituir por otro). */
-function currentDocumentName() {
-  return [...messages].reverse().find((m) => m.role === "doc")?.name ?? null;
+/** Los documentos adjuntados en esta conversación, en orden. */
+function documentNames() {
+  return messages.filter((m) => m.role === "doc").map((m) => m.name);
+}
+
+function documentsChipText() {
+  const names = documentNames();
+  return names.length ? `📄 ${names.join(" · ")}` : "";
 }
 
 // --- Preguntar por voz ------------------------------------------------------

@@ -32,16 +32,40 @@ public class ConversationRepository {
         return id;
     }
 
-    /** El texto del documento adjunto a la conversación, o null. */
+    /** Documentos que admite una conversación: cada uno se le envía a Claude en todas las preguntas siguientes. */
+    public static final int MAX_DOCUMENTS = 3;
+
+    /** El texto de los documentos adjuntos a la conversación, o null. */
     public String documentText(UUID id) {
         return jdbc.sql("SELECT document_text FROM conversations WHERE id = :id")
                 .param("id", id).query(String.class).optional().orElse(null);
     }
 
-    /** Guarda (o sustituye) el documento de la conversación: solo el nombre y el texto, nunca el archivo. */
-    public void saveDocument(UUID id, String name, String text) {
-        jdbc.sql("UPDATE conversations SET document_name = :name, document_text = :text WHERE id = :id")
-                .param("id", id).param("name", name).param("text", text).update();
+    /** Cuántos documentos lleva la conversación (0 si no existe). */
+    public int documentCount(UUID id) {
+        return jdbc.sql("SELECT document_count FROM conversations WHERE id = :id")
+                .param("id", id).query(Integer.class).optional().orElse(0);
+    }
+
+    /**
+     * Añade un documento a los que ya tenga la conversación: solo el nombre y el texto, nunca el archivo.
+     * Todo en una sola sentencia: dos subidas a la vez no se pisan ni pasan del tope.
+     *
+     * @return false si la conversación ya tenía el máximo (y entonces no se guarda)
+     */
+    public boolean addDocument(UUID id, String name, String text) {
+        return jdbc.sql("""
+                UPDATE conversations
+                SET document_name = COALESCE(document_name || ', ', '') || :name,
+                    document_text = COALESCE(document_text || :separator, '') || :section,
+                    document_count = document_count + 1
+                WHERE id = :id AND document_count < :max
+                """)
+                .param("id", id).param("name", name)
+                .param("separator", "\n\n")
+                .param("section", "[" + name + "]\n" + text)
+                .param("max", MAX_DOCUMENTS)
+                .update() > 0;
     }
 
     /** Datos de una respuesta del bot para las métricas. */

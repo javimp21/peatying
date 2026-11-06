@@ -66,6 +66,10 @@ public class DocumentController {
         if (kind.isEmpty()) {
             return ResponseEntity.badRequest().body(new ErrorResponse("Solo se pueden adjuntar PDF o fotos (JPG, PNG o WebP)."));
         }
+        // Antes de leerlo: leer cuesta dinero, y no se le gasta un documento de su límite por IP.
+        if (conversationId != null && conversations.documentCount(conversationId) >= ConversationRepository.MAX_DOCUMENTS) {
+            return tooManyDocuments();
+        }
         // Antes del límite por IP: si no hay hueco, no se le gasta un documento.
         if (!reading.tryAcquire()) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).header(HttpHeaders.RETRY_AFTER, "30")
@@ -93,11 +97,19 @@ public class DocumentController {
             UUID id = conversationId != null && conversations.exists(conversationId)
                     ? conversationId
                     : conversations.create(clientInfo.visitorHash(http), internal);
-            conversations.saveDocument(id, displayName(file.getOriginalFilename()), text.get());
-            return ResponseEntity.ok(new DocumentResponse(id, displayName(file.getOriginalFilename())));
+            String name = displayName(file.getOriginalFilename());
+            if (!conversations.addDocument(id, name, text.get())) {
+                return tooManyDocuments();
+            }
+            return ResponseEntity.ok(new DocumentResponse(id, name));
         } finally {
             reading.release();
         }
+    }
+
+    private static ResponseEntity<ErrorResponse> tooManyDocuments() {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(
+                "Ya hay " + ConversationRepository.MAX_DOCUMENTS + " documentos en esta conversación. Para adjuntar otro, empieza una nueva."));
     }
 
     /** Solo el nombre, corto y sin rutas ni caracteres raros (se muestra en la página y en el panel). */
