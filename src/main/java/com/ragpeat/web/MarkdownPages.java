@@ -49,6 +49,7 @@ public class MarkdownPages extends OncePerRequestFilter {
             "/en/about", "static/en/about.html",
             "/privacidad", "static/privacidad.html",
             "/en/privacy", "static/en/privacy.html",
+            "/privacy", "static/en/privacy.html",           // en HTML redirige a /en/privacy (WebConfig)
             "/temas", "static/temas/index.html",
             "/en/topics", "static/en/topics/index.html");
 

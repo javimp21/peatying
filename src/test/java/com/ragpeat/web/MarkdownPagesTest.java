@@ -22,6 +22,7 @@ class MarkdownPagesTest {
         assertThat(MarkdownPages.source("/")).isEqualTo("static/md/index.md");
         assertThat(MarkdownPages.source(MarkdownPages.normalize("/en/"))).isEqualTo("static/md/en.md");
         assertThat(MarkdownPages.source("/temas/sal")).isEqualTo("static/temas/sal.html");
+        assertThat(MarkdownPages.source("/privacy")).isEqualTo("static/en/privacy.html");
         assertThat(MarkdownPages.source("/en/topics/salt")).isEqualTo("static/en/topics/salt.html");
         assertThat(MarkdownPages.source("/temas/../panel")).isNull();
         assertThat(MarkdownPages.source("/panel")).isNull();

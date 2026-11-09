@@ -3,6 +3,7 @@ package com.ragpeat.web;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -36,6 +37,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/en/").setViewName("forward:/en/index.html");
         registry.addViewController("/en/about").setViewName("forward:/en/about.html");
         registry.addViewController("/en/privacy").setViewName("forward:/en/privacy.html");
+        // /privacy es donde agentes y validadores buscan la política de privacidad: lleva a la versión en inglés.
+        registry.addRedirectViewController("/privacy", "/en/privacy").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
     }
 
     @Bean
