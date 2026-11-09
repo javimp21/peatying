@@ -1,0 +1,81 @@
+{
+  "slug" : "proteina-carne",
+  "name" : "las proteínas y la carne",
+  "title" : "Ray Peat, las proteínas y la carne",
+  "question" : "¿Por qué decía que la carne muscular sola no basta?",
+  "description" : "Qué pensaba Ray Peat de la proteína y la carne: por qué recelaba de la carne muscular, su apuesta por la gelatina y los lácteos y el papel del azúcar.",
+  "intro" : "Ray Peat no era contrario a la proteína: sostenía que un adulto necesita bastante cada día [1]. Lo que le preocupaba era la carne muscular, rica en triptófano, cisteína y metionina, aminoácidos que según él frenan el tiroides y alimentan el estrés [2][3]. Por eso prefería repartir la proteína entre gelatina, lácteos y otros alimentos, y no comer solo músculo [2][1].",
+  "sections" : [ {
+    "heading" : "Por qué desconfiaba de la carne muscular",
+    "paragraphs" : [ "Para Peat, comer solo carne magra hace que a la sangre llegue la misma mezcla de aminoácidos que se produce en una situación de estrés intenso, cuando el exceso de cortisol degrada el músculo propio para obtener energía [2]. Explicaba que el músculo es muy rico en triptófano y cisteína, y que ambos frenan la función tiroidea [4].", "Según él, el triptófano se convierte en serotonina, esta estimula la producción de más cortisol, y el cortisol intensifica la degradación muscular, que libera más triptófano. Así se forma un círculo que, en su opinión, también deprime el tiroides [2][5]." ]
+  }, {
+    "heading" : "La gelatina como proteína preferida",
+    "paragraphs" : [ "Peat destacaba que la gelatina no contiene triptófano y solo tiene pequeñas cantidades de cisteína, metionina e histidina [2]. Por eso la consideraba una forma sencilla de restringir los aminoácidos que, a su juicio, se asocian con los problemas del envejecimiento [2]. Citaba además experimentos con animales en los que quitar casi toda la metionina alargaba la vida entre un 30 y un 40 por ciento [6].", "También defendía comer el animal entero, con caldos de pescado, patas de pollo o carrillada, porque así se obtiene mucha glicina y gelatina, lo que para él da un equilibrio de aminoácidos más sano que el del músculo solo [2]. Señalaba que quienes comen las partes duras del animal toman más gelatina que quienes comen filetes tiernos [6]. Preguntado por su proteína favorita, confirmó que era la gelatina [1]." ]
+  }, {
+    "heading" : "Cuánta proteína necesita un adulto",
+    "paragraphs" : [ "Peat citaba un estudio de la Academia Nacional de Ciencias de Estados Unidos para el ejército, según el cual incluso mujeres y hombres de tamaño medio con trabajo de oficina necesitaban al menos unos 100 gramos de proteína al día [1]. En otras ocasiones se le oyó hablar de 75 a 100 gramos diarios [7]. En un programa de suplementación para épocas de estrés propuso unos 90 gramos, con hígado, huevos, leche y marisco [8].", "Añadía que una parte importante de esa cantidad podía ser gelatina en los adultos, y que para un niño en crecimiento una dosis grande de gelatina refinada desplazaría otros alimentos necesarios [2]. En su opinión, los requerimientos de triptófano y cisteína son muy bajos en la edad adulta [2], aunque no son nulos: se necesitan para renovar tejidos como el pelo, la piel y las células del intestino [3]." ]
+  }, {
+    "heading" : "Edad, actividad y proteína",
+    "paragraphs" : [ "Según Peat, un joven en crecimiento y con metabolismo muy alto necesita más proteína rica en metionina, cisteína y triptófano, y esa proporción cambia con la edad y con el nivel de actividad [3]. Decía que el metabolismo cae rápido tras la pubertad y después baja de forma constante cada año, de modo que cuanto mayor es una persona, más cuidado conviene tener con el exceso de aminoácidos excitotóxicos [7].", "Contaba que Broda Barnes, al comer mucha más carne, tuvo que duplicar su dosis de tiroides. Peat lo interpretaba como el efecto de desplazar carbohidratos y liberar aminoácidos que, según él, suprimen el tiroides [3]." ]
+  }, {
+    "heading" : "Por qué unir la proteína con azúcar",
+    "paragraphs" : [ "Peat sostenía que una comida abundante en proteína y sin azúcar ni otros carbohidratos dispara la insulina, y esta baja la glucosa en sangre. Esa bajada, según él, empuja el cortisol al alza y provoca una gran subida de esta hormona [9][5]. Atribuía a ello que algunas personas parezcan diabéticas o muy hiperglucémicas por comer demasiada carne sin carbohidratos [9].", "Para él, la consecuencia práctica era mantener un equilibrio entre proteínas y azúcares y tomar siempre azúcares junto con la proteína [9]. Añadía que el azúcar frena el cortisol, con lo que se ahorra proteína, y que además inhibe la liberación crónica de ácidos grasos desde las reservas [10]." ]
+  }, {
+    "heading" : "Leche y fruta frente a la carne",
+    "paragraphs" : [ "Peat observaba que las proteínas de mayor calidad suelen ser las más ricas en metionina, cisteína y triptófano, que consideraba potencialmente tóxicas en exceso, con riesgo de convulsiones o inflamación [1]. Según él, la leche aporta factores contra el estrés que compensan el efecto de esos aminoácidos, y su alto contenido en calcio sería el más importante [1].", "En una entrevista, el presentador recordó que Peat recomendaba sacar la mayor parte de la proteína de los lácteos y limitar los huevos a dos al día, y Peat respondió que, ya adulto, conviene guiarse por los impulsos biológicos propios y no por la publicidad [7]." ]
+  } ],
+  "faq" : [ {
+    "q" : "¿Qué pensaba Ray Peat de comer mucha carne?",
+    "a" : "Según Peat, es fácil pasarse con la proteína, sobre todo si desplaza a los carbohidratos, porque se liberan triptófano, cisteína y metionina, que para él frenan el tiroides [3]. Sostenía que la carne muscular sola reproduce el equilibrio de aminoácidos del estrés extremo [2]."
+  }, {
+    "q" : "¿Por qué Ray Peat prefería la gelatina a la carne?",
+    "a" : "Porque, según él, la gelatina carece de triptófano y tiene poca cisteína, metionina e histidina, aminoácidos que relacionaba con inflamación y envejecimiento [2]. También decía que tolera mejor dosis altas de proteína quien la toma en forma de gelatina natural [3]."
+  }, {
+    "q" : "¿Cuánta proteína al día recomendaba Ray Peat?",
+    "a" : "Citaba un estudio de la Academia Nacional de Ciencias que fijaba un mínimo de unos 100 gramos al día para trabajar con eficacia [1], y en otra entrevista se habló de 75 a 100 gramos [7]. Opinaba que buena parte podía venir de gelatina en los adultos [2]."
+  }, {
+    "q" : "¿Por qué decía Peat que hay que comer azúcar con la proteína?",
+    "a" : "Explicaba que la proteína sin carbohidratos estimula la insulina, baja la glucosa y eleva el cortisol [9]. Según él, el azúcar frena el cortisol y permite ahorrar proteína [10]."
+  } ],
+  "sources" : [ {
+    "title" : "One Radio Network: Oxygen saturation lactic acid thyroid vaccines pufas (2020)",
+    "url" : "https://www.toxinless.com/orn-200120-oxygen-saturation-lactic-acid-thyroid-vaccines-pufas.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Gelatin, stress, longevity",
+    "url" : "https://raypeat.com/articles/articles/gelatin.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Generative Energy: Bioenergetic Nutrition Basics, \"The Ray Peat Diet\", Appetite and Metabolism (2021)",
+    "url" : "https://d3ctxlq1ktw2nl.cloudfront.net/staging/2021-3-25/f0b7be3e-6477-07bc-24c3-1711673bca8e.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Multiple sclerosis, protein, fats, and progesterone",
+    "url" : "https://raypeat.com/articles/articles/ms.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Glycemia, starch, and sugar in context",
+    "url" : "https://raypeat.com/articles/articles/glycemia.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Radiation (2010)",
+    "url" : "https://www.toxinless.com/kmud-101217-radiation.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD), 2022-01-21",
+    "url" : "https://www.toxinless.com/kmud-220121.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Nutrition for Women, p. 92",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p92",
+    "type" : "book"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Sugar 1 (2010)",
+    "url" : "https://www.toxinless.com/kmud-100917-sugar-1.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Sugar 2 (2010)",
+    "url" : "https://www.toxinless.com/kmud-101015-sugar-2.mp3",
+    "type" : "interview"
+  } ]
+}

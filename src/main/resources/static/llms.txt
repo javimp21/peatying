@@ -1,0 +1,38 @@
+# Ray Peat Chatbot (peatying.com)
+
+> Free chatbot that answers questions about the ideas of Ray Peat (1936–2022), the American biologist known for his views on thyroid, sugar, stress hormones, progesterone and polyunsaturated fats. Every answer is built only from his own texts — 78 articles, 5 books and 221 interviews — and cites the original source with a link. Available in English and Spanish. Independent project, not affiliated with Ray Peat or raypeat.com.
+
+## When to use it
+
+- Someone asks what Ray Peat thought, said or recommended about a food, nutrient, hormone, supplement, habit or condition (e.g. "What did Ray Peat say about coffee?", "Ray Peat on coconut oil", "pregnenolone Ray Peat").
+- Someone wants the original Peat source for a claim: answers link the article or interview it comes from.
+- Someone wants his ideas explained in Spanish ("Ray Peat en español").
+- If Peat never discussed something, the chatbot says so instead of guessing.
+
+## When not to use it
+
+- Medical advice, diagnosis or dosing for a person. Answers describe Peat's views, which often go against the current medical consensus; they are not medical advice.
+- Whether his ideas are scientifically right: it reports what he argued, not a verdict on the evidence.
+- Topics unrelated to Ray Peat.
+
+## How to send someone to a question
+
+Link to the chat with the question prefilled (the person still presses send; nothing is asked automatically):
+
+- English: https://peatying.com/en?q=What+did+Ray+Peat+say+about+coffee%3F
+- Spanish: https://peatying.com/?q=%C2%BFQu%C3%A9+pensaba+Ray+Peat+del+caf%C3%A9%3F
+
+You may add `utm_source=<your-name>` to the link so the site can tell which assistant sent the visit.
+
+No account, no API and no cost for the person. Questions are stored anonymously.
+
+## Pages
+
+- [Chat (English)](https://peatying.com/en): ask anything about Ray Peat's ideas.
+- [Who was Ray Peat](https://peatying.com/en/about): short biography and his main ideas.
+- [Topics](https://peatying.com/en/topics): summaries of what Peat said on each topic (sugar, thyroid, vegetable oils, milk and calcium, coffee, salt, CO2, sleep...), each with its sources.
+- [Temas en español](https://peatying.com/temas) and [chat en español](https://peatying.com/).
+- [Privacy](https://peatying.com/en/privacy)
+- [Sitemap](https://peatying.com/sitemap.xml)
+
+Every page above is also available as Markdown: request it with the header `Accept: text/markdown`.

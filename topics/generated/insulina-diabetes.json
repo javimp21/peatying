@@ -1,0 +1,77 @@
+{
+  "slug" : "insulina-diabetes",
+  "name" : "la insulina y la diabetes",
+  "title" : "Ray Peat, la insulina y la diabetes",
+  "question" : "¿Qué causaba la diabetes según Peat?",
+  "description" : "Qué sostenía Ray Peat sobre la insulina y la diabetes: el papel de los ácidos grasos poliinsaturados, el azúcar y la energía celular, según sus textos.",
+  "intro" : "Para Ray Peat, la diabetes no la causa el azúcar sino los ácidos grasos libres, sobre todo los poliinsaturados (PUFA), que impiden a las células usar la glucosa [1][2]. Sostenía que estos ácidos grasos dañan la producción de energía en las mitocondrias y también las células del páncreas que fabrican insulina [3][4]. Por eso consideraba que la obsesión dietética con el azúcar había sido un desvío peligroso para entender estas enfermedades [3].",
+  "sections" : [ {
+    "heading" : "La idea central: grasas, no azúcar",
+    "paragraphs" : [ "Según Peat, hace décadas unos fisiólogos de Israel comprendieron que lo que provoca la diabetes son los ácidos grasos libres y no el azúcar. Estos ácidos grasos se producen cuando el organismo está bajo estrés [1]. Añadía que un investigador argentino, en estudios hechos casi de pasada, había visto que el azúcar protegía frente a la diabetes [2].", "Para él, los experimentos de Bernardo Houssay en los años cuarenta, en los que el azúcar y el aceite de coco protegían contra la diabetes, y la demostración posterior de Randle de que las grasas y la glucosa compiten entre sí, apuntaban en esa dirección [3]. A ello sumaba el creciente reconocimiento de que los PUFA causan resistencia a la insulina y dañan el páncreas [3]." ]
+  }, {
+    "heading" : "Cómo bloquean las grasas el uso de la glucosa",
+    "paragraphs" : [ "Peat explicaba que, según Randle, cuanto más suben los ácidos grasos libres, menos capacidad hay de utilizar glucosa. Como ejemplo citaba a pacientes hospitalizados a los que se les administra por vía intravenosa una emulsión de aceite de soja: en unos 15 minutos, su capacidad para metabolizar la glucosa prácticamente desaparecía [2]. Consideraba que ese es el efecto diabetógeno instantáneo de los ácidos grasos [2].", "Según él, los ácidos grasos libres frenan la respiración mitocondrial, de modo que la célula recurre más a la glucólisis y produce ácido láctico [4]. En los diabéticos, la frecuente concentración alta de ácido láctico indicaría que la glucosa sí entra en la célula pero no puede usarse de forma oxidativa [5]. El lactato viaja al hígado, que lo convierte en más glucosa [5]. Además, uno de los puntos donde los ácidos grasos frenan el uso de la glucosa es su conversión en fructosa dentro de la glucólisis [6]." ]
+  }, {
+    "heading" : "Daño al páncreas y a los vasos sanguíneos",
+    "paragraphs" : [ "Peat sostenía que una exposición breve a los PUFA ya puede dañar las células del páncreas que secretan insulina y las mitocondrias, y que la exposición prolongada causa un daño progresivo [3]. Si se mantiene en el tiempo, no solo se bloquea el uso de la glucosa en los tejidos, sino que se sobrecargan y envenenan las células beta pancreáticas [2]. Así, los mismos efectos tóxicos explicarían la resistencia a la insulina de la diabetes tipo 2 y, al dañar o matar las células beta, un déficit de insulina parecido al de la tipo 1 [4].", "También señalaba que los PUFA libres aumentan la permeabilidad de los capilares, algo detectable al comienzo de la resistencia a la insulina. Con la exposición crónica la fuga crece, aparece albúmina en la orina y se dañan la retina, el cerebro y otros órganos [3]. Recordaba, además, que las primeras píldoras anticonceptivas producían signos de diabetes, y que en 1966 se propuso que la causa podía ser una elevación de los ácidos grasos libres [7]." ]
+  }, {
+    "heading" : "El azúcar y la fructosa en la diabetes",
+    "paragraphs" : [ "Peat recordaba que en el siglo XIX algunos médicos trataron la diabetes añadiendo sacarosa a la dieta, y que en 1874 se publicó que los diabéticos asimilan la fructosa mejor que la glucosa. Tras el descubrimiento de la insulina en 1922, esa terapia con fructosa quedó prácticamente olvidada [6][8].", "Según su explicación, la fructosa puede saltarse el bloqueo que los ácidos grasos imponen a la glucosa y seguir alimentando el metabolismo oxidativo [6]. Citaba un trabajo según el cual los diabéticos tienen menos fructosa de lo normal en el suero, y concluía que era razonable aportarla con la dieta [6]. Decía también que en algunos estudios el azúcar estimulaba la regeneración de las células beta del páncreas [2]. Aun así, admitía que quien come más de lo que necesita engorda [1]." ]
+  }, {
+    "heading" : "Grasas que consideraba protectoras",
+    "paragraphs" : [ "Para Peat, los PUFA son tóxicos para el sistema de producción de energía de las células, y la diabetes sería solo una de las enfermedades terminales que pueden causar los aceites vegetales poliinsaturados. En su opinión, el aceite de coco protege mucho frente a ella [7].", "Explicaba que, si no hay exceso de PUFA, el organismo puede desaturar parte de las grasas saturadas que fabrica a partir de los carbohidratos o que obtiene de alimentos como el chocolate o la carne de vaca. Así produce la serie omega-9, que según él es antiinflamatoria y protege frente a los ácidos grasos omega-3 y omega-6 de origen vegetal [9]. El ácido oleico, la grasa principal del aguacate y del aceite de oliva, pertenece a esa serie [9]." ]
+  }, {
+    "heading" : "Su crítica a la visión médica dominante",
+    "paragraphs" : [ "Peat afirmaba que creer que comer azúcar causa diabetes es una idea precientífica que sigue sosteniendo probablemente la mayoría de los médicos. Recordaba que Claude Bernard descubrió en 1848 que el cuerpo fabrica azúcar a partir de las proteínas de los tejidos [6]. También explicaba que el nombre de diabetes se extendió a las personas obesas con glucosa alta cuando se generalizó medir la glucemia [6].", "Señalaba que, pese a la insulina, otros fármacos y las campañas para cambiar la alimentación, la mortalidad por diabetes ha aumentado durante el último siglo, y la tipo 1 crece incluso entre los niños [4]. Según él, en torno a la diabetes y el azúcar se fue construyendo una cultura que beneficiaba a diversas industrias, entre ellas la de la insulina, y que acabó presentando como saludables aceites de semillas, aceites de pescado y otros productos [3]." ]
+  } ],
+  "faq" : [ {
+    "q" : "¿Causa el azúcar la diabetes según Ray Peat?",
+    "a" : "No. Peat sostenía que lo que causa la diabetes son los ácidos grasos libres, en particular los poliinsaturados, y no el azúcar [1][2]. Para él, creer lo contrario es una idea precientífica todavía muy extendida entre los médicos [6]."
+  }, {
+    "q" : "¿Qué es la resistencia a la insulina para Peat?",
+    "a" : "Según Peat, es el resultado de que los ácidos grasos libres, especialmente los PUFA, frenan la respiración mitocondrial y la oxidación de la glucosa. Así, la glucosa no puede usarse aunque entre en la célula [5][4]. Añadía que los efectos tóxicos de los PUFA explican la resistencia a la insulina de la diabetes tipo 2 [4]."
+  }, {
+    "q" : "¿Por qué defendía Peat la fructosa y la sacarosa en la diabetes?",
+    "a" : "Sostenía que la fructosa puede esquivar el bloqueo que los ácidos grasos ejercen sobre la glucosa y seguir siendo oxidada [6]. Recordaba además que desde 1874 se sabía que los diabéticos la asimilan mejor que la glucosa, y que se llegó a tratar la diabetes con sacarosa [6][8]."
+  }, {
+    "q" : "¿Qué decía Peat del aceite de coco y de los PUFA en la diabetes?",
+    "a" : "Para él, los PUFA son tóxicos para la producción de energía celular y pueden contribuir a causar diabetes, mientras que el aceite de coco es muy protector [7]. Citaba además los experimentos de Houssay, en los que el aceite de coco y el azúcar protegían contra la diabetes [3]."
+  } ],
+  "sources" : [ {
+    "title" : "One Radio Network: Plethora of wide ranging questions (2019)",
+    "url" : "https://www.toxinless.com/orn-191015-plethora-of-wide-ranging-questions.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "EastWest Healing: Glycemia starch and sugar in context (2011)",
+    "url" : "https://www.toxinless.com/ewh-110427-glycemia-starch-and-sugar-in-context.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Glycemia, starch, and sugar in context",
+    "url" : "https://raypeat.com/articles/articles/glycemia.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Glucose and sucrose for diabetes",
+    "url" : "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Sugar 1 (2010)",
+    "url" : "https://www.toxinless.com/kmud-100917-sugar-1.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Sugar issues",
+    "url" : "https://raypeat.com/articles/articles/sugar-issues.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Diabetes, scleroderma, oils and hormones",
+    "url" : "https://raypeat.com/articles/articles/diabetes.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Sugar myths 2 (2011)",
+    "url" : "https://www.toxinless.com/kmud-111021-sugar-myths-2.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD), 2022-11-18",
+    "url" : "https://www.toxinless.com/kmud-221118.mp3",
+    "type" : "interview"
+  } ]
+}

@@ -1,0 +1,113 @@
+{
+  "slug" : "vitaminas",
+  "name" : "las vitaminas",
+  "title" : "Ray Peat y las vitaminas",
+  "question" : "¿Qué vitaminas consideraba más importantes?",
+  "description" : "Qué pensaba Ray Peat sobre las vitaminas: E como antiestrógeno, A y tiroides, D y K con el calcio, y niacinamida y riboflavina en la energía celular.",
+  "intro" : "Para Ray Peat, las vitaminas no eran simples complementos: las veía ligadas a las hormonas, a las grasas poliinsaturadas y al metabolismo energético de las células. Sostenía que la vitamina E es sobre todo un antagonista del estrógeno y no un mero antioxidante [1], y que otras como la A, la D, la K, la niacinamida y la riboflavina intervienen en la tiroides, el calcio y la respiración mitocondrial [2][3][4].",
+  "sections" : [ {
+    "heading" : "La vitamina E como antagonista del estrógeno",
+    "paragraphs" : [ "Según Peat, el estrógeno aumenta la síntesis de prostaglandinas y activa enzimas como la COX y la LOX, mientras que la vitamina E hace lo contrario [1]. También sostenía que el estrógeno libera enzimas de los lisosomas y que la vitamina E frena esa liberación [1].", "Los ácidos grasos poliinsaturados (PUFA) y las prostaglandinas actúan, a su juicio, como amplificadores de los efectos del estrógeno. Por eso pensaba que, si la vitamina E protege frente a esas grasas, ya eso explicaría parte de su efecto antiestrogénico [1]. Añadía que inhibe la lipólisis y que se une a los ácidos grasos libres para inactivarlos [1]." ]
+  }, {
+    "heading" : "Vitamina E, fertilidad y grasas poliinsaturadas",
+    "paragraphs" : [ "Peat contaba que su director de tesis comprobó en hámsteres que dar vitamina E extra retrasaba la infertilidad de la edad media [1]. En sus propios experimentos, la vitamina E aumentó el oxígeno en el útero y corrigió el déficit causado por estrógeno añadido o por la vejez [1]. Según él, el estrógeno reduce el oxígeno disponible para el embrión y la vitamina E lo aumenta [1].", "Señalaba que la necesidad de vitamina E crece con la edad y con la cantidad de grasa poliinsaturada de la dieta. Si se evitan con cuidado esas grasas, la necesidad sería muy baja [5]. En ratas, la cantidad necesaria para sostener la gestación aumentaba unas 65 veces durante el primer año de vida, y creía que el estrógeno eleva la necesidad de esta vitamina [6]." ]
+  }, {
+    "heading" : "Vitamina A, tiroides y caroteno",
+    "paragraphs" : [ "Para Peat, la vitamina A es el cofactor principal que permite a la tiroides convertir el colesterol en hormonas esteroideas [7]. Decía que ambas trabajan tan unidas que las transporta una sola proteína, la transtiretina, y que sin tiroides no se puede aprovechar la vitamina A [2].", "En ese contexto, afirmaba que el caroteno se acumula en los tejidos que fabrican esteroides cuando hay hipotiroidismo y compite con la vitamina A, con lo que tiene un efecto contrario a ella [7][2]. Recordaba que en los años treinta el color rojo de esos tejidos servía para confirmar la muerte por hipotiroidismo [2].", "También veía riesgos: creía que un exceso de vitamina A inhibe la tiroides y que hay menos riesgo de toxicidad si se toma a la vez vitamina E [8]. Tanto su deficiencia como un gran exceso liberan enzimas que disuelven el cartílago [8]." ]
+  }, {
+    "heading" : "Vitaminas D y K y el control del calcio",
+    "paragraphs" : [ "Según Peat, la vitamina D o una ingesta alta de calcio apagan la hormona paratiroidea, y eso evitaría la calcificación de los tejidos blandos [9]. Prefería el sol a los suplementos [9]. Cuando hablaba de vitamina D se refería al colecalciferol, no a la forma 1,25-hidroxilada, que según él hace el trabajo sucio de la paratiroidea [3]. Sostenía además que las vitaminas D y K necesitan dióxido de carbono para manejar bien el calcio [10].", "De la vitamina K2 decía que bloquea la pérdida de calcio del hueso provocada por la hormona paratiroidea porque impide la producción de ácido láctico, y que favorece la formación de proteínas óseas [11]. Afirmaba que las proteínas C y S, que evitan la coagulación anormal, no pueden fabricarse sin ella [12]. Añadía que mucha investigación la respalda en la hipertensión, aunque a su juicio la mayoría de los médicos la desaconseja por su fama de vitamina coagulante [13]. Mencionaba casos de dosis altas con descenso de la tensión y decía que en Japón se usaron dosis muy superiores a las dietéticas sin problemas [12][14]." ]
+  }, {
+    "heading" : "Vitaminas B: niacinamida y riboflavina",
+    "paragraphs" : [ "Peat defendía la niacinamida porque, según él, aporta energía al sistema mitocondrial, reduce la excitación celular y ayuda a estabilizar los sistemas de reparación [4]. Explicaba que el estrógeno interfiere en la formación de niacina a partir del triptófano [4]. Insistía en usar la forma amida y no el ácido nicotínico, porque el rubor que este causa va con la liberación de serotonina, histamina y prostaglandinas tóxicas. Decía que la niacina «sin rubor» libera lo mismo, solo que más despacio [15][16].", "De la riboflavina (B2) decía que es un componente de las enzimas respiratorias de la mitocondria y que la luz la destruye con facilidad [4]. Relataba el caso de un niño con hemorragias nasales y arrebatos de ira que mejoraron tras una dosis de riboflavina, y lo atribuía a un déficit energético [4]. Sobre las dosis, criticaba el exceso del movimiento ortomolecular y prefería probar primero la dosis más pequeña posible, de unas cinco veces el mínimo diario [16]." ]
+  }, {
+    "heading" : "Su crítica a la versión oficial sobre las vitaminas",
+    "paragraphs" : [ "Peat sostenía que en los años cuarenta se redefinió la vitamina E como antioxidante, y que ese cambio desvió la atención de su relación con el estrógeno y las grasas insaturadas [5][1]. Según él, la industria del estrógeno y la de los aceites de semillas se beneficiaron de esa idea, y la investigación sobre sus efectos curativos se frenó durante unos 40 años [17][1].", "Afirmaba también que en los años setenta las farmacéuticas con formas sintéticas de vitamina A promovieron historias exageradas sobre la toxicidad de la natural. Eso habría hecho que mucha gente dejara de comer hígado, que para él es una fuente importante de vitamina E y de vitamina K [1]. Aun así, reconocía que las vitaminas A y D pueden ser tóxicas en cantidades grandes [18]." ]
+  } ],
+  "faq" : [ {
+    "q" : "¿Consideraba Ray Peat que la vitamina E es un antioxidante?",
+    "a" : "Según Peat, esa es una redefinición posterior: antes de los años cuarenta se la veía como antiestrógeno [5]. Para él, su papel principal es contrarrestar los efectos del estrógeno y de las grasas poliinsaturadas, y no solo proteger de la oxidación [1]."
+  }, {
+    "q" : "¿Qué relación veía Peat entre la vitamina A y la tiroides?",
+    "a" : "Sostenía que ambas trabajan muy unidas: comparten proteína de transporte y, sin tiroides, no se puede usar la vitamina A [2]. Decía además que en el hipotiroidismo el caroteno se acumula y compite con la vitamina A [7][2]."
+  }, {
+    "q" : "¿Por qué prefería Peat la niacinamida al ácido nicotínico?",
+    "a" : "Según él, el rubor del ácido nicotínico va acompañado de la liberación de serotonina, histamina y prostaglandinas tóxicas, y la niacina «sin rubor» libera lo mismo más despacio [15]. Para Peat, la forma amida evita eso [16]."
+  }, {
+    "q" : "¿Qué pensaba Peat de las vitaminas D y K?",
+    "a" : "Creía que la vitamina D, junto con el calcio, mantiene baja la hormona paratiroidea, y que la K2 protege el hueso frente a su acción [9][11]. Defendía la K frente a su fama de favorecer los coágulos, porque hacen falta para fabricar las proteínas C y S [12]."
+  } ],
+  "sources" : [ {
+    "title" : "Vitamin E: Estrogen antagonist, energy promoter, and anti-inflammatory",
+    "url" : "https://raypeat.com/articles/articles/vitamin-e.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Thyroid polyunsaturated fats and oils (2009)",
+    "url" : "https://www.toxinless.com/kmud-090401-thyroid-polyunsaturated-fats-and-oils.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Generative Energy: CO2 and Mineral Balance, Thyroid, Magnesium, Calcium in Health and Disease, Current Events (2020)",
+    "url" : "https://d3ctxlq1ktw2nl.cloudfront.net/staging/2020-9-3/df8a82b8-e939-431b-228d-8f6d24fbc262.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Rosacea, inflammation, and aging: The inefficiency of stress",
+    "url" : "https://raypeat.com/articles/articles/rosacea-inflammation-aging.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Blood pressure regulation heart failure muscle atrophy (2012)",
+    "url" : "https://www.toxinless.com/kmud-120720-blood-pressure-regulation-heart-failure-muscle-atrophy.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Nutrition for Women, p. 13",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p13",
+    "type" : "book"
+  }, {
+    "title" : "World Puja: Foundational hormones (2012)",
+    "url" : "https://www.toxinless.com/wp-121123-foundational-hormones.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "From PMS to Menopause, p. 108",
+    "url" : "https://raypeat.com/products.shtml#from-pms-to-menopause-p108",
+    "type" : "book"
+  }, {
+    "title" : "One Radio Network: Top contrarian on health (2019)",
+    "url" : "https://www.toxinless.com/orn-191217-top-contrarian-on-health.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Glucose and sucrose for diabetes",
+    "url" : "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Osteoporosis, aging, tissue renewal, and product science",
+    "url" : "https://raypeat.com/articles/articles/osteoporosis-aging.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Questions and answers (2014)",
+    "url" : "https://www.toxinless.com/kmud-140117-questions-and-answers.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Heart and hormones",
+    "url" : "https://raypeat.com/articles/articles/heart-hormones.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Hair loss inflammation osteoporosis (2011)",
+    "url" : "https://www.toxinless.com/kmud-110715-hair-loss-inflammation-osteoporosis.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Longevity (2014)",
+    "url" : "https://www.toxinless.com/kmud-141017-longevity.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Progesterone vs estrogen listener questions part2 (2018)",
+    "url" : "https://www.toxinless.com/kmud-180518-progesterone-vs-estrogen-listener-questions-part2.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Antioxidants (2012)",
+    "url" : "https://www.toxinless.com/kmud-121019-antioxidants.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Nutrition for Women, p. 93",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p93",
+    "type" : "book"
+  } ]
+}

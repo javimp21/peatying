@@ -1,0 +1,85 @@
+{
+  "slug" : "intestino-endotoxinas",
+  "name" : "el intestino y las endotoxinas",
+  "title" : "Ray Peat, el intestino y las endotoxinas",
+  "question" : "¿Por qué le preocupaban las endotoxinas?",
+  "description" : "Qué sostenía Ray Peat sobre el intestino y las endotoxinas: cómo afectan a la energía celular, el estreñimiento, la fibra, las bacterias y las hormonas.",
+  "intro" : "Según Peat, la endotoxina es un fragmento de la cubierta de las bacterias intestinales que, cuando se absorbe en exceso, altera la producción de energía de las células y desencadena inflamación [1][2]. Para él, el estreñimiento crónico, la fibra mal elegida y el estrés favorecen esa absorción, con consecuencias que van mucho más allá del intestino [3][4][1].",
+  "sections" : [ {
+    "heading" : "Qué es la endotoxina según Peat",
+    "paragraphs" : [ "Peat explicaba que la endotoxina forma parte de la estructura de la cubierta bacteriana: una molécula parecida al almidón con ácidos grasos unidos. Las bacterias la liberan cuando se multiplican o sufren estrés [2].", "Según él, los organismos llevan tanto tiempo conviviendo con ella que funciona como una señal básica de que hay que defenderse del entorno. Por eso desencadena con facilidad sustancias como la serotonina y el óxido nítrico [2]. Además, tiene un efecto irritante sobre el revestimiento del intestino y sobre los vasos sanguíneos cuando la endotoxina logra salir del intestino [2]." ]
+  }, {
+    "heading" : "Energía celular y barrera intestinal",
+    "paragraphs" : [ "Para Peat, en presencia de endotoxina las células que recubren el intestino pierden su capacidad de producir energía por respiración, y el óxido nítrico sería probablemente el principal mediador de ese efecto [1]. La célula pasa de la respiración a la glucólisis, es decir, de producir dióxido de carbono a producir ácido láctico, y abandona su función especializada para dedicarse a procesos defensivos e inflamatorios [1].", "Sostenía que ese cambio modifica las propiedades del citoplasma, que tiende a hincharse y deja entrar sustancias que normalmente no pasarían [1]. Rechazaba la idea de que la permeabilidad se explique solo por huecos entre células: en su opinión, una célula inflamada o fatigada debilita su función de barrera, y por eso la permeabilidad varía según la sustancia [1]." ]
+  }, {
+    "heading" : "Estreñimiento, inflamación y círculos viciosos",
+    "paragraphs" : [ "Según Peat, el estreñimiento asociado a adrenalina alta prolonga la absorción de endotoxina bacteriana, mientras que una diarrea aguda arrastra rápidamente el contenido y suele reducirla. De ahí que considerara la diarrea ocasional algo en cierto modo terapéutico [4]. Recordaba además que desde hace siglos se asocia el estreñimiento crónico con el cáncer y otras enfermedades [4].", "Para él, el envejecimiento y el estrés aumentan mediadores inflamatorios que reducen la barrera intestinal, dejan pasar más toxinas bacterianas a la sangre y crean círculos viciosos de más inflamación y más permeabilidad [1]. Describía una pared intestinal que puede hincharse hasta engrosar mucho, estrechar la luz y perder capacidad de contracción, de modo que ni un estimulante ni la fibra voluminosa servirían en ese caso [1]. Defendía que los antiinflamatorios, como la aspirina o los antihistamínicos, pueden restaurar la contracción del músculo liso [1]. También señalaba que la hipofunción tiroidea y otros problemas endocrinos rara vez se consideran en el estreñimiento crónico [1]." ]
+  }, {
+    "heading" : "Fibra, alimentos y bacterias",
+    "paragraphs" : [ "Peat sostenía que los alimentos poco digeribles que llegan al intestino con valor nutritivo alimentan a las bacterias y favorecen su sobrecrecimiento. En cambio, la fruta se digiere y absorbe rápido, de modo que llega poco a la zona bacteriana [3]. Criticaba que se promueva la fibra y los almidones indigeribles para la salud intestinal: citaba estudios australianos en los que quienes comían mucho salvado de avena parecían tener más riesgo de cáncer de intestino [3][1].", "Según él, algunas fibras provocan un crecimiento bacteriano tan intenso que se producen otras toxinas además de la endotoxina, como proteínas y grasas modificadas a partir de alimento no digerido [3]. Aun así, pensaba que el tipo adecuado de fibra puede beneficiar varios problemas intestinales [1]. Como ejemplo, mencionaba la zanahoria cruda, que según él reduce la absorción de endotoxina y contiene antibióticos naturales [5][6]." ]
+  }, {
+    "heading" : "Endotoxina, hormonas y enfermedad",
+    "paragraphs" : [ "Para Peat, la endotoxina eleva el estrógeno en sangre, y el estreñimiento crónico o la ansiedad pueden aumentar la exposición del hígado a ella [7]. Añadía que un exceso de estrógeno respecto a la progesterona reduce la motilidad intestinal, probablemente al aumentar el óxido nítrico [1]. Según él, la penicilina, probablemente al reducir la producción de endotoxina, disminuye el estrógeno y la cortisona y aumenta la progesterona, y las zanahorias crudas lograrían un efecto parecido [7].", "También relacionaba la endotoxina con otros problemas. Decía haber visto casos de personas con estreñimiento crónico que sufrían ictus, aneurismas y coagulación anormal, y afirmaba que las hemorragias cerebrales están promovidas por la endotoxina y la inflamación que provoca [4]. Sobre el cáncer, defendía que reducir la absorción de endotoxina sería un enfoque mínimamente razonable, porque la endotoxemia puede producir glucólisis aerobia en una persona sana [5]. Señalaba además que el párkinson suele empezar con estreñimiento [8]." ]
+  }, {
+    "heading" : "Bacterias intestinales y antibióticos",
+    "paragraphs" : [ "Peat explicaba que las bacterias más inocuas del colon compiten con las más irritantes, y que muchos probióticos de tipo yogur no sobreviven a una digestión sana. A su juicio, hace falta algo que combine bacterias inofensivas con un antibiótico competitivo, y ponía como ejemplo productos basados en Bacillus subtilis [9]. Añadía que ciertos hongos y bacterias son a la vez probióticos y antibióticos, y que en pocas horas se nota si un suplemento antibiótico ayuda [10].", "Según él, parte del beneficio de los antibióticos se debe a la menor tensión por endotoxina al suprimir las bacterias intestinales [6]. Advertía de que esos fármacos eliminan las bacterias que producen vitamina K, por lo que conviene aportarla con la dieta [6][11]. Subrayaba, sin embargo, que no hay una sola sustancia patógena en el intestino: todo depende de las bacterias, de la comida y de cómo responde el intestino [8]." ]
+  } ],
+  "faq" : [ {
+    "q" : "¿Qué es la endotoxina según Ray Peat?",
+    "a" : "Para Peat es un fragmento de la cubierta de las bacterias, formado por una molécula parecida al almidón con ácidos grasos, que estas liberan al multiplicarse o al sufrir estrés [2]. Sostenía que actúa como señal de defensa y desencadena serotonina y óxido nítrico [2]."
+  }, {
+    "q" : "¿Por qué relacionaba Peat el estreñimiento con las endotoxinas?",
+    "a" : "Según él, el estreñimiento con adrenalina alta prolonga la absorción de endotoxina bacteriana [4]. También pensaba que la inflamación de la pared intestinal reduce la barrera y deja pasar más toxinas a la sangre [1]."
+  }, {
+    "q" : "¿Era Peat partidario de comer mucha fibra?",
+    "a" : "No de forma general. Sostenía que la fibra y los almidones indigeribles pueden alimentar un crecimiento bacteriano excesivo y producir toxinas, y citaba el salvado de avena como ejemplo asociado a más riesgo de cáncer intestinal [3][1]. Consideraba, no obstante, que el tipo adecuado de fibra, como la zanahoria cruda, puede ser beneficioso [5][1]."
+  }, {
+    "q" : "¿Qué papel daba Peat a la zanahoria cruda?",
+    "a" : "Según Peat, una zanahoria rallada con sal y vinagre puede mejorar mucho la salud intestinal y reducir la absorción de endotoxina [5]. Añadía que contiene antibióticos naturales y que puede reducir el estrógeno de forma parecida a la penicilina [7][6]."
+  } ],
+  "sources" : [ {
+    "title" : "Cascara, energy, cancer and the FDA's laxative abuse",
+    "url" : "https://raypeat.com/articles/articles/cascara-energy-cancer-fda-laxative-abuse.shtml",
+    "type" : "article"
+  }, {
+    "title" : "EastWest Healing: Inflammation (2011)",
+    "url" : "https://www.toxinless.com/ewh-110118-inflammation.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Endotoxins (2010)",
+    "url" : "https://www.toxinless.com/kmud-101119-endotoxins.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Politics & Science: Digestion (2010)",
+    "url" : "https://www.toxinless.com/polsci-100426-digestion.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Lactate vs. CO2 in wounds, sickness, and aging; the other approach to cancer",
+    "url" : "https://raypeat.com/articles/articles/lactate.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Rosacea, inflammation, and aging: The inefficiency of stress",
+    "url" : "https://raypeat.com/articles/articles/rosacea-inflammation-aging.shtml",
+    "type" : "article"
+  }, {
+    "title" : "From PMS to Menopause, p. 40",
+    "url" : "https://raypeat.com/products.shtml#from-pms-to-menopause-p40",
+    "type" : "book"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Endocrinology part1 parkinsons (2017)",
+    "url" : "https://www.toxinless.com/kmud-170317-endocrinology-part1-parkinsons.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "JodelleFit: How to fix your digestion poop (2019)",
+    "url" : "https://www.toxinless.com/jf-190910-how-to-fix-your-digestion-poop.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD), 2021-06-18",
+    "url" : "https://www.toxinless.com/kmud-210618.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Nutrition for Women, p. 96",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p96",
+    "type" : "book"
+  } ]
+}
