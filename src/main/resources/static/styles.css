@@ -883,7 +883,16 @@ li .source-panel { margin: 8px 0 4px; }
 .kpis strong { display: block; font: 400 2.6rem/1 var(--display); color: var(--ink); }
 .kpis span { font-size: 0.85rem; color: var(--muted); }
 /* El dibujo va a su tamaño real (un ancho fijo por día): si no cabe, el recuadro se desplaza en horizontal. */
-.panel-chart { overflow-x: auto; overscroll-behavior-x: contain; }
+.panel-chart {
+  overflow-x: auto; overscroll-behavior-x: contain; padding-bottom: 6px;
+  /* Barra fina con los colores de la página, sin flechas ni fondo blanco. */
+  scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+}
+.panel-chart::-webkit-scrollbar { height: 6px; }
+.panel-chart::-webkit-scrollbar-track { background: transparent; }
+.panel-chart::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+.panel-chart::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+.panel-chart::-webkit-scrollbar-button { display: none; }
 .panel-chart svg { display: block; }
 .panel-chart text { font: 14px var(--sans); fill: var(--muted); }
 .panel-chart text.chart-count { font-weight: 700; font-size: 16px; fill: var(--ink); }
