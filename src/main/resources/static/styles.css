@@ -867,7 +867,9 @@ li .source-panel { margin: 8px 0 4px; }
 .topic-index span { display: block; margin-top: 4px; font-size: 0.95rem; color: var(--muted); }
 
 /* --- Panel privado (peatying.com/panel) ------------------------------------- */
-.panel { max-width: 1000px; margin: 0 auto; padding: 24px 20px 80px; color: var(--text-soft); }
+/* width: 100% porque, con margin auto dentro de un flex, el ancho sería el de su contenido: el gráfico ancho
+   lo estiraría en vez de desplazarse. */
+.panel { width: 100%; max-width: 1000px; box-sizing: border-box; margin: 0 auto; padding: 24px 20px 80px; color: var(--text-soft); }
 .panel h1 { margin: 0 0 6px; font: 400 4rem/0.9 var(--display); text-transform: uppercase; color: var(--ink); }
 .panel h2 { margin: 34px 0 10px; padding-top: 10px; border-top: var(--rule-bar) solid var(--ink); font: 400 1.1rem/1.2 var(--slab); text-transform: uppercase; color: var(--ink); }
 .panel-sub { font-size: 0.85rem; color: var(--muted); }
@@ -880,8 +882,9 @@ li .source-panel { margin: 8px 0 4px; }
 .kpis div { padding: 14px 16px; border-right: var(--rule-hair) solid var(--line); }
 .kpis strong { display: block; font: 400 2.6rem/1 var(--display); color: var(--ink); }
 .kpis span { font-size: 0.85rem; color: var(--muted); }
-.panel-chart svg { width: 100%; height: auto; display: block; }
-/* Medidas en unidades del dibujo (640 de ancho): en un móvil se ve a la mitad, así que no pueden ser más pequeñas. */
+/* El dibujo va a su tamaño real (un ancho fijo por día): si no cabe, el recuadro se desplaza en horizontal. */
+.panel-chart { overflow-x: auto; overscroll-behavior-x: contain; }
+.panel-chart svg { display: block; }
 .panel-chart text { font: 14px var(--sans); fill: var(--muted); }
 .panel-chart text.chart-count { font-weight: 700; font-size: 16px; fill: var(--ink); }
 .bar-visits { fill: var(--line); }

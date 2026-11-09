@@ -168,13 +168,16 @@ const top3 = (rows) => rows.slice(0, 3).map(([name, n]) => `${name} ${num(n)}`).
 function renderChart(rows) {
   const box = $("chart");
   if (rows.length === 0) { box.textContent = "Todavía no hay visitas."; return; }
-  const W = 640, H = 180, pad = 8, top = 42;    // top: sitio para las dos cifras encima de la barra más alta
-  const max = Math.max(...rows.map((r) => Number(r.visitors)), 1);
-  // Con pocos días, barras de 28 px como mucho (si no, un solo día ocuparía todo el ancho).
+  // Cada día tiene su ancho fijo (step), lo justo para que quepan sus cifras: con muchos días el dibujo es más
+  // ancho que la pantalla y el recuadro se desplaza en horizontal (empieza mostrando los últimos días).
   // (24 de margen a la derecha: la fecha de la última barra es más ancha que la barra).
-  const step = Math.min((W - pad - 24) / rows.length, 40), bar = Math.max(Math.min(step * 0.7, 28), 2);
+  const H = 180, pad = 8, top = 42, step = 44, bar = 28;  // top: sitio para las dos cifras encima de la barra más alta
+  const W = pad + rows.length * step + 24;
+  const max = Math.max(...rows.map((r) => Number(r.visitors)), 1);
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   svg.setAttribute("viewBox", `0 0 ${W} ${top + H + 24}`);
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", top + H + 24);
   svg.setAttribute("role", "img");
   svg.setAttribute("aria-label", "Visitantes por día");
   const rect = (x, y, w, h, cls, title) => {
@@ -198,11 +201,8 @@ function renderChart(rows) {
     t.textContent = text;
     svg.appendChild(t);
   };
-  // La fecha debajo de su barra: todas si caben (hasta 14 días); si no, una de cada pocas.
-  // Encima de cada barra (las mismas que llevan fecha), cuántos visitantes hubo y qué parte preguntó.
-  const every = Math.ceil(rows.length / 14);
+  // Debajo de cada barra su fecha; encima, cuántos visitantes hubo y qué parte preguntó.
   rows.forEach((r, i) => {
-    if (i % every !== 0 && i !== rows.length - 1) return;
     const x = pad + i * step + bar / 2, barTop = top + H - (r.visitors / max) * H;
     label(x, top + H + 19, `${r.day.slice(8)}/${r.day.slice(5, 7)}`);
     if (Number(r.visitors) > 0) {
@@ -211,6 +211,7 @@ function renderChart(rows) {
     }
   });
   box.replaceChildren(svg);
+  box.scrollLeft = box.scrollWidth;     // lo último, a la vista
 }
 
 function fillTable(table, rows) {
