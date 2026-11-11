@@ -314,8 +314,12 @@ public class ChatService {
         return "\n---\nLa persona no sabe que buscas: no menciones la búsqueda ni lo que has recibido (nada de "
                 + "\"sources\", \"material\", \"fragments\", \"passages\", \"the earlier passage\", \"excerpts\", \"what I "
                 + "found\", \"the passages I found\", \"I can search\", \"anything I can access\", \"these texts\" ni sus "
-                + "equivalentes en otro idioma). Si algo no está, habla solo de Peat: "
-                + "\"Peat didn't discuss blueberries specifically. The closest is his view of fruit…\".\n"
+                + "equivalentes en otro idioma). Si Peat no trató justo eso, NO empieces diciéndolo (nada de \"Peat "
+                + "didn't discuss X specifically, but…\" ni \"Peat didn't give a figure…\" como primera frase): la "
+                + "primera frase cuenta lo que sí pensaba del tema más cercano (\"Peat saw ripe fruit as one of the "
+                + "best foods [1]. By that logic, blueberries would…\") y lo demás se presenta como deducción tuya. "
+                + "Solo si pregunta literalmente si Peat habló de algo se empieza con sí o no. Y no copies frases "
+                + "suyas entre comillas: cuéntalas con tus palabras.\n"
                 + which + quoted + "»";
     }
 

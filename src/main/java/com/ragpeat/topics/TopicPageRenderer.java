@@ -160,16 +160,16 @@ public class TopicPageRenderer {
         article.put("description", p.description());
         article.put("inLanguage", t.code());
         article.put("url", url);
-        article.put("about", Map.of("@type", "Person", "name", "Ray Peat"));
-        article.put("publisher", Map.of("@type", "Organization", "name", "Ray Peat Chatbot", "url", SITE + t.home()));
+        article.put("about", ordered("@type", "Person", "name", "Ray Peat"));
+        article.put("publisher", ordered("@type", "Organization", "name", "Ray Peat Chatbot", "url", SITE + t.home()));
         List<Map<String, Object>> questions = new ArrayList<>();
         for (Faq f : p.faq()) {
-            questions.add(Map.of("@type", "Question", "name", f.q(),
-                    "acceptedAnswer", Map.of("@type", "Answer", "text", plain(f.a()))));
+            questions.add(ordered("@type", "Question", "name", f.q(),
+                    "acceptedAnswer", ordered("@type", "Answer", "text", plain(f.a()))));
         }
-        Map<String, Object> faqPage = Map.of("@context", "https://schema.org", "@type", "FAQPage", "mainEntity", questions);
+        Map<String, Object> faqPage = ordered("@context", "https://schema.org", "@type", "FAQPage", "mainEntity", questions);
         // Las migas de pan, para que Google muestre "peatying.com › Temas › ..." en vez de la URL.
-        Map<String, Object> breadcrumbs = Map.of("@context", "https://schema.org", "@type", "BreadcrumbList", "itemListElement", List.of(
+        Map<String, Object> breadcrumbs = ordered("@context", "https://schema.org", "@type", "BreadcrumbList", "itemListElement", List.of(
                 crumb(1, "Ray Peat Chatbot", SITE + t.home()),
                 crumb(2, t.topics(), SITE + t.base()),
                 crumb(3, p.title(), url)));
@@ -178,8 +178,20 @@ public class TopicPageRenderer {
                 t, otherPath);
     }
 
+    /**
+     * Como Map.of, pero conserva el orden en que se escriben las claves. Map.of las baraja en cada ejecución: el
+     * JSON-LD salía distinto cada vez y git veía cambiadas todas las páginas (y el sitemap les ponía fecha de hoy).
+     */
+    private static Map<String, Object> ordered(Object... keysAndValues) {
+        Map<String, Object> map = new LinkedHashMap<>();
+        for (int i = 0; i < keysAndValues.length; i += 2) {
+            map.put((String) keysAndValues[i], keysAndValues[i + 1]);
+        }
+        return map;
+    }
+
     private static Map<String, Object> crumb(int position, String name, String url) {
-        return Map.of("@type", "ListItem", "position", position, "name", name, "item", url);
+        return ordered("@type", "ListItem", "position", position, "name", name, "item", url);
     }
 
     /** El botón que lleva al chat con la pregunta ya escrita (no se envía sola: la persona decide). */
@@ -218,9 +230,45 @@ public class TopicPageRenderer {
             english.forEach(p -> urls.add(EN.base() + "/" + p.slug()));
         }
         for (String path : urls) {
-            xml.append("  <url><loc>").append(SITE).append(path).append("</loc><lastmod>").append(today).append("</lastmod></url>\n");
+            xml.append("  <url><loc>").append(SITE).append(path).append("</loc><lastmod>")
+                    .append(lastModified(fileOf(path), today)).append("</lastmod></url>\n");
         }
         return xml.append("</urlset>\n").toString();
+    }
+
+    /** El archivo que sirve una dirección: "/" y las carpetas son su index.html; el resto, su .html. */
+    static Path fileOf(String path) {
+        Path file = STATIC.resolve(path.substring(1));
+        return path.equals("/") || Files.isDirectory(file) ? file.resolve("index.html") : STATIC.resolve(path.substring(1) + ".html");
+    }
+
+    /**
+     * La fecha en que cambió de verdad una página, para el lastmod del sitemap. Antes todas llevaban la fecha del
+     * día en que se generaba, y Bing (que decide con ese dato qué volver a leer) no podía distinguir las que habían
+     * cambiado. Se la preguntamos a git: si el archivo tiene cambios sin guardar en un commit, es hoy (saldrá en el
+     * próximo despliegue); si no, la fecha de su último commit. Sin git, hoy, como antes.
+     */
+    static String lastModified(Path file, String today) {
+        try {
+            // diff --quiet devuelve 1 si el contenido difiere del último commit (no cuenta los finales de línea).
+            if (git("diff", "--quiet", "HEAD", "--", file.toString()).exit() != 0) {
+                return today;
+            }
+            String date = git("log", "-1", "--format=%cs", "--", file.toString()).output();
+            return date.matches("\\d{4}-\\d{2}-\\d{2}") ? date : today;   // vacío: archivo nuevo, aún sin commit
+        } catch (IOException | InterruptedException e) {
+            return today;
+        }
+    }
+
+    private record GitResult(int exit, String output) {}
+
+    private static GitResult git(String... args) throws IOException, InterruptedException {
+        List<String> command = new ArrayList<>(List.of("git"));
+        command.addAll(List.of(args));
+        Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
+        String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8).strip();
+        return new GitResult(process.waitFor(), output);
     }
 
     // --- Piezas comunes -------------------------------------------------------------------

@@ -41,5 +41,8 @@ eval/results/*
 # Los artículos tienen copyright: se quedan en local, no se suben a GitHub.
 data/
 
+# Las hojas originales de la mascota: se guardan en local por si hay que recortar otra pose.
+mascota-originales/
+
 # Datos de la cuenta de AWS (ver aws/config.example.ps1)
 aws/config.ps1

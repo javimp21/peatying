@@ -66,6 +66,7 @@ const LOADING_CYCLE_MS = 2400;  // solo si las animaciones están desactivadas; 
 const TEXT = {
   es: {
     firstPlaceholder: "Prueba: «¿Qué pensaba del azúcar?»",
+    firstPlaceholderShort: "«¿Es malo el azúcar?»",
     nextPlaceholder: "Escribe otra pregunta…",
     internalOn: "Este navegador ya no cuenta en las métricas.",
     internalOff: "Este navegador vuelve a contar en las métricas.",
@@ -128,6 +129,7 @@ const TEXT = {
   },
   en: {
     firstPlaceholder: "Try: “What did he think of sugar?”",
+    firstPlaceholderShort: "“Is sugar really bad?”",
     nextPlaceholder: "Ask another question…",
     internalOn: "This browser no longer counts in the metrics.",
     internalOff: "This browser counts in the metrics again.",
@@ -197,13 +199,15 @@ function serverError(data, status) {
   return status === 429 ? TEXT.tooMany : status === 503 ? TEXT.busy : TEXT.genericError;
 }
 
-const FIRST_PLACEHOLDER = TEXT.firstPlaceholder;
+// En móvil el ejemplo largo no cabe en una línea y se cortaba a medias: ahí va uno más corto.
+const FIRST_PLACEHOLDER = window.matchMedia("(max-width: 640px)").matches ? TEXT.firstPlaceholderShort : TEXT.firstPlaceholder;
 const NEXT_PLACEHOLDER = TEXT.nextPlaceholder;
 const INTERNAL_KEY = "rp-internal";
 const STORAGE_KEY = "rp-chat-v1";      // donde se guardaba la conversación antes (ver forgetOldConversation)
 
 const form = document.getElementById("ask-form");
 const input = document.getElementById("question");
+input.placeholder = FIRST_PLACEHOLDER;   // el del HTML es el largo; en móvil toca el corto
 const sendButton = document.getElementById("send");
 const errorBox = document.getElementById("error");
 const examplesBox = document.getElementById("examples");

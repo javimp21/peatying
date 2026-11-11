@@ -48,6 +48,7 @@
       <nav class="actions">
         <a href="/en" class="ghost" hreflang="en" lang="en" title="English version">EN</a>
         <a href="/about" class="ghost"><span class="wide-only">Sobre Ray Peat</span><span class="narrow-only">About</span></a>
+        <a href="/temas" class="ghost topics-link">Temas</a>
         <!-- Solo se ve si hay conversaciones guardadas en este navegador (app.js lo muestra) -->
         <button type="button" id="history" class="ghost icon-ghost" aria-label="Historial" title="Historial" hidden>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor"
@@ -64,7 +65,7 @@
         <!-- La mascota (una naranja con canas y gafas) saluda en la portada; desaparece al conversar, como el título.
              Easter egg: al pulsarla, sale un exprimidor que exprime una naranja (ver #juicer). -->
         <button type="button" id="mascot" class="hero-mascot" aria-label="Exprimir la naranja">
-          <img src="/img/mascota/hello.webp" alt="" width="136" height="160">
+          <img src="/img/mascota/hello.webp" alt="" width="217" height="230">
         </button>
         <h1><span class="kick">Las ideas de</span> <span class="name">Ray Peat</span> <em class="kick">en español</em></h1>
         <p class="lead">Pregunta lo que quieras. Cada respuesta cita sus artículos, libros y entrevistas originales.</p>
@@ -133,6 +134,19 @@
 
       <!-- Estado vacío: preguntas de ejemplo. Se rellenan desde app.js y desaparecen al preguntar. -->
       <section id="examples" class="examples" aria-label="Preguntas de ejemplo"></section>
+
+      <!-- Enlaces a los temas: para quien prefiere leer antes de preguntar, y para que los buscadores lleguen a ellos desde la portada. -->
+      <nav class="home-topics" aria-label="Temas">
+        <span class="home-topics-label">O lee un tema:</span>
+        <a href="/temas/azucar">Azúcar</a>
+        <a href="/temas/tiroides">Tiroides</a>
+        <a href="/temas/aceites-vegetales">Aceites vegetales</a>
+        <a href="/temas/progesterona">Progesterona</a>
+        <a href="/temas/cafe">Café</a>
+        <a href="/temas/sal">Sal</a>
+        <a href="/temas/dieta">Dieta</a>
+        <a href="/temas" class="home-topics-all">Los 28 temas →</a>
+      </nav>
     </main>
   </div>
 

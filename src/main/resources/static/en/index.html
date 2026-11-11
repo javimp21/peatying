@@ -47,6 +47,7 @@
       <nav class="actions">
         <a href="/" class="ghost" hreflang="es" lang="es" title="Versión en español">ES</a>
         <a href="/en/about" class="ghost"><span class="wide-only">About Ray Peat</span><span class="narrow-only">About</span></a>
+        <a href="/en/topics" class="ghost topics-link">Topics</a>
         <!-- Solo se ve si hay conversaciones guardadas en este navegador (app.js lo muestra) -->
         <button type="button" id="history" class="ghost icon-ghost" aria-label="History" title="History" hidden>
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor"
@@ -63,7 +64,7 @@
         <!-- La mascota (una naranja con canas y gafas) saluda en la portada; desaparece al conversar, como el título.
              Easter egg: al pulsarla, sale un exprimidor que exprime una naranja (ver #juicer). -->
         <button type="button" id="mascot" class="hero-mascot" aria-label="Squeeze the orange">
-          <img src="/img/mascota/hello.webp" alt="" width="136" height="160">
+          <img src="/img/mascota/hello.webp" alt="" width="217" height="230">
         </button>
         <h1><span class="kick">The ideas of</span> <span class="name">Ray Peat</span> <em class="kick">with sources</em></h1>
         <p class="lead">Ask anything. Every answer cites his original articles, books and interviews.</p>
@@ -132,6 +133,19 @@
 
       <!-- Estado vacío: preguntas de ejemplo. Se rellenan desde app.js y desaparecen al preguntar. -->
       <section id="examples" class="examples" aria-label="Example questions"></section>
+
+      <!-- Links to the topic pages: for readers who prefer to read first, and so search engines reach them from the home page. -->
+      <nav class="home-topics" aria-label="Topics">
+        <span class="home-topics-label">Or read a topic:</span>
+        <a href="/en/topics/sugar">Sugar</a>
+        <a href="/en/topics/thyroid">Thyroid</a>
+        <a href="/en/topics/vegetable-oils">Vegetable oils</a>
+        <a href="/en/topics/progesterone">Progesterone</a>
+        <a href="/en/topics/coffee">Coffee</a>
+        <a href="/en/topics/salt">Salt</a>
+        <a href="/en/topics/diet">Diet</a>
+        <a href="/en/topics" class="home-topics-all">All 28 topics →</a>
+      </nav>
     </main>
   </div>
 
