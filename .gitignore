@@ -46,3 +46,6 @@ mascota-originales/
 
 # Datos de la cuenta de AWS (ver aws/config.example.ps1)
 aws/config.ps1
+
+# De qué páginas se ha avisado ya a los buscadores (ver aws/indexnow.ps1): es estado de este ordenador.
+aws/indexnow-sent.json

@@ -6,6 +6,9 @@
 #       .\aws\bing-check.ps1 /en /temas/azucar   (solo esas)
 #       .\aws\bing-check.ps1 -Enviar             (además pide a Bing que lea las que no tiene al día; gasta cuota)
 #
+# Para avisar a Bing tras un despliegue, mejor .\aws\indexnow.ps1: no tiene cuota y solo avisa de lo que ha cambiado.
+# Este script queda para MIRAR qué ha rastreado Bing; -Enviar, solo si IndexNow no bastara.
+#
 # La clave SÍ es un secreto (da acceso a toda la cuenta de Bing Webmaster): se genera en bing.com/webmasters,
 # Ajustes > API access > API Key, y se guarda una vez en una variable de entorno de usuario:
 #   [Environment]::SetEnvironmentVariable("BING_WEBMASTER_API_KEY", "<la clave>", "User")
