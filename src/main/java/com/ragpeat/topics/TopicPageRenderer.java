@@ -223,7 +223,7 @@ public class TopicPageRenderer {
                 <!-- Lo genera TopicsCommand (comando "topics"): las páginas que queremos que aparezcan en Google. -->
                 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
                 """);
-        List<String> urls = new ArrayList<>(List.of("/", "/about", "/temas", "/privacidad", "/en", "/en/about", "/en/privacy"));
+        List<String> urls = new ArrayList<>(List.of("/", "/about", "/temas", "/como-funciona", "/privacidad", "/en", "/en/about", "/en/how-it-works", "/en/privacy"));
         pages.forEach(p -> urls.add(ES.base() + "/" + p.slug()));
         if (!english.isEmpty()) {
             urls.add(EN.base());

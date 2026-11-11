@@ -1,0 +1,94 @@
+{
+  "slug" : "aspirina",
+  "name" : "la aspirina",
+  "title" : "Ray Peat y la aspirina",
+  "question" : "¿Por qué defendía Peat la aspirina?",
+  "description" : "Qué pensaba Ray Peat sobre la aspirina: inflamación, prostaglandinas, envejecimiento, estrógeno, cáncer y el papel de la vitamina K, según sus textos.",
+  "intro" : "Para Ray Peat, la aspirina era una protección de amplio espectro frente a la inflamación y el envejecimiento, sobre todo porque bloquea la formación de prostaglandinas [1][2]. Sostenía que esas sustancias amplifican la inflamación y están implicadas en el cáncer y en el deterioro de los tejidos [1][3]. También insistía en cuidar el aporte de vitamina K cuando se usa de forma crónica [4].",
+  "sections" : [ {
+    "heading" : "Inflamación, colágeno y envejecimiento",
+    "paragraphs" : [ "Según Peat, cuando hay inflamación sistémica se producen ácido láctico y prostaglandinas, y ambos favorecen que se acumule colágeno en los tejidos. Por eso comparaba el envejecimiento con una cicatriz enorme, y ponía el ejemplo de la diferencia entre un guante de cabritilla y una bota de cuero, que para él depende de la edad del animal [1].", "En su opinión, la aspirina protege porque bloquea las prostaglandinas y otros mecanismos inflamatorios [1]. Añadía que reduce la producción de ACTH en la hipófisis, y que la ACTH eleva la aldosterona, que a su vez contribuye a la formación de colágeno propia del envejecimiento y a otros procesos degenerativos [1]." ]
+  }, {
+    "heading" : "Prostaglandinas y grasas poliinsaturadas",
+    "paragraphs" : [ "Peat explicaba que cualquier inflamación, aunque sea leve, dispara la producción de prostaglandinas, hormonas de acción breve que en su mayoría amplifican la inflamación y tienen efectos secundarios dañinos. Según él, se forman en proporción a los ácidos grasos poliinsaturados (PUFA) incorporados en cada tejido [1].", "Sostenía que, a partir de los veinte años, el metabolismo más lento hace que acumulemos PUFA con eficacia, hasta el punto de que entre los 20 y los 40 años su cantidad en los tejidos podría duplicarse. Para él, eso explica que un feto o un recién nacido cicatrice sin dejar marca, mientras que con la edad las heridas curan más despacio, inflaman más y pueden dejar cicatrices que estorban la función [1]. En ese contexto, la aspirina reduce la formación de prostaglandinas a partir del ácido araquidónico, y según Peat también protege frente a la toxicidad del hierro, la formación de coágulos y la peroxidación de lípidos [2]." ]
+  }, {
+    "heading" : "Aspirina, estrógeno y cáncer",
+    "paragraphs" : [ "Peat describía un círculo vicioso: las células estresadas de un tumor producen estrógeno, y este activa la enzima ciclooxigenasa, que fabrica prostaglandinas, las cuales mantienen activa la aromatasa y generan aún más estrógeno. Los PUFA ya almacenados en los tejidos alimentarían ese proceso al liberarse con el estrés [5]. Según él, la aspirina es una forma muy eficaz de apagar la producción de estrógeno y la respuesta a él [6].", "Creía que los antiinflamatorios como la aspirina tienen un lugar racional en el tratamiento del cáncer, sobre todo si poseen cierta acción antihistamínica, y señalaba que el estrógeno tiende a depositarse en los tejidos inflamados [3][7]. Para él, las prostaglandinas intervienen en todos los tipos importantes de cáncer, y en el de próstata consideraba que los inhibidores de prostaglandinas deberían ser parte básica de la terapia [3][8]. Añadía que el azúcar y la niacinamida refuerzan la acción de la aspirina al limitar la salida de grasas poliinsaturadas de los tejidos [5], y que también ayudan la progesterona, el dióxido de carbono y la luz roja [9]." ]
+  }, {
+    "heading" : "Cerebro, diabetes, huesos y piel",
+    "paragraphs" : [ "Peat recordaba que el uso de aspirina se asocia con una menor incidencia de alzhéimer, y lo atribuía a que reduce la inflamación y frena la formación de prostaglandinas neurotóxicas [10][2]. En otros contextos, según él, también protege frente al estrógeno [10].", "En la diabetes, destacaba su amplio abanico de acciones antiinflamatorias. Como una de las consecuencias de la inflamación es la hiperglucemia, sostenía que la aspirina ayuda a corregirla y protege las proteínas del daño oxidativo [11]. Respecto al hueso, decía que apoya la respiración celular, inhibe la formación de ácido láctico y favorece la calcificación [12]. Para la piel con rosácea, mencionaba que la aspirina aplicada de forma tópica puede ser protectora [13]." ]
+  }, {
+    "heading" : "Vitamina K y riesgo de sangrado",
+    "paragraphs" : [ "Peat advertía de que el uso crónico de aspirina puede causar un sangrado excesivo anormal, sobre todo si los antibióticos han alterado las bacterias intestinales que producen vitamina K [4][13]. Contaba que, al experimentar con un uso continuado, notó que un pequeño arañazo sangraba durante unos 20 o 30 minutos. Tras tomar vitamina K, afirmaba que dejó de observar anomalías de sangrado incluso con 1.000 miligramos diarios [4].", "Como fuentes de vitamina K citaba las verduras de hoja cocinadas, como la col rizada, el hígado y algunos quesos [14]. Decía que comer hígado dos o tres veces al mes aporta el abanico de formas de vitamina K, porque el hígado puede fabricarlas todas [4]." ]
+  } ],
+  "faq" : [ {
+    "q" : "¿Por qué defendía Ray Peat el uso de la aspirina?",
+    "a" : "Según Peat, la aspirina bloquea las prostaglandinas y otros mecanismos inflamatorios, lo que protegería frente a la inflamación y el envejecimiento de los tejidos [1]. Las prostaglandinas, decía, amplifican la inflamación y se forman a partir de los PUFA acumulados en los tejidos [1]."
+  }, {
+    "q" : "¿Qué relación veía Peat entre la aspirina, el estrógeno y el cáncer?",
+    "a" : "Sostenía que el estrógeno activa la ciclooxigenasa, que produce prostaglandinas, y estas mantienen activa la aromatasa, que genera más estrógeno [5]. Por eso consideraba que la aspirina, al cortar ese círculo, tiene un lugar racional en la terapia del cáncer [3][6]."
+  }, {
+    "q" : "¿Qué decía Peat sobre el sangrado con la aspirina?",
+    "a" : "Según Peat, el uso crónico puede provocar un sangrado anormal, sobre todo si se han tomado antibióticos que alteran las bacterias intestinales productoras de vitamina K [4]. Por eso recomendaba que la dieta incluyera vitamina K, por ejemplo mediante hígado, verduras cocinadas o ciertos quesos [14][4]."
+  }, {
+    "q" : "¿Qué decía Peat sobre la aspirina y el alzhéimer?",
+    "a" : "Peat señalaba que el uso de aspirina y otros antiinflamatorios, tomados por ejemplo para la artritis, se asocia con una menor incidencia de alzhéimer [10][2]. Lo explicaba por su capacidad de reducir la inflamación y de frenar la formación de prostaglandinas neurotóxicas [10]."
+  } ],
+  "sources" : [ {
+    "title" : "JodelleFit: Insulin resistance vegans low cortisol (2020)",
+    "url" : "https://www.toxinless.com/jf-200116-insulin-resistance-vegans-low-cortisol.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "The problem of Alzheimer's disease as a clue to immortality - part 2",
+    "url" : "https://raypeat.com/articles/articles/alzheimers2.shtml",
+    "type" : "article"
+  }, {
+    "title" : "From PMS to Menopause, p. 116",
+    "url" : "https://raypeat.com/products.shtml#from-pms-to-menopause-p116",
+    "type" : "book"
+  }, {
+    "title" : "One Radio Network: Milk (2019)",
+    "url" : "https://www.toxinless.com/orn-190718-milk.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "EastWest Healing: Energy and metabolism (2013)",
+    "url" : "https://www.toxinless.com/ewh-130717-energy-and-metabolism.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Breast cancer (2015)",
+    "url" : "https://www.toxinless.com/kmud-150320-breast-cancer.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Progesterone in Orthomolecular Medicine, p. 33",
+    "url" : "https://raypeat.com/products.shtml#progesterone-orthomolecular-medicine-p33",
+    "type" : "book"
+  }, {
+    "title" : "Prostate Cancer",
+    "url" : "https://raypeat.com/articles/articles/prostate-cancer.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Cancer: Disorder and Energy",
+    "url" : "https://raypeat.com/articles/articles/cancer-disorder-energy.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Estrogen and brain aging in men and women: Depression, energy, stress",
+    "url" : "https://raypeat.com/articles/articles/estrogen-age-stress.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Glucose and sucrose for diabetes",
+    "url" : "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Osteoporosis, aging, tissue renewal, and product science",
+    "url" : "https://raypeat.com/articles/articles/osteoporosis-aging.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Rosacea, inflammation, and aging: The inefficiency of stress",
+    "url" : "https://raypeat.com/articles/articles/rosacea-inflammation-aging.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): How to restore and protect nerves (2014)",
+    "url" : "https://www.toxinless.com/kmud-140321-how-to-restore-and-protect-nerves.mp3",
+    "type" : "interview"
+  } ]
+}

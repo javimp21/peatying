@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How it works · Ray Peat Chatbot</title>
+  <meta name="description" content="How peatying.com is built: where the answers come from, how the AI is kept from making things up, how it is measured and the technology behind it. Open source.">
+  <meta name="color-scheme" content="light">
+  <link rel="canonical" href="https://peatying.com/en/how-it-works">
+  <link rel="alternate" hreflang="es" href="https://peatying.com/como-funciona">
+  <link rel="alternate" hreflang="en" href="https://peatying.com/en/how-it-works">
+  <link rel="icon" href="/img/favicon-mascota.png" type="image/png" sizes="144x144">
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+  <script src="/theme.js"></script>
+  <script src="/visit.js"></script>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="legal-page">
+  <div class="frame">
+    <header class="topbar">
+      <a href="/en" class="wordmark" aria-label="Home"><img src="/img/logo.png" alt="" class="logo" width="30" height="30"><span class="wordmark-name">Ray Peat</span></a>
+      <nav class="actions">
+        <a class="ghost" href="/como-funciona" hreflang="es" lang="es" title="Versión en español">ES</a>
+        <a class="ghost" href="/en">Back to the chat</a>
+      </nav>
+    </header>
+
+    <main class="legal">
+      <h1>How it works</h1>
+      <p>This chatbot answers questions about Ray Peat's ideas using only what he wrote and said, and shows where each claim comes from. I built it and run it on my own, <a href="https://www.linkedin.com/in/francisco-javier-martinez-perez/" target="_blank" rel="noopener">Javi</a>, and all the code is public on <a href="https://github.com/javimp21/peatying" target="_blank" rel="noopener">GitHub</a>.</p>
+
+      <h2>The problem</h2>
+      <p>Ask any AI about Ray Peat and it mixes what he said with what the internet says, and sometimes credits him with the opposite of what he thought. Here the AI does not answer from memory: it first searches his texts and then answers with what it found, citing it.</p>
+
+      <h2>Where the answers come from</h2>
+      <ul>
+        <li><strong>78 articles</strong> from raypeat.com, downloaded and split into short passages.</li>
+        <li><strong>5 books</strong>, cited by page. Their text is copyrighted: it is used to answer but never shown.</li>
+        <li><strong>221 radio and podcast interviews</strong>, about 250 hours of audio. A program of my own transcribes them and marks who is speaking in each sentence, so only Peat's words count as his opinion.</li>
+      </ul>
+
+      <h2>What happens when you ask</h2>
+      <ul>
+        <li><strong>The AI decides what to search for.</strong> It gets your question and a search tool. It can search up to three times, from different angles.</li>
+        <li><strong>The search combines two ways of finding.</strong> One by meaning (it finds a passage even if it uses other words or another language) and one by exact words (for terms like "pregnenolone"). The results of both are merged into one list.</li>
+        <li><strong>The answer is written from those passages</strong>, in the language you asked in. Each number in brackets opens the original text, or the audio of the interview.</li>
+      </ul>
+
+      <h2>How I know it doesn't make things up</h2>
+      <p>I measured it with 30 questions. Another AI acts as judge: it splits each answer into claims attributed to Peat and checks them one by one against his texts.</p>
+      <ul>
+        <li><strong>Searching his texts:</strong> 198 of 202 claims supported (98%) and none contradicting him.</li>
+        <li><strong>The same model, from memory:</strong> 144 of 198 (73%) and 7 contradicting him.</li>
+      </ul>
+      <p>On top of that, every time I change the bot's instructions a suite of 34 questions runs with automatic checks: that it cites the expected sources, that literal quotes really exist and that it does not answer about topics unrelated to Peat.</p>
+
+      <h2>What it is built with</h2>
+      <ul>
+        <li><strong>Server:</strong> Java 21 and Spring Boot, with hand-written SQL.</li>
+        <li><strong>Data:</strong> PostgreSQL with pgvector for search by meaning.</li>
+        <li><strong>AI:</strong> Claude (Anthropic) to answer, Voyage AI for search and Whisper to turn voice into text.</li>
+        <li><strong>Web:</strong> HTML, CSS and JavaScript, no frameworks.</li>
+        <li><strong>Infrastructure:</strong> AWS in Ireland, with Docker.</li>
+      </ul>
+
+      <h2>Privacy and limits</h2>
+      <p>No accounts, cookies or ads, and IP addresses are not stored. The details are on the <a href="/en/privacy">privacy</a> page. Answers may contain errors and are not medical advice.</p>
+
+      <h2>The code</h2>
+      <p>It is at <a href="https://github.com/javimp21/peatying" target="_blank" rel="noopener">github.com/javimp21/peatying</a>, under the MIT license. The README also tells the problems that came up and how I solved them. Ray Peat's texts are not in the repository.</p>
+    </main>
+  </div>
+</body>
+</html>

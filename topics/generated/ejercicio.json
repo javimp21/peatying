@@ -1,0 +1,81 @@
+{
+  "slug" : "ejercicio",
+  "name" : "el ejercicio",
+  "title" : "Ray Peat y el ejercicio",
+  "question" : "¿Qué tipo de ejercicio recomendaba Peat?",
+  "description" : "Qué pensaba Ray Peat sobre el ejercicio: por qué defendía el esfuerzo concéntrico, desconfiaba del ejercicio agotador y vigilaba el cortisol.",
+  "intro" : "Para Ray Peat, el ejercicio es útil cuando estimula el músculo sin disparar el estrés. Sostenía que el esfuerzo bien dosificado favorece las hormonas protectoras y la salud de las mitocondrias, mientras que el excesivo eleva el cortisol y empuja al organismo hacia el metabolismo del ácido láctico [1][2]. Por eso daba más importancia al tipo de ejercicio que a la cantidad [2].",
+  "sections" : [ {
+    "heading" : "Esteroides protectores y tolerancia al esfuerzo",
+    "paragraphs" : [ "Según Peat, pregnenolona, progesterona, DHEA y testosterona forman una primera barrera frente al daño, con efectos protectores que se solapan y que mantienen estables el aparato energético y el sensorial [3]. Con abundancia de estas hormonas, decía, un esfuerzo como correr una maratón o nadar en agua helada no resultaría dañino [3].", "Cuando faltan, sostenía que cualquier cosa se vuelve estresante, incluso caminar o respirar con más fuerza, y el cuerpo pasa al metabolismo del ácido láctico y a la producción de emergencia de cortisol [3]. Para él, el envejecimiento o la malnutrición pueden reducir esa producción protectora [3]." ]
+  }, {
+    "heading" : "Ejercicio concéntrico frente a excéntrico",
+    "paragraphs" : [ "Peat distinguía entre la contracción concéntrica, en la que el músculo se acorta contra una resistencia, y la excéntrica, en la que se alarga mientras soporta carga. Según él, la primera mejora la función muscular sin lesionarlo, y la segunda daña el músculo [4]. Su ejemplo era subir una montaña, que es concéntrico, frente a bajarla, que es excéntrico y provoca agujetas [4][5].", "Explicaba que en el ejercicio excéntrico se consume menos oxígeno, se produce menos dióxido de carbono, aumenta el ácido láctico y se oxida más grasa. Veía un patrón parecido en el estrés prolongado [6]. En las máquinas de gimnasio, la parte concéntrica era la que, para él, no destruía tanto las fibras musculares [5]." ]
+  }, {
+    "heading" : "Mitocondrias y ejercicio concéntrico",
+    "paragraphs" : [ "Peat citaba estudios de fisiólogos del ejercicio con personas mayores cuyas mitocondrias musculares estaban muy deterioradas. Tras unas semanas de ejercicio solo concéntrico, según contaba, esas personas tenían mitocondrias funcionales nuevas, y su ADN mitocondrial se había normalizado [4][5][2].", "Como para él la mitocondria es la fuente de la producción de esteroides, cuidarla era la razón de preferir ese tipo de esfuerzo [2]. Ponía como ejemplos subir escaleras corriendo y bajar deslizándose por la barandilla, o subir una cuesta en bicicleta y bajarla sin pedalear [2]. En el caso de las pesas, mencionaba máquinas que permiten levantar la carga y soltarla sin frenarla [2]." ]
+  }, {
+    "heading" : "Cortisol, andrógenos y masa muscular",
+    "paragraphs" : [ "Según Peat, un músculo bien estimulado produce testosterona y otros andrógenos, mientras que un músculo sometido a demasiado estrés produce cortisol [1]. Contaba que en los años sesenta unos entrenadores alemanes lograron fortalecer el músculo con resistencia moderada, sin subir el cortisol. Sus atletas tenían andrógenos tan altos que se les acusó de dopaje [1].", "También recogía que, según los rusos, combinar ejercicio con más proteína puede aumentar la masa muscular [7]. Pero advertía de que, si el ejercicio produce mucho estrés y poca acción muscular, el cortisol desvía los aminoácidos hacia la producción de glucosa y el músculo se atrofia [7]. Para él, el cortisol mantenido también afecta a la piel, al sistema inmunitario y al cerebro [7]." ]
+  }, {
+    "heading" : "Ácido láctico, azúcar en sangre y tiroides",
+    "paragraphs" : [ "Peat explicaba que, al superar el umbral en que sube el ácido láctico, aparece la sensación de ahogo. Según él, el lactato tiene un efecto proinflamatorio y va unido a una caída del azúcar en sangre, porque producirlo es mucho menos eficiente que la oxidación aeróbica [2]. Con el azúcar bajo, decía, no se puede formar la hormona tiroidea activa [2]. En una persona muy sana, el hígado elimina el lactato en el reposo. Con una nutrición deficiente, un solo episodio de ejercicio con lactato podía bastar para bajar el metabolismo [2].", "Sostenía que cuanto menor es la función tiroidea, más bajo es el umbral para pasar al metabolismo del lactato. Con tiroides alta, el cuerpo funcionaría como a gran altitud, donde sube la T3 y se puede trabajar más sin producir ácido láctico [8]. Además, consideraba que la fatiga extrema y el ejercicio agotador pueden elevar el amoníaco en sangre, algo que, para él, se asocia a un exceso de ácido láctico [9]." ]
+  }, {
+    "heading" : "Entrenamiento intenso, pulso y sexualidad",
+    "paragraphs" : [ "En uno de sus libros, Peat señalaba que el entrenamiento atlético reduce el pulso. Según él, el cortisol producido por el estrés inhibe la tiroides, y eso puede ser una adaptación útil para la resistencia, porque con tiroides baja se necesita menos oxígeno [10]. Añadía que estos cambios hormonales se sabe que producen esterilidad en hombres y mujeres [10].", "Su conjetura era que el ejercicio intenso, como correr, reduce la respuesta sexual igual que reduce la fertilidad. Para él, el estrés emocional o las carencias nutricionales podrían producir el mismo efecto [10]. En ese mismo libro consideraba el ejercicio aeróbico el más estresante, porque la producción de lactato es la señal principal de que hay que fabricar glucosa nueva [7]." ]
+  } ],
+  "faq" : [ {
+    "q" : "¿Qué tipo de ejercicio recomendaba Ray Peat?",
+    "a" : "Según Peat, lo ideal era un ejercicio sobre todo concéntrico, con carga mientras el músculo se acorta y sin carga mientras se relaja y se alarga [2]. Ponía como ejemplos subir escaleras corriendo o ir en bicicleta cuesta arriba y bajar sin esfuerzo [2]. Para él, esto protege la musculatura y las mitocondrias [5][2]."
+  }, {
+    "q" : "¿Por qué Ray Peat desconfiaba del ejercicio aeróbico intenso?",
+    "a" : "Para Peat, quedarse sin aliento indica producción de ácido láctico, y esa es la señal de que el cuerpo necesita fabricar glucosa nueva, lo cual relacionaba con el cortisol y con la atrofia muscular [7]. También sostenía que el lactato va unido a una bajada del azúcar en sangre y a un freno en la formación de hormona tiroidea activa [2]."
+  }, {
+    "q" : "¿Qué relación veía Ray Peat entre el ejercicio y la testosterona?",
+    "a" : "Según Peat, un músculo estimulado de forma adecuada produce andrógenos como la testosterona, pero un músculo estresado produce cortisol [1]. Por eso defendía hacer el ejercicio de modo que el cortisol se mantuviera bajo y los andrógenos siguieran activos [1]."
+  }, {
+    "q" : "¿Qué decía Ray Peat sobre las agujetas y el ejercicio excéntrico?",
+    "a" : "Peat explicaba que el ejercicio excéntrico, como bajar una montaña, estira el músculo mientras soporta carga y lo daña, lo que provoca agujetas [4][5]. Añadía que en él se usa menos oxígeno, se produce menos dióxido de carbono y aumenta el ácido láctico [6]."
+  } ],
+  "sources" : [ {
+    "title" : "One Radio Network: Plethora of wide ranging questions (2019)",
+    "url" : "https://www.toxinless.com/orn-191015-plethora-of-wide-ranging-questions.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "World Puja: Foundational hormones (2012)",
+    "url" : "https://www.toxinless.com/wp-121123-foundational-hormones.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "JodelleFit: Cortisol low testosterone (2019)",
+    "url" : "https://www.toxinless.com/jf-190601-cortisol-low-testosterone.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Adaptive substance, creative regeneration: Mainstream science, repression, and creativity",
+    "url" : "https://raypeat.com/articles/articles/adaptive-substance.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Serotonin endotoxins stress (2011)",
+    "url" : "https://www.toxinless.com/kmud-110617-serotonin-endotoxins-stress.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Protective CO2 and aging",
+    "url" : "https://raypeat.com/articles/articles/co2.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Nutrition for Women, p. 92",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p92",
+    "type" : "book"
+  }, {
+    "title" : "One Radio Network: Top contrarian on health (2019)",
+    "url" : "https://www.toxinless.com/orn-191217-top-contrarian-on-health.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Fatigue, aging, and recuperation",
+    "url" : "https://raypeat.com/articles/articles/fatigue-aging-recuperation.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Nutrition for Women, p. 104",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p104",
+    "type" : "book"
+  } ]
+}

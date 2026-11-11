@@ -1,0 +1,82 @@
+{
+  "slug" : "fruta-zumo-naranja",
+  "name" : "la fruta y el zumo de naranja",
+  "title" : "Ray Peat, la fruta y el zumo de naranja",
+  "question" : "¿Por qué le gustaba tanto el zumo de naranja?",
+  "description" : "Qué pensaba Ray Peat sobre la fruta y el zumo de naranja: azúcares, minerales, combinación con proteínas, madurez y críticas al índice glucémico.",
+  "intro" : "Según Peat, la fruta madura y el zumo de naranja son una buena fuente de azúcares acompañados de minerales, sobre todo si se toman con proteínas como el huevo o la leche [1][2]. Para él, el miedo al índice glucémico del zumo era incoherente, porque los almidones que se recomendaban en su lugar elevan más el azúcar en sangre [3]. También insistía en que la fruta debe estar bien madura y ser de buena calidad [4][5].",
+  "sections" : [ {
+    "heading" : "El zumo de naranja y el índice glucémico",
+    "paragraphs" : [ "Peat señalaba que el zumo de naranja y la sacarosa tienen un índice glucémico más bajo que el almidón, el pan integral o el pan blanco. Aun así, decía, es habitual que los dietistas desaconsejen el zumo porque su índice es parecido al de un refresco de cola [3]. Para él, si el índice glucémico fuera tan importante, lo coherente sería recomendar el refresco o el zumo en lugar del pan blanco [3].", "Recordaba que en los años setenta se empezó a aconsejar los hidratos de carbono complejos, con cereales integrales y legumbres, y a evitar los zumos de fruta [3]. Según él, tras décadas de promover los alimentos con almidón, la obesidad y las muertes por diabetes habían aumentado [3]. Atribuía el posible efecto dañino del almidón no tanto a la glucosa sostenida que mide el índice como a la reacción de estrés que sigue a una fuerte liberación de insulina [3]." ]
+  }, {
+    "heading" : "Fruta y proteínas: por qué combinarlas",
+    "paragraphs" : [ "Para Peat, los azúcares y minerales de la fruta ayudan a estabilizar el azúcar en sangre y permiten aprovechar las proteínas para construir tejidos en lugar de quemarlas como energía. Según él, esa combinación reduce las hormonas del estrés y favorece la función tiroidea [1]. Ponía como ejemplos un vaso de zumo de naranja con un huevo, o cerezas con queso [1].", "Explicaba que los aminoácidos estimulan la liberación de insulina y que, sin azúcar en la comida, la glucosa baja. El cuerpo responde entonces con adrenalina o cortisol, y el cortisol convierte parte de la proteína en azúcar y grasa [6][3]. Por eso sostenía que, para manejar bien la proteína, hace falta glucosa o fructosa que mantenga estable el azúcar en sangre [6]." ]
+  }, {
+    "heading" : "Minerales, potasio y calcio del zumo y la leche",
+    "paragraphs" : [ "Peat comparaba el zumo de naranja con el arroz, la pasta o el pan, que según él son pobres en los minerales que la fruta aporta en abundancia. Decía que el potasio, muy presente en todas las frutas, actúa de forma parecida a la insulina, de modo que se necesita secretar menos para manejar la misma cantidad de glucosa [2]. Añadía que el zumo contiene otras sustancias, como la naringina, que ayudarían a prevenir la inflamación [2].", "En su opinión, la leche completa el cuadro: la proteína y la grasa frenan la absorción de la lactosa, y el calcio estimula con fuerza el metabolismo energético, de modo que el azúcar se usa antes de almacenarse como grasa. Por eso consideraba que quienes beben leche suelen ser más delgados [2]. Veía en la leche el mismo principio de combinar azúcar, proteína y minerales [1]." ]
+  }, {
+    "heading" : "Fructosa, estrés oxidativo y azúcar refinado",
+    "paragraphs" : [ "Peat citaba un estudio en el que personas que tomaron una bebida con glucosa mostraron un gran aumento del estrés oxidativo e inflamatorio, mientras que ese aumento no apareció con fructosa ni con zumo de naranja [7]. También mencionaba que un derivado de la fructosa, la fructosa difosfato, tiene efectos protectores frente a la inflamación y las lesiones por falta de oxígeno [7].", "Según él, una dieta diaria con unos dos litros de leche y uno de zumo de naranja aporta fructosa y otros azúcares suficientes para resistir el estrés en general. Cantidades mayores de zumo o miel podrían proteger frente a un estrés mayor e incluso revertir algunas condiciones degenerativas [7]. Del azúcar refinado decía que carece de nutrientes esenciales y que solo debe verse como un recurso temporal u ocasional cuando no hay buena fruta [7]. Advertía además que sustituir alimentos como la fruta, la leche o los huevos por azúcar puede provocar carencias [6]." ]
+  }, {
+    "heading" : "Madurez y calidad de la fruta y el zumo",
+    "paragraphs" : [ "Peat afirmaba que muchas frutas de supermercado no están bien maduras y resultan difíciles de digerir. Según él, cuando los polímeros de la fruta no se han descompuesto alimentan a las bacterias y no a la persona, y los gases son la señal de que algo falla [4]. Pensaba que una manzana corriente contiene mucha pectina y poco azúcar, y que al comerla se alimenta en buena parte a las bacterias. Lo mismo valdría para las peras duras y los melocotones poco maduros [8][9].", "Para el zumo recomendaba naranjas o mandarinas bien maduras y cultivadas sin químicos, y juzgar por el sabor [5]. Criticaba además que las grandes empresas usen enzimas para romper la pulpa y obtener más volumen de zumo [10]. Consideraba, en general, que los frutos maduros apenas contienen toxinas, a diferencia de las semillas [11]." ]
+  } ],
+  "faq" : [ {
+    "q" : "¿Qué opinaba Ray Peat del zumo de naranja frente a los refrescos y el pan?",
+    "a" : "Peat apuntaba que el zumo de naranja tiene un índice glucémico más bajo que el pan blanco, y que sería incoherente desaconsejar el zumo y recomendar el pan [3]. Además, para él el zumo aporta minerales como el potasio, que no tienen los almidones refinados [2]."
+  }, {
+    "q" : "¿Por qué decía Peat que la fruta debe tomarse con proteínas?",
+    "a" : "Sostenía que la proteína sola estimula la insulina y puede bajar el azúcar en sangre, lo que dispara adrenalina y cortisol, y el cortisol destruye parte de la proteína convirtiéndola en azúcar y grasa [6]. Con fruta, según él, se evita ese estrés y la proteína se aprovecha mejor [1]."
+  }, {
+    "q" : "¿Por qué Peat desconfiaba de las manzanas y de la fruta poco madura?",
+    "a" : "Según Peat, la fruta poco madura contiene mucha pectina y poco azúcar, y las personas no la digieren pero sí las bacterias, así que en buena medida se alimenta a la flora intestinal [8]. Para él, los gases son un indicio de que el alimento no se digiere bien [4]."
+  }, {
+    "q" : "¿Cuánto zumo de naranja y leche proponía Peat?",
+    "a" : "En uno de sus textos señalaba que una dieta con unos dos litros de leche y uno de zumo de naranja al día aporta suficientes azúcares para resistir el estrés en general [7]. Añadía que cantidades mayores de zumo o miel podían proteger frente a un estrés mayor [7]."
+  } ],
+  "sources" : [ {
+    "title" : "From PMS to Menopause, p. 189",
+    "url" : "https://raypeat.com/products.shtml#from-pms-to-menopause-p189",
+    "type" : "book"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Sugar 1 (2010)",
+    "url" : "https://www.toxinless.com/kmud-100917-sugar-1.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Glycemia, starch, and sugar in context",
+    "url" : "https://raypeat.com/articles/articles/glycemia.shtml",
+    "type" : "article"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Food (2016)",
+    "url" : "https://www.toxinless.com/kmud-161216-food.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Politics & Science: Food quality (2012)",
+    "url" : "https://www.toxinless.com/polsci-120107-food-quality.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Sugar myths 2 (2011)",
+    "url" : "https://www.toxinless.com/kmud-111021-sugar-myths-2.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Sugar issues",
+    "url" : "https://raypeat.com/articles/articles/sugar-issues.shtml",
+    "type" : "article"
+  }, {
+    "title" : "EastWest Healing: Q and a 1 (2011)",
+    "url" : "https://www.toxinless.com/ewh-110712-q-and-a-1.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "EastWest Healing: Serotonin and endotoxin (2011)",
+    "url" : "https://www.toxinless.com/ewh-110825-serotonin-and-endotoxin.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Heart 1 (2013)",
+    "url" : "https://www.toxinless.com/kmud-130517-heart-1.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Vegetables, etc.—Who Defines Food?",
+    "url" : "https://raypeat.com/articles/articles/vegetables.shtml",
+    "type" : "article"
+  } ]
+}

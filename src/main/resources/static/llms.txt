@@ -32,6 +32,7 @@ No account, no API and no cost for the person. Questions are stored anonymously.
 - [Who was Ray Peat](https://peatying.com/en/about): short biography and his main ideas.
 - [Topics](https://peatying.com/en/topics): summaries of what Peat said on each topic (sugar, thyroid, vegetable oils, milk and calcium, coffee, salt, CO2, sleep...), each with its sources.
 - [Temas en español](https://peatying.com/temas) and [chat en español](https://peatying.com/).
+- [How it works](https://peatying.com/en/how-it-works): sources, search, how accuracy is measured, and the open-source code.
 - [Privacy](https://peatying.com/en/privacy)
 - [Sitemap](https://peatying.com/sitemap.xml)
 

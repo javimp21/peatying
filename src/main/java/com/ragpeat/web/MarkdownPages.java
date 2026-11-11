@@ -42,16 +42,18 @@ public class MarkdownPages extends OncePerRequestFilter {
     static final String SITE = "https://peatying.com";
     private static final MediaType MARKDOWN = MediaType.parseMediaType("text/markdown");
     private static final Pattern TOPIC = Pattern.compile("/(temas|en/topics)/([a-z0-9-]+)");
-    private static final Map<String, String> FIXED = Map.of(
-            "/", "static/md/index.md",
-            "/en", "static/md/en.md",
-            "/about", "static/about.html",
-            "/en/about", "static/en/about.html",
-            "/privacidad", "static/privacidad.html",
-            "/en/privacy", "static/en/privacy.html",
-            "/privacy", "static/en/privacy.html",           // en HTML redirige a /en/privacy (WebConfig)
-            "/temas", "static/temas/index.html",
-            "/en/topics", "static/en/topics/index.html");
+    private static final Map<String, String> FIXED = Map.ofEntries(
+            Map.entry("/", "static/md/index.md"),
+            Map.entry("/en", "static/md/en.md"),
+            Map.entry("/about", "static/about.html"),
+            Map.entry("/en/about", "static/en/about.html"),
+            Map.entry("/privacidad", "static/privacidad.html"),
+            Map.entry("/en/privacy", "static/en/privacy.html"),
+            Map.entry("/privacy", "static/en/privacy.html"),           // en HTML redirige a /en/privacy (WebConfig)
+            Map.entry("/como-funciona", "static/como-funciona.html"),
+            Map.entry("/en/how-it-works", "static/en/how-it-works.html"),
+            Map.entry("/temas", "static/temas/index.html"),
+            Map.entry("/en/topics", "static/en/topics/index.html"));
 
     /** Ya convertidas: las páginas no cambian mientras la aplicación está en marcha. */
     private final Map<String, String> cache = new ConcurrentHashMap<>();

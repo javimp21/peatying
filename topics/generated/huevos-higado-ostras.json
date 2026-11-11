@@ -1,0 +1,101 @@
+{
+  "slug" : "huevos-higado-ostras",
+  "name" : "los huevos, el hígado y las ostras",
+  "title" : "Ray Peat, los huevos, el hígado y las ostras",
+  "question" : "¿Por qué recomendaba hígado y ostras?",
+  "description" : "Qué pensaba Ray Peat de los huevos, el hígado y las ostras: fuente de vitamina A, cobre y zinc, cómo cocinarlos y por qué los combinaba en su dieta.",
+  "intro" : "Para Ray Peat, los huevos, el hígado y el marisco funcionaban como un «efecto escopeta»: tres alimentos que cubren carencias que uno ni siquiera sabe que tiene [1]. Aportan sobre todo vitamina A, vitaminas del grupo B y minerales como el cobre y el zinc [2][3]. Aun así, tenía matices sobre cómo cocinarlos y sobre el hierro de algunos mariscos [4][5].",
+  "sections" : [ {
+    "heading" : "Una combinación para cubrir lo que no sabemos",
+    "paragraphs" : [ "Según Peat, calcular los nutrientes uno a uno es demasiado complicado. A veces un solo suplemento rescata a alguien en un estado grave, pero casi nunca hay tanta suerte [1]. Por eso defendía la combinación de huevos, hígado y marisco, que sirve para rellenar lo que se desconoce [1].", "En el menú diario que propone en un libro dirigido a mujeres aparecen el huevo en el desayuno y un guiso de ostras en la cena [6]." ]
+  }, {
+    "heading" : "Huevos e hígado como fuentes de vitamina A",
+    "paragraphs" : [ "Peat sostenía que una ración de hígado a la semana, uno o dos huevos al día y leche bastan para cubrir la vitamina A de la mayoría de la gente [2]. Para él, cualquier hígado (de pescado, de pollo o de ternera) es una gran fuente, y también lo son los huevos, la leche y el queso [7].", "Añadía que la vitamina B12 es imprescindible para transformar el caroteno en vitamina A [7]. Además, explicaba que, junto con la hormona tiroidea, la vitamina A es el principal cofactor para convertir el colesterol en hormonas [8]. En su opinión, el caroteno acumulado en exceso compite con las enzimas que usan vitamina A y acaba actuando como una antivitamina A [8]." ]
+  }, {
+    "heading" : "Cómo prefería el huevo y qué decía del colesterol",
+    "paragraphs" : [ "Peat señalaba que algo de la yema cruda tiene efecto germicida y ayuda a desinfectar el intestino. Cocinarla reduce ese efecto, pero se conserva casi todo el beneficio [5]. Aun así, recomendaba cocinarlo lo mínimo, con la yema líquida, porque sus grasas poliinsaturadas (PUFA) se oxidan y se dañan con facilidad con el calor [5].", "Sobre el colesterol, citaba estudios en los que añadir huevos a la dieta no empeoraba el carácter aterogénico de las LDL. Uno de ellos, con niños mexicanos que tomaban dos huevos al día, observó que se mantenía la proporción entre LDL y HDL [9]. También consideraba la yema una proteína de máxima calidad para realimentar a personas desnutridas, a veces junto con hormona tiroidea [10]." ]
+  }, {
+    "heading" : "El hígado: vitaminas B, cobre y otros nutrientes",
+    "paragraphs" : [ "Peat recomendaba comer hígado una vez por semana por su riqueza en vitaminas del grupo B [11][12]. En otro libro menciona tomarlo al menos dos veces por semana [6]. También lo cita como alimento rico en ácido fólico, cobre y ubiquinona [3].", "Contaba el caso de un hombre con una infección recurrente al que dio hígado y vitaminas, y que según su relato se recuperó en pocos días [13]. Explicaba que el ácido fólico mejora la función de los glóbulos blancos y que la vitamina A es necesaria para sintetizar proteínas y formar tejido inmunitario [13]. Para él, un acné o una caspa persistentes sugerían falta de vitamina A [6]." ]
+  }, {
+    "heading" : "Por qué el hígado puede costar de digerir",
+    "paragraphs" : [ "Peat pensaba que la dificultad del hígado se debe sobre todo a su bajo contenido en grasa. Su alto nivel de proteína envía señales fuertes al organismo y exige bastante azúcar extra, y preferiblemente algo de grasa saturada que frene la absorción para que la digestión no resulte estresante [1]." ]
+  }, {
+    "heading" : "Las ostras: cobre, zinc y el problema del hierro",
+    "paragraphs" : [ "Según Peat, las ostras son una fuente de zinc, un mineral que relacionaba con la inmunidad, la cicatrización, la fertilidad y los nervios [3]. Sostenía que la falta de cobre hace que los tejidos retengan hierro en exceso, y por eso aconsejaba tomar con regularidad alimentos ricos en cobre como las gambas y las ostras [14][15].", "Valoraba el cobre porque permite usar bien el oxígeno para producir energía, mantiene la elasticidad de la piel y los vasos y participa en el color del pelo [14]. Sobre el pescado, decía que solo lo recomendaba por los minerales traza fiables, como el selenio y el yodo, y prefería el marisco y el pescado bajo en grasa [4]. Matizaba que las ostras tienen mucho hierro y que el calamar es una opción muy buena, pues es pobre en hierro y rico en cobre [4]." ]
+  } ],
+  "faq" : [ {
+    "q" : "¿Cuánto hígado recomendaba comer Ray Peat?",
+    "a" : "En sus textos habla de una ración de hígado a la semana, por su contenido en vitaminas del grupo B [11][12][2]. En otro libro menciona tomarlo al menos dos veces por semana [6]. Según Peat, esa ración semanal junto con uno o dos huevos diarios y leche cubre la vitamina A de la mayoría de la gente [2]."
+  }, {
+    "q" : "¿Por qué Ray Peat recomendaba las ostras?",
+    "a" : "Las consideraba una fuente de zinc, y los mariscos en general de cobre [3][4]. Sostenía que la falta de cobre favorece que los tejidos acumulen hierro, algo que para él era perjudicial [14]. También advertía de que las ostras tienen mucho hierro, y señalaba el calamar como alternativa pobre en hierro [4]."
+  }, {
+    "q" : "¿Pensaba Ray Peat que los huevos suben el colesterol?",
+    "a" : "Citaba estudios en los que consumir huevos no empeoraba el carácter aterogénico de las LDL [9]. En uno realizado con niños mexicanos, dos huevos al día mantenían la proporción entre LDL y HDL [9]. Para Peat, además, la vitamina A es necesaria, junto con la hormona tiroidea, para convertir el colesterol en hormonas [8]."
+  }, {
+    "q" : "¿Cómo prefería Ray Peat cocinar los huevos?",
+    "a" : "Prefería cocinarlos lo menos posible, con la yema todavía líquida [5]. Según él, las grasas poliinsaturadas (PUFA) de la yema se oxidan y se dañan con facilidad con el calor, aunque un huevo cocinado conserva casi todo el beneficio [5]."
+  } ],
+  "sources" : [ {
+    "title" : "Generative Energy: Bioenergetic Nutrition Basics, \"The Ray Peat Diet\", Appetite and Metabolism (2021)",
+    "url" : "https://d3ctxlq1ktw2nl.cloudfront.net/staging/2021-3-25/f0b7be3e-6477-07bc-24c3-1711673bca8e.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "EastWest Healing: Milk calcium and hormones (2011)",
+    "url" : "https://www.toxinless.com/ewh-110603-milk-calcium-and-hormones.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Nutrition for Women, p. 112",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p112",
+    "type" : "book"
+  }, {
+    "title" : "One Radio Network: Fats and questions (2019)",
+    "url" : "https://www.toxinless.com/orn-190124-fats-and-questions.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "One Radio Network: Natural healing (2019)",
+    "url" : "https://www.toxinless.com/orn-190429-natural-healing.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Nutrition for Women, p. 90",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p90",
+    "type" : "book"
+  }, {
+    "title" : "Ask the Herb Doctor (KMUD): Memory cognition and nutrition (2014)",
+    "url" : "https://www.toxinless.com/kmud-140516-memory-cognition-and-nutrition.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "World Puja: Foundational hormones (2012)",
+    "url" : "https://www.toxinless.com/wp-121123-foundational-hormones.mp3",
+    "type" : "interview"
+  }, {
+    "title" : "Cholesterol, longevity, intelligence, and health.",
+    "url" : "https://raypeat.com/articles/articles/cholesterol-longevity.shtml",
+    "type" : "article"
+  }, {
+    "title" : "From PMS to Menopause, p. 129",
+    "url" : "https://raypeat.com/products.shtml#from-pms-to-menopause-p129",
+    "type" : "book"
+  }, {
+    "title" : "From PMS to Menopause, p. 115",
+    "url" : "https://raypeat.com/products.shtml#from-pms-to-menopause-p115",
+    "type" : "book"
+  }, {
+    "title" : "Progesterone in Orthomolecular Medicine, p. 31",
+    "url" : "https://raypeat.com/products.shtml#progesterone-orthomolecular-medicine-p31",
+    "type" : "book"
+  }, {
+    "title" : "Nutrition for Women, p. 53",
+    "url" : "https://raypeat.com/products.shtml#nutrition-for-women-p53",
+    "type" : "book"
+  }, {
+    "title" : "Iron's Dangers",
+    "url" : "https://raypeat.com/articles/articles/iron-dangers.shtml",
+    "type" : "article"
+  }, {
+    "title" : "From PMS to Menopause, p. 172",
+    "url" : "https://raypeat.com/products.shtml#from-pms-to-menopause-p172",
+    "type" : "book"
+  } ]
+}

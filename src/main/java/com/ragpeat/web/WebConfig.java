@@ -31,12 +31,14 @@ public class WebConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/about").setViewName("forward:/about.html");
         registry.addViewController("/privacidad").setViewName("forward:/privacidad.html");
+        registry.addViewController("/como-funciona").setViewName("forward:/como-funciona.html");
         registry.addViewController("/panel").setViewName("forward:/panel.html");
         // La versión en inglés: la misma app, con los textos en inglés (app.js mira <html lang>).
         registry.addViewController("/en").setViewName("forward:/en/index.html");
         registry.addViewController("/en/").setViewName("forward:/en/index.html");
         registry.addViewController("/en/about").setViewName("forward:/en/about.html");
         registry.addViewController("/en/privacy").setViewName("forward:/en/privacy.html");
+        registry.addViewController("/en/how-it-works").setViewName("forward:/en/how-it-works.html");
         // /privacy es donde agentes y validadores buscan la política de privacidad: lleva a la versión en inglés.
         registry.addRedirectViewController("/privacy", "/en/privacy").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
     }
@@ -50,7 +52,7 @@ public class WebConfig implements WebMvcConfigurer {
         // este filtro la respuesta salía vacía. Sin fecha ni huella, el navegador la pide entera
         // cada vez, que para un HTML tan pequeño no importa.
         registration.addUrlPatterns("/index.html", "/app.js", "/theme.js", "/visit.js", "/styles.css", "/about.html", "/about.js",
-                "/privacidad.html", "/contact.js", "/panel.js", "/robots.txt", "/sitemap.xml", "/img/*");
+                "/privacidad.html", "/como-funciona.html", "/contact.js", "/panel.js", "/robots.txt", "/sitemap.xml", "/img/*");
         // /temas/* tampoco: /temas/azucar es otro forward (ver TopicPagesController) y saldría vacía.
         return registration;
     }

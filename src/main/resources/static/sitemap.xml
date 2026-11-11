@@ -3,10 +3,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://peatying.com/</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/about</loc><lastmod>2026-11-11</lastmod></url>
-  <url><loc>https://peatying.com/temas</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://peatying.com/temas</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/como-funciona</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/privacidad</loc><lastmod>2026-11-05</lastmod></url>
   <url><loc>https://peatying.com/en</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/en/about</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/en/how-it-works</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/en/privacy</loc><lastmod>2026-11-05</lastmod></url>
   <url><loc>https://peatying.com/temas/azucar</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/temas/aceites-vegetales</loc><lastmod>2026-11-11</lastmod></url>
@@ -36,7 +38,13 @@
   <url><loc>https://peatying.com/temas/insulina-diabetes</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/temas/intestino-endotoxinas</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/temas/perder-grasa</loc><lastmod>2026-11-11</lastmod></url>
-  <url><loc>https://peatying.com/en/topics</loc><lastmod>2026-11-09</lastmod></url>
+  <url><loc>https://peatying.com/temas/ejercicio</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/temas/testosterona-dhea</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/temas/fruta-zumo-naranja</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/temas/suplementos</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/temas/aspirina</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/temas/huevos-higado-ostras</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/en/topics</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/en/topics/sugar</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/en/topics/vegetable-oils</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/en/topics/thyroid</loc><lastmod>2026-11-11</lastmod></url>
@@ -65,4 +73,10 @@
   <url><loc>https://peatying.com/en/topics/insulin-diabetes</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/en/topics/gut-endotoxin</loc><lastmod>2026-11-11</lastmod></url>
   <url><loc>https://peatying.com/en/topics/fat-loss</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/en/topics/exercise</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/en/topics/testosterone-dhea</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/en/topics/fruit-orange-juice</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/en/topics/supplements</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/en/topics/aspirin</loc><lastmod>2026-11-11</lastmod></url>
+  <url><loc>https://peatying.com/en/topics/eggs-liver-oysters</loc><lastmod>2026-11-11</lastmod></url>
 </urlset>

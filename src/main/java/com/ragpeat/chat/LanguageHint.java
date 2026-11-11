@@ -42,6 +42,10 @@ public class LanguageHint {
     // árabe...). Con inglés y español el bot ya acertaba, y así casi ninguna pregunta paga el retraso extra.
     private static final Pattern OTHER_LETTERS = Pattern.compile("[\\p{L}&&[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ]]");
 
+    // Letras que no son del alfabeto latino (cirílico, griego, árabe, chino...): con ellas basta una palabra suelta
+    // para saber que no es ni español ni inglés. "Груша" (pera), sola, se respondió en español.
+    private static final Pattern NOT_LATIN = Pattern.compile("[\\p{L}&&[^\\p{IsLatin}]]");
+
     // "Turkish (Türkçe)", "Polish (polski)", "Chinese (中文)"
     private static final Pattern NAME = Pattern.compile("\\p{L}+ \\([\\p{L}\\p{M} ]+\\)");
 
@@ -90,8 +94,11 @@ public class LanguageHint {
             return null;
         }
         String own = QUOTE_PREFIX.matcher(question).replaceFirst("").strip();
-        if (own.split("\\s+").length < 3 || !OTHER_LETTERS.matcher(own).find()) {
-            return null; // una palabra suelta o una sigla, o letras de inglés y español: no hace falta
+        if (!OTHER_LETTERS.matcher(own).find()) {
+            return null; // letras de inglés y español: no hace falta
+        }
+        if (own.split("\\s+").length < 3 && !NOT_LATIN.matcher(own).find()) {
+            return null; // una palabra suelta o una sigla en letras latinas ("Şeker"): no se puede saber el idioma
         }
         return own.length() > 500 ? own.substring(0, 500) : own;
     }

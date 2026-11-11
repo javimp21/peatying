@@ -20,6 +20,8 @@ class LanguageHintTest {
             What did he think of serotonin?                                | false
             Hcg for men?                                                   | false
             Şeker                                                          | false
+            Груша                                                          | true
+            Кока кола                                                      | true
             """)
     void asksOnlyForSentencesWithLettersOutsideEnglishAndSpanish(String question, boolean asks) {
         assertThat(LanguageHint.ownText(question) != null).isEqualTo(asks);

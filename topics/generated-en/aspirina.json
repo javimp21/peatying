@@ -1,0 +1,135 @@
+{
+  "slug": "aspirin",
+  "name": "aspirin",
+  "title": "Ray Peat on aspirin",
+  "question": "Why did Peat defend aspirin?",
+  "description": "What Ray Peat thought about aspirin: inflammation, prostaglandins, aging, estrogen, cancer and the role of vitamin K, according to his work.",
+  "intro": "For Ray Peat, aspirin was a broad-spectrum protection against inflammation and aging, above all because it blocks the formation of prostaglandins [1][2]. He held that those substances amplify inflammation and are involved in cancer and in the deterioration of tissues [1][3]. He also insisted on looking after the supply of vitamin K when it is used chronically [4].",
+  "sections": [
+    {
+      "heading": "Inflammation, collagen and aging",
+      "paragraphs": [
+        "According to Peat, when there is systemic inflammation, lactic acid and prostaglandins are produced, and both favor the buildup of collagen in the tissues. That is why he compared aging to one enormous scar, and gave the example of the difference between a kid glove and a leather boot, which for him depends on the age of the animal [1].",
+        "In his opinion, aspirin protects because it blocks prostaglandins and other inflammatory mechanisms [1]. He added that it lowers the production of ACTH in the pituitary, and that ACTH raises aldosterone, which in turn contributes to the collagen formation typical of aging and to other degenerative processes [1]."
+      ]
+    },
+    {
+      "heading": "Prostaglandins and polyunsaturated fats",
+      "paragraphs": [
+        "Peat explained that any inflammation, even a mild one, triggers the production of prostaglandins, short-acting hormones that mostly amplify inflammation and have harmful side effects. According to him, they are formed in proportion to the polyunsaturated fatty acids (PUFA) incorporated into each tissue [1].",
+        "He held that, from the age of twenty on, a slower metabolism makes us accumulate PUFA efficiently, to the point that between 20 and 40 their amount in the tissues could double. For him, that explains why a fetus or a newborn heals without leaving a mark, while with age wounds heal more slowly, inflame more and can leave scars that get in the way of function [1]. In that context, aspirin reduces the formation of prostaglandins from arachidonic acid, and according to Peat it also protects against iron toxicity, clot formation and lipid peroxidation [2]."
+      ]
+    },
+    {
+      "heading": "Aspirin, estrogen and cancer",
+      "paragraphs": [
+        "Peat described a vicious circle: the stressed cells of a tumor produce estrogen, and this activates the enzyme cyclooxygenase, which makes prostaglandins, which keep aromatase active and generate still more estrogen. The PUFA already stored in the tissues would feed that process as they are released under stress [5]. According to him, aspirin is a very effective way to turn off both the production of estrogen and the response to it [6].",
+        "He believed that anti-inflammatories such as aspirin have a rational place in the treatment of cancer, especially if they have some antihistamine action, and he noted that estrogen tends to be deposited in inflamed tissues [3][7]. For him, prostaglandins are involved in all the major types of cancer, and in prostate cancer he thought prostaglandin inhibitors should be a basic part of therapy [3][8]. He added that sugar and niacinamide reinforce the action of aspirin by limiting the release of polyunsaturated fats from the tissues [5], and that progesterone, carbon dioxide and red light also help [9]."
+      ]
+    },
+    {
+      "heading": "Brain, diabetes, bones and skin",
+      "paragraphs": [
+        "Peat pointed out that aspirin use is associated with a lower incidence of Alzheimer's disease, and he attributed this to its reducing inflammation and slowing the formation of neurotoxic prostaglandins [10][2]. In other contexts, according to him, it also protects against estrogen [10].",
+        "In diabetes, he stressed its wide range of anti-inflammatory actions. Since one of the consequences of inflammation is hyperglycemia, he held that aspirin helps correct it and protects proteins from oxidative damage [11]. As for bone, he said it supports cell respiration, inhibits the formation of lactic acid and favors calcification [12]. For skin with rosacea, he mentioned that aspirin applied topically can be protective [13]."
+      ]
+    },
+    {
+      "heading": "Vitamin K and the risk of bleeding",
+      "paragraphs": [
+        "Peat warned that chronic aspirin use can cause abnormal excessive bleeding, especially if antibiotics have disturbed the intestinal bacteria that produce vitamin K [4][13]. He recounted that, when experimenting with continuous use, he noticed that a small scratch bled for about 20 or 30 minutes. After taking vitamin K, he stated that he no longer saw any bleeding abnormality, even with 1,000 milligrams a day [4].",
+        "As sources of vitamin K he cited cooked leafy greens, such as kale, as well as liver and some cheeses [14]. He said that eating liver two or three times a month supplies the range of forms of vitamin K, because the liver can make them all [4]."
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why did Ray Peat defend the use of aspirin?",
+      "a": "According to Peat, aspirin blocks prostaglandins and other inflammatory mechanisms, which would protect against inflammation and the aging of tissues [1]. Prostaglandins, he said, amplify inflammation and are formed from the PUFA accumulated in the tissues [1]."
+    },
+    {
+      "q": "What link did Peat see between aspirin, estrogen and cancer?",
+      "a": "He held that estrogen activates cyclooxygenase, which produces prostaglandins, and these keep aromatase active, which generates more estrogen [5]. That is why he considered that aspirin, by breaking that circle, has a rational place in cancer therapy [3][6]."
+    },
+    {
+      "q": "What did Peat say about bleeding with aspirin?",
+      "a": "According to Peat, chronic use can cause abnormal bleeding, especially after antibiotics that disturb the intestinal bacteria that make vitamin K [4]. That is why he recommended that the diet include vitamin K, for example from liver, cooked greens or certain cheeses [14][4]."
+    },
+    {
+      "q": "What did Peat say about aspirin and Alzheimer's disease?",
+      "a": "Peat noted that the use of aspirin and other anti-inflammatories, taken for arthritis for example, is associated with a lower incidence of Alzheimer's disease [10][2]. He explained it by their ability to reduce inflammation and to slow the formation of neurotoxic prostaglandins [10]."
+    }
+  ],
+  "sources": [
+    {
+      "title": "JodelleFit: Insulin resistance vegans low cortisol (2020)",
+      "url": "https://www.toxinless.com/jf-200116-insulin-resistance-vegans-low-cortisol.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "The problem of Alzheimer's disease as a clue to immortality - part 2",
+      "url": "https://raypeat.com/articles/articles/alzheimers2.shtml",
+      "type": "article"
+    },
+    {
+      "title": "From PMS to Menopause, p. 116",
+      "url": "https://raypeat.com/products.shtml#from-pms-to-menopause-p116",
+      "type": "book"
+    },
+    {
+      "title": "One Radio Network: Milk (2019)",
+      "url": "https://www.toxinless.com/orn-190718-milk.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "EastWest Healing: Energy and metabolism (2013)",
+      "url": "https://www.toxinless.com/ewh-130717-energy-and-metabolism.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): Breast cancer (2015)",
+      "url": "https://www.toxinless.com/kmud-150320-breast-cancer.mp3",
+      "type": "interview"
+    },
+    {
+      "title": "Progesterone in Orthomolecular Medicine, p. 33",
+      "url": "https://raypeat.com/products.shtml#progesterone-orthomolecular-medicine-p33",
+      "type": "book"
+    },
+    {
+      "title": "Prostate Cancer",
+      "url": "https://raypeat.com/articles/articles/prostate-cancer.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Cancer: Disorder and Energy",
+      "url": "https://raypeat.com/articles/articles/cancer-disorder-energy.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Estrogen and brain aging in men and women: Depression, energy, stress",
+      "url": "https://raypeat.com/articles/articles/estrogen-age-stress.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Glucose and sucrose for diabetes",
+      "url": "https://raypeat.com/articles/articles/glucose-sucrose-diabetes.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Osteoporosis, aging, tissue renewal, and product science",
+      "url": "https://raypeat.com/articles/articles/osteoporosis-aging.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Rosacea, inflammation, and aging: The inefficiency of stress",
+      "url": "https://raypeat.com/articles/articles/rosacea-inflammation-aging.shtml",
+      "type": "article"
+    },
+    {
+      "title": "Ask the Herb Doctor (KMUD): How to restore and protect nerves (2014)",
+      "url": "https://www.toxinless.com/kmud-140321-how-to-restore-and-protect-nerves.mp3",
+      "type": "interview"
+    }
+  ]
+}
