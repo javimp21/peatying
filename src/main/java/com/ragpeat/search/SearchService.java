@@ -1,5 +1,6 @@
 package com.ragpeat.search;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.ragpeat.embedding.PgVector;
@@ -39,6 +40,34 @@ public class SearchService {
      *                        y encontraría ruido ("Bungenberg de Jong"). Más adelante será el modelo
      *                        quien escriba estas palabras clave en inglés.
      */
+    /** Fragmentos concretos por su id (los que citó una respuesta anterior). Los que ya no existan no salen. */
+    public List<SearchResult> byIds(Collection<Long> chunkIds) {
+        if (chunkIds.isEmpty()) {
+            return List.of();
+        }
+        return jdbc.sql("""
+                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, 0 AS score
+                FROM chunks c JOIN documents d ON d.id = c.document_id
+                WHERE c.id IN (:ids)
+                """)
+                .param("ids", chunkIds)
+                .query(SearchResult.class)
+                .list();
+    }
+
+    /** Los fragmentos de un documento por su slug, en orden (para reproducir conversaciones en el examen). */
+    public List<SearchResult> ofDocument(String slug) {
+        return jdbc.sql("""
+                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, 0 AS score
+                FROM chunks c JOIN documents d ON d.id = c.document_id
+                WHERE d.slug = :slug
+                ORDER BY c.id
+                """)
+                .param("slug", slug)
+                .query(SearchResult.class)
+                .list();
+    }
+
     public List<SearchResult> search(String query, String englishKeywords, int limit) {
         String queryVector = PgVector.toLiteral(voyage.embedQuery(query));
 

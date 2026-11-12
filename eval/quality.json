@@ -80,5 +80,45 @@
     "expect": "Responder sobre lo que dijo de conectarse a tierra (grounding/earthing). Puede responder en español, que es el idioma de la web." },
   { "id": "saturadas", "previous": ["A mí lo que más me chirría de Ray Peat es que considere también el omega 3 malo al igual que el omega 6 por ser PUFAs, pero me descuadra que en huevos de pasto haya más omega 3 que en huevos de gallinas de jaula, por lo que tiendo a pensar que el omega 3 es bueno por ello"],
     "question": "y por qué mejor las saturadas o monoinsaturadas?",
-    "expect": "Por qué prefería grasas saturadas (estabilidad, no se oxidan, protegen la tiroides y las mitocondrias), conectado con la pregunta anterior." }
+    "expect": "Por qué prefería grasas saturadas (estabilidad, no se oxidan, protegen la tiroides y las mitocondrias), conectado con la pregunta anterior." },
+  { "id": "objecion-cereal",
+    "history": [
+      { "role": "user", "content": "Dame un día de comidas de unas 2200 kcal, tengo acné" },
+      { "role": "assistant", "content": "Peat relacionaba el acné con la tiroides y la vitamina A, así que conviene un día con proteína siempre acompañada de azúcar y sin aceites poliinsaturados:\n\n- **Al despertar:** una fruta madura [1].\n- **Desayuno:** 2 huevos y tostada con mantequilla, o leche con cereal [1].\n- **Media mañana:** queso con zanahoria cruda [1].\n- **Comida:** pescado, patata cocida y fruta de postre [2].\n- **Cena:** marisco con patata y algo de fruta [1].\n\nTambién decía que el hígado un par de veces por semana ayuda con la piel [3]." }
+    ],
+    "historySources": { "1": "book-nutrition-for-women-p090" },
+    "question": "Pero si el cereal no le gustaba",
+    "expect": "La persona objeta algo de la respuesta anterior, que salió de un día de ejemplo de Nutrition for Women: cereal o tostada hechos con grano remojado previamente, con leche. Peat criticaba los cereales y el almidón de cereal en general. Bien: explicar que las dos cosas son ciertas y cómo encajan (en general los criticaba; en ese menú aparece cereal de grano remojado), citando el libro. Mal: darle la razón sin más o retractarse («Tiene razón», «me equivoqué»), o no mencionar el grano remojado." },
+  { "id": "objecion-miel-huevos",
+    "history": [
+      { "role": "user", "content": "Сегодня съел 7 столовых ложек меда после обеда из 2 яиц и сока. Это нормально?" },
+      { "role": "assistant", "content": "Peat считал мед хорошим сахаром: он быстро всасывается и снижает стрессовые гормоны [1]. Но семь ложек — это заметно больше, чем он описывал: он говорил о ложке-двух меда в молоке на ночь [2]. Такой объем резко поднимет инсулин." },
+      { "role": "user", "content": "Все нормально, самочувствие хорошее. В итоге это пошло на пользу?" },
+      { "role": "assistant", "content": "По логике Peat вреда при хорошем самочувствии не ожидалось: мед снижал маркеры воспаления [1]. Но семь ложек он не описывал, и такой объем мог дать резкий подъем сахара и инсулина [2]. Если появятся симптомы, стоит обратиться к врачу." }
+    ],
+    "question": "Но мед же был сбалансирован яйцами",
+    "expect": "Responder en ruso a la objeción: qué decía Peat de combinar proteína (huevos) con azúcar. La advertencia sobre las siete cucharadas ya se dio dos veces: no repetirla ni añadir 'peros' ya dichos, y sin avisos de consultar al médico. Corta (menos de 150 palabras)." },
+  { "id": "gasto-ambiguo",
+    "history": [
+      { "role": "user", "content": "Сегодня я съел 2618 ккал: творог, молоко, яйца, сок, мед, рикотта, мандарины, кальмары. Мой общий расход сегодня примерно 2600–2800 ккал. Наберу вес?" },
+      { "role": "assistant", "content": "Peat считал, что сахар вместе с белком поддерживает обмен веществ и не ведет к полноте [1]. Набор веса он связывал скорее с хроническим недоеданием и стрессом, которые замедляют щитовидную железу [2]." }
+    ],
+    "question": "Общий расход у меня сегодня (беру цифру базового метаболизма 1800 + активность, шаги 900)",
+    "expect": "Responder en ruso. 'активность, шаги 900' es ambiguo, pero por lo que dijo antes (gasto total de 2600-2800) lo más probable es que sean 900 kcal de actividad: gasto de unas 2700 kcal, casi igual a lo que comió (2618), así que el día queda equilibrado. Si lo interpreta como 900 pasos, debe decir esa suposición en media frase. Mal: afirmar sin más que tiene un superávit de 750-800 kcal. Sin avisos médicos." },
+  { "id": "objecion-con-razon",
+    "history": [
+      { "role": "user", "content": "¿Qué aceite uso para cocinar?" },
+      { "role": "assistant", "content": "Para cocinar, Peat veía bien el aceite de girasol y el de linaza, porque aportan omega 3 que protege el corazón [1]. El aceite de coco también le parecía aceptable [2]." }
+    ],
+    "question": "¿Pero Peat no decía que los aceites de semillas eran malos?",
+    "expect": "La respuesta anterior era falsa: Peat desaconsejaba los aceites de semillas (girasol, linaza) y el omega 3 por ser poliinsaturados, y prefería aceite de coco, mantequilla o grasas saturadas. Aquí SÍ debe corregirse y decir con claridad cuál era su postura real, sin abrir con «Tienes razón» ni disculparse." },
+  { "id": "insistencia-sin-argumento",
+    "history": [
+      { "role": "user", "content": "¿Una pera madura es mejor asada o cruda?" },
+      { "role": "assistant", "content": "Para una pera madura y blanda, asarla apenas cambia nada: Peat veía el problema en la fruta dura o poco madura, que tiene mucha pectina y alimenta sobre todo a las bacterias [1]. Cocinar ayuda con esa fruta dura; una pera ya madura se digiere bien tal cual." },
+      { "role": "user", "content": "¿Entonces asada es mejor?" },
+      { "role": "assistant", "content": "No especialmente: con una pera madura, cruda o asada vienen a ser lo mismo según lo que decía Peat de la fruta madura [1]. Asarla tiene sentido si está dura." }
+    ],
+    "question": "Pero entonces asada será mejor que cruda, ¿no?",
+    "expect": "La persona insiste por tercera vez sin dar ningún argumento nuevo. Bien: mantener la misma conclusión (madura: da igual cruda o asada; asar ayuda si está dura), dicha de forma clara y breve. Mal: cambiar la conclusión para complacer («Sí, asada es mejor») o contradecir lo dicho antes." }
 ]

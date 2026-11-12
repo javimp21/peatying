@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -19,6 +22,8 @@ import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.chat.ChatListener;
 import com.ragpeat.chat.ChatService;
 import com.ragpeat.chat.Turn;
+import com.ragpeat.search.SearchResult;
+import com.ragpeat.search.SearchService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.Resource;
@@ -33,6 +38,7 @@ import tools.jackson.databind.json.JsonMapper;
  *   java -jar target\rag-peat-0.0.1-SNAPSHOT.jar quality
  *   java -jar target\rag-peat-0.0.1-SNAPSHOT.jar quality --chat.system-prompt=file:otro.md     (otro prompt)
  *   java -jar target\rag-peat-0.0.1-SNAPSHOT.jar quality --anthropic.model=claude-sonnet-5-5   (otro modelo)
+ *   java -jar target\rag-peat-0.0.1-SNAPSHOT.jar quality --eval.only=cena,cafe                 (solo esas preguntas)
  *
  * Guarda el detalle en eval/results/ para poder comparar ejecuciones.
  */
@@ -41,8 +47,15 @@ public class QualityCommand implements CommandLineRunner {
 
     private static final int THREADS = 4;
 
-    /** Una pregunta del examen. previous: preguntas anteriores de la misma conversación (se responden antes). */
-    record QualityQuestion(String id, List<String> previous, String question, String expect) {}
+    /**
+     * Una pregunta del examen. previous: preguntas anteriores de la misma conversación (se responden antes).
+     * history: en lugar de previous, una conversación ya escrita (preguntas y respuestas tal cual), para reproducir
+     * una conversación real en la que importa lo que dijo el bot antes (por ejemplo, cuando la persona le lleva la contraria).
+     * historySources: de qué documento salió cada cita de la última respuesta de history (número -> slug del documento),
+     * para que el bot vea esos fragmentos como en la web, donde se guardan con cada respuesta.
+     */
+    record QualityQuestion(String id, List<String> previous, List<Turn> history, Map<Integer, String> historySources,
+                           String question, String expect) {}
 
     record Review(@JsonPropertyDescription("1 a 5: ¿responde a lo que la persona quiere?") int answers,
                   @JsonPropertyDescription("Partes que no ayudan a responder a esta pregunta") List<String> offTopic,
@@ -60,6 +73,7 @@ public class QualityCommand implements CommandLineRunner {
                   long inputTokens, long outputTokens, long millis) {}
 
     private final ChatService chatService;
+    private final SearchService searchService;
     private final AnthropicClient claude;
     private final JsonMapper json;
     private final String model;
@@ -68,18 +82,23 @@ public class QualityCommand implements CommandLineRunner {
     private final String promptName;
     private final int limit;
     private final boolean judge;
+    private final List<String> only;
 
     private long judgeInput, judgeOutput;
 
-    public QualityCommand(ChatService chatService, AnthropicClient claude, JsonMapper json,
+    public QualityCommand(ChatService chatService, SearchService searchService, AnthropicClient claude, JsonMapper json,
                           @Value("${anthropic.model}") String model,
                           @Value("${eval.judge-model}") String judgeModel,
                           @Value("classpath:prompts/judge-quality.md") Resource judgePrompt,
                           @Value("${chat.system-prompt:classpath:prompts/system.md}") String promptName,
                           @Value("${eval.limit:1000}") int limit,
                           // --eval.judge=false: solo responde y guarda lo que encontró la búsqueda, sin pagar al juez.
-                          @Value("${eval.judge:true}") boolean judge) throws IOException {
+                          @Value("${eval.judge:true}") boolean judge,
+                          // --eval.only=cereal-objecion,miel-huevos: solo esas preguntas (por id).
+                          @Value("${eval.only:}") List<String> only) throws IOException {
+        this.only = only;
         this.chatService = chatService;
+        this.searchService = searchService;
         this.claude = claude;
         this.json = json;
         this.model = model;
@@ -101,7 +120,9 @@ public class QualityCommand implements CommandLineRunner {
         // Varias a la vez: cada pregunta (con su conversación previa) es independiente de las demás.
         List<Result> results = new ArrayList<>();
         try (ExecutorService pool = Executors.newFixedThreadPool(THREADS)) {
-            List<Future<Result>> pending = questions.stream().limit(limit)
+            List<Future<Result>> pending = questions.stream()
+                    .filter(q -> only.isEmpty() || only.contains(q.id()))
+                    .limit(limit)
                     .map(q -> pool.submit(() -> evaluate(q))).toList();
             for (Future<Result> f : pending) {
                 Result r = f.get();
@@ -125,17 +146,33 @@ public class QualityCommand implements CommandLineRunner {
 
     private Result evaluate(QualityQuestion q) {
         // Primero se responde la conversación previa, como lo haría una persona en la web.
-        List<Turn> history = new ArrayList<>();
+        List<Turn> history = new ArrayList<>(q.history() == null ? List.of() : q.history());
         StringBuilder previous = new StringBuilder();
+        for (Turn t : history) {
+            previous.append(t.role().equals(Turn.USER) ? "- Usuario: " : "- Bot: ").append(t.content()).append("\n");
+        }
+        // Los fragmentos que citó la última respuesta, como los guarda la web para la pregunta siguiente.
+        SortedMap<Integer, SearchResult> lastSources = new TreeMap<>();
+        if (q.historySources() != null) {
+            q.historySources().forEach((number, slug) -> {
+                List<SearchResult> chunks = searchService.ofDocument(slug);
+                if (chunks.isEmpty()) {
+                    throw new IllegalStateException(q.id() + ": no hay ningún documento con el slug " + slug);
+                }
+                lastSources.put(number, chunks.get(0));
+            });
+        }
         for (String p : q.previous() == null ? List.<String>of() : q.previous()) {
-            ChatAnswer a = chatService.answer(history, p, ChatListener.NONE);
+            ChatAnswer a = chatService.answer(history, lastSources, p, null, null, ChatListener.NONE);
             history.add(new Turn("user", p));
             history.add(new Turn("assistant", a.text()));
+            lastSources.clear();
+            lastSources.putAll(a.citedSources());
             previous.append("- ").append(p).append("\n");
         }
 
         long start = System.currentTimeMillis();
-        ChatAnswer answer = chatService.answer(history, q.question(), ChatListener.NONE);
+        ChatAnswer answer = chatService.answer(history, lastSources, q.question(), null, null, ChatListener.NONE);
         long millis = System.currentTimeMillis() - start;
 
         StringBuilder sources = new StringBuilder();

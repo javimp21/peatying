@@ -2,8 +2,11 @@ package com.ragpeat.chat;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 import com.ragpeat.search.SearchResult;
 import org.junit.jupiter.api.Test;
@@ -55,5 +58,37 @@ class ChatServiceTest {
         SortedMap<Integer, SearchResult> cited = ChatService.citedIn("Algo [7] y nada [0].", sources);
 
         assertThat(cited).isEmpty();
+    }
+
+    private static SearchResult chunk(long id) {
+        return new SearchResult(id, "slug-" + id, "Título " + id, "https://example.org/" + id, "article", "texto " + id, 0);
+    }
+
+    @Test
+    void theLastAnswerKeepsItsCitationsWithTheNewNumbers() {
+        // La respuesta anterior citaba [2] y [5]; ahora son los fragmentos 1 y 2, y una búsqueda nueva sigue en el 3.
+        SortedMap<Integer, SearchResult> previous = new TreeMap<>(Map.of(2, chunk(20), 5, chunk(50)));
+        List<SearchResult> sources = new ArrayList<>();
+
+        Map<Integer, Integer> renumber = ChatService.seedPrevious(previous, sources);
+
+        assertThat(sources).extracting(SearchResult::chunkId).containsExactly(20L, 50L);
+        assertThat(ChatService.renumbered("Leche con cereal [2]. Hígado [5][7]. Fruta [9].", renumber))
+                .isEqualTo("Leche con cereal [1]. Hígado [2]. Fruta.");
+        assertThat(ChatService.previousSourcesSection(sources)).contains("[1] ARTÍCULO: Título 20", "[2] ARTÍCULO: Título 50");
+    }
+
+    @Test
+    void onlyTheFirstFragmentsOfALongAnswerAreShownAgain() {
+        SortedMap<Integer, SearchResult> previous = new TreeMap<>();
+        for (int n = 1; n <= 12; n++) {
+            previous.put(n, chunk(n));
+        }
+        List<SearchResult> sources = new ArrayList<>();
+
+        Map<Integer, Integer> renumber = ChatService.seedPrevious(previous, sources);
+
+        assertThat(sources).hasSize(ChatService.MAX_PREVIOUS_SOURCES);
+        assertThat(ChatService.renumbered("a [3] b [12]", renumber)).isEqualTo("a [3] b");
     }
 }

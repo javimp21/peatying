@@ -3,6 +3,7 @@ package com.ragpeat.chat;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -135,7 +136,37 @@ public class ChatService {
      */
     public ChatAnswer answer(List<Turn> history, String question, String document, String pageLang,
                              ChatListener listener) {
+        return answer(history, new TreeMap<>(), question, document, pageLang, listener);
+    }
+
+    /** Hasta cuántos fragmentos de la respuesta anterior se vuelven a enseñar (cada uno son unos 400 tokens). */
+    static final int MAX_PREVIOUS_SOURCES = 8;
+
+    /** Los fragmentos de unas citas guardadas (número -> id del chunk). Los chunks que ya no existan se quedan fuera. */
+    public SortedMap<Integer, SearchResult> sourcesOf(SortedMap<Integer, Long> cited) {
+        Map<Long, SearchResult> byId = new HashMap<>();
+        searchService.byIds(cited.values()).forEach(r -> byId.put(r.chunkId(), r));
+        SortedMap<Integer, SearchResult> found = new TreeMap<>();
+        cited.forEach((number, chunkId) -> {
+            if (byId.containsKey(chunkId)) {
+                found.put(number, byId.get(chunkId));
+            }
+        });
+        return found;
+    }
+
+    /**
+     * @param previousSources los fragmentos que citó la ÚLTIMA respuesta del bot (número de la cita en su texto ->
+     *                        fragmento), o vacío. Se le vuelven a enseñar: sin ellos no podía comprobar lo que había
+     *                        dicho y, si la persona se lo discutía («pero si el cereal no le gustaba»), se retractaba
+     *                        de cosas ciertas, porque la búsqueda nueva solo traía la otra cara del tema.
+     */
+    public ChatAnswer answer(List<Turn> history, SortedMap<Integer, SearchResult> previousSources, String question,
+                             String document, String pageLang, ChatListener listener) {
         List<SearchResult> sources = new ArrayList<>(); // todos los fragmentos vistos; su posición+1 es su número [n]
+        // Los de la respuesta anterior van primero: ocupan los números 1, 2, 3... y las búsquedas nuevas siguen
+        // desde ahí (si una búsqueda vuelve a traer uno de ellos, conserva su número).
+        Map<Integer, Integer> renumber = seedPrevious(previousSources, sources);
         List<String> queries = new ArrayList<>();       // las búsquedas que pidió Claude (para el examen)
         int searches = 0;
         long inputTokens = 0, outputTokens = 0;
@@ -153,6 +184,9 @@ public class ChatService {
         }
         if (pageLang != null) {
             system.add(TextBlockParam.builder().text(pageLanguageSection(pageLang)).build());
+        }
+        if (!sources.isEmpty()) {
+            system.add(TextBlockParam.builder().text(previousSourcesSection(sources)).build());
         }
         String language = languageHint.of(question); // "Turkish (Türkçe)", o null si no hace falta o no está claro
         if (language != null) {
@@ -176,9 +210,20 @@ public class ChatService {
 
         // Primero, la conversación anterior; al final, la pregunta nueva. Así Claude entiende
         // preguntas como "¿y por qué?" o "explícamelo más simple".
-        for (Turn turn : compact(history)) {
+        List<Turn> turns = compact(history);
+        int lastAnswer = -1;
+        for (int i = 0; i < turns.size(); i++) {
+            if (Turn.ASSISTANT.equals(turns.get(i).role())) {
+                lastAnswer = i;
+            }
+        }
+        for (int i = 0; i < turns.size(); i++) {
+            Turn turn = turns.get(i);
             if (Turn.USER.equals(turn.role())) {
                 request.addUserMessage(turn.content());
+            } else if (i == lastAnswer && !renumber.isEmpty()) {
+                // La última respuesta conserva las citas de los fragmentos que le volvemos a enseñar.
+                request.addAssistantMessage(renumbered(turn.content(), renumber));
             } else {
                 request.addAssistantMessage(withoutCitations(turn.content()));
             }
@@ -232,7 +277,7 @@ public class ChatService {
                 }
                 toolResults.add(ContentBlockParam.ofToolResult(ToolResultBlockParam.builder()
                         .toolUseId(toolUse.id()) // así Claude sabe a qué petición corresponde cada resultado
-                        .content(result + languageReminder(question, language))
+                        .content(result + conversationReminder(history) + languageReminder(question, language))
                         .build()));
             }
             request.addMessage(MessageParam.builder()
@@ -303,6 +348,23 @@ public class ChatService {
      * justo después de leer los resultados, el bot seguía escribiendo "in the sources I can access" o "the fragments
      * don't show". Dicho aquí, lo último que lee antes de escribir, pesa más.
      */
+    /**
+     * En una conversación en marcha, lo que más pesa son las respuestas anteriores del propio bot: si en dos de ellas
+     * ya avisó de algo, tiende a avisar otra vez aunque el prompt diga que no, y a alargarse. Como con el idioma, se
+     * le recuerda justo antes de escribir. En la primera pregunta no hace falta.
+     */
+    static String conversationReminder(List<Turn> history) {
+        if (history.isEmpty()) {
+            return "";
+        }
+        return "\n---\nEsta conversación ya está en marcha. Responde solo a lo nuevo de este mensaje: si es una réplica "
+                + "corta, en un párrafo corto (menos de 100 palabras). Antes de escribir, relee tus respuestas "
+                + "anteriores: los avisos, pegas y explicaciones que ya están ahí no se repiten, ni con otras palabras "
+                + "ni con otras cifras. Si la persona discute algo de tu última respuesta, mira su fragmento en "
+                + "«Fragmentos de tu respuesta anterior» (si lo hay), cítalo y explica cómo encaja con lo que ella dice: "
+                + "ni le des la razón sin más ni cambies de conclusión solo porque insista.";
+    }
+
     static String languageReminder(String question, String language) {
         String quoted = question.length() > 300 ? question.substring(0, 300) + "…" : question;
         String which = language != null
@@ -335,14 +397,57 @@ public class ChatService {
 
         StringBuilder text = new StringBuilder();
         for (SearchResult result : searchService.search(input.query(), input.keywords(), resultsPerSearch)) {
-            int number = numberOf(result, sources);
-            // Claude tiene que saber qué es entrevista (transcripción automática) y qué es libro.
-            text.append("[").append(number).append("] ").append(result.label()).append(": ")
-                    .append(result.title())
-                    .append(" (").append(result.url()).append(")\n")
-                    .append(result.content()).append("\n\n");
+            text.append(fragment(numberOf(result, sources), result));
         }
         return text.isEmpty() ? "No se encontró nada." : text.toString();
+    }
+
+    /** Un fragmento tal como lo lee Claude: su número, qué es (entrevista, libro o artículo), el título y el texto. */
+    private static String fragment(int number, SearchResult result) {
+        // Claude tiene que saber qué es entrevista (transcripción automática) y qué es libro.
+        return "[" + number + "] " + result.label() + ": " + result.title() + " (" + result.url() + ")\n"
+                + result.content() + "\n\n";
+    }
+
+    /**
+     * Mete en la lista de fuentes los fragmentos de la respuesta anterior (como mucho MAX_PREVIOUS_SOURCES).
+     * @return número que tenía cada cita en la respuesta anterior -> número que tiene ahora
+     */
+    static Map<Integer, Integer> seedPrevious(SortedMap<Integer, SearchResult> previous, List<SearchResult> sources) {
+        Map<Integer, Integer> renumber = new HashMap<>();
+        for (Map.Entry<Integer, SearchResult> cited : previous.entrySet()) {
+            boolean known = sources.stream().anyMatch(s -> s.chunkId() == cited.getValue().chunkId());
+            if (known || sources.size() < MAX_PREVIOUS_SOURCES) {
+                renumber.put(cited.getKey(), numberOf(cited.getValue(), sources));
+            }
+        }
+        return renumber;
+    }
+
+    /** La respuesta anterior con sus citas pasadas a los números nuevos; las que no se vuelven a enseñar se quitan. */
+    static String renumbered(String text, Map<Integer, Integer> renumber) {
+        Matcher matcher = Pattern.compile("(\\s?)\\[(\\d+)]").matcher(text);
+        StringBuilder out = new StringBuilder();
+        while (matcher.find()) {
+            Integer number = renumber.get(Integer.parseInt(matcher.group(2)));
+            matcher.appendReplacement(out, number == null ? "" : Matcher.quoteReplacement(matcher.group(1) + "[" + number + "]"));
+        }
+        matcher.appendTail(out);
+        return out.toString();
+    }
+
+    static String previousSourcesSection(List<SearchResult> sources) {
+        StringBuilder text = new StringBuilder("""
+                ## Fragmentos de tu respuesta anterior
+                Tu última respuesta se basó en estos fragmentos; sus números son los [n] que ves en ella. Están aquí \
+                para que puedas comprobar lo que dijiste si la persona lo discute o pide más detalle, y puedes volver \
+                a citarlos con el mismo número. No responden a la pregunta nueva: busca igualmente.
+
+                """);
+        for (int i = 0; i < sources.size(); i++) {
+            text.append(fragment(i + 1, sources.get(i)));
+        }
+        return text.toString();
     }
 
     /** Respuestas que van enteras: las dos últimas (para "¿y eso por qué?" hace falta lo que se dijo justo antes). */
@@ -398,7 +503,7 @@ public class ChatService {
     record SearchInput(String query, String keywords) {}
 
     /** Si el fragmento ya salió en una búsqueda anterior, conserva su número; si no, le da uno nuevo. */
-    private int numberOf(SearchResult result, List<SearchResult> sources) {
+    private static int numberOf(SearchResult result, List<SearchResult> sources) {
         for (int i = 0; i < sources.size(); i++) {
             if (sources.get(i).chunkId() == result.chunkId()) {
                 return i + 1;

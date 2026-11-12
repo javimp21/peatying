@@ -1,7 +1,11 @@
 package com.ragpeat.chat;
 
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -105,14 +109,20 @@ public class ConversationRepository {
      */
     @Transactional
     public long saveExchange(UUID id, String question, String answer, AnswerMetrics metrics) {
+        return saveExchange(id, question, answer, metrics, Map.of());
+    }
+
+    /** @param cited los fragmentos que cita la respuesta: número de la cita -> id del chunk (ver V14). */
+    @Transactional
+    public long saveExchange(UUID id, String question, String answer, AnswerMetrics metrics, Map<Integer, Long> cited) {
         jdbc.sql("INSERT INTO chat_messages (conversation_id, role, content) VALUES (:id, 'user', :content)")
                 .param("id", id)
                 .param("content", PersonalData.redact(question))
                 .update();
         return jdbc.sql("""
                 INSERT INTO chat_messages
-                    (conversation_id, role, content, latency_ms, input_tokens, output_tokens, searches)
-                VALUES (:id, 'assistant', :content, :latency, :input, :output, :searches)
+                    (conversation_id, role, content, latency_ms, input_tokens, output_tokens, searches, cited_chunks)
+                VALUES (:id, 'assistant', :content, :latency, :input, :output, :searches, :cited)
                 RETURNING id
                 """)
                 .param("id", id)
@@ -121,8 +131,50 @@ public class ConversationRepository {
                 .param("input", metrics.inputTokens())
                 .param("output", metrics.outputTokens())
                 .param("searches", metrics.searches())
+                .param("cited", cited.isEmpty() ? null : encodeCited(cited))
                 .query(Long.class)
                 .single();
+    }
+
+    /**
+     * Lo que citó la ÚLTIMA respuesta del bot en la conversación (número de la cita -> id del chunk); vacío si no hay
+     * respuestas o no citó nada.
+     */
+    public SortedMap<Integer, Long> lastAnswerCited(UUID id) {
+        return decodeCited(jdbc.sql("""
+                SELECT COALESCE(cited_chunks, '') FROM chat_messages
+                WHERE conversation_id = :id AND role = 'assistant'
+                ORDER BY id DESC
+                LIMIT 1
+                """)
+                .param("id", id)
+                .query(String.class)
+                .optional().orElse(""));
+    }
+
+    /** "1:15342,3:8811" */
+    static String encodeCited(Map<Integer, Long> cited) {
+        return new TreeMap<>(cited).entrySet().stream()
+                .map(e -> e.getKey() + ":" + e.getValue())
+                .collect(Collectors.joining(","));
+    }
+
+    static SortedMap<Integer, Long> decodeCited(String text) {
+        SortedMap<Integer, Long> cited = new TreeMap<>();
+        if (text == null || text.isBlank()) {
+            return cited;
+        }
+        for (String pair : text.split(",")) {
+            String[] parts = pair.split(":");
+            if (parts.length == 2) {
+                try {
+                    cited.put(Integer.parseInt(parts[0].strip()), Long.parseLong(parts[1].strip()));
+                } catch (NumberFormatException e) {
+                    // un par roto se ignora: esa cita simplemente no se enseña
+                }
+            }
+        }
+        return cited;
     }
 
     /**

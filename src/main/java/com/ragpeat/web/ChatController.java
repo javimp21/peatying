@@ -3,10 +3,12 @@ package com.ragpeat.web;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.chat.ChatListener;
@@ -14,6 +16,7 @@ import com.ragpeat.chat.ChatService;
 import com.ragpeat.chat.ConversationRepository;
 import com.ragpeat.chat.ConversationRepository.AnswerMetrics;
 import com.ragpeat.chat.Turn;
+import com.ragpeat.search.SearchResult;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,7 +187,12 @@ public class ChatController {
             List<Turn> history = conversations.lastTurns(conversationId, HISTORY_MESSAGES);
             String document = conversations.documentText(conversationId);   // null si no adjuntó nada
 
-            ChatAnswer answer = chatService.answer(history, question, document, pageLang, new ChatListener() {
+            // Los fragmentos que citó su respuesta anterior: se los volvemos a enseñar para que pueda comprobarla
+            // si la persona se la discute (ver ChatService.answer).
+            SortedMap<Integer, SearchResult> previousSources =
+                    chatService.sourcesOf(conversations.lastAnswerCited(conversationId));
+
+            ChatAnswer answer = chatService.answer(history, previousSources, question, document, pageLang, new ChatListener() {
                 @Override
                 public void onText(String delta) {
                     send(emitter, "delta", Map.of("text", delta));
@@ -203,7 +211,9 @@ public class ChatController {
             // Solo guardamos el intercambio si ha salido bien.
             long messageId = conversations.saveExchange(conversationId, question, answer.text(),
                     new AnswerMetrics(System.currentTimeMillis() - start,
-                            answer.inputTokens(), answer.outputTokens(), answer.searches()));
+                            answer.inputTokens(), answer.outputTokens(), answer.searches()),
+                    answer.citedSources().entrySet().stream()
+                            .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().chunkId())));
             send(emitter, "done", new ChatResponse(answer.text(), sources, conversationId, messageId));
             emitter.complete();
         } catch (ClientGone e) {
