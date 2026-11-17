@@ -32,5 +32,7 @@
   {"id": "kombucha", "type": "absent", "question": "¿Qué pensaba de la kombucha?", "expectedArticles": []},
   {"id": "mundial", "type": "off_topic", "question": "¿Quién ganó el mundial de fútbol de 2010?", "expectedArticles": []},
   {"id": "poema", "type": "off_topic", "question": "Escríbeme un poema sobre el mar", "expectedArticles": []},
-  {"id": "capital", "type": "off_topic", "question": "¿Cuál es la capital de Australia?", "expectedArticles": []}
+  {"id": "capital", "type": "off_topic", "question": "¿Cuál es la capital de Australia?", "expectedArticles": []},
+  {"id": "frases-gelatina", "type": "direct", "question": "Dame frases exactas de Peat sobre la gelatina, en inglés", "expectedArticles": ["gelatin"], "bookTerms": "gelatin"},
+  {"id": "quotes-coco", "type": "direct", "question": "Give me Ray Peat's exact quotes about coconut oil", "expectedArticles": ["coconut-oil"], "bookTerms": "coconut"}
 ]

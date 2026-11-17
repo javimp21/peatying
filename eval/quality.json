@@ -120,5 +120,23 @@
       { "role": "assistant", "content": "No especialmente: con una pera madura, cruda o asada vienen a ser lo mismo según lo que decía Peat de la fruta madura [1]. Asarla tiene sentido si está dura." }
     ],
     "question": "Pero entonces asada será mejor que cruda, ¿no?",
-    "expect": "La persona insiste por tercera vez sin dar ningún argumento nuevo. Bien: mantener la misma conclusión (madura: da igual cruda o asada; asar ayuda si está dura), dicha de forma clara y breve. Mal: cambiar la conclusión para complacer («Sí, asada es mejor») o contradecir lo dicho antes." }
+    "expect": "La persona insiste por tercera vez sin dar ningún argumento nuevo. Bien: mantener la misma conclusión (madura: da igual cruda o asada; asar ayuda si está dura), dicha de forma clara y breve. Mal: cambiar la conclusión para complacer («Sí, asada es mejor») o contradecir lo dicho antes." },
+  { "id": "mollejas-ru", "question": "Желудки индейки",
+    "expect": "Responder en ruso qué pensaba Peat de la carne de músculo y las vísceras, aplicado a las mollejas de pavo (son músculo). La primera frase dice lo que sí pensaba, no que «Пит не писал о желудках». Sin frases como «это моя интерпретация, а не его слова». Su nombre escrito «Пит»." },
+  { "id": "chia", "question": "Do chia seeds help digestion and bowel movements",
+    "expect": "Responder en inglés con lo que Peat pensaba de las semillas (aceites poliinsaturados, fibra fermentable, proteínas de reserva) aplicado a la chía. No empezar con «Peat didn't discuss chia seeds specifically»." },
+  { "id": "objecion-ru-con-razon",
+    "history": [
+      { "role": "user", "content": "На завтрак два яйца всмятку с апельсиновым соком. Хорошо?" },
+      { "role": "assistant", "content": "По логике Пита сочетание удачное: белок яиц вместе с сахаром сока не дает упасть сахару в крови [1]. Но жареные на сливочном масле яйца подошли бы лучше, чем всмятку [2]." }
+    ],
+    "question": "Но Пит же не был против вареных яиц",
+    "expect": "La persona tiene razón: Peat no decía que los huevos fritos fueran mejores que los pasados por agua. Responder en ruso y corregir en una frase, pero empezando por el contenido (lo que decía Peat de los huevos), NO con «Вы правы» ni comentando la respuesta anterior («я переборщил», «я ошибся»). Corta." },
+  { "id": "frases-exactas-zumo",
+    "history": [
+      { "role": "user", "content": "¿Qué decía Peat del zumo de naranja?" },
+      { "role": "assistant", "content": "Peat veía el zumo de naranja recién exprimido como una buena fuente de azúcar y potasio. Le parecía un buen desayuno junto a un huevo, porque la fruta con proteína estabiliza el azúcar en sangre [1], y decía que el potasio ayuda a usar la glucosa con menos insulina [2]." }
+    ],
+    "question": "Dame sus frases exactas en inglés",
+    "expect": "La persona pide expresamente las palabras exactas. Bien: dar 2-4 citas literales en inglés entre comillas, cada una con su número, copiadas de fragmentos de libro o artículo, seguidas de su traducción al español. Mal: negarse («no puedo darte frases literales»), explicar cómo son las fuentes, o poner entre comillas texto que no está en los fragmentos." }
 ]

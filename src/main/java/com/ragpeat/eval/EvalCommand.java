@@ -49,7 +49,7 @@ public class EvalCommand implements CommandLineRunner {
     }
 
     /** Lo que guardamos de cada pregunta en el archivo de resultados. */
-    record Result(EvalQuestion question, String answer, List<String> cited, Grade grade,
+    record Result(EvalQuestion question, String answer, List<String> cited, Grade grade, List<String> tone,
                   int searches, long inputTokens, long outputTokens, long millis) {}
 
     @Override
@@ -69,12 +69,15 @@ public class EvalCommand implements CommandLineRunner {
 
             Grade grade = grader.grade(q, answer);
             List<String> cited = answer.citedSources().values().stream().map(s -> s.url()).distinct().toList();
-            results.add(new Result(q, answer.text(), cited, grade, answer.searches(),
+            // En las preguntas sobre algo de lo que Peat no habla, decirlo al principio es lo correcto.
+            List<String> tone = ToneCheck.problems(answer.text(), "absent".equals(q.type()));
+            results.add(new Result(q, answer.text(), cited, grade, tone, answer.searches(),
                     answer.inputTokens(), answer.outputTokens(), millis));
 
-            System.out.printf("%-4s %-20s %-9s %s%n", grade.passed() ? "OK" : "FALLO", q.id(), q.type(),
+            System.out.printf("%-4s %-20s %-9s %s%s%n", grade.passed() ? "OK" : "FALLO", q.id(), q.type(),
                     grade.passed() ? "" : grade.reason() + (grade.invalidQuotes().isEmpty() ? "" : " " + grade.invalidQuotes())
-                            + (grade.interviewQuotes().isEmpty() ? "" : " " + grade.interviewQuotes()));
+                            + (grade.interviewQuotes().isEmpty() ? "" : " " + grade.interviewQuotes()),
+                    tone.isEmpty() ? "" : " [tono: " + String.join(", ", tone) + "]");
         }
         printSummary(results);
 
@@ -96,6 +99,8 @@ public class EvalCommand implements CommandLineRunner {
 
         System.out.printf("%n=== %s: %d/%d aprobadas (%.0f%%)%n", model, passed, results.size(), 100.0 * passed / results.size());
         System.out.printf("Citas literales: %d, de ellas inventadas: %d, de entrevistas: %d%n", quotes, invalid, fromInterviews);
+        System.out.printf("Vicios de tono (no restan aprobados): %d respuestas%n",
+                results.stream().filter(r -> !r.tone().isEmpty()).count());
         System.out.printf("Coste total: ~$%.4f · tiempo medio por pregunta: %.1f s%n%n", cost, avgSeconds);
     }
 }

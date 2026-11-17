@@ -128,11 +128,12 @@ public class QualityCommand implements CommandLineRunner {
                 Result r = f.get();
                 results.add(r);
                 Review v = r.review();
-                System.out.printf("%2d/10  responde %d/5  %s%s%s%s  %-22s %s%n", v.score(), v.answers(),
+                List<String> tone = tone(r);
+                System.out.printf("%2d/10  responde %d/5  %s%s%s%s  %-22s %s%s%n", v.score(), v.answers(),
                         v.formatOk() ? "   " : "fmt", v.offTopic().isEmpty() ? "   " : "ot" + v.offTopic().size(),
                         v.needlessCaveats().isEmpty() ? "   " : "av" + v.needlessCaveats().size(),
                         v.unsupported().isEmpty() ? "   " : "sr" + v.unsupported().size(),
-                        r.question().id(), v.comment());
+                        r.question().id(), tone.isEmpty() ? "" : "[tono: " + String.join(", ", tone) + "] ", v.comment());
             }
         }
         printSummary(results);
@@ -209,6 +210,13 @@ public class QualityCommand implements CommandLineRunner {
                 .orElseThrow(() -> new IllegalStateException("El juez no devolvió resultado"));
     }
 
+    /** Los vicios de tono de la respuesta (ver ToneCheck). Si pregunta «¿habló Peat de X?», empezar con «no» vale. */
+    private static List<String> tone(Result r) {
+        boolean asksIfHeTalked = r.question().question().matches(
+                "(?isu).*(habló|dijo algo|did (ray )?peat (ever )?(talk|discuss|mention|say|write)|говорил ли|писал ли).*");
+        return ToneCheck.problems(r.answer(), asksIfHeTalked);
+    }
+
     private void printSummary(List<Result> results) {
         double score = results.stream().mapToInt(r -> r.review().score()).average().orElse(0);
         double answers = results.stream().mapToInt(r -> r.review().answers()).average().orElse(0);
@@ -232,6 +240,8 @@ public class QualityCommand implements CommandLineRunner {
         System.out.printf("Partes que sobran: %d · avisos innecesarios: %d · atribuido sin respaldo: %d%n",
                 offTopic, caveats, unsupported);
         System.out.printf("Palabras de media: %.0f · respuestas con lista: %d/%d%n", words, withList, results.size());
+        System.out.printf("Vicios de tono: %d/%d respuestas%n",
+                results.stream().filter(r -> !tone(r).isEmpty()).count(), results.size());
         System.out.printf("Coste -> respuestas (solo la última de cada conversación): $%.4f · juez: $%.4f%n%n",
                 answerCost, judgeCost);
     }

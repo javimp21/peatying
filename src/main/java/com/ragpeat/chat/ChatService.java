@@ -362,7 +362,9 @@ public class ChatService {
                 + "anteriores: los avisos, pegas y explicaciones que ya están ahí no se repiten, ni con otras palabras "
                 + "ni con otras cifras. Si la persona discute algo de tu última respuesta, mira su fragmento en "
                 + "«Fragmentos de tu respuesta anterior» (si lo hay), cítalo y explica cómo encaja con lo que ella dice: "
-                + "ni le des la razón sin más ni cambies de conclusión solo porque insista.";
+                + "ni le des la razón sin más ni cambies de conclusión solo porque insista. Aunque tenga razón, NO "
+                + "empieces con «Tienes razón», «You're right» ni «Вы правы», ni comentes tu respuesta anterior "
+                + "(«me pasé», «я переборщил», «я ошибся»): empieza directamente por lo que decía Peat.";
     }
 
     static String languageReminder(String question, String language) {
@@ -377,11 +379,16 @@ public class ChatService {
                 + "\"sources\", \"material\", \"fragments\", \"passages\", \"the earlier passage\", \"excerpts\", \"what I "
                 + "found\", \"the passages I found\", \"I can search\", \"anything I can access\", \"these texts\" ni sus "
                 + "equivalentes en otro idioma). Si Peat no trató justo eso, NO empieces diciéndolo (nada de \"Peat "
-                + "didn't discuss X specifically, but…\" ni \"Peat didn't give a figure…\" como primera frase): la "
-                + "primera frase cuenta lo que sí pensaba del tema más cercano (\"Peat saw ripe fruit as one of the "
-                + "best foods [1]. By that logic, blueberries would…\") y lo demás se presenta como deducción tuya. "
-                + "Solo si pregunta literalmente si Peat habló de algo se empieza con sí o no. Y no copies frases "
-                + "suyas entre comillas: cuéntalas con tus palabras.\n"
+                + "didn't discuss X specifically, but…\", \"Peat didn't give a figure…\" ni \"Пит не писал о X "
+                + "отдельно, но…\" como primera frase): la primera frase cuenta lo que sí pensaba del tema más cercano "
+                + "(\"Peat saw ripe fruit as one of the best foods [1]. By that logic, blueberries would…\") y lo demás "
+                + "se presenta como deducción tuya. Solo si pregunta literalmente si Peat habló de algo se empieza con "
+                + "sí o no. Escribir «por su lógica…» ya marca que es deducción: no añadas frases que lo comenten "
+                + "(nada de \"this is my interpretation, not his words\", \"это моя интерпретация, а не его слова\", "
+                + "\"es mi deducción\"). En ruso, su nombre es siempre «Пит» («Рэй Пит»). Y no copies frases "
+                + "suyas entre comillas: cuéntalas con tus palabras, salvo que pida expresamente sus palabras "
+                + "exactas; entonces cópialas tal cual de fragmentos LIBRO o ARTÍCULO, en inglés, con su número, y si la "
+                + "persona no escribe en inglés, tradúcelas y escribe lo demás en su idioma.\n"
                 + which + quoted + "»";
     }
 
