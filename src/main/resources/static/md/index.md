@@ -1,6 +1,6 @@
 # Ray Peat Chatbot: las ideas de Ray Peat en español
 
-Pregunta lo que quieras sobre las ideas de Ray Peat (1936–2022). Cada respuesta sale de sus propios artículos, libros, newsletters y entrevistas (78 artículos, 5 libros, 55 newsletters y 221 entrevistas) y cita la fuente original con enlace. Si Peat no habló de algo, el chatbot lo dice.
+Pregunta lo que quieras sobre las ideas de Ray Peat (1936–2022). Cada respuesta sale de sus propios artículos, libros, newsletters y entrevistas (78 artículos, 5 libros, 53 newsletters y 221 entrevistas) y cita la fuente original con enlace. Si Peat no habló de algo, el chatbot lo dice.
 
 - Chat: https://peatying.com/ (para dejar una pregunta escrita: https://peatying.com/?q=%C2%BFPor+qu%C3%A9+el+CO2+es+protector%3F)
 - Quién fue Ray Peat: https://peatying.com/about

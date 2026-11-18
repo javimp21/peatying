@@ -1,6 +1,6 @@
 # Ray Peat Chatbot
 
-Ask anything about the ideas of Ray Peat (1936–2022). Every answer is built from his own articles, books, newsletters and interviews (78 articles, 5 books, 55 newsletters and 221 interviews) and cites the original source with a link. If Peat never discussed something, the chatbot says so.
+Ask anything about the ideas of Ray Peat (1936–2022). Every answer is built from his own articles, books, newsletters and interviews (78 articles, 5 books, 53 newsletters and 221 interviews) and cites the original source with a link. If Peat never discussed something, the chatbot says so.
 
 - Chat: https://peatying.com/en (to prefill a question: https://peatying.com/en?q=Why+is+CO2+protective%3F)
 - Who was Ray Peat: https://peatying.com/en/about
