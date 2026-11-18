@@ -51,12 +51,12 @@ public class ShareController {
     private static final Labels ES = new Labels("es", "es_ES", "/", "/temas", "Temas", "Ir al chat",
             "Respuesta compartida", "Fuentes", "artículo", "entrevista", "libro",
             "Pregunta tú lo que quieras sobre Ray Peat →",
-            "Respuesta generada por IA a partir de los artículos, libros y entrevistas de Ray Peat. "
+            "Respuesta generada por IA a partir de los artículos, libros, newsletters y entrevistas de Ray Peat. "
                     + "Puede contener errores y no es consejo médico.");
     private static final Labels EN = new Labels("en", "en_GB", "/en", "/en/topics", "Topics", "Go to the chat",
             "Shared answer", "Sources", "article", "interview", "book",
             "Ask anything about Ray Peat →",
-            "AI-generated answer based on Ray Peat's articles, books and interviews. "
+            "AI-generated answer based on Ray Peat's articles, books, newsletters and interviews. "
                     + "It may contain errors and is not medical advice.");
     private static final Pattern CITATION = Pattern.compile("\\[(\\d+)]");
     private static final char[] ALPHABET = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789".toCharArray();

@@ -65,7 +65,7 @@ public class ChatService {
     private static Tool searchTool(int resultsPerSearch) {
         return Tool.builder()
             .name("search_peat")
-            .description("Busca en los artículos, libros y entrevistas de Ray Peat (en inglés) y devuelve los "
+            .description("Busca en los artículos, libros, newsletters y entrevistas de Ray Peat (en inglés) y devuelve los "
                     + resultsPerSearch + " textos más relevantes, numerados para poder citarlos. La persona no ve "
                     + "la búsqueda: en la respuesta habla de lo que dijo Peat, nunca de estos resultados.")
             .inputSchema(Tool.InputSchema.builder()
