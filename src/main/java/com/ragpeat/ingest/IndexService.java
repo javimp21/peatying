@@ -41,7 +41,7 @@ public class IndexService {
 
     @Transactional
     public int index(BookFileStore.Page page) {
-        return index(page.slug(), page.title(), page.url(), "book", chunker.split(page.text()));
+        return index(page.slug(), page.title(), page.url(), page.type(), chunker.split(page.text()));
     }
 
     private int index(String slug, String title, String url, String sourceType, List<String> chunks) {

@@ -101,6 +101,8 @@ const TEXT = {
     book: "Libro",
     bookNote: "Por derechos de autor, el texto del libro no se muestra aquí.",
     buyBook: "Comprar el libro en raypeat.com ↗",
+    newsletter: "Newsletter",
+    newsletterNote: "Por derechos de autor, el texto de la newsletter no se muestra aquí.",
     interview: "Entrevista",
     article: "Artículo",
     listen: "Escuchar el audio original",
@@ -165,6 +167,8 @@ const TEXT = {
     book: "Book",
     bookNote: "For copyright reasons, the book's text isn't shown here.",
     buyBook: "Buy the book at raypeat.com ↗",
+    newsletter: "Newsletter",
+    newsletterNote: "For copyright reasons, the newsletter's text isn't shown here.",
     interview: "Interview",
     article: "Article",
     listen: "Listen to the original audio",
@@ -1422,6 +1426,17 @@ function toggleSource(messageDiv, button, source) {
   number.textContent = source.number;
   const title = document.createElement("h3");
   title.textContent = source.title;
+
+  // Newsletters: también con derechos de autor. Solo número y página; no se venden sueltas, así que sin enlace.
+  if (source.type === "newsletter") {
+    meta.append(number, TEXT.newsletter);
+    const note = document.createElement("p");
+    note.className = "source-note";
+    note.textContent = TEXT.newsletterNote;
+    panel.append(meta, title, note);
+    placeSourcePanel(messageDiv, button, panel, source);
+    return;
+  }
 
   // Libros: tienen derechos de autor y el servidor no manda su texto. Solo libro, página y dónde comprarlo.
   if (source.type === "book") {

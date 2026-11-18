@@ -40,7 +40,8 @@ public class TopicPageRenderer {
                 String indexIntro, String related) {
 
         String type(String type) {
-            return "interview".equals(type) ? interview : "book".equals(type) ? book : article;
+            return "interview".equals(type) ? interview : "book".equals(type) ? book
+                    : "newsletter".equals(type) ? "newsletter" : article;
         }
     }
 

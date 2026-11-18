@@ -74,7 +74,7 @@ public class IndexCommand implements CommandLineRunner {
                 interviews.size(), changed, writtenChunks);
     }
 
-    /** "index-books": las páginas de los libros (data/books). */
+    /** "index-books": las páginas de los libros (data/books) y de las newsletters (data/newsletters/issues). */
     private void indexBooks() throws Exception {
         List<BookFileStore.Page> pages = bookStore.loadAll();
         int changed = 0, writtenChunks = 0;
@@ -85,7 +85,7 @@ public class IndexCommand implements CommandLineRunner {
                 writtenChunks += written;
             }
         }
-        log.info("Revisadas {} páginas de libros: {} cambiadas ({} chunks nuevos), el resto sin cambios",
+        log.info("Revisadas {} páginas de libros y newsletters: {} cambiadas ({} chunks nuevos), el resto sin cambios",
                 pages.size(), changed, writtenChunks);
     }
 }

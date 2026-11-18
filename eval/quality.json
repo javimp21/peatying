@@ -138,5 +138,5 @@
       { "role": "assistant", "content": "Peat veía el zumo de naranja recién exprimido como una buena fuente de azúcar y potasio. Le parecía un buen desayuno junto a un huevo, porque la fruta con proteína estabiliza el azúcar en sangre [1], y decía que el potasio ayuda a usar la glucosa con menos insulina [2]." }
     ],
     "question": "Dame sus frases exactas en inglés",
-    "expect": "La persona pide expresamente las palabras exactas. Bien: dar 2-4 citas literales en inglés entre comillas, cada una con su número, copiadas de fragmentos de libro o artículo, seguidas de su traducción al español. Mal: negarse («no puedo darte frases literales»), explicar cómo son las fuentes, o poner entre comillas texto que no está en los fragmentos." }
+    "expect": "La persona pide expresamente las palabras exactas. Bien: citas literales en inglés entre comillas, cada una con su número y seguida de su traducción al español, copiadas solo de fragmentos ARTÍCULO; lo que venga de LIBRO, NEWSLETTER o ENTREVISTA (derechos de autor o texto editado) se cuenta con sus palabras, sin comillas y sin explicar por qué. Mal: negarse del todo («no puedo darte frases literales»), explicar cómo son las fuentes, o poner entre comillas texto de un libro, una newsletter o que no está en los fragmentos." }
 ]

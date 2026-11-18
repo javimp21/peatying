@@ -190,7 +190,8 @@ public class ShareController {
             }
             html.append(" · <a href=\"").append(esc(s.url())).append("\" target=\"_blank\" rel=\"noopener\">").append(esc(s.title()))
                     .append("</a> <span>")
-                    .append("interview".equals(s.type()) ? t.interview() : "book".equals(s.type()) ? t.book() : t.article())
+                    .append("interview".equals(s.type()) ? t.interview() : "book".equals(s.type()) ? t.book()
+                            : "newsletter".equals(s.type()) ? "newsletter" : t.article())
                     .append("</span></li>\n");
         }
         return html.append("</ul>\n").toString();

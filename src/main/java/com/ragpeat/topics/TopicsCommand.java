@@ -151,7 +151,7 @@ public class TopicsCommand implements CommandLineRunner {
         for (int i = 0; i < fragments.size(); i++) {
             SearchResult r = fragments.get(i);
             prompt.append("[").append(i + 1).append("] ")
-                    .append(r.isInterview() ? "ENTREVISTA: " : r.isBook() ? "LIBRO: " : "ARTÍCULO: ").append(r.title()).append("\n")
+                    .append(r.isInterview() ? "ENTREVISTA: " : r.isBook() ? "LIBRO: " : r.isCopyrighted() ? "NEWSLETTER: " : "ARTÍCULO: ").append(r.title()).append("\n")
                     .append(r.content()).append("\n\n");
         }
 

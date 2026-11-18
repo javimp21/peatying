@@ -50,6 +50,7 @@ public class EmbedCommand implements CommandLineRunner {
                     .map(c -> (switch (c.sourceType()) {
                         case "interview" -> "Ray Peat interview, \"";
                         case "book" -> "Ray Peat, book \"";
+                        case "newsletter" -> "Ray Peat, newsletter \"";
                         default -> "Ray Peat, \"";
                     })
                             + c.title() + "\"\n\n" + c.content())

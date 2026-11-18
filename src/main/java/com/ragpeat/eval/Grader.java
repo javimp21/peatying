@@ -68,7 +68,7 @@ public class Grader {
 
     /** Una página de libro trata el tema si menciona sus términos al menos dos veces (una sola puede ser de pasada). */
     static boolean isRelevantBookPage(SearchResult source, String bookTerms) {
-        if (!source.isBook() || bookTerms == null || bookTerms.isBlank()) {
+        if (!source.isCopyrighted() || bookTerms == null || bookTerms.isBlank()) {
             return false;
         }
         return Pattern.compile("(?i)" + bookTerms).matcher(source.content()).results().count() >= 2;

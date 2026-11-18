@@ -387,7 +387,7 @@ public class ChatService {
                 + "(nada de \"this is my interpretation, not his words\", \"это моя интерпретация, а не его слова\", "
                 + "\"es mi deducción\"). En ruso, su nombre es siempre «Пит» («Рэй Пит»). Y no copies frases "
                 + "suyas entre comillas: cuéntalas con tus palabras, salvo que pida expresamente sus palabras "
-                + "exactas; entonces cópialas tal cual de fragmentos LIBRO o ARTÍCULO, en inglés, con su número, y si la "
+                + "exactas; entonces cópialas tal cual, solo de fragmentos ARTÍCULO, en inglés, con su número, y si la "
                 + "persona no escribe en inglés, tradúcelas y escribe lo demás en su idioma.\n"
                 + which + quoted + "»";
     }

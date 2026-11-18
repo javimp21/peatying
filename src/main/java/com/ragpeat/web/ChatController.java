@@ -204,9 +204,9 @@ public class ChatController {
                 }
             });
             List<Source> sources = answer.citedSources().entrySet().stream()
-                    // El texto de los libros nunca sale del servidor (derechos de autor): solo título, página y enlace.
+                    // El texto de libros y newsletters nunca sale del servidor (derechos de autor): solo título, página y enlace.
                     .map(e -> new Source(e.getKey(), e.getValue().title(), e.getValue().url(),
-                            e.getValue().sourceType(), e.getValue().isBook() ? null : e.getValue().content()))
+                            e.getValue().sourceType(), e.getValue().isCopyrighted() ? null : e.getValue().content()))
                     .toList();
             // Solo guardamos el intercambio si ha salido bien.
             long messageId = conversations.saveExchange(conversationId, question, answer.text(),
