@@ -834,7 +834,7 @@ li .source-panel { margin: 8px 0 4px; }
 
 /* --- Páginas de temas (peatying.com/temas/...) -------------------------------- */
 .topic { max-width: 680px; margin: 0 auto; padding: 30px 20px 80px; font-size: 1.08rem; line-height: 1.7; color: var(--text-soft); }
-.topic h1 { margin: 6px 0 18px; font: 400 clamp(3.2rem, 13vw, 5.6rem)/0.9 var(--display); text-transform: uppercase; color: var(--ink); }
+.topic h1 { margin: 6px 0 18px; font: 400 clamp(3.2rem, 13vw, 5.6rem)/1 var(--display); text-transform: uppercase; color: var(--ink); text-wrap: balance; }
 .topic h2 { margin: 38px 0 10px; padding-top: 12px; border-top: var(--rule-bar) solid var(--ink); font: 400 1.2rem/1.2 var(--slab); text-transform: uppercase; color: var(--ink); }
 .topic p { margin: 0 0 14px; }
 .topic a { color: var(--ink); }

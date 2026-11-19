@@ -1,9 +1,9 @@
 {
   "slug": "dieta",
   "name": "la dieta",
-  "title": "La dieta de Ray Peat",
+  "title": "La dieta prometabólica de Ray Peat",
   "question": "¿Cómo era la dieta que recomendaba Peat?",
-  "description": "Qué defendía Ray Peat sobre la dieta: leche, queso, fruta y marisco, pocas grasas poliinsaturadas, menos almidón y proteína con más gelatina.",
+  "description": "La dieta prometabólica o bioenergética según Ray Peat: leche, queso, fruta y marisco, pocas grasas poliinsaturadas, menos almidón y más gelatina.",
   "intro": "Según Peat, la dieta más sana se basa en proteína abundante, pocas grasas insaturadas, poco hierro y muchos antioxidantes, con un consumo de almidón bajo o moderado [1]. En la práctica, para él esto significa apoyarse en leche, queso, huevos, marisco, fruta y aceite de coco [1]. Sostenía además que los aceites vegetales poliinsaturados son uno de los grandes problemas de la alimentación moderna [2].",
   "sections": [
     {
@@ -50,6 +50,10 @@
     }
   ],
   "faq": [
+    {
+      "q": "¿Qué es la dieta prometabólica o bioenergética?",
+      "a": "Es el nombre con el que se suele conocer en internet la forma de comer basada en las ideas de Ray Peat. Según él, la dieta más sana se apoya en leche, queso, huevos, marisco, fruta y aceite de coco, con pocas grasas insaturadas y un consumo de almidón bajo o moderado [1]."
+    },
     {
       "q": "¿Qué alimentos recomendaba Ray Peat?",
       "a": "Según Peat, buena parte de la dieta debía ser leche, queso, huevos, marisco, fruta y aceite de coco [1]. También valoraba el zumo de naranja y la gelatina como fuente de proteína [3][9]."
