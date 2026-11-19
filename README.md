@@ -19,7 +19,7 @@ The point of RAG here is faithfulness: the bot should only attribute to Peat wha
 
 Example: without RAG, Claude says Peat saw lactic acid as "a useful fuel". Peat wrote the opposite: *"I have begun thinking of lactic acid as a toxin."*
 
-A cheaper rule-based suite runs on every prompt change: expected sources cited, literal quotes that really exist in the corpus (and never from automatic transcripts), admitting when Peat never covered a topic, refusing off-topic questions. Latest run (November 2026): **32/34**, ~$0.01; the two failures (vegetables, mushrooms) cite interviews or a book page instead of the expected articles. Details in [`eval/RESULTS.md`](eval/RESULTS.md).
+A cheaper rule-based suite runs on every prompt change: expected sources cited, literal quotes that really exist in the corpus (and never from automatic transcripts), admitting when Peat never covered a topic, refusing off-topic questions. Latest run (19 November 2026): **33/37**; the failures are answers that cite other passages than the expected ones. A second suite of 50 real-style questions, some with a prior conversation, is graded by Claude Sonnet for answering what was asked, format, tone and unsupported claims: **7.5/10** on average. Details in [`eval/RESULTS.md`](eval/RESULTS.md).
 
 ## How it works
 
@@ -30,7 +30,7 @@ flowchart TD
     S -->|question + search_peat tool| A[Claude Haiku 5.5]
     A -->|search_peat calls| S
     S --> H[SearchService<br/>hybrid search]
-    H -->|embedding| V[Voyage AI]
+    H -->|embedding + rerank| V[Voyage AI]
     H -->|vector + full text| P[(Postgres + pgvector)]
     S -.->|answer, streamed| U
 ```
@@ -39,7 +39,7 @@ flowchart TD
 2. **Books.** His 5 books, extracted from PDF with printed page numbers recovered from the page headers (a fixed offset per book, taken from the most common value so misread numbers don't matter). Each page is its own document (Generative Energy, p. 35). The text is used to answer but never sent to the browser: the source panel shows only book, page and where to buy it.
    **Newsletters.** 53 issues of Ray Peat's Newsletter (1995–2013), from the OCR of a scanned collection on Internet Archive. The OCR mixes the two columns of each page line by line, so `scripts/extract_newsletters.py` rebuilds them word by word from word positions, splits issues by their masthead and date, and drops the issues he later published as articles on raypeat.com. Treated like the books: used to answer, never shown.
 3. **Interviews.** ~250 hours of public radio and podcast audio, transcribed by my own pipeline (below). Chunks keep who is speaking, and only Peat's words count as his opinion.
-4. **Hybrid search.** One SQL query combines pgvector cosine distance (meaning, works across languages) with Postgres full-text search (exact terms like "pregnenolone"), merged with Reciprocal Rank Fusion, with a per-type quota (3 written passages from articles and books + 2 interviews per 5 results) so the written work is never crowded out.
+4. **Hybrid search.** One SQL query combines pgvector cosine distance (meaning, works across languages) with Postgres full-text search (exact terms like "pregnenolone"), merged with Reciprocal Rank Fusion. The best 30 candidates are then reordered by Voyage's reranker (`rerank-2.5`), which reads the query and each passage together: embeddings mostly capture the topic, so "thyroid in newborns" used to bring the most general thyroid passages, and the reranker brings the ones about babies. Finally a per-type quota (3 written passages from articles, books and newsletters + 2 interviews per 5 results) keeps the written work from being crowded out. If the reranker fails, the hybrid order is used.
 5. **Agentic answer.** Claude gets the question and a `search_peat` tool. It rewrites the question in English, picks keywords, may search again from another angle (max 3 searches, 6 with an attached document), then answers in the language of the question, citing passages as `[n]`. The loop is written by hand against the Messages API, not a framework.
 6. **Streaming.** Tokens are streamed over server-sent events from virtual threads; the frontend renders markdown live and turns `[n]` into buttons that open the original passage, which can be translated to Spanish on demand.
 
@@ -70,7 +70,7 @@ Sonnet never rewrites the text: it only returns ranges of sentence numbers per s
 ## Stack
 
 - **Backend:** Java 21, Spring Boot 4, JdbcClient (plain SQL), Flyway, anthropic-java SDK
-- **Data:** PostgreSQL 17 + pgvector, Voyage AI embeddings
+- **Data:** PostgreSQL 17 + pgvector, Voyage AI embeddings and reranking
 - **LLM:** Claude Haiku 5.5 (answers, translations), Claude Sonnet 5.5 (speaker attribution, topic pages, evaluation judge), Whisper on Groq (speech to text, for the interviews and for voice questions)
 - **Frontend:** vanilla HTML/CSS/JS, no framework — streaming renderer, self-hosted fonts, strict CSP
 - **Infra:** AWS EC2 (ARM, Docker Compose) + RDS Postgres, Caddy for HTTPS, ECR, SSM Parameter Store for secrets, deploys via SSM Run Command (no SSH), CloudWatch logs
