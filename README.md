@@ -1,5 +1,7 @@
 # Peatying — ask Ray Peat's work
 
+[![CI](https://github.com/javimp21/peatying/actions/workflows/ci.yml/badge.svg)](https://github.com/javimp21/peatying/actions/workflows/ci.yml)
+
 **[peatying.com](https://peatying.com)** · A chatbot about the ideas of biologist Ray Peat (1936–2022), with a Spanish and an English site, that answers in whatever language you write in. Every answer is grounded in his own words — 78 articles, 5 books, 53 newsletter issues and 221 radio interviews — and cites them, with the original text and audio one click away (books and newsletters are cited by page or date, without showing their copyrighted text).
 
 ![peatying.com](src/main/resources/static/img/og-mascota.jpg)
@@ -108,6 +110,8 @@ java -jar target/rag-peat-0.0.1-SNAPSHOT.jar index-books       # one document pe
 java -jar target/rag-peat-0.0.1-SNAPSHOT.jar embed             # compute embeddings
 java -jar target/rag-peat-0.0.1-SNAPSHOT.jar                   # web app on http://localhost:8080
 ```
+
+`./mvnw verify` needs Docker running: the integration tests start a disposable Postgres + pgvector with Testcontainers, and CI does the same on every push to main and every pull request.
 
 Other commands: `search "<query>" "<keywords>"`, `ask "<question>"`, `eval` (rule-based suite), `compare` (RAG vs no RAG with the LLM judge), `topics` (generate topic pages), `stats` (usage metrics), `redact` (re-run the personal-data filter on stored messages).
 
