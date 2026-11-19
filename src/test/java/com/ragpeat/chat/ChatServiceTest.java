@@ -91,4 +91,20 @@ class ChatServiceTest {
         assertThat(sources).hasSize(ChatService.MAX_PREVIOUS_SOURCES);
         assertThat(ChatService.renumbered("a [3] b [12]", renumber)).isEqualTo("a [3] b");
     }
+
+    @Test
+    void losAvisosYaDados_seCopianEnElRecordatorio() {
+        List<Turn> history = List.of(
+                new Turn(Turn.USER, "Comí 7 cucharadas de miel con huevos."),
+                new Turn(Turn.ASSISTANT, "Peat veía la miel como un buen azúcar [1]. Pero siete cucharadas es "
+                        + "demasiado para una vez [2]. Si notas algo raro, consulta a un médico."),
+                new Turn(Turn.USER, "Me siento bien."));
+
+        String reminder = ChatService.warningsReminder(history);
+
+        assertThat(reminder).contains("«Pero siete cucharadas es demasiado para una vez.»")
+                .contains("consulta a un médico").doesNotContain("buen azúcar").doesNotContain("[2]");
+        assertThat(ChatService.warningsReminder(List.of(new Turn(Turn.USER, "hola"),
+                new Turn(Turn.ASSISTANT, "Peat recomendaba la leche [1].")))).isEmpty();
+    }
 }

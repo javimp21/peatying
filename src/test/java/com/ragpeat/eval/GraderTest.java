@@ -138,4 +138,26 @@ class GraderTest {
         assertThat(grader.grade(q, answer("Solo hablo de Ray Peat.")).passed()).isTrue();
         assertThat(grader.grade(q, answer("Ganó España [1].", "gelatin")).passed()).isFalse();
     }
+
+    @Test
+    void unTituloEntreComillas_noEsUnaCitaInventada() {
+        var q = new EvalQuestion("g", "direct", "?", List.of("gelatin"));
+        Grader withTitle = new Grader(List.of(new Article("https://raypeat.com/articles/articles/gelatin.shtml",
+                "Gelatin, stress, longevity", "Glycine is recognized as an inhibitory neurotransmitter.")), List.of());
+
+        var grade = withTitle.grade(q, answer("In his article \"Gelatin, stress, longevity,\" he wrote it [1].", "gelatin"));
+
+        assertThat(grade.invalidQuotes()).isEmpty();
+        assertThat(grade.passed()).isTrue();
+    }
+
+    @Test
+    void absent_aceptaOtrasFormasDeDecirQueNoHablo() {
+        var q = new EvalQuestion("k", "absent", "?", List.of());
+
+        assertThat(grader.grade(q, answer("Peat no se refirió a la kombucha por su nombre, pero sí a lo fermentado.")).passed()).isTrue();
+        assertThat(grader.grade(q, answer("Peat didn't specifically discuss blueberries, but ripe fruit [1].")).passed()).isTrue();
+        assertThat(grader.grade(q, answer("Peat no se pronunció sobre la kombucha, pero sí sobre lo fermentado [1].")).passed()).isTrue();
+        assertThat(grader.grade(q, answer("La kombucha es una bebida fermentada [1].")).passed()).isFalse();
+    }
 }

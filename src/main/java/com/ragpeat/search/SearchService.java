@@ -1,10 +1,15 @@
 package com.ragpeat.search;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 import com.ragpeat.embedding.PgVector;
 import com.ragpeat.embedding.VoyageClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +27,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class SearchService {
 
+    private static final Logger log = LoggerFactory.getLogger(SearchService.class);
+
     /** Cuántos candidatos sacamos de cada búsqueda antes de mezclar. */
     private static final int CANDIDATES = 20;
+    /** Cuántos candidatos de la búsqueda híbrida reordena el reranker. */
+    static final int RERANK_POOL = 30;
 
     private final JdbcClient jdbc;
     private final VoyageClient voyage;
+    private final boolean rerank;
 
-    public SearchService(JdbcClient jdbc, VoyageClient voyage) {
+    public SearchService(JdbcClient jdbc, VoyageClient voyage, @Value("${search.rerank:true}") boolean rerank) {
         this.jdbc = jdbc;
         this.voyage = voyage;
+        this.rerank = rerank;
     }
 
     /**
@@ -68,7 +79,66 @@ public class SearchService {
                 .list();
     }
 
+    /**
+     * La búsqueda híbrida trae candidatos de más (RERANK_POOL) y el reranker de Voyage los ordena leyendo la
+     * consulta y cada texto juntos. Sin él, una consulta como "thyroid in newborns" trae lo más general del
+     * tiroides: los embeddings ven sobre todo el tema, y lo que hace concreta la pregunta pesa poco.
+     * Si el reranker falla, se usa el orden de la búsqueda híbrida: nunca deja al bot sin resultados.
+     */
     public List<SearchResult> search(String query, String englishKeywords, int limit) {
+        if (!rerank) {
+            return hybrid(query, englishKeywords, limit);
+        }
+        List<SearchResult> pool = hybrid(query, englishKeywords, Math.max(limit, RERANK_POOL));
+        try {
+            String rerankQuery = englishKeywords == null || englishKeywords.isBlank() ? query
+                    : query + " (" + englishKeywords + ")";
+            double[] scores = voyage.rerank(rerankQuery, pool.stream().map(SearchResult::content).toList());
+            List<SearchResult> reranked = new ArrayList<>();
+            for (int i = 0; i < pool.size(); i++) {
+                SearchResult r = pool.get(i);
+                reranked.add(new SearchResult(r.chunkId(), r.slug(), r.title(), r.url(), r.sourceType(), r.content(),
+                        scores[i]));
+            }
+            reranked.sort(Comparator.comparingDouble(SearchResult::score).reversed());
+            return withQuotas(reranked, limit);
+        } catch (RuntimeException e) {
+            log.warn("El reranker ha fallado; uso el orden de la búsqueda híbrida: {}", e.toString());
+            return withQuotas(pool, limit);
+        }
+    }
+
+    /** Cuántas entrevistas caben en {@code limit} resultados (el resto, texto escrito por Peat). */
+    static int interviewQuota(int limit) {
+        return limit * 2 / 5;
+    }
+
+    /**
+     * Los {@code limit} mejores de una lista ya ordenada, con el mismo reparto que la búsqueda híbrida: 3 de cada
+     * 5 de texto escrito y 2 de entrevistas. Si un tipo no llena su cupo, el hueco es para el mejor del otro.
+     */
+    static List<SearchResult> withQuotas(List<SearchResult> sorted, int limit) {
+        int interviews = interviewQuota(limit), written = limit - interviews;
+        List<SearchResult> chosen = new ArrayList<>(), rest = new ArrayList<>();
+        int i = 0, w = 0;
+        for (SearchResult r : sorted) {
+            if (r.isInterview() ? i < interviews : w < written) {
+                chosen.add(r);
+                if (r.isInterview()) i++; else w++;
+            } else {
+                rest.add(r);
+            }
+        }
+        for (SearchResult r : rest) {
+            if (chosen.size() >= limit) break;
+            chosen.add(r);
+        }
+        List<SearchResult> result = new ArrayList<>(chosen.subList(0, Math.min(limit, chosen.size())));
+        result.sort(Comparator.comparingDouble(SearchResult::score).reversed());
+        return result;
+    }
+
+    private List<SearchResult> hybrid(String query, String englishKeywords, int limit) {
         String queryVector = PgVector.toLiteral(voyage.embedQuery(query));
 
         // websearch_to_tsquery exige TODAS las palabras por defecto, demasiado estricto.
@@ -82,7 +152,7 @@ public class SearchService {
         // entrevistas taparían a los artículos, que son la fuente más fiable (texto escrito por Peat, literal).
         // Por eso cada tipo tiene sitio reservado: de 5 resultados, 3 de texto escrito por Peat y 2 entrevistas.
         // Lo escrito son los artículos y los libros: compiten juntos por esos 3 puestos.
-        int interviews = limit * 2 / 5;
+        int interviews = interviewQuota(limit);
 
         return jdbc.sql("""
                 WITH semantic AS (

@@ -20,6 +20,7 @@ public class VoyageClient {
 
     private static final Logger log = LoggerFactory.getLogger(VoyageClient.class);
     private static final String MODEL = "voyage-4";
+    private static final String RERANK_MODEL = "rerank-2.5";
     public static final int DIMENSIONS = 1024; // tiene que coincidir con vector(1024) de la migración V2
 
     private final RestClient http;
@@ -40,6 +41,22 @@ public class VoyageClient {
     /** Para la pregunta del usuario. */
     public float[] embedQuery(String query) {
         return embed(List.of(query), "query").getFirst();
+    }
+
+    /**
+     * Puntúa cada texto según lo bien que responde a la consulta (reranker). Más fino que comparar embeddings:
+     * lee la consulta y el texto juntos. Devuelve una puntuación por texto, en el mismo orden.
+     * Documentación: https://docs.voyageai.com/reference/reranker-api
+     */
+    public double[] rerank(String query, List<String> texts) {
+        RerankResponse response = http.post()
+                .uri("/rerank")
+                .body(new RerankRequest(query, texts, RERANK_MODEL))
+                .retrieve()
+                .body(RerankResponse.class);
+        double[] scores = new double[texts.size()];
+        response.data().forEach(item -> scores[item.index()] = item.relevanceScore());
+        return scores;
     }
 
     /**
@@ -91,4 +108,10 @@ public class VoyageClient {
     record EmbeddingResponse(List<EmbeddingItem> data) {}
 
     record EmbeddingItem(int index, float[] embedding) {}
+
+    record RerankRequest(String query, List<String> documents, String model) {}
+
+    record RerankResponse(List<RerankItem> data) {}
+
+    record RerankItem(int index, @JsonProperty("relevance_score") double relevanceScore) {}
 }

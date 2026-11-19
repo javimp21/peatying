@@ -364,7 +364,47 @@ public class ChatService {
                 + "«Fragmentos de tu respuesta anterior» (si lo hay), cítalo y explica cómo encaja con lo que ella dice: "
                 + "ni le des la razón sin más ni cambies de conclusión solo porque insista. Aunque tenga razón, NO "
                 + "empieces con «Tienes razón», «You're right» ni «Вы правы», ni comentes tu respuesta anterior "
-                + "(«me pasé», «я переборщил», «я ошибся»): empieza directamente por lo que decía Peat.";
+                + "(«me pasé», «я переборщил», «я ошибся»): empieza directamente por lo que decía Peat."
+                + warningsReminder(history);
+    }
+
+    /**
+     * Frases de aviso: dosis o cantidades excesivas, riesgos, ir al médico. En los idiomas que más llegan. Un "pero"
+     * solo no basta: tiene que hablar de riesgo, exceso, médico o cuidado.
+     */
+    private static final Pattern WARNING = Pattern.compile("(?iu)(riesgo|peligr|exceso|excesiv|demasiad|cuidado|"
+            + "precauci|médico|medico|consult|supervis|no (lo )?(sustituye|reemplaza)|más de lo que|"
+            + "\\brisk|danger|excess|too much|careful|caution|doctor|physician|medical (care|supervision)|"
+            + "more than (he|peat)|"
+            + "риск|опас|слишком|избыт|осторож|врач|больше, чем|заметно больше|резк)");
+    static final int MAX_WARNINGS = 4;
+
+    /**
+     * Los avisos que el bot ya dio en esta conversación, copiados tal cual. La regla general («no repitas avisos»)
+     * no basta: el modelo la lee pero vuelve a advertir, a menudo con otras cifras. Enseñarle sus propias frases
+     * funciona mejor que describirlas, y además recupera las que se perdieron al recortar respuestas antiguas.
+     */
+    static String warningsReminder(List<Turn> history) {
+        List<String> warnings = new ArrayList<>();
+        for (Turn turn : history) {
+            if (!Turn.ASSISTANT.equals(turn.role())) {
+                continue;
+            }
+            for (String sentence : withoutCitations(turn.content()).split("(?<=[.!?…])\\s+")) {
+                String s = sentence.strip();
+                if (s.length() > 20 && WARNING.matcher(s).find()) {
+                    warnings.add(s.length() > 220 ? s.substring(0, 220) + "…" : s);
+                }
+            }
+        }
+        if (warnings.isEmpty()) {
+            return "";
+        }
+        // Los más recientes: son los que más tiende a repetir.
+        List<String> last = warnings.subList(Math.max(0, warnings.size() - MAX_WARNINGS), warnings.size());
+        return "\nEstos avisos ya los diste en esta conversación: «" + String.join("» «", last) + "». No los repitas "
+                + "ni los reformules (tampoco con otras cifras o cálculos nuevos) y no añadas otro de ir al médico. Si "
+                + "la persona discute justo eso, contesta a su argumento con lo que decía Peat, sin volver a advertir.";
     }
 
     static String languageReminder(String question, String language) {

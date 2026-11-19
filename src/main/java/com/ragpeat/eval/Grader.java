@@ -34,12 +34,21 @@ public class Grader {
             "en", "es", "un", "una", "por", "para", "con", "se", "lo", "su", "sus", "no", "como", "pero",
             "muy", "mucho", "mucha", "muchos", "muchas", "comer", "tomar", "hay", "son");
 
-    /** Frases con las que el bot reconoce que algo no está en los artículos. */
+    /**
+     * Frases con las que el bot reconoce que algo no está en los artículos. Desde que el prompt le pide no abrir
+     * con «Peat no habló de X», lo dice de otras formas: «no se refirió a la kombucha por su nombre», «no
+     * menciona los arándanos en concreto», «no tengo nada suyo sobre X», o en inglés.
+     */
     private static final Pattern ADMITS_ABSENCE = Pattern.compile(
-            "(?i)no (lo )?(menciona|mencionó|habla|habló|comenta|comentó|aparece|aparecen|trata|trató|dice|dijo|dejó|dio|expresó|valoró|opinó|tuvo|tenía|encontr|encuentro|se menciona|hay)");
+            "(?i)no (lo |la |los |las )?(se )?(menciona|mencionó|habla|habló|comenta|comentó|aparece|aparecen|trata|trató|"
+                    + "dice|dijo|dejó|dio|expresó|valoró|opinó|tuvo|tenía|encontr|encuentro|se menciona|hay|refiere|"
+                    + "refirió|nombra|nombró|escribió|escribe|cita|citó|analizó|estudió|abordó|tengo|tiene|pronunci)"
+                    + "|\\b(didn't|did not|never) (specifically |directly )?(discuss|mention|talk|write|address|name|cover)");
 
     /** El texto de todos los artículos, normalizado, para comprobar que las citas literales existen. */
     private final String corpus;
+    /** Los títulos de los artículos: «"Gelatin, stress, longevity"» entre comillas es un título, no una cita. */
+    private final Set<String> titles;
     /** Lo que dijo Peat en las entrevistas. Una cita de aquí no es inventada, pero tampoco literal: el texto está editado. */
     private final String interviewCorpus;
 
@@ -51,6 +60,7 @@ public class Grader {
     public Grader(List<Article> articles, List<Interview> interviews, List<BookFileStore.Page> books) {
         this.corpus = normalize(Stream.concat(articles.stream().map(Article::text), books.stream().map(BookFileStore.Page::text))
                 .collect(Collectors.joining(" ")));
+        this.titles = articles.stream().map(a -> asTitle(a.title())).collect(Collectors.toSet());
         this.interviewCorpus = normalize(interviews.stream()
                 .flatMap(i -> i.sections().stream())
                 .flatMap(s -> s.turns().stream())
@@ -81,7 +91,11 @@ public class Grader {
         boolean sourceHit = q.expectedArticles().stream().anyMatch(citedSlugs::contains)
                 || answer.citedSources().values().stream().anyMatch(s -> isRelevantBookPage(s, q.bookTerms()));
 
-        List<String> quotes = quotesIn(answer.text());
+        Set<String> citedTitles = answer.citedSources().values().stream().map(s -> asTitle(s.title()))
+                .collect(Collectors.toSet());
+        List<String> quotes = quotesIn(answer.text()).stream()
+                .filter(quote -> !titles.contains(asTitle(quote)) && !citedTitles.contains(asTitle(quote)))
+                .toList();
         List<String> notInArticles = quotes.stream().filter(quote -> !corpus.contains(normalize(quote))).toList();
         List<String> fromInterviews = notInArticles.stream()
                 .filter(quote -> interviewCorpus.contains(normalize(quote)))
@@ -139,6 +153,11 @@ public class Grader {
             if (SPANISH_WORDS.contains(word)) spanish++;
         }
         return spanish <= english;
+    }
+
+    /** Un título para comparar: normalizado y sin la puntuación del final («longevity,» → «longevity»). */
+    static String asTitle(String text) {
+        return normalize(text).strip().replaceAll("[\\p{Punct}\\s]+$", "");
     }
 
     /**
