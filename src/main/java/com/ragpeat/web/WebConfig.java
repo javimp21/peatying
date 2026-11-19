@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -41,6 +42,12 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/en/how-it-works").setViewName("forward:/en/how-it-works.html");
         // /privacy es donde agentes y validadores buscan la política de privacidad: lleva a la versión en inglés.
         registry.addRedirectViewController("/privacy", "/en/privacy").setStatusCode(HttpStatus.MOVED_PERMANENTLY);
+    }
+
+    // El nombre "localeResolver" es el que busca DispatcherServlet; ver PageLocaleResolver.
+    @Bean
+    LocaleResolver localeResolver() {
+        return new PageLocaleResolver();
     }
 
     @Bean
