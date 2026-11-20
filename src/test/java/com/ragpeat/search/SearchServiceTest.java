@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class SearchServiceTest {
 
     private static SearchResult r(long id, String type, double score) {
-        return new SearchResult(id, "s" + id, "t", "u", type, "c", score);
+        return new SearchResult(id, "s" + id, "t", "u", type, "c", score, false);
     }
 
     @Test

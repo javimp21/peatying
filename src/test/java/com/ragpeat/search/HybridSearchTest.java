@@ -75,6 +75,19 @@ class HybridSearchTest {
                 .containsExactlyInAnyOrder("it-a1", "it-a2", "it-a3", "it-a4", "it-a5");
     }
 
+    @Test
+    void mixedAuthorsFlagComesFromTheDocument() {
+        articles();
+        jdbc.sql("UPDATE documents SET mixed_authors = true WHERE slug = 'it-a1'").update();
+
+        List<SearchResult> results = search.search("q", null, 5);
+
+        assertThat(results).filteredOn(SearchResult::mixedAuthors).extracting(SearchResult::slug).containsExactly("it-a1");
+        assertThat(search.ofDocument("it-a1")).extracting(SearchResult::mixedAuthors).containsExactly(true);
+        long chunkId = results.stream().filter(r -> r.slug().equals("it-a1")).findFirst().orElseThrow().chunkId();
+        assertThat(search.byIds(List.of(chunkId))).extracting(SearchResult::mixedAuthors).containsExactly(true);
+    }
+
     private void articles() {
         insert("it-a1", "article", "Thyroid and metabolism in the body.", vector(1, 0, 0));
         insert("it-a2", "article", "Sugar and energy production in cells.", vector(1, 0.5f, 0));

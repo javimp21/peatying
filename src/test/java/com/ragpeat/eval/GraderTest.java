@@ -25,7 +25,7 @@ class GraderTest {
     private ChatAnswer answer(String text, String... citedSlugs) {
         TreeMap<Integer, SearchResult> cited = new TreeMap<>();
         for (int i = 0; i < citedSlugs.length; i++) {
-            cited.put(i + 1, new SearchResult(i, citedSlugs[i], "t", "https://raypeat.com/articles/articles/" + citedSlugs[i] + ".shtml", "article", "c", 0));
+            cited.put(i + 1, new SearchResult(i, citedSlugs[i], "t", "https://raypeat.com/articles/articles/" + citedSlugs[i] + ".shtml", "article", "c", 0, false));
         }
         return new ChatAnswer(text, cited, 1, 0, 0);
     }
@@ -109,7 +109,7 @@ class GraderTest {
     private ChatAnswer citingBookPage(String content) {
         TreeMap<Integer, SearchResult> cited = new TreeMap<>();
         cited.put(1, new SearchResult(1, "book-generative-energy-p035", "Generative Energy, p. 35",
-                "https://raypeat.com/products.shtml#generative-energy-p35", "book", content, 0));
+                "https://raypeat.com/products.shtml#generative-energy-p35", "book", content, 0, false));
         return new ChatAnswer("Según su libro, la gelatina protege [1].", cited, 1, 0, 0);
     }
 

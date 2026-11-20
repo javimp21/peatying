@@ -57,7 +57,7 @@ public class SearchService {
             return List.of();
         }
         return jdbc.sql("""
-                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, 0 AS score
+                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, 0 AS score, d.mixed_authors
                 FROM chunks c JOIN documents d ON d.id = c.document_id
                 WHERE c.id IN (:ids)
                 """)
@@ -69,7 +69,7 @@ public class SearchService {
     /** Los fragmentos de un documento por su slug, en orden (para reproducir conversaciones en el examen). */
     public List<SearchResult> ofDocument(String slug) {
         return jdbc.sql("""
-                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, 0 AS score
+                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, 0 AS score, d.mixed_authors
                 FROM chunks c JOIN documents d ON d.id = c.document_id
                 WHERE d.slug = :slug
                 ORDER BY c.id
@@ -98,7 +98,7 @@ public class SearchService {
             for (int i = 0; i < pool.size(); i++) {
                 SearchResult r = pool.get(i);
                 reranked.add(new SearchResult(r.chunkId(), r.slug(), r.title(), r.url(), r.sourceType(), r.content(),
-                        scores[i]));
+                        scores[i], r.mixedAuthors()));
             }
             reranked.sort(Comparator.comparingDouble(SearchResult::score).reversed());
             return withQuotas(reranked, limit);
@@ -192,7 +192,7 @@ public class SearchService {
                              score DESC
                     LIMIT :limit
                 )
-                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, r.score
+                SELECT c.id AS chunk_id, d.slug, d.title, d.url, d.source_type, c.content, r.score, d.mixed_authors
                 FROM chosen r
                 JOIN chunks c ON c.id = r.id
                 JOIN documents d ON d.id = c.document_id
