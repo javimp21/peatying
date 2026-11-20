@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Lo genera TopicsCommand (comando "topics"): las páginas que queremos que aparezcan en Google. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://peatying.com/</loc><lastmod>2026-11-18</lastmod></url>
-  <url><loc>https://peatying.com/about</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://peatying.com/</loc><lastmod>2026-11-19</lastmod></url>
+  <url><loc>https://peatying.com/about</loc><lastmod>2026-11-20</lastmod></url>
   <url><loc>https://peatying.com/temas</loc><lastmod>2026-11-19</lastmod></url>
   <url><loc>https://peatying.com/como-funciona</loc><lastmod>2026-11-18</lastmod></url>
   <url><loc>https://peatying.com/privacidad</loc><lastmod>2026-11-18</lastmod></url>
   <url><loc>https://peatying.com/en</loc><lastmod>2026-11-18</lastmod></url>
-  <url><loc>https://peatying.com/en/about</loc><lastmod>2026-11-18</lastmod></url>
+  <url><loc>https://peatying.com/en/about</loc><lastmod>2026-11-20</lastmod></url>
   <url><loc>https://peatying.com/en/how-it-works</loc><lastmod>2026-11-18</lastmod></url>
   <url><loc>https://peatying.com/en/privacy</loc><lastmod>2026-11-18</lastmod></url>
   <url><loc>https://peatying.com/temas/azucar</loc><lastmod>2026-11-19</lastmod></url>
