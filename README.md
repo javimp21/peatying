@@ -4,7 +4,7 @@
 
 **[peatying.com](https://peatying.com)** · A chatbot about the ideas of biologist Ray Peat (1936–2022), with a Spanish and an English site, that answers in whatever language you write in. Every answer is grounded in his own words — 78 articles, 5 books, 53 newsletter issues and 221 radio interviews — and cites them, with the original text and audio one click away (books and newsletters are cited by page or date, without showing their copyrighted text).
 
-![peatying.com](src/main/resources/static/img/og-mascota.jpg)
+![peatying.com](.github/social-preview.png)
 
 A retrieval-augmented generation (RAG) app built and run end to end by one developer: corpus scraping, an audio transcription pipeline with speaker attribution, hybrid search in Postgres, an agentic tool-use loop with Claude, streaming answers, an evaluation harness, privacy-first analytics, SEO, and a production deployment on AWS.
 
