@@ -162,7 +162,10 @@ public class ChatService {
      *                        de cosas ciertas, porque la búsqueda nueva solo traía la otra cara del tema.
      */
     public ChatAnswer answer(List<Turn> history, SortedMap<Integer, SearchResult> previousSources, String question,
-                             String document, String pageLang, ChatListener listener) {
+                             String document, String pageLang, ChatListener target) {
+        // Lo que se envía y lo que se guarda pasa por el mismo filtro de tono (ver ToneFilter).
+        boolean allowNegativeOpener = ToneFilter.asksIfHeTalked(question);
+        ToneFilter.Streaming listener = ToneFilter.listener(target, allowNegativeOpener);
         List<SearchResult> sources = new ArrayList<>(); // todos los fragmentos vistos; su posición+1 es su número [n]
         // Los de la respuesta anterior van primero: ocupan los números 1, 2, 3... y las búsquedas nuevas siguen
         // desde ahí (si una búsqueda vuelve a traer uno de ellos, conserva su número).
@@ -252,10 +255,11 @@ public class ChatService {
 
             // Caso b): no pide herramientas -> es la respuesta final.
             if (toolUses.isEmpty()) {
-                String text = response.content().stream()
+                String text = ToneFilter.clean(response.content().stream()
                         .flatMap(block -> block.text().stream())
                         .map(TextBlock::text)
-                        .collect(Collectors.joining());
+                        .collect(Collectors.joining()), allowNegativeOpener);
+                listener.finish();
                 return new ChatAnswer(text, citedIn(text, sources), searches, inputTokens, outputTokens,
                         List.copyOf(sources), List.copyOf(queries));
             }

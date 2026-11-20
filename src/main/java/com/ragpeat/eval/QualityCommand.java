@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.ragpeat.chat.ChatAnswer;
 import com.ragpeat.chat.ChatListener;
 import com.ragpeat.chat.ChatService;
+import com.ragpeat.chat.ToneFilter;
 import com.ragpeat.chat.Turn;
 import com.ragpeat.search.SearchResult;
 import com.ragpeat.search.SearchService;
@@ -212,8 +213,7 @@ public class QualityCommand implements CommandLineRunner {
 
     /** Los vicios de tono de la respuesta (ver ToneCheck). Si pregunta «¿habló Peat de X?», empezar con «no» vale. */
     private static List<String> tone(Result r) {
-        boolean asksIfHeTalked = r.question().question().matches(
-                "(?isu).*(habló|dijo algo|did (ray )?peat (ever )?(talk|discuss|mention|say|write)|говорил ли|писал ли).*");
+        boolean asksIfHeTalked = ToneFilter.asksIfHeTalked(r.question().question());
         return ToneCheck.problems(r.answer(), asksIfHeTalked);
     }
 
