@@ -65,7 +65,91 @@ class ToneFilterTest {
     void russianSelfNoteIsRemovedButAttributionStays() {
         assertThat(ToneFilter.clean("Он ценил сахар [1]. Это моя прикидка. По его логике, фрукты полезны [2].", false))
                 .isEqualTo("Он ценил сахар [1]. По его логике, фрукты полезны [2].");
-        assertThat(ToneFilter.clean("Он ценил сахар [1]. По моей логике, это так.", false)).isEqualTo("Он ценил сахар [1]. ");
+    }
+
+    @Test
+    void pureNotesAreDroppedWholeButCommentariesWithContentAreNot() {
+        String[] notes = {
+                "Esta es una deducción mía, no una opinión que él diera sobre esos productos.",
+                "Esto es una deducción a partir de sus ideas.",
+                "Estas son deducciones mías a partir de sus ideas, no pautas que él diera.",
+                "Eso es una deducción mía a partir de su idea.",
+                "Esa frecuencia es una deducción mía, no algo que él propusiera.",
+                "La escala de 0 a 10 es mía, construida con lo que decía sobre cada alimento.",
+                "This is my own interpretation, not something he said.",
+                "Это моя интерпретация, а не его слова.",
+        };
+        for (String note : notes) {
+            assertThat(ToneFilter.clean("Antes [1].\n\n" + note + "\n\nDespués [2].", false))
+                    .as(note).isEqualTo("Antes [1].\n\nDespués [2].");
+        }
+        String estimate = "Es una estimación de 2.300 kcal [1].";
+        assertThat(ToneFilter.clean(estimate, false)).isEqualTo(estimate);
+        String presents = "Esto es una deducción a partir de sus ideas: una leche de supermercado encajaría [6].";
+        assertThat(ToneFilter.clean(presents, false)).isEqualTo(presents);
+    }
+
+    @Test
+    void leadingClauseIsRemovedAndTheRestKept() {
+        assertThat(ToneFilter.clean("Como deducción mía, una manzana con queso encajaría [1].", false))
+                .isEqualTo("Una manzana con queso encajaría [1].");
+        assertThat(ToneFilter.clean("Como deducción a partir de esas ideas, convendría:\n- Fruta [1].\n", false))
+                .isEqualTo("Convendría:\n- Fruta [1].\n");
+        assertThat(ToneFilter.clean("Como deducción mía, 300 g a la semana son unos 40 g al día [2].", false))
+                .isEqualTo("300 g a la semana son unos 40 g al día [2].");
+        assertThat(ToneFilter.clean("Intro [1].\n\nComo deducción a partir de esas ideas:\n- Fruta [1].\n", false))
+                .isEqualTo("Intro [1].\n\n- Fruta [1].\n");
+        assertThat(ToneFilter.clean("- **Como deducción mía, la avena** quedaría detrás [1].\n", false))
+                .isEqualTo("- **La avena** quedaría detrás [1].\n");
+    }
+
+    @Test
+    void embeddedClauseIsRemovedWithoutLeavingStrayCommas() {
+        assertThat(ToneFilter.clean("Con esas ideas, y solo como deducción mía, el enfoque sería:\n- Fruta [1].\n", false))
+                .isEqualTo("Con esas ideas, el enfoque sería:\n- Fruta [1].\n");
+        assertThat(ToneFilter.clean("Una forma de ordenarlo, como deducción a partir de sus ideas:\n- Fruta [1].\n", false))
+                .isEqualTo("Una forma de ordenarlo:\n- Fruta [1].\n");
+        assertThat(ToneFilter.clean("Mi estimación, como deducción mía a partir de sus ideas, es de unas **2.300-2.500 kcal al día** [1].", false))
+                .isEqualTo("Mi estimación es de unas **2.300-2.500 kcal al día** [1].");
+    }
+
+    @Test
+    void trailingClauseIsRemovedKeepingTheFinalPunctuation() {
+        assertThat(ToneFilter.clean("Por eso convendría un ejercicio moderado [2], aunque esto es una deducción mía a partir de lo que dice.", false))
+                .isEqualTo("Por eso convendría un ejercicio moderado [2].");
+        assertThat(ToneFilter.clean("Le pasaría también a ella, pero eso es una deducción mía.", false))
+                .isEqualTo("Le pasaría también a ella.");
+    }
+
+    @Test
+    void otherSelfNotesAreLeftAlone() {
+        String[] untouched = {
+                "So for steamed milk, my reading of his ideas is that gentle heating costs little nutritionally [1].",
+                "Como Peat no habló de esa marca concreta, esto es una deducción a partir de sus ideas: una leche de Hacendado encajaría [6].",
+                "Por mi deducción, la leche entera encajaría mejor [2].",
+                "По моей логике, это так.",
+                "Una vez dicho, convendría una sesión corta de luz roja [3].",
+                "Es una deducción aplicarla a la garganta.",
+                "Es una estimación mía, y es menos de lo que calculé antes.",
+        };
+        for (String text : untouched) {
+            assertThat(ToneFilter.clean(text, true)).as(text).isEqualTo(text);
+        }
+    }
+
+    @Test
+    void negativeOpenerFollowedByAnAffirmationIsLeftAlone() {
+        String[] untouched = {
+                "Peat no habló de los abdominales en concreto, pero sí de la frecuencia del ejercicio.",
+                "Peat no habló del boniato en particular, pero sí dijo algo sobre él.",
+                "Peat didn't discuss tattoos, but yes, he talked about skin [1].",
+                "Пэт не писал об этом, но да, он говорил о коже [1].",
+        };
+        for (String text : untouched) {
+            assertThat(ToneFilter.clean(text, false)).as(text).isEqualTo(text);
+        }
+        assertThat(ToneFilter.clean("Peat no dio cantidades de pollo ni de patata para una cena concreta, pero sus ideas apuntan a un plato con patata [1].", false))
+                .isEqualTo("Sus ideas apuntan a un plato con patata [1].");
     }
 
     @Test
@@ -150,8 +234,8 @@ class ToneFilterTest {
         }, false);
         listener.onText("Voy a buscar. Peat no habló de");
         listener.onDiscardText();
-        listener.onText("Peat no habló de X, pero sí de Y [1].");
+        listener.onText("Peat no habló de X, pero sus ideas apuntan a Y [1].");
         listener.finish();
-        assertThat(events).containsExactly("text:Voy a buscar. ", "discard", "text:Sí de Y [1].");
+        assertThat(events).containsExactly("text:Voy a buscar. ", "discard", "text:Sus ideas apuntan a Y [1].");
     }
 }

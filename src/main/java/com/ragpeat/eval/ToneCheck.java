@@ -12,14 +12,25 @@ import com.ragpeat.chat.ToneFilter;
  *  - empezar diciendo que Peat no habló de algo («Peat didn't discuss X specifically, but…»);
  *  - comentar que lo dicho es una deducción propia («this is my interpretation, not his words»);
  *  - abrir dándole la razón a la persona («You're right», «Tienes razón», «Вы правы»).
- * En español, inglés y ruso, que son los idiomas de casi todas las preguntas. Las expresiones de los dos primeros
- * vicios están en ToneFilter, que también los quita de las respuestas en producción.
+ * En español, inglés y ruso, que son los idiomas de casi todas las preguntas. La apertura negativa usa el patrón de
+ * ToneFilter, que también la recorta en producción. Las notas de deducción se cuentan con un patrón amplio, el suyo:
+ * contar no borra nada, y ToneFilter solo corta las formas que puede cortar sin perder contenido.
  */
 public final class ToneCheck {
 
     public static final String NEGATIVE_OPENER = "empieza con «no habló de»";
     public static final String SELF_NOTE = "comenta que es deducción suya";
     public static final String CONCEDES = "abre dándole la razón";
+
+    private static final Pattern SELF = Pattern.compile(
+            "my (own )?(interpretation|inference|reading|estimate|conclusion|extrapolation)"
+                    + "|not his (words|verdict|approval|own)"
+                    + "|mi (interpretación|deducción|valoración)|no (son )?sus palabras"
+                    + "|(esto |eso )?(es|son) (una )?deducci[óo]n|como deducci[óo]n"
+                    + "|(es )?una (estimaci[óo]n|extrapolaci[óo]n) m[íi]a|es m[íi]a,? (construida|hecha|a partir)"
+                    + "|мо(я|й|ё) (интерпретация|вывод|оценка|прикидка|натяжка|экстраполяция)"
+                    + "|не его (слова|одобрение|расч|оценка)|по моей логике",
+            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 
     private static final Pattern CONCEDE = Pattern.compile(
             "^\\W*(you.re (absolutely )?right|you are right|good catch|tienes razón|tiene razón|tienes toda la razón"
@@ -35,7 +46,7 @@ public final class ToneCheck {
         if (!allowNegativeOpener && ToneFilter.NEGATIVE.matcher(firstSentence(text)).find()) {
             found.add(NEGATIVE_OPENER);
         }
-        if (ToneFilter.SELF.matcher(text).find()) {
+        if (SELF.matcher(text).find()) {
             found.add(SELF_NOTE);
         }
         if (CONCEDE.matcher(text).find()) {

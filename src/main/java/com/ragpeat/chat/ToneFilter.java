@@ -6,17 +6,26 @@ import java.util.regex.Pattern;
 /**
  * Quita de la respuesta dos vicios de tono que el prompt prohíbe y que el modelo sigue cometiendo (revisión de
  * 1.481 respuestas reales): abrir con «Peat no habló de X, pero…» y comentar que lo dicho es una deducción propia.
- * ToneCheck (el examen) usa estas mismas expresiones, así que examen y producción coinciden.
+ * ToneCheck (el examen) usa el mismo patrón de la apertura negativa; para contar las notas de deducción tiene el suyo,
+ * más amplio, porque contar no borra nada.
  *
  * Trabaja por frases, y cada frase se decide solo con su propio texto y con si es la primera de la respuesta. Por eso
  * el resultado es el mismo escribas la respuesta de golpe (clean) o por trozos mientras llega (listener): lo que se
  * ve en la web es exactamente lo que se guarda.
  *
- *  1. Una frase que comenta que es deducción suya se borra entera (y la línea que quede vacía o con solo la viñeta).
- *  2. Si la primera frase dice que Peat no habló de algo y sigue con «, pero …», se queda lo de después del «pero».
- *     Sin esa conjunción no se toca: borrarla podría perder contenido.
+ * Solo corta en unas pocas formas precisas; si una frase tiene el vicio pero no encaja en ninguna, se deja tal cual,
+ * porque lo que no se sabe cortar sin perder contenido (la recomendación, la cifra pedida) no se toca:
+ *  1. La frase que es solo la nota («Esto es una deducción mía a partir de sus ideas.») se borra entera, y la línea
+ *     que quede vacía o con solo la viñeta.
+ *  2. «Como deducción mía, …» al principio: se quita la cláusula y se sigue con lo demás.
+ *  3. «…, como deducción mía, …» en medio: se quita la cláusula.
+ *  4. «…, aunque esto es una deducción mía.» al final: se quita la cláusula.
+ *  5. Si la primera frase dice que Peat no habló de algo y sigue con «, pero …», se queda lo de después del «pero»
+ *     (salvo si lo que sigue es «sí…»: «no habló de X, pero sí de Y» no se puede recortar). Sin conjunción no se toca.
  */
 public final class ToneFilter {
+
+    private static final int FLAGS = Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE | Pattern.UNICODE_CHARACTER_CLASS;
 
     // Solo la primera frase: más adelante, decir que no trató algo puede ser legítimo.
     public static final Pattern NEGATIVE = Pattern.compile(
@@ -25,15 +34,39 @@ public final class ToneFilter {
                     + "|не (писал|говорил|упоминал|обсуждал|описывал|разбирал)",
             Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
 
-    public static final Pattern SELF = Pattern.compile(
-            "my (own )?(interpretation|inference|reading|estimate|conclusion|extrapolation)"
-                    + "|not his (words|verdict|approval|own)"
-                    + "|mi (interpretación|deducción|valoración)|no (son )?sus palabras"
-                    + "|(esto |eso )?(es|son) (una )?deducci[óo]n|como deducci[óo]n"
-                    + "|(es )?una (estimaci[óo]n|extrapolaci[óo]n) m[íi]a|es m[íi]a,? (construida|hecha|a partir)"
-                    + "|мо(я|й|ё) (интерпретация|вывод|оценка|прикидка|натяжка|экстраполяция)"
-                    + "|не его (слова|одобрение|расч|оценка)|по моей логике",
-            Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
+    private static final String START = "^[\\s*•\\-]*";
+
+    private static final Pattern ONLY_A_NOTE = Pattern.compile(
+            START + "(((esto|eso|esta|estas|esa|esas|este|estos|es|son|aun así,? esto)\\s+(es|son)?\\s*(una |unas )?"
+                    + "((deducci[óo]n|deducciones)(?=\\s*(?:m[íi]a|suya|a partir|sobre|de |[,.!?]|$))"
+                    + "|(estimaci[óo]n|extrapolaci[óo]n) m[íi]a(?=\\s*(?:[.!?]|$|, no ))))"
+                    + "|((this|that|these) (is|are) (my (own )?(interpretation|inference|reading|estimate|extrapolation|deduction)"
+                    + "|an? (inference|deduction|extrapolation)))"
+                    + "|((это|эта|этот) (моя|мой|моё) (интерпретация|вывод|оценка|прикидка|экстраполяция))"
+                    + "|(la escala .* es m[íi]a)"
+                    + "|(esa (frecuencia|cifra|lista|escala) es (una deducci[óo]n )?m[íi]a))",
+            FLAGS);
+
+    private static final Pattern LEADING_CLAUSE = Pattern.compile(
+            "^(\\W*)(como deducci[óo]n( m[íi]a| a partir de (sus|sus propias|esas?|estas?|lo que [^,:]*) ?"
+                    + "(ideas?|lo que dice|que dijo)?)?|por deducci[óo]n m[íi]a|y solo como deducci[óo]n m[íi]a)[ \\t]*[,:][ \\t]*",
+            FLAGS);
+
+    private static final String DEDUCTION = "como deducci[óo]n (?:m[íi]a(?: a partir de (?:sus|esas?|estas?) ideas)?"
+            + "|a partir de (?:sus|esas?|estas?) ideas)";
+
+    // «Mi estimación, como deducción mía a partir de sus ideas, es de…»: la cláusula va entre comas y se va con ellas.
+    private static final Pattern CLAUSE_BETWEEN_COMMAS = Pattern.compile(
+            ", (?:y solo )?" + DEDUCTION + ",(?= (es|son|sería|serían|convendría|encajaría|podría|debería|puede)\\b)", FLAGS);
+
+    private static final Pattern EMBEDDED_CLAUSE = Pattern.compile(", (?:y solo )?" + DEDUCTION + "\\s*([,:])", FLAGS);
+
+    private static final Pattern TRAILING_CLAUSE = Pattern.compile(
+            "[,;]\\s*(aunque|pero)\\s+(esto |eso )?(es|son) (una )?deducci[óo]n( m[íi]a| suya)?( a partir de [^.!?]*)?"
+                    + "(, no [^.!?]*)?(?=[.!?]\\s*$)",
+            FLAGS);
+
+    private static final Pattern AFFIRMS_AFTER_BUT = Pattern.compile("(sí|si|yes|he did|did|да)\\b", FLAGS);
 
     private static final Pattern CONJUNCTION = Pattern.compile("[,;] (pero|but|но) ",
             Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE);
@@ -157,6 +190,9 @@ public final class ToneFilter {
         private void sentence(String sentence, StringBuilder out) {
             boolean endsLine = sentence.endsWith("\n");
             String kept = decide(sentence);
+            if (kept != null && endsLine && !kept.endsWith("\n")) {
+                kept += "\n";       // una edición nunca puede comerse el salto de línea que cierra la frase
+            }
             first = false;
             if (kept == null) {
                 if (lineHasContent) {
@@ -198,25 +234,39 @@ public final class ToneFilter {
 
         /** El texto que queda de la frase, o null si hay que borrarla entera. */
         private String decide(String sentence) {
-            if (SELF.matcher(sentence).find()) {
+            // Con «:» la frase presenta algo que viene detrás: no es solo una nota.
+            if (ONLY_A_NOTE.matcher(sentence).find() && !sentence.contains(":")) {
                 return null;
             }
+            String text = sentence;
+            Matcher leading = LEADING_CLAUSE.matcher(text);
+            if (leading.find()) {
+                text = leading.group(1) + capitalized(text.substring(leading.end()));
+            }
+            text = CLAUSE_BETWEEN_COMMAS.matcher(text).replaceAll("");
+            text = EMBEDDED_CLAUSE.matcher(text).replaceAll("$1");
+            text = TRAILING_CLAUSE.matcher(text).replaceAll("");
             if (first && !allowNegativeOpener) {
-                Matcher negative = NEGATIVE.matcher(sentence);
+                Matcher negative = NEGATIVE.matcher(text);
                 if (negative.find()) {
-                    Matcher conjunction = CONJUNCTION.matcher(sentence);
-                    if (conjunction.find(negative.start())) {
-                        return capitalized(sentence.substring(conjunction.end()));
+                    Matcher conjunction = CONJUNCTION.matcher(text);
+                    if (conjunction.find(negative.start())
+                            && !AFFIRMS_AFTER_BUT.matcher(text).region(conjunction.end(), text.length()).lookingAt()) {
+                        return capitalized(text.substring(conjunction.end()));
                     }
                 }
             }
-            return sentence;
+            return text;
         }
 
         private static String capitalized(String text) {
             for (int i = 0; i < text.length(); i++) {
-                if (Character.isLetter(text.charAt(i))) {
-                    return text.substring(0, i) + Character.toUpperCase(text.charAt(i)) + text.substring(i + 1);
+                char c = text.charAt(i);
+                if (Character.isDigit(c)) {
+                    return text;        // «300 g…»: la unidad que sigue no se toca
+                }
+                if (Character.isLetter(c)) {
+                    return text.substring(0, i) + Character.toUpperCase(c) + text.substring(i + 1);
                 }
             }
             return text;
