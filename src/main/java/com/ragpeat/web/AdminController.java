@@ -2,8 +2,10 @@ package com.ragpeat.web;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -192,28 +194,36 @@ public class AdminController {
     /**
      * Las últimas conversaciones con todos sus mensajes (preguntas ya sin datos personales: ver PersonalData).
      * internas=true incluye también las nuestras (marcadas con ?interno), para probar cosas.
+     * before pasa a las anteriores: solo salen las de last_at menor que él (para paginar, el last_at de la última recibida).
      */
     @GetMapping("/api/admin/conversations")
     public ResponseEntity<?> conversations(HttpServletRequest http,
                                            @RequestParam(defaultValue = "false") boolean internas,
-                                           @RequestParam(defaultValue = "150") int limit) {
+                                           @RequestParam(defaultValue = "150") int limit,
+                                           @RequestParam(required = false) Instant before) {
         ResponseEntity<?> no = denied(http);
         if (no != null) {
             return no;
         }
+        // Sin before, una fecha lejana: así la consulta es siempre la misma y no hay parámetros NULL sin tipo.
+        Timestamp limitAt = Timestamp.from(before != null ? before : Instant.parse("9999-01-01T00:00:00Z"));
         List<Map<String, Object>> conversations = jdbc.sql("""
-                SELECT c.id, c.created_at AS started, c.internal, c.document_name, c.document_text,
-                       (SELECT max(m.created_at) FROM chat_messages m WHERE m.conversation_id = c.id) AS last_at,
-                       p.country, p.referrer
-                FROM conversations c
-                LEFT JOIN page_views p ON p.visitor_hash = c.visitor_hash AND p.day = c.created_at::date
-                WHERE (:internas OR NOT c.internal)
-                  AND EXISTS (SELECT 1 FROM chat_messages m WHERE m.conversation_id = c.id)
+                SELECT * FROM (
+                    SELECT c.id, c.created_at AS started, c.internal, c.document_name, c.document_text,
+                           (SELECT max(m.created_at) FROM chat_messages m WHERE m.conversation_id = c.id) AS last_at,
+                           p.country, p.referrer
+                    FROM conversations c
+                    LEFT JOIN page_views p ON p.visitor_hash = c.visitor_hash AND p.day = c.created_at::date
+                    WHERE (:internas OR NOT c.internal)
+                      AND EXISTS (SELECT 1 FROM chat_messages m WHERE m.conversation_id = c.id)
+                ) found
+                WHERE last_at < :before
                 -- Primero las que tienen la pregunta más reciente, aunque la conversación empezara antes.
                 ORDER BY last_at DESC NULLS LAST
                 LIMIT :limit
                 """)
                 .param("internas", internas)
+                .param("before", limitAt)
                 .param("limit", Math.min(Math.max(limit, 1), 500))
                 .query().listOfRows();
         if (conversations.isEmpty()) {
