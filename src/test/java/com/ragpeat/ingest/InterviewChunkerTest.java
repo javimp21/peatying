@@ -132,13 +132,21 @@ class InterviewChunkerTest {
     }
 
     @Test
-    void elTextoQueVeElUsuarioNoLlevaElContexto() {
+    void elPanelSeparaElContextoDelTexto() {
         String chunk = InterviewChunker.CONTEXT_HEADER + "\nHost: A question long enough to count?\nRay Peat: An answer…\n\nHost: Next?\n\nRay Peat: Reply.";
 
-        assertThat(InterviewChunker.withoutContext(chunk)).isEqualTo("Host: Next?\n\nRay Peat: Reply.");
-        assertThat(InterviewChunker.withoutContext("Host: Next?\n\nRay Peat: Reply.")).isEqualTo("Host: Next?\n\nRay Peat: Reply.");
+        InterviewChunker.Split split = InterviewChunker.splitContext(chunk);
+        assertThat(split.context()).isEqualTo("Host: A question long enough to count?\nRay Peat: An answer…");
+        assertThat(split.text()).isEqualTo("Host: Next?\n\nRay Peat: Reply.");
+
+        InterviewChunker.Split plain = InterviewChunker.splitContext("Host: Next?\n\nRay Peat: Reply.");
+        assertThat(plain.context()).isNull();
+        assertThat(plain.text()).isEqualTo("Host: Next?\n\nRay Peat: Reply.");
+
         String withoutBlankLine = InterviewChunker.CONTEXT_HEADER + "\nHost: A question long enough to count?";
-        assertThat(InterviewChunker.withoutContext(withoutBlankLine)).isEqualTo(withoutBlankLine);
+        InterviewChunker.Split noBlankLine = InterviewChunker.splitContext(withoutBlankLine);
+        assertThat(noBlankLine.context()).isNull();
+        assertThat(noBlankLine.text()).isEqualTo(withoutBlankLine);
     }
 
     private static Interview interview(Turn... turns) {

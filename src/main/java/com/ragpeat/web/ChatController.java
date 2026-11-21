@@ -90,7 +90,17 @@ public class ChatController {
     /** lang: el idioma de la página desde la que se pregunta ("es" o "en"); cualquier otra cosa se ignora. */
     record ChatRequest(String question, UUID conversationId, Boolean internal, String lang) {}
 
-    record Source(int number, String title, String url, String type, String text) {}
+    /** context: lo que se hablaba justo antes en una entrevista (ver InterviewChunker); null en lo demás. */
+    record Source(int number, String title, String url, String type, String text, String context) {}
+
+    /** El texto de libros y newsletters nunca sale del servidor (derechos de autor): solo título, página y enlace. */
+    static Source source(int number, SearchResult result) {
+        if (result.isCopyrighted()) {
+            return new Source(number, result.title(), result.url(), result.sourceType(), null, null);
+        }
+        InterviewChunker.Split split = InterviewChunker.splitContext(result.content());
+        return new Source(number, result.title(), result.url(), result.sourceType(), split.text(), split.context());
+    }
 
     record ChatResponse(String answer, List<Source> sources, UUID conversationId, long messageId) {}
 
@@ -205,9 +215,7 @@ public class ChatController {
                 }
             });
             List<Source> sources = answer.citedSources().entrySet().stream()
-                    // El texto de libros y newsletters nunca sale del servidor (derechos de autor): solo título, página y enlace.
-                    .map(e -> new Source(e.getKey(), e.getValue().title(), e.getValue().url(),
-                            e.getValue().sourceType(), e.getValue().isCopyrighted() ? null : InterviewChunker.withoutContext(e.getValue().content())))
+                    .map(e -> source(e.getKey(), e.getValue()))
                     .toList();
             // Solo guardamos el intercambio si ha salido bien.
             long messageId = conversations.saveExchange(conversationId, question, answer.text(),

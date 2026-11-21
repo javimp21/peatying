@@ -604,6 +604,10 @@ li .source-panel { margin: 8px 0 4px; }
 .source-panel h3 { margin: 0 0 8px; font: 400 1.05rem/1.15 var(--slab); text-transform: uppercase; color: var(--text); }
 .source-panel p { margin: 0 0 8px; white-space: pre-line; color: var(--panel-text); }
 .source-panel .source-text { font-size: 0.86rem; }
+/* Lo que se hablaba justo antes en una entrevista: más pequeño y más suave que el texto, pero legible (--muted cumple AA). */
+.source-panel .source-context { margin: 0 0 10px; padding-left: 10px; border-left: 1px solid var(--line); }
+.source-panel .source-context-label { display: block; font: 600 0.74rem var(--sans); letter-spacing: 0.02em; color: var(--muted); }
+.source-panel .source-context p { margin: 2px 0 0; font-size: 0.78rem; line-height: 1.45; color: var(--muted); }
 .source-panel .source-note { font-size: 0.78rem; color: var(--muted); font-style: italic; }
 .source-panel a { color: var(--ink); font: 500 0.85rem var(--sans); word-break: break-all; }
 .source-panel a:hover { color: var(--accent); }

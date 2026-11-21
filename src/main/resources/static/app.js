@@ -104,6 +104,7 @@ const TEXT = {
     newsletter: "Newsletter",
     newsletterNote: "Por derechos de autor, el texto de la newsletter no se muestra aquí.",
     interview: "Entrevista",
+    earlierInInterview: "Antes, en la entrevista:",
     article: "Artículo",
     listen: "Escuchar el audio original",
     readArticle: "Leer el artículo completo",
@@ -170,6 +171,7 @@ const TEXT = {
     newsletter: "Newsletter",
     newsletterNote: "For copyright reasons, the newsletter's text isn't shown here.",
     interview: "Interview",
+    earlierInInterview: "Earlier in the interview:",
     article: "Article",
     listen: "Listen to the original audio",
     readArticle: "Read the full article",
@@ -1079,7 +1081,7 @@ function renderAnswer(message) {
 // En el panel de cada cita, dos botones pegados: "Inglés" (el texto tal cual, por defecto) y "Español".
 // La traducción se pide una sola vez y se guarda en la fuente (y en el historial): no se vuelve a pagar.
 
-function sourceLanguageToggle(source, textElement) {
+function sourceLanguageToggle(source, textElement, contextElement) {
   if (LANG === "en") return "";         // en inglés el original ya se lee tal cual
   const group = document.createElement("div");
   group.className = "lang-toggle";
@@ -1095,6 +1097,7 @@ function sourceLanguageToggle(source, textElement) {
 
   const paint = (spanish) => {
     textElement.textContent = spanish ? source.translation : source.text;
+    if (contextElement) contextElement.textContent = spanish ? source.translationContext : source.context;
     buttons[0].setAttribute("aria-pressed", String(!spanish));
     buttons[1].setAttribute("aria-pressed", String(spanish));
   };
@@ -1107,11 +1110,12 @@ function sourceLanguageToggle(source, textElement) {
         const response = await fetch("/api/translate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ texts: [source.text] }),
+          body: JSON.stringify({ texts: contextElement ? [source.text, source.context] : [source.text] }),
         });
         const data = await response.json();
         if (!response.ok) throw new Error(data.error || "HTTP " + response.status);
         source.translation = data.translations[0];
+        if (contextElement) source.translationContext = data.translations[1];
         saveCurrentConversation();
       } catch (e) {
         showToast(TEXT.translateFail);
@@ -1457,7 +1461,20 @@ function toggleSource(messageDiv, button, source) {
   const text = document.createElement("p");
   text.className = "source-text";
   text.textContent = source.text;       // el texto original de Peat, en inglés
-  meta.append(number, interview ? TEXT.interview : TEXT.article, sourceLanguageToggle(source, text));
+  // Lo que se hablaba justo antes (solo entrevistas): el bot lo lee y puede citarlo, así que se enseña, atenuado.
+  let contextBody = null;
+  let contextBlock = null;
+  if (source.context) {
+    contextBlock = document.createElement("div");
+    contextBlock.className = "source-context";
+    const label = document.createElement("span");
+    label.className = "source-context-label";
+    label.textContent = TEXT.earlierInInterview;
+    contextBody = document.createElement("p");
+    contextBody.textContent = source.context;
+    contextBlock.append(label, contextBody);
+  }
+  meta.append(number, interview ? TEXT.interview : TEXT.article, sourceLanguageToggle(source, text, contextBody));
   const link = document.createElement("a");
   link.href = source.url;
   link.target = "_blank";
@@ -1465,7 +1482,9 @@ function toggleSource(messageDiv, button, source) {
   link.textContent = `${shortUrl(source.url)} ↗`;
   link.setAttribute("aria-label", interview ? TEXT.listen : TEXT.readArticle);
 
-  panel.append(meta, title, text);
+  panel.append(meta, title);
+  if (contextBlock) panel.append(contextBlock);
+  panel.append(text);
   // Las transcripciones son automáticas (Whisper): avisamos de que puede haber errores de reconocimiento.
   if (interview) {
     const note = document.createElement("p");

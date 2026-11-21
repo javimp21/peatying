@@ -32,17 +32,23 @@ public class InterviewChunker {
     static final int MIN_QUESTION_CHARS = 40;
     public static final String CONTEXT_HEADER = "[Earlier in this interview]";
 
+    /** Un chunk partido para enseñarlo: el contexto (sin su cabecera, o null) y lo dicho en ese tramo. */
+    public record Split(String context, String text) {}
+
     /**
-     * El chunk sin el contexto que le pone este chunker, para enseñarlo al usuario: el bot necesita el contexto,
-     * pero quien lee la fuente (o la traduce) solo quiere lo que se dijo en ese tramo. Sin contexto, o con un
-     * contexto sin línea en blanco detrás, se devuelve tal cual.
+     * Separa el contexto que le pone este chunker del resto, para que el panel de fuentes los pinte distinto: el bot
+     * lee los dos y puede citar palabras de Peat que estén en el contexto, así que quien lee la fuente tiene que poder
+     * verlas. Sin contexto, o con un contexto sin línea en blanco detrás, el contexto es null y el texto, todo el chunk.
      */
-    public static String withoutContext(String chunk) {
+    public static Split splitContext(String chunk) {
         if (chunk == null || !chunk.startsWith(CONTEXT_HEADER + "\n")) {
-            return chunk;
+            return new Split(null, chunk);
         }
         int end = chunk.indexOf("\n\n");
-        return end < 0 ? chunk : chunk.substring(end + 2);
+        if (end < 0) {
+            return new Split(null, chunk);
+        }
+        return new Split(chunk.substring(CONTEXT_HEADER.length() + 1, end), chunk.substring(end + 2));
     }
 
     public List<String> split(Interview interview) {
