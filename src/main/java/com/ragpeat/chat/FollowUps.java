@@ -45,6 +45,7 @@ public class FollowUps {
             - Stay on the topic of the reader's question: go one step deeper or to a very close aspect (the mechanism, a comparison with something similar, when or how, what Peat contrasted it with). Never jump to a different subject just because it appears in the passages.
             - Within that topic, each one must be answerable with what the passages say, and must not repeat what the answer already covers.
             - No personal questions and nothing about doses or advice for the reader themselves.
+            - Never mention "the text", "the passages" or "the sources": the reader has not seen them. Ask about Peat or the topic directly.
             - One question per line, no numbering, no bullets, nothing else.
             """;
 
