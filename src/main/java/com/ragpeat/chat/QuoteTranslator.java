@@ -40,25 +40,36 @@ public class QuoteTranslator {
     }
 
     public List<String> toSpanish(List<String> quotes) {
+        // A veces (con entrevistas, sobre todo) el modelo se niega a traducir «por derechos de autor» y no devuelve el
+        // array: son fragmentos cortos que la web ya enseña, así que se reintenta una vez antes de dar el error.
+        for (int attempt = 1; ; attempt++) {
+            String text = ask(quotes);
+            // Por si lo envuelve en ```json ... ```: nos quedamos con lo que va del primer [ al último ].
+            int start = text.indexOf('['), end = text.lastIndexOf(']');
+            if (start < 0 || end < start) {
+                if (attempt < 2) {
+                    continue;
+                }
+                throw new IllegalStateException("La traducción no es un array JSON");
+            }
+            List<String> translations = json.readValue(text.substring(start, end + 1), new TypeReference<List<String>>() {});
+            if (translations.size() != quotes.size()) {
+                throw new IllegalStateException("Se esperaban " + quotes.size() + " traducciones y llegaron " + translations.size());
+            }
+            return translations;
+        }
+    }
+
+    private String ask(List<String> quotes) {
         Message response = client.messages().create(MessageCreateParams.builder()
                 .model(model)
                 .maxTokens(6000L)
                 .outputConfig(OutputConfig.builder().effort(OutputConfig.Effort.LOW).build())
                 .addUserMessage(PROMPT + json.writeValueAsString(quotes))
                 .build(), AnthropicConfig.WEB_REQUEST);
-        String text = response.content().stream()
+        return response.content().stream()
                 .flatMap(block -> block.text().stream())
                 .map(TextBlock::text)
                 .reduce("", String::concat);
-        // Por si lo envuelve en ```json ... ```: nos quedamos con lo que va del primer [ al último ].
-        int start = text.indexOf('['), end = text.lastIndexOf(']');
-        if (start < 0 || end < start) {
-            throw new IllegalStateException("La traducción no es un array JSON");
-        }
-        List<String> translations = json.readValue(text.substring(start, end + 1), new TypeReference<List<String>>() {});
-        if (translations.size() != quotes.size()) {
-            throw new IllegalStateException("Se esperaban " + quotes.size() + " traducciones y llegaron " + translations.size());
-        }
-        return translations;
     }
 }

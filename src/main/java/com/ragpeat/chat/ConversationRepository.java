@@ -2,6 +2,7 @@ package com.ragpeat.chat;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.UUID;
@@ -115,9 +116,17 @@ public class ConversationRepository {
     /** @param cited los fragmentos que cita la respuesta: número de la cita -> id del chunk (ver V14). */
     @Transactional
     public long saveExchange(UUID id, String question, String answer, AnswerMetrics metrics, Map<Integer, Long> cited) {
-        jdbc.sql("INSERT INTO chat_messages (conversation_id, role, content) VALUES (:id, 'user', :content)")
+        return saveExchange(id, question, answer, metrics, cited, false);
+    }
+
+    /** @param fromSuggestion true si la pregunta salió de pulsar un botón de seguimiento (ver V16). */
+    @Transactional
+    public long saveExchange(UUID id, String question, String answer, AnswerMetrics metrics, Map<Integer, Long> cited,
+                             boolean fromSuggestion) {
+        jdbc.sql("INSERT INTO chat_messages (conversation_id, role, content, from_suggestion) VALUES (:id, 'user', :content, :fromSuggestion)")
                 .param("id", id)
                 .param("content", PersonalData.redact(question))
+                .param("fromSuggestion", fromSuggestion)
                 .update();
         return jdbc.sql("""
                 INSERT INTO chat_messages
@@ -152,6 +161,38 @@ public class ConversationRepository {
                 .optional().orElse(""));
     }
 
+    /**
+     * La primera respuesta del bot de una conversación, con lo necesario para sugerir preguntas de seguimiento: la
+     * pregunta guardada (ya sin datos personales), la respuesta, lo que citó y las sugerencias ya generadas (null si
+     * aún no). Vacío si ese mensaje no existe, no es del bot, es de otra conversación o no es el primero.
+     */
+    public record FirstAnswer(long id, String question, String answer, String citedChunks, String suggestions) {}
+
+    public Optional<FirstAnswer> firstAnswer(UUID conversationId, long messageId) {
+        return jdbc.sql("""
+                SELECT m.id, m.content AS answer, m.cited_chunks, m.suggestions,
+                       (SELECT u.content FROM chat_messages u
+                        WHERE u.conversation_id = m.conversation_id AND u.role = 'user' AND u.id < m.id
+                        ORDER BY u.id DESC LIMIT 1) AS question
+                FROM chat_messages m
+                WHERE m.id = :message AND m.conversation_id = :conversation AND m.role = 'assistant'
+                  AND m.id = (SELECT min(f.id) FROM chat_messages f WHERE f.conversation_id = :conversation AND f.role = 'assistant')
+                """)
+                .param("message", messageId)
+                .param("conversation", conversationId)
+                .query((rs, n) -> new FirstAnswer(rs.getLong("id"), rs.getString("question"), rs.getString("answer"),
+                        rs.getString("cited_chunks"), rs.getString("suggestions")))
+                .optional();
+    }
+
+    /** Guarda las sugerencias (array JSON) de un mensaje del bot, solo si aún no tenía. */
+    public void saveSuggestions(long messageId, String suggestionsJson) {
+        jdbc.sql("UPDATE chat_messages SET suggestions = :s WHERE id = :id AND suggestions IS NULL")
+                .param("s", suggestionsJson)
+                .param("id", messageId)
+                .update();
+    }
+
     /** "1:15342,3:8811" */
     static String encodeCited(Map<Integer, Long> cited) {
         return new TreeMap<>(cited).entrySet().stream()
@@ -159,7 +200,7 @@ public class ConversationRepository {
                 .collect(Collectors.joining(","));
     }
 
-    static SortedMap<Integer, Long> decodeCited(String text) {
+    public static SortedMap<Integer, Long> decodeCited(String text) {
         SortedMap<Integer, Long> cited = new TreeMap<>();
         if (text == null || text.isBlank()) {
             return cited;

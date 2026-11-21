@@ -400,6 +400,9 @@ body {
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease;
 }
+/* Seguimiento bajo la primera respuesta: más discreto que los ejemplos de la portada. */
+.suggestions.follow-ups { margin: 14px 0 0; }
+.suggestions.follow-ups button { padding: 6px 12px; font-size: 0.9rem; }
 .suggestions button:hover { background: var(--ink); color: var(--frame); }
 .suggestions button:focus-visible { outline: 2px solid var(--accent-text); outline-offset: 3px; }
 

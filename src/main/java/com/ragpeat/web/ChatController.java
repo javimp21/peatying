@@ -87,8 +87,9 @@ public class ChatController {
     // Lo que llega y lo que sale, como records: Spring los convierte de/a JSON automáticamente.
     /** conversationId: null en la primera pregunta; después, el que devolvimos en la respuesta anterior. */
     /** internal: true desde un navegador nuestro (marcado con ?interno); sus conversaciones no cuentan en las métricas. */
+    /** fromSuggestion: true si la pregunta salió de pulsar un botón de seguimiento (ver FollowUps). */
     /** lang: el idioma de la página desde la que se pregunta ("es" o "en"); cualquier otra cosa se ignora. */
-    record ChatRequest(String question, UUID conversationId, Boolean internal, String lang) {}
+    record ChatRequest(String question, UUID conversationId, Boolean internal, String lang, Boolean fromSuggestion) {}
 
     /** context: lo que se hablaba justo antes en una entrevista (ver InterviewChunker); null en lo demás. */
     record Source(int number, String title, String url, String type, String text, String context) {}
@@ -152,11 +153,12 @@ public class ChatController {
             String visitor = clientInfo.visitorHash(http);
             SseEmitter emitter = new SseEmitter(STREAM_TIMEOUT_MS);
             boolean internal = Boolean.TRUE.equals(request.internal());
+            boolean fromSuggestion = Boolean.TRUE.equals(request.fromSuggestion());
             String pageLang = "en".equals(request.lang()) || "es".equals(request.lang()) ? request.lang() : null;
             AtomicBoolean closed = new AtomicBoolean();
             Thread worker = workers.newThread(() -> {
                 try {
-                    respond(question, request.conversationId(), visitor, internal, pageLang, emitter, closed);
+                    respond(question, request.conversationId(), visitor, internal, pageLang, fromSuggestion, emitter, closed);
                 } finally {
                     generating.release();
                 }
@@ -186,7 +188,7 @@ public class ChatController {
      * @param closed true cuando la conexión ya terminó y chat() ha interrumpido este hilo.
      */
     private void respond(String question, UUID requestedId, String visitor, boolean internal, String pageLang,
-                         SseEmitter emitter, AtomicBoolean closed) {
+                         boolean fromSuggestion, SseEmitter emitter, AtomicBoolean closed) {
         long start = System.currentTimeMillis();
         try {
             // Si nos mandan una conversación que existe, seguimos en ella; si no (primera pregunta,
@@ -222,7 +224,8 @@ public class ChatController {
                     new AnswerMetrics(System.currentTimeMillis() - start,
                             answer.inputTokens(), answer.outputTokens(), answer.searches()),
                     answer.citedSources().entrySet().stream()
-                            .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().chunkId())));
+                            .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().chunkId())),
+                    fromSuggestion);
             send(emitter, "done", new ChatResponse(answer.text(), sources, conversationId, messageId));
             emitter.complete();
         } catch (ClientGone e) {

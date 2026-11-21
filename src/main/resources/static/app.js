@@ -665,9 +665,11 @@ function autoGrow() {
 // (startOver): si no, su respuesta aparecería después en la pantalla nueva, sin su pregunta.
 let currentRequest = null;
 
-async function ask(question, quote = null) {
+// fromSuggestion: la pregunta sale de pulsar uno de los botones de seguimiento (el servidor lo anota).
+async function ask(question, quote = null, fromSuggestion = false) {
   question = question.trim();
   if (!question || sendButton.disabled) return;
+  removeFollowUps();
   const request = new AbortController();
   currentRequest = request;
   const cancelled = () => request.signal.aborted;
@@ -694,7 +696,7 @@ async function ask(question, quote = null) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       // lang: el idioma de esta página. El bot lo usa solo si el mensaje no deja claro el suyo ("CFS", "TSH").
-      body: JSON.stringify({ question: withQuote(question, quote), conversationId, internal: isInternal, lang: LANG }),
+      body: JSON.stringify({ question: withQuote(question, quote), conversationId, internal: isInternal, lang: LANG, fromSuggestion }),
       signal: request.signal,
     });
 
@@ -736,14 +738,18 @@ async function ask(question, quote = null) {
           await loading.stop({ roll: firstOfConversation });
           loading = null;
         }
+        let botDiv;
         if (live) {
           await live.finish();
           if (cancelled()) return;      // se volvió a la portada mientras terminaba de escribirse
-          live.element.replaceWith(addMessage(message, { animate: false }));
+          botDiv = addMessage(message, { animate: false });
+          live.element.replaceWith(botDiv);
         } else {
-          addMessage(message);
+          botDiv = addMessage(message);
         }
         saveCurrentConversation();
+        // Solo bajo la primera respuesta de la conversación y si cita fuentes: sin esperar y sin guardarlo en el historial.
+        if (firstOfConversation && data.sources.length > 0) offerFollowUps(botDiv, data.conversationId, data.messageId);
         finished = true;
       } else if (event === "error") {
         live?.remove();
@@ -1027,6 +1033,40 @@ function suggestionButtons(body) {
       box.appendChild(button);
     }
     list.replaceWith(box);
+  }
+}
+
+// --- Preguntas de seguimiento ---------------------------------------------------------
+// Bajo la primera respuesta de una conversación (si cita fuentes) salen 2 botones con preguntas que podría hacer
+// la persona a continuación. Las prepara el servidor aparte (/api/followups), sin bloquear nada; si falla o tarda,
+// simplemente no salen. No se guardan en el historial y se quitan al hacer cualquier pregunta.
+function removeFollowUps() {
+  document.querySelectorAll(".follow-ups").forEach((box) => box.remove());
+}
+
+async function offerFollowUps(botDiv, convId, messageId) {
+  try {
+    const response = await fetch("/api/followups", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ conversationId: convId, messageId }),
+    });
+    if (!response.ok) return;
+    const { questions } = await response.json();
+    // Solo si esa respuesta sigue siendo la última de la pantalla y no hay ninguna pregunta en marcha.
+    if (!questions?.length || currentRequest || conversation.lastElementChild !== botDiv) return;
+    const box = document.createElement("div");
+    box.className = "suggestions follow-ups";
+    for (const text of questions) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = text;
+      button.addEventListener("click", () => ask(text, null, true));
+      box.appendChild(button);
+    }
+    botDiv.appendChild(box);
+  } catch (e) {
+    // Sin botones: no pasa nada.
   }
 }
 
@@ -1667,6 +1707,7 @@ function startOver() {
     setBusy(false);
   }
   messages = [];
+  removeFollowUps();
   conversationId = null;                // la próxima pregunta empieza una conversación nueva en el servidor
   conversation.replaceChildren();       // vacía la conversación en pantalla
   showDocChip("");                      // el documento era de la conversación anterior
