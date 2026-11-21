@@ -131,6 +131,16 @@ class InterviewChunkerTest {
         assertThat(sectionTwoFirst).doesNotContain(InterviewChunker.CONTEXT_HEADER);
     }
 
+    @Test
+    void elTextoQueVeElUsuarioNoLlevaElContexto() {
+        String chunk = InterviewChunker.CONTEXT_HEADER + "\nHost: A question long enough to count?\nRay Peat: An answer…\n\nHost: Next?\n\nRay Peat: Reply.";
+
+        assertThat(InterviewChunker.withoutContext(chunk)).isEqualTo("Host: Next?\n\nRay Peat: Reply.");
+        assertThat(InterviewChunker.withoutContext("Host: Next?\n\nRay Peat: Reply.")).isEqualTo("Host: Next?\n\nRay Peat: Reply.");
+        String withoutBlankLine = InterviewChunker.CONTEXT_HEADER + "\nHost: A question long enough to count?";
+        assertThat(InterviewChunker.withoutContext(withoutBlankLine)).isEqualTo(withoutBlankLine);
+    }
+
     private static Interview interview(Turn... turns) {
         return new Interview("interview-test", "Test", "url", List.of(new Section("", List.of(turns))));
     }

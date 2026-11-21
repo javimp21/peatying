@@ -30,7 +30,20 @@ public class InterviewChunker {
     static final int MAX_CONTEXT_CHARS = 300;
     /** Una pregunta más corta («Wow.», «Right.») no dice de qué se habla: se busca la anterior. */
     static final int MIN_QUESTION_CHARS = 40;
-    static final String CONTEXT_HEADER = "[Earlier in this interview]";
+    public static final String CONTEXT_HEADER = "[Earlier in this interview]";
+
+    /**
+     * El chunk sin el contexto que le pone este chunker, para enseñarlo al usuario: el bot necesita el contexto,
+     * pero quien lee la fuente (o la traduce) solo quiere lo que se dijo en ese tramo. Sin contexto, o con un
+     * contexto sin línea en blanco detrás, se devuelve tal cual.
+     */
+    public static String withoutContext(String chunk) {
+        if (chunk == null || !chunk.startsWith(CONTEXT_HEADER + "\n")) {
+            return chunk;
+        }
+        int end = chunk.indexOf("\n\n");
+        return end < 0 ? chunk : chunk.substring(end + 2);
+    }
 
     public List<String> split(Interview interview) {
         List<String> chunks = new ArrayList<>();
