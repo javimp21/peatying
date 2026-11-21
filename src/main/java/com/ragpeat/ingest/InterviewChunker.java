@@ -12,19 +12,25 @@ import org.springframework.stereotype.Component;
  * con tres reglas propias de una conversación:
  *
  *  1. Nunca mezcla secciones: cada sección de la transcripción es un tema (o la llamada de un oyente).
- *  2. Pregunta y respuesta van juntas. Si la respuesta de Peat no cabe y sigue en otro chunk, ese
- *     chunk empieza repitiendo la pregunta (recortada): sin ella, "Yes, but only in small amounts"
- *     no significa nada.
+ *  2. Un chunk que empieza por un corte lleva delante el intercambio anterior: la última pregunta
+ *     (recortada) y el principio de la última respuesta de Peat, bajo «[Earlier in this interview]».
+ *     El bot solo ve el chunk, y «Would it bring stress hormones down in people too?» no dice de qué
+ *     hablan: el tema (la pregnenolona) estaba en el chunk anterior. La pregunta es el último turno de
+ *     otro que tenga cuerpo (se saltan «Wow.», «Okay.»); la respuesta es el turno de Peat más reciente,
+ *     aunque el corte caiga en mitad de él. El primer chunk de cada sección no lleva nada.
  *  3. Solo se guardan los chunks donde Peat dice algo de verdad: fuera presentaciones, anuncios,
- *     despedidas y charlas entre los presentadores.
+ *     despedidas y charlas entre los presentadores. Lo que Peat dice en el contexto no cuenta.
  */
 @Component
 public class InterviewChunker {
 
     /** Menos de esto dicho por Peat (unas dos frases) no aporta nada que buscar. */
     static final int MIN_PEAT_CHARS = 200;
-    /** La pregunta repetida como contexto se recorta: es contexto, no lo que queremos encontrar. */
+    /** Cada parte del contexto se recorta: es contexto, no lo que queremos encontrar. */
     static final int MAX_CONTEXT_CHARS = 300;
+    /** Una pregunta más corta («Wow.», «Right.») no dice de qué se habla: se busca la anterior. */
+    static final int MIN_QUESTION_CHARS = 40;
+    static final String CONTEXT_HEADER = "[Earlier in this interview]";
 
     public List<String> split(Interview interview) {
         List<String> chunks = new ArrayList<>();
@@ -38,7 +44,7 @@ public class InterviewChunker {
         List<String> chunks = new ArrayList<>();
         StringBuilder current = new StringBuilder();
         int peatChars = 0;
-        Turn lastQuestion = null; // el último turno que no es de Peat: lo que se le acaba de preguntar
+        List<Turn> done = new ArrayList<>(); // los turnos anteriores al que se está troceando
 
         for (Turn turn : section.turns()) {
             // El nombre de quien habla va al empezar su turno, y otra vez si el turno sigue en un chunk nuevo.
@@ -49,10 +55,8 @@ public class InterviewChunker {
                         addIfPeatSpeaks(chunks, current, peatChars);
                         current.setLength(0);
                         peatChars = 0;
+                        current.append(previousExchange(done, turn, !needsSpeaker));
                         needsSpeaker = true;
-                        if (turn.isPeat() && lastQuestion != null) {
-                            current.append(lastQuestion.speaker()).append(": ").append(shorten(lastQuestion.text()));
-                        }
                     }
                     if (!current.isEmpty()) {
                         current.append("\n\n");
@@ -67,12 +71,43 @@ public class InterviewChunker {
                     }
                 }
             }
-            if (!turn.isPeat()) {
-                lastQuestion = turn;
-            }
+            done.add(turn);
         }
         addIfPeatSpeaks(chunks, current, peatChars);
         return chunks;
+    }
+
+    /**
+     * El contexto de un chunk que empieza por un corte dentro de {@code turn}, o "" si aún no se ha dicho nada.
+     * La respuesta es el turno de Peat más reciente (este mismo, si es suyo y ya había empezado en el chunk anterior); la pregunta, el último turno de otro con
+     * cuerpo anterior a esa respuesta. Sin respuesta (Peat aún no ha hablado), solo la pregunta.
+     */
+    private static String previousExchange(List<Turn> done, Turn turn, boolean turnStarted) {
+        Turn answer = turn.isPeat() && turnStarted ? turn : null;
+        int before = done.size();
+        if (answer == null) {
+            for (int i = done.size() - 1; i >= 0 && answer == null; i--) {
+                if (done.get(i).isPeat()) {
+                    answer = done.get(i);
+                    before = i;
+                }
+            }
+        }
+        Turn question = null;
+        for (int i = before - 1; i >= 0 && question == null; i--) {
+            Turn candidate = done.get(i);
+            if (!candidate.isPeat() && candidate.text().length() >= MIN_QUESTION_CHARS) {
+                question = candidate;
+            }
+        }
+        StringBuilder context = new StringBuilder();
+        if (question != null) {
+            context.append(question.speaker()).append(": ").append(shorten(question.text()));
+        }
+        if (answer != null) {
+            context.append(context.isEmpty() ? "" : "\n").append(answer.speaker()).append(": ").append(shorten(answer.text()));
+        }
+        return context.isEmpty() ? "" : CONTEXT_HEADER + "\n" + context;
     }
 
     private static void addIfPeatSpeaks(List<String> chunks, StringBuilder chunk, int peatChars) {
