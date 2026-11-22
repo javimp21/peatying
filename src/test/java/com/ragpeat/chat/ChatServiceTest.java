@@ -107,4 +107,24 @@ class ChatServiceTest {
         assertThat(ChatService.warningsReminder(List.of(new Turn(Turn.USER, "hola"),
                 new Turn(Turn.ASSISTANT, "Peat recomendaba la leche [1].")))).isEmpty();
     }
+
+    @Test
+    void quitaElParrafoFinalCortoQueAcabaEnPuntosSuspensivos() {
+        assertThat(ChatService.withoutDanglingEnd("Texto largo del autor [7].\n\nHoy, la medicina convencional…"))
+                .isEqualTo("Texto largo del autor [7].");
+        assertThat(ChatService.withoutDanglingEnd("Texto del autor [7].\n\nHoy, la medicina convencional...  \n"))
+                .isEqualTo("Texto del autor [7].");
+    }
+
+    @Test
+    void dejaIgualLoQueNoEsUnFragmentoColgado() {
+        String longParagraph = "Texto [1].\n\n" + "Una frase final bastante larga que sigue y sigue sin cita alguna ".repeat(3) + "…";
+        assertThat(ChatService.withoutDanglingEnd(longParagraph)).isEqualTo(longParagraph);
+        String withCitation = "Texto [1].\n\nY por eso, según él [2]…";
+        assertThat(ChatService.withoutDanglingEnd(withCitation)).isEqualTo(withCitation);
+        String single = "Hoy, la medicina convencional…";
+        assertThat(ChatService.withoutDanglingEnd(single)).isEqualTo(single);
+        String plain = "Texto [1].\n\nFin de la respuesta.";
+        assertThat(ChatService.withoutDanglingEnd(plain)).isEqualTo(plain);
+    }
 }

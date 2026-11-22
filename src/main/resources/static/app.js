@@ -1055,10 +1055,6 @@ async function offerFollowUps(botDiv, convId, messageId) {
     const { questions } = await response.json();
     // Solo si esa respuesta sigue siendo la última de la pantalla y no hay ninguna pregunta en marcha.
     if (!questions?.length || currentRequest || conversation.lastElementChild !== botDiv) return;
-    // Los botones llegan un par de segundos después de la respuesta: si la persona seguía abajo del todo, el input
-    // fijo los taparía; si ha subido a leer, no se la mueve.
-    // "Cerca del final" se mide con el final de la respuesta (la página puede ser más larga por la altura mínima).
-    const nearBottom = botDiv.getBoundingClientRect().bottom - window.innerHeight < 200;
     const box = document.createElement("div");
     box.className = "suggestions follow-ups";
     for (const text of questions) {
@@ -1068,11 +1064,10 @@ async function offerFollowUps(botDiv, convId, messageId) {
       button.addEventListener("click", () => ask(text, null, true));
       box.appendChild(button);
     }
-    botDiv.appendChild(box);
-    if (nearBottom) {
-      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      window.scrollTo({ top: document.body.scrollHeight, behavior: reducedMotion ? "auto" : "smooth" });
-    }
+    // Justo después del texto y antes de las fuentes: debajo (con 👍/👎 y el input fijo encima) quedaban fuera de pantalla.
+    const anchor = botDiv.querySelector(".answer-body");
+    if (anchor) anchor.after(box);
+    else botDiv.prepend(box);
   } catch (e) {
     // Sin botones: no pasa nada.
   }

@@ -142,6 +142,25 @@ public class ChatService {
     /** Hasta cuántos fragmentos de la respuesta anterior se vuelven a enseñar (cada uno son unos 400 tokens). */
     static final int MAX_PREVIOUS_SOURCES = 8;
 
+    /**
+     * A veces el modelo cierra con una frase corta que se queda en el aire («Hoy, la medicina convencional…») tras una
+     * respuesta ya completa. Se quita ese último párrafo si es corto (menos de 120 caracteres), acaba en «…» o «...»,
+     * no lleva ninguna cita [n] y no es el único párrafo; en cualquier otro caso el texto queda igual.
+     */
+    static String withoutDanglingEnd(String text) {
+        String trimmed = text.stripTrailing();
+        int cut = trimmed.lastIndexOf("\n\n");
+        if (cut < 0) {
+            return text;
+        }
+        String last = trimmed.substring(cut + 2).strip();
+        if (last.length() < 120 && (last.endsWith("…") || last.endsWith("..."))
+                && !CITATION.matcher(last).find()) {
+            return trimmed.substring(0, cut).stripTrailing();
+        }
+        return text;
+    }
+
     /** Los fragmentos de unas citas guardadas (número -> id del chunk). Los chunks que ya no existan se quedan fuera. */
     public SortedMap<Integer, SearchResult> sourcesOf(SortedMap<Integer, Long> cited) {
         Map<Long, SearchResult> byId = new HashMap<>();
@@ -237,9 +256,10 @@ public class ChatService {
             Message response = streamTurn(request.build(), listener);
             inputTokens += response.usage().inputTokens();
             outputTokens += response.usage().outputTokens();
-            log.info("Tokens -> entrada {} · caché leída {} · caché escrita {} · salida {}",
+            log.info("Tokens -> entrada {} · caché leída {} · caché escrita {} · salida {} · fin {}",
                     response.usage().inputTokens(), response.usage().cacheReadInputTokens().orElse(0L),
-                    response.usage().cacheCreationInputTokens().orElse(0L), response.usage().outputTokens());
+                    response.usage().cacheCreationInputTokens().orElse(0L), response.usage().outputTokens(),
+                    response.stopReason().map(Object::toString).orElse("ninguno"));
 
             if (response.stopReason().filter(StopReason.REFUSAL::equals).isPresent()) {
                 return new ChatAnswer("Lo siento, no puedo responder a esa pregunta.", new TreeMap<>(), searches,
@@ -255,10 +275,10 @@ public class ChatService {
 
             // Caso b): no pide herramientas -> es la respuesta final.
             if (toolUses.isEmpty()) {
-                String text = ToneFilter.clean(response.content().stream()
+                String text = withoutDanglingEnd(ToneFilter.clean(response.content().stream()
                         .flatMap(block -> block.text().stream())
                         .map(TextBlock::text)
-                        .collect(Collectors.joining()), allowNegativeOpener);
+                        .collect(Collectors.joining()), allowNegativeOpener));
                 listener.finish();
                 return new ChatAnswer(text, citedIn(text, sources), searches, inputTokens, outputTokens,
                         List.copyOf(sources), List.copyOf(queries));
